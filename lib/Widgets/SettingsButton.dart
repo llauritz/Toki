@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import '../Pages/SettingsPage.dart';
 
 class SettingsButton extends StatefulWidget {
   @override
@@ -25,12 +26,7 @@ class _SettingsButtonState extends State<SettingsButton> {
         },
         openBuilder: (BuildContext context, void Function({Object returnValue}) action) {
           //TODO Return Settings Page
-          return Container(
-
-            child: Center(
-              child: Text("hi"),
-            ),
-          );
+          return SettingsPage();
         },
         closedBuilder: (BuildContext context, void Function() action) {
           return Container(
