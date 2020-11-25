@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
-import 'package:work_in_progress/Pages/home.dart';
+import 'Pages/home.dart';
 import 'Pages/Onboarding/onboarding_1.dart';
 import 'Pages/loading.dart';
 import 'Services/Data.dart';
@@ -24,11 +23,13 @@ void main() {
         fontFamily: "BandeinsSans",
         textTheme: TextTheme(
 
+            //Large Numbers (Hours, Minutes)
             headline1: TextStyle(
                 fontSize: 80.0,
                 fontWeight: FontWeight.bold,
                 color: Colors.white),
 
+            //Smaller Numbers (Seconds), Mantra Text
             headline2: TextStyle(
               fontSize: 30.0,
               fontWeight: FontWeight.bold,

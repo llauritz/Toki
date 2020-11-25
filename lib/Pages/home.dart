@@ -7,8 +7,6 @@ import 'package:work_in_progress/Widgets/AnimatedStempelButton.dart';
 import 'package:work_in_progress/Widgets/SettingsButton.dart';
 import 'package:work_in_progress/Widgets/background.dart';
 import '../Services/timer.dart';
-import '../Widgets/TestStempelButton.dart';
-import '../Widgets/TimerTextWidget.dart';
 
 class homePage extends StatefulWidget {
   @override
@@ -21,6 +19,9 @@ class _homePageState extends State<homePage> {
 
   @override
   Widget build(BuildContext context) {
+
+  print("home - build start");
+
     return Scaffold(
       body: SlidingUpPanel(
         minHeight: 240.0,
@@ -44,7 +45,7 @@ class _homePageState extends State<homePage> {
                 callbackTurnOff: timerText.stop,
                 callbackTurnOn: timerText.start
             ),
-        TestZeitenliste()
+            TestZeitenliste()
           ],
         ),
 
@@ -59,7 +60,8 @@ class _homePageState extends State<homePage> {
                       SettingsButton()
                     ],
                   ),
-                  timerText
+                  timerText,
+                  //MantraText()
                 ],
               ),
             )

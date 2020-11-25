@@ -23,9 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences: '>=0.5.7+2 <2.0.0'
-  bloc: ^6.1.0
-  flutter_bloc: ^6.1.0
+  shared_preferences: '>=0.5.12+4 <2.0.0'
   get_it: ^5.0.1
   sliding_up_panel: ^1.0.2
   avatar_glow: ^1.2.0

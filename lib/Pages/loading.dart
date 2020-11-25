@@ -15,19 +15,23 @@ class Loading extends StatefulWidget {
 class _LoadingState extends State<Loading> {
 
   void getData()async{
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    getIt<Data>().prefs = prefs;
-    print("loading - getIt prefs = " + getIt<Data>().prefs.toString());
-
+    final SharedPreferences _prefs = await SharedPreferences.getInstance();
+    getIt<Data>().prefs = _prefs;
+    mockData();
+    getIt<Data>().initData();
     Navigator.pushReplacementNamed(context, "/home");
   }
 
   @override
   void initState() {
-    super.initState();
-    print("loading");
     getData();
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
     prechacheImages();
+    super.didChangeDependencies();
   }
 
   void prechacheImages (){
@@ -39,15 +43,32 @@ class _LoadingState extends State<Loading> {
     precacheImage(AssetImage("assets/background/clouds/clouds6.jpg"), context);
   }
 
+  void mockData(){
+    getIt<Data>().prefs.setString("name", "Lauritz");
+    getIt<Data>().prefs.setDouble("tagesstunden", 8.0);
+    getIt<Data>().prefs.setBool("MO", true);
+    getIt<Data>().prefs.setBool("DI", true);
+    getIt<Data>().prefs.setBool("MI", true);
+    getIt<Data>().prefs.setBool("DO", true);
+    getIt<Data>().prefs.setBool("FR", true);
+    getIt<Data>().prefs.setBool("SA", false);
+    getIt<Data>().prefs.setBool("SO", false);
+  }
+
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(color: Color(0x0EE796FF)),
+      backgroundColor: Color(0xff0EE796),
+      body: Center(
+          child: Column(
+            children: [
+              CircularProgressIndicator(),
+              Text("loading", style: TextStyle(color: Colors.white),),
+            ],
+          )
       ),
     );
-
 
   }
 }

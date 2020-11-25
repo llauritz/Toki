@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 
 
@@ -19,7 +18,6 @@ class Background extends StatefulWidget {
 
 class _BackgroundState extends State<Background> with WidgetsBindingObserver{
 
-  AppLifecycleState _appLifecycleState;
   Widget _backgroundImageContainer;
   Widget _oldBackgroundImageContainer;
 
@@ -34,9 +32,11 @@ class _BackgroundState extends State<Background> with WidgetsBindingObserver{
   @override
   void initState() {
     // TODO: implement initState
+    print("background - init start");
     updateBackground();
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    print("background - init finished");
   }
 
   @override
