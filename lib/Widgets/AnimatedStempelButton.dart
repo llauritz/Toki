@@ -1,6 +1,7 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+
 import '../Services/Data.dart';
 
 final getIt = GetIt.instance;
@@ -64,7 +65,7 @@ class StempelButtonSTOP extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 0.0),
       child: RaisedButton(
-        elevation: 5.0,
+        elevation: 10.0,
         onPressed: callback,
         shape: CircleBorder(),
         color: Colors.redAccent[100],
@@ -101,7 +102,7 @@ class StempelButtonSTART extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 0.0),
       child: RaisedButton(
-        elevation: 5.0,
+        elevation: 10.0,
         onPressed: callback,
         shape: CircleBorder(),
         color: Colors.greenAccent,

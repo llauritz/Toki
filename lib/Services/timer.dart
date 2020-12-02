@@ -2,13 +2,11 @@
 
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Widgets/TimerTextWidget.dart';
-import 'package:get_it/get_it.dart';
 import 'Data.dart';
 
 final getIt = GetIt.instance;
@@ -41,7 +39,6 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
   SharedPreferences prefs;
   Timer _timer = Timer.periodic(Duration(hours: 1), (timer) {});
   final _timeController = StreamController<int>();
-  AppLifecycleState _appLifecycleState;
 
   void initSharedPreferences()async{
     _startTime = getIt<Data>().prefs.getInt("startTime");
@@ -86,7 +83,7 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
     print("timer - timer " + _timer.isActive.toString());
     if(_timer.isActive == false){
       _timer = Timer.periodic(Duration(seconds: 1), updateTime);
-      _startTime = DateTime.now().microsecondsSinceEpoch;
+      _startTime = DateTime.now().millisecondsSinceEpoch;
       getIt<Data>().prefs.setInt("startTime", _startTime);
       print("timer - started, startTime = " + _startTime.toString());
     }
@@ -111,7 +108,7 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
     if(_startTime != 0) {
         int elapsedTimeMilliseconds = DateTime
             .now()
-            .microsecondsSinceEpoch - _startTime;
+            .millisecondsSinceEpoch - _startTime;
         _elapsedTime = elapsedTimeMilliseconds;
         //print("timer - updateTime elapsed Time "+ _elapsedTime.toString());
         _timeController.sink.add(_elapsedTime);

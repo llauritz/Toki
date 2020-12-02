@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'Pages/home.dart';
+
 import 'Pages/Onboarding/onboarding_1.dart';
+import 'Pages/home.dart';
 import 'Pages/loading.dart';
 import 'Services/Data.dart';
 
@@ -34,6 +35,13 @@ void main() {
               fontSize: 30.0,
               fontWeight: FontWeight.bold,
               color: Colors.white,
+            ),
+
+            //Widgets.Settings Cards Titles
+            headline3: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.black.withOpacity(0.8),
             ),
 
             button: TextStyle(

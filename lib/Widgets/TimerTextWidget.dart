@@ -10,15 +10,11 @@ class TimerTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime elapsedDateTime = DateTime.fromMicrosecondsSinceEpoch(elapsedTime);
-    int elapsedHours = elapsedDateTime.hour;
-    int elapsedMinutes = elapsedDateTime.minute;
-    int elapsedSeconds = elapsedDateTime.second;
-
-    print("timer - elapsed Hours" + elapsedHours.toString());
-
-/*    print("timer - elapsed Minutes" + elapsedMinutes.toString());
-
+    int elapsedSeconds = ((elapsedTime/(1000))%60).truncate();
+    int elapsedMinutes = ((elapsedTime/(60*1000))%60).truncate();
+    int elapsedHours = ((elapsedTime/(60*60*1000))%60).truncate();
+/*    print("timer - elapsed Hours" + elapsedHours.toString());
+    print("timer - elapsed Minutes" + elapsedMinutes.toString());
     print("timer - elapsed Seconds" + elapsedSeconds.toString());*/
 
     if(elapsedMinutes < 1){ //Bis zu 60 Sekunden

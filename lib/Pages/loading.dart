@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:work_in_progress/Services/Data.dart';
@@ -62,6 +63,7 @@ class _LoadingState extends State<Loading> {
       backgroundColor: Color(0xff0EE796),
       body: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircularProgressIndicator(),
               Text("loading", style: TextStyle(color: Colors.white),),

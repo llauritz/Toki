@@ -2,11 +2,16 @@ import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:work_in_progress/Widgets/AnimatedStempelButton.dart';
-import 'package:work_in_progress/Widgets/SettingsButton.dart';
-import 'package:work_in_progress/Widgets/background.dart';
+import 'package:work_in_progress/Widgets/background_copy.dart';
+
+import '../Services/Data.dart';
 import '../Services/timer.dart';
+import '../Widgets/AnimatedStempelButton.dart';
+import '../Widgets/Settings/SettingsButton.dart';
+
+final getIt = GetIt.instance;
 
 class homePage extends StatefulWidget {
   @override
@@ -19,9 +24,7 @@ class _homePageState extends State<homePage> {
 
   @override
   Widget build(BuildContext context) {
-
   print("home - build start");
-
     return Scaffold(
       body: SlidingUpPanel(
         minHeight: 240.0,
@@ -50,8 +53,10 @@ class _homePageState extends State<homePage> {
         ),
 
 
-        body: Background(
-            child: SafeArea(
+        body: Stack(
+          children: [
+            Background_legacy(),
+            SafeArea(
               child: Column(
                 children: [
                   Row(
@@ -65,9 +70,17 @@ class _homePageState extends State<homePage> {
                 ],
               ),
             )
+          ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    getIt<Data>().dispose();
+    print("home - DISPOSING-----------------");
+    super.dispose();
   }
 }
 
@@ -108,7 +121,7 @@ class TestZeitenliste extends StatelessWidget {
                                 child: Text("Eintrag" + index.toString())),
                           );},
                           openBuilder: (BuildContext context, void Function({Object returnValue}) action) {
-                            //TODO Return Settings Page
+                            //TODO Return Widgets.Settings Page
                             return Container(
                               decoration: BoxDecoration(color: Colors.white),
                               child: Center(
