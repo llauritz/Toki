@@ -25,24 +25,45 @@ class Data{
 
   void initData(){
     if(prefs!=null){
-      username = prefs.getString("name");
-      tagesstunden = prefs.getDouble("tagesstunden");
-      wochentage = [
-        prefs.getBool("MO"),
-        prefs.getBool("DI"),
-        prefs.getBool("MI"),
-        prefs.getBool("DO"),
-        prefs.getBool("FR"),
-        prefs.getBool("SA"),
-        prefs.getBool("SO"),
-      ];
-      updatePausenKorrektur(true);
-      pausenKorrektur = prefs.get("pausenKorrektur");
-      prefs.setStringList("korrekturAB", korrekturAB.map((e) => e.toString()).toList());
+      prefs.containsKey("name")
+          ?  username = prefs.getString("name")
+      //TODO: generate Random Name
+          :  updateName("username");
+
+      prefs.containsKey("tagesstunden")
+          ?  tagesstunden = prefs.getDouble("tagesstunden")
+          :  updateTagesstunden(tagesstunden);
+
+      prefs.containsKey("MO")
+          ? wochentage = [
+            prefs.getBool("MO"),
+            prefs.getBool("DI"),
+            prefs.getBool("MI"),
+            prefs.getBool("DO"),
+            prefs.getBool("FR"),
+            prefs.getBool("SA"),
+            prefs.getBool("SO"),
+          ]
+          : updateWochentage(wochentage);
+
+      prefs.containsKey("pausenKorrektur")
+          ? pausenKorrektur = prefs.getBool("pausenKorrektur")
+          : updatePausenKorrektur(pausenKorrektur);
+
+      prefs.containsKey("korrekturAB")
       //converts List of Strings to List of Integers and stores them in local List
-      korrekturAB = prefs.getStringList("korrekturAB").map(int.parse).toList();
+          ? korrekturAB = prefs.getStringList("korrekturAB").map(int.parse).toList()
+      //and the other way round
+          : prefs.setStringList("korrekturAB", korrekturAB.map((e) => e.toString()).toList());
       print("Data - kAB in local List"+ korrekturAB.toString());
-      //korrekturUM = prefs.getStringList("korrekturUM").cast<int>();
+
+      prefs.containsKey("korrekturUM")
+      //converts List of Strings to List of Integers and stores them in local List
+          ? korrekturAB = prefs.getStringList("korrekturUM").map(int.parse).toList()
+      //and the other way round
+          : prefs.setStringList("korrekturUM", korrekturAB.map((e) => e.toString()).toList());
+      print("Data - kAB in local List"+ korrekturAB.toString());
+
       print("Data - Data initialized");
     }
   }
