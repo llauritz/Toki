@@ -1,34 +1,46 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-import 'Pages/Onboarding/onboarding_1.dart';
+import 'Pages/Onboarding/onboarding.dart';
 import 'Pages/home.dart';
-import 'Pages/loading.dart';
 import 'Services/Data.dart';
+import 'Services/HiveDB.dart';
+import 'hiveClasses/Zeitnahme.dart';
 
 GetIt getIt = GetIt.instance;
 
-void main() {
-
+void main() async {
+  await Hive.initFlutter();
   getIt.registerSingleton<Data>(Data());
+  getIt.registerSingleton<HiveDB>(HiveDB());
+  Hive.registerAdapter(ZeitnahmeAdapter());
+
+  await getIt<Data>().initData();
+  await getIt<HiveDB>().initHiveDB();
+  await initializeDateFormatting("de_DE", null);
 
   runApp(MaterialApp(
     routes: {
-      "/": (context) => Loading(),
+      "/": (context) => homePage(),
       "/home": (context) => homePage(),
-      "/onboarding": (context) => Onboarding_1(),
+      "/onboarding": (context) => Onboarding(),
     },
     theme: ThemeData(
-      backgroundColor: Colors.indigoAccent[700],
+        backgroundColor: Colors.indigoAccent[700],
         fontFamily: "BandeinsSans",
         textTheme: TextTheme(
 
             //Large Numbers (Hours, Minutes)
             headline1: TextStyle(
-                fontSize: 80.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.white),
+              fontSize: 80.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontFamily: "Roboto-Mono",
+            ),
 
             //Smaller Numbers (Seconds), Mantra Text
             headline2: TextStyle(
@@ -43,13 +55,22 @@ void main() {
               fontWeight: FontWeight.bold,
               color: Colors.black.withOpacity(0.8),
             ),
-
             button: TextStyle(
                 fontSize: 20.0,
                 color: Colors.white,
                 letterSpacing: 0.5,
-                fontWeight: FontWeight.bold)
+                fontWeight: FontWeight.bold),
 
-        )),
+            // Wochentag in ZeitCard
+            headline4: TextStyle(
+                fontSize: 16.0,
+                height: 1.05,
+                color: Colors.black.withAlpha(150)),
+
+            // Datum in ZeitCard
+            headline5: TextStyle(
+                fontSize: 12.0,
+                height: 1.1,
+                color: Colors.black.withAlpha(150)))),
   ));
 }

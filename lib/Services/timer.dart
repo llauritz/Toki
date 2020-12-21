@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Widgets/TimerTextWidget.dart';
 import 'Data.dart';
+import 'HiveDB.dart';
 
 final getIt = GetIt.instance;
 
@@ -42,16 +43,21 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
 
   void initSharedPreferences()async{
     _startTime = getIt<Data>().prefs.getInt("startTime");
-    print(getIt<Data>().prefs.getInt("startTime").toString());
-    if(_startTime == null) {
+    print("timer - previous startTime is " +
+        getIt<Data>().prefs.getInt("startTime").toString());
+    if (_startTime == null) {
       _startTime = 0;
       getIt<Data>().prefs.setInt("startTime", 0);
-    }else if(_startTime!=0){
+    } else if (_startTime != 0) {
       print("timer - restored Time" + _startTime.toString());
-      _timer = Timer.periodic(Duration(seconds: 1), updateTime);
+      _timer = Timer.periodic(Duration(milliseconds: 100), updateTime);
       updateTime(_timer);
       getIt<Data>().isRunningStream.sink.add(true);
+      getIt<Data>().isRunning = true;
+      getIt<HiveDB>().isRunning = true;
     }
+    await getIt<HiveDB>().calculateTodayElapsedTime();
+    updateTime(_timer);
     print("timer - init ready");
   }
 
@@ -81,13 +87,18 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
   void timerStart(){
     print("timer - start");
     print("timer - timer " + _timer.isActive.toString());
-    if(_timer.isActive == false){
-      _timer = Timer.periodic(Duration(seconds: 1), updateTime);
+    if (_timer.isActive == false) {
+      _timer = Timer.periodic(Duration(milliseconds: 100), updateTime);
       _startTime = DateTime.now().millisecondsSinceEpoch;
       getIt<Data>().prefs.setInt("startTime", _startTime);
       print("timer - started, startTime = " + _startTime.toString());
     }
     getIt<Data>().isRunningStream.sink.add(true);
+    getIt<Data>().isRunning = true;
+    getIt<HiveDB>().isRunning = true;
+
+    getIt<HiveDB>().startTime(_startTime);
+    getIt<HiveDB>().updateGesamtUeberstunden();
   }
 
   void timerStop() async{
@@ -97,29 +108,53 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
     getIt<Data>().prefs.setInt("startTime", 0);
     //print("timer - newStartTime" + getIt<Data>().prefs.getInt("startTime").toString());
     _startTime = 0;
-    updateTime(_timer);
     getIt<Data>().isRunningStream.sink.add(false);
+    getIt<Data>().isRunning = false;
+    getIt<HiveDB>().isRunning = false;
+    getIt<HiveDB>().endTime(DateTime
+        .now()
+        .millisecondsSinceEpoch);
+    await getIt<HiveDB>().calculateTodayElapsedTime();
+    await getIt<HiveDB>().updateGesamtUeberstunden();
+    updateTime(_timer);
   }
 
-  void updateTime(Timer timer){
+  void updateTime(Timer timer) {
     //print("timer + updateTime");
     //print("timer - update Time start Time" + startTime.toString());
     //print("timer - current Time" + DateTime.now().microsecondsSinceEpoch.toString());
-    if(_startTime != 0) {
-        int elapsedTimeMilliseconds = DateTime
-            .now()
-            .millisecondsSinceEpoch - _startTime;
+    if (_startTime != 0) {
+      int elapsedTimeMilliseconds = DateTime
+          .now()
+          .millisecondsSinceEpoch - _startTime +
+          getIt<HiveDB>().todayElapsedTime;
+
+      //print("timer - updateTime elapsed Time "+ _elapsedTime.toString());
+
+      //rebuild only if value changed at least one Second
+      if (
+      Duration(milliseconds: elapsedTimeMilliseconds).inSeconds
+          - Duration(milliseconds: _elapsedTime).inSeconds >= 1
+      ) {
+        //print("timer - update");
         _elapsedTime = elapsedTimeMilliseconds;
-        //print("timer - updateTime elapsed Time "+ _elapsedTime.toString());
         _timeController.sink.add(_elapsedTime);
+      }
+    } else {
+      _timeController.sink.add(getIt<HiveDB>().todayElapsedTime);
     }
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if(state.index == 0){
+    //Make sure prefs is existing
+    //Make sure Timer is running
+
+    if (state.index == 0) {
       print("timer - resumed");
       updateTime(_timer);
+      getIt<HiveDB>().calculateTodayElapsedTime();
+      getIt<HiveDB>().urlaubsTageCheck();
     }
   }
 

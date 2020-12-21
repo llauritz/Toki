@@ -1,7 +1,7 @@
-import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:get_it/get_it.dart';
 
 import '../Services/Data.dart';
@@ -45,7 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
               return AnimatedContainer(color: snapshot.data, duration: Duration(milliseconds: 1000),);
             }
           ),*/
-          StreamBuilder<AssetImage>(
+        /*StreamBuilder<AssetImage>(
             stream: getIt<Data>().currentImageStream.stream,
             initialData: getIt<Data>().currentImage,
             builder: (context, snapshot) {
@@ -55,38 +55,42 @@ class _SettingsPageState extends State<SettingsPage> {
                 )),
                 duration: Duration(milliseconds: 1000),);
             }
-          ),
-
-          /*Container(
+          ),*/
+        /*Container(
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("assets/background/clouds/clouds2.jpg"), fit: BoxFit.cover
                 )
             ),
           ),*/
-          BackdropFilter(filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
-          child: Container(color: Colors.transparent)),
-          SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  FadeIn(
-                      delay: 300,
-                      fadeChild: SettingsTitle()
+        /* BackdropFilter(filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
+          child: Container(color: Colors.transparent)),*/
+
+        StreamBuilder<String>(
+            stream: getIt<Data>().backgroundHashStream.stream,
+            initialData: getIt<Data>().backgroundHash,
+            builder: (context, snapshot) {
+              return AnimatedSwitcher(
+                duration: Duration(milliseconds: 2000),
+                child: KeyedSubtree(
+                  key: ValueKey<int>(getIt<Data>().backgroundNumber),
+                  child: BlurHash(
+                    hash: snapshot.data,
+                    imageFit: BoxFit.fill,
+                    duration: Duration(microseconds: 1),
                   ),
-                  FadeIn(
-                      delay: 350,
-                      fadeChild: NamePicker()
-                  ),
-                  FadeIn(
-                      delay: 400,
-                      fadeChild:TagesstundenPicker()),
-                  FadeIn(
-                      delay: 450,
-                      fadeChild:WochentagePicker()),
-                  FadeIn(
-                      delay: 500,
-                      fadeChild:PausenkorrekturPicker()),
+                ),
+              );
+            }),
+        SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                FadeIn(delay: 300, fadeChild: SettingsTitle()),
+                FadeIn(delay: 350, fadeChild: NamePicker()),
+                FadeIn(delay: 400, fadeChild: TagesstundenPicker()),
+                FadeIn(delay: 450, fadeChild: WochentagePicker()),
+                FadeIn(delay: 500, fadeChild:PausenkorrekturPicker()),
                   FadeIn(
                       delay: 550,
                       fadeChild:FertigButton(callback: (){Navigator.pop(context);},)),

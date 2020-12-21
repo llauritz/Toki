@@ -32,17 +32,16 @@ class _AnimatedStempelButtonState extends State<AnimatedStempelButton> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: getIt<Data>().isRunningStream.stream,
-      initialData: false,
-      builder: (context, snapshot){
+      initialData: getIt<Data>().isRunning,
+      builder: (context, snapshot) {
+        print("AnimatedStempelbutton - build" + snapshot.data.toString());
         //TODO add Error exceptions
         return AnimatedSwitcher(
-          transitionBuilder:(Widget child, Animation<double> animation){
+          transitionBuilder: (Widget child, Animation<double> animation) {
             return ScaleTransition(child: child, scale: animation);
           },
-
           switchInCurve: Curves.ease,
           switchOutCurve: Curves.easeOutExpo,
-
           child: updateButton(snapshot.data),
           duration: const Duration(milliseconds: 500),
         );

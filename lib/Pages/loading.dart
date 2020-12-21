@@ -1,25 +1,23 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:work_in_progress/Services/Data.dart';
 
 final getIt = GetIt.instance;
 
 class Loading extends StatefulWidget {
-
   @override
   _LoadingState createState() => _LoadingState();
 }
 
 class _LoadingState extends State<Loading> {
+  void getData() async {
+    await Hive.initFlutter();
+    //mockData();
+    await getIt<Data>().initData();
 
-  void getData()async{
-    final SharedPreferences _prefs = await SharedPreferences.getInstance();
-    getIt<Data>().prefs = _prefs;
-    mockData();
-    getIt<Data>().initData();
     Navigator.pushReplacementNamed(context, "/home");
   }
 
@@ -63,14 +61,21 @@ class _LoadingState extends State<Loading> {
       backgroundColor: Color(0xff0EE796),
       body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              CircularProgressIndicator(),
-              Text("loading", style: TextStyle(color: Colors.white),),
+              /*CircularProgressIndicator(
+                strokeWidth: 5.0,
+                valueColor:
+                  AlwaysStoppedAnimation<Color>(Colors.white)
+                ,
+              ),*/
+              Padding(
+                padding: const EdgeInsets.only(bottom: 30.0),
+                child: Text("loading", style: TextStyle(color: Colors.white),),
+              ),
             ],
           )
       ),
     );
-
   }
 }

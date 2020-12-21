@@ -6,7 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Data{
   SharedPreferences prefs;
-  final isRunningStream = StreamController<bool>();
+  final isRunningStream = StreamController<bool>.broadcast();
+  bool isRunning = false;
   String username = "";
   double tagesstunden = 8.0;
   List<bool> wochentage = [true, true, true, true, true, false, false];
@@ -17,33 +18,40 @@ class Data{
   List<int> korrekturAB = [6, 9];
   List<int> korrekturUM = [30, 45];
   bool pausenKorrektur = true;
+  final backgroundHashStream = StreamController<String>.broadcast();
+  String backgroundHash = "cCBYFk?a9K9Ht7of06Rm?Wa%M~WC~ks,9J";
+  int backgroundNumber = 1;
 
-  Future<void> initSharedPreferences() async{
+  Future<void> initSharedPreferences() async {
     prefs = await SharedPreferences.getInstance();
-    print("Data - SharedPreferences initiated "+ prefs.toString());
+    print("Data - SharedPreferences initiated " + prefs.toString());
   }
 
-  void initData(){
-    if(prefs!=null){
+  Future<void> initData() async {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    await initSharedPreferences();
+
+    if (prefs != null) {
       prefs.containsKey("name")
-          ?  username = prefs.getString("name")
-      //TODO: generate Random Name
-          :  updateName("username");
+          ? username = prefs.getString("name")
+          //TODO: generate Random Name
+          : updateName("");
 
       prefs.containsKey("tagesstunden")
-          ?  tagesstunden = prefs.getDouble("tagesstunden")
-          :  updateTagesstunden(tagesstunden);
+          ? tagesstunden = prefs.getDouble("tagesstunden")
+          : updateTagesstunden(tagesstunden);
 
       prefs.containsKey("MO")
           ? wochentage = [
-            prefs.getBool("MO"),
-            prefs.getBool("DI"),
-            prefs.getBool("MI"),
-            prefs.getBool("DO"),
-            prefs.getBool("FR"),
-            prefs.getBool("SA"),
-            prefs.getBool("SO"),
-          ]
+              prefs.getBool("MO"),
+              prefs.getBool("DI"),
+              prefs.getBool("MI"),
+              prefs.getBool("DO"),
+              prefs.getBool("FR"),
+              prefs.getBool("SA"),
+              prefs.getBool("SO"),
+            ]
           : updateWochentage(wochentage);
 
       prefs.containsKey("pausenKorrektur")
@@ -52,19 +60,25 @@ class Data{
 
       prefs.containsKey("korrekturAB")
       //converts List of Strings to List of Integers and stores them in local List
-          ? korrekturAB = prefs.getStringList("korrekturAB").map(int.parse).toList()
+          ?
+      korrekturAB = prefs.getStringList("korrekturAB").map(int.parse).toList()
       //and the other way round
-          : prefs.setStringList("korrekturAB", korrekturAB.map((e) => e.toString()).toList());
-      print("Data - kAB in local List"+ korrekturAB.toString());
+          : prefs.setStringList(
+          "korrekturAB", korrekturAB.map((e) => e.toString()).toList());
+      print("Data - kAB in local List" + korrekturAB.toString());
 
       prefs.containsKey("korrekturUM")
       //converts List of Strings to List of Integers and stores them in local List
-          ? korrekturAB = prefs.getStringList("korrekturUM").map(int.parse).toList()
+          ?
+      korrekturAB = prefs.getStringList("korrekturUM").map(int.parse).toList()
       //and the other way round
-          : prefs.setStringList("korrekturUM", korrekturAB.map((e) => e.toString()).toList());
-      print("Data - kAB in local List"+ korrekturAB.toString());
+          : prefs.setStringList(
+          "korrekturUM", korrekturAB.map((e) => e.toString()).toList());
+      print("Data - kUM in local List" + korrekturUM.toString());
 
       print("Data - Data initialized");
+    } else {
+      print("Data - SHARED PREFERENCES NOT WORKING -------------------");
     }
   }
 
@@ -81,38 +95,46 @@ class Data{
     return prefs.getString("name");
   }
 
-  Future<void> updatePrimaryColor(AssetImage image)async{
+  Future<void> updatePrimaryColor(AssetImage image) async {
     currentImageStream.sink.add(image);
     currentImage = image;
-    PaletteGenerator paletteGenerator = await PaletteGenerator.fromImageProvider(image);
+    PaletteGenerator paletteGenerator = await PaletteGenerator
+        .fromImageProvider(image);
     primaryColor = paletteGenerator.dominantColor.color;
     print(primaryColor.toString());
     primaryColorStream.sink.add(primaryColor);
   }
 
-  void updateTagesstunden(double newTagesstunden) async{
+  void updateSettingsBackground(String hash) async {
+    backgroundHashStream.sink.add(hash);
+    backgroundHash = hash;
+    print("Data - hash updated");
+  }
+
+  void updateTagesstunden(double newTagesstunden) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setDouble("tagesstunden", newTagesstunden);
     tagesstunden = newTagesstunden;
-    print("Data - updated Tagesstunden: " + prefs.getDouble("tagesstunden").toString());
+    print("Data - updated Tagesstunden: " +
+        prefs.getDouble("tagesstunden").toString());
   }
 
-  void updateName(String newName) async{
+  void updateName(String newName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("name", newName);
     username = newName;
     print("Data - updated Username: " + prefs.getString("name").toString());
   }
 
-  Future<void> updateWochentage(List<bool> _selections) async {
+  Future<void> updateWochentage(List<bool> list) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("Mo", _selections[0]);
-    prefs.setBool("Di", _selections[1]);
-    prefs.setBool("Mi", _selections[2]);
-    prefs.setBool("Do", _selections[3]);
-    prefs.setBool("Fr", _selections[4]);
-    prefs.setBool("Sa", _selections[5]);
-    prefs.setBool("So", _selections[6]);
+    prefs.setBool("MO", list[0]);
+    prefs.setBool("DI", list[1]);
+    prefs.setBool("MI", list[2]);
+    prefs.setBool("DO", list[3]);
+    prefs.setBool("FR", list[4]);
+    prefs.setBool("SA", list[5]);
+    prefs.setBool("SO", list[6]);
     print("Dayrow in Shared Preferences gespeichert");
   }
 
@@ -175,6 +197,7 @@ class Data{
     primaryColorStream.close();
     isRunningStream.close();
     currentImageStream.close();
+    backgroundHashStream.close();
   }
 
 }
