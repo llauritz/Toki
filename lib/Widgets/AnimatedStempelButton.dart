@@ -1,6 +1,7 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+
 import '../Services/Data.dart';
 
 final getIt = GetIt.instance;
@@ -31,17 +32,16 @@ class _AnimatedStempelButtonState extends State<AnimatedStempelButton> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: getIt<Data>().isRunningStream.stream,
-      initialData: false,
-      builder: (context, snapshot){
+      initialData: getIt<Data>().isRunning,
+      builder: (context, snapshot) {
+        print("AnimatedStempelbutton - build" + snapshot.data.toString());
         //TODO add Error exceptions
         return AnimatedSwitcher(
-          transitionBuilder:(Widget child, Animation<double> animation){
+          transitionBuilder: (Widget child, Animation<double> animation) {
             return ScaleTransition(child: child, scale: animation);
           },
-
           switchInCurve: Curves.ease,
           switchOutCurve: Curves.easeOutExpo,
-
           child: updateButton(snapshot.data),
           duration: const Duration(milliseconds: 500),
         );
@@ -64,7 +64,7 @@ class StempelButtonSTOP extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 0.0),
       child: RaisedButton(
-        elevation: 5.0,
+        elevation: 10.0,
         onPressed: callback,
         shape: CircleBorder(),
         color: Colors.redAccent[100],
@@ -101,7 +101,7 @@ class StempelButtonSTART extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 0.0),
       child: RaisedButton(
-        elevation: 5.0,
+        elevation: 10.0,
         onPressed: callback,
         shape: CircleBorder(),
         color: Colors.greenAccent,

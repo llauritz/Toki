@@ -23,14 +23,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences: '>=0.5.7+2 <2.0.0'
-  bloc: ^6.1.0
-  flutter_bloc: ^6.1.0
+  shared_preferences: '>=0.5.12+4 <2.0.0'
   get_it: ^5.0.1
   sliding_up_panel: ^1.0.2
   avatar_glow: ^1.2.0
   animations: ^1.1.1
-
+  palette_generator: ^0.2.3
+  simple_animations: ^2.3.1
+  hive: ^1.4.4+1
+  hive_flutter: ^0.3.1
+  flutter_blurhash: ^0.5.0
+  flutter_xlider: ^3.4.0
+  timelines: ^0.0.2+1
+  day_night_time_picker: ^0.4.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -41,6 +46,8 @@ dev_dependencies:
     sdk: flutter
   flutter_native_splash: ^0.1.9
   flutter_launcher_icons: ^0.7.5
+  hive_generator: ^0.8.2
+  build_runner: ^1.10.6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -68,6 +75,7 @@ flutter:
   assets:
     - assets/
     - assets/background/clouds/
+    - assets/icon/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
@@ -81,15 +89,24 @@ flutter:
   # example:
 
   fonts:
-    - family: Monoton
-      fonts:
-        - asset: fonts/Monoton-Regular.ttf
     - family: BandeinsStrange
       fonts:
         - asset: fonts/BandeinsStrangeBoldExtendedHalf.ttf
     - family: BandeinsSans
       fonts:
         - asset: fonts/BandeinsSansBold.otf
+
+    - family: MajorMono
+      fonts:
+        - asset: fonts/MajorMonoDisplay-Regular.ttf
+
+    - family: Roboto-Mono
+      fonts:
+        - asset: fonts/RobotoMono-Regular.ttf
+
+    - family: Roboto-Mono_bold
+      fonts:
+        - asset: fonts/RobotoMono-SemiBold.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:
