@@ -5,16 +5,17 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:work_in_progress/Widgets/ZeitenCardWidgets/EmptyCardClosed.dart';
-import 'package:work_in_progress/Widgets/ZeitenCardWidgets/firstWidget.dart';
-import 'package:work_in_progress/hiveClasses/Zeitnahme.dart';
 
 import '../Services/Data.dart';
 import '../Services/HiveDB.dart';
-import 'ZeitenCardWidgets/DefaultCardClosed.dart';
-import 'ZeitenCardWidgets/DefaultCardOpen/DefaultCardOpen.dart';
-import 'ZeitenCardWidgets/FirstCardClosed.dart';
-import 'ZeitenCardWidgets/FreeCardClosed.dart';
+import '../Widgets/OvertimeCards/EmptyCardClosed.dart';
+import '../Widgets/OvertimeCards/firstWidget.dart';
+import '../hiveClasses/Zeitnahme.dart';
+import 'OvertimeCards/DefaultCardClosed.dart';
+import 'OvertimeCards/EditedCardClosed.dart';
+import 'OvertimeCards/FirstCardClosed.dart';
+import 'OvertimeCards/FreeCardClosed.dart';
+import 'OvertimeCards/OpenCard.dart';
 
 final getIt = GetIt.instance;
 
@@ -189,14 +190,19 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
                                                         case "edited":
                                                           {
                                                             _widget =
-                                                                Text("edited");
+                                                                EditedCardClosed(
+                                                                    i: i,
+                                                                    index:
+                                                                    index,
+                                                                    zeitnahme:
+                                                                    _zeitnahme);
                                                             break;
                                                           }
 
                                                         default:
                                                           {
                                                             _widget =
-                                                                Text("error");
+                                                                Center(child: Text("error"));
                                                           }
                                                       }
                                                     }
@@ -228,42 +234,9 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
                                                           milliseconds: 600),
                                                     );
                                                   },
-                                                  openBuilder: (BuildContext
-                                                          context,
-                                                      void Function(
-                                                              {Object
-                                                                  returnValue})
+                                                  openBuilder: (BuildContext context, void Function({Object returnValue})
                                                           action) {
-                                                    switch (_state) {
-                                                      case "default":
-                                                        {
-                                                          return DefaultCardOpen(
-                                                              i: i,
-                                                              index: index,
-                                                              zeitnahme:
-                                                                  _zeitnahme);
-                                                        }
-
-                                                      case "free":
-                                                        {
-                                                          return Text("free");
-                                                        }
-
-                                                      case "edited":
-                                                        {
-                                                          return Text("edited");
-                                                        }
-
-                                                      case "empty":
-                                                        {
-                                                          return Text("empty");
-                                                        }
-
-                                                      default:
-                                                        {
-                                                          return Text("error");
-                                                        }
-                                                    }
+                                                    return OpenCard(state: _state, index: index, i: i, zeitnahme: _zeitnahme,);
                                                   },
                                                   onClosed: (o) {
                                                     getIt<HiveDB>()

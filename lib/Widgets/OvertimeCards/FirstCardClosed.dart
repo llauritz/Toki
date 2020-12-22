@@ -4,9 +4,10 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:work_in_progress/Services/Data.dart';
-import 'package:work_in_progress/Widgets/TimerTextWidget.dart';
-import 'package:work_in_progress/hiveClasses/Zeitnahme.dart';
+
+import '../../Services/Data.dart';
+import '../../Widgets/TimerTextWidget.dart';
+import '../../hiveClasses/Zeitnahme.dart';
 
 final getIt = GetIt.instance;
 

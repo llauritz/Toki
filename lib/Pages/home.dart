@@ -2,14 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:work_in_progress/Services/HiveDB.dart';
-import 'package:work_in_progress/Widgets/ZeitenCard.dart';
-import 'package:work_in_progress/Widgets/background_copy.dart';
 
-import '../Services/Data.dart';
 import '../Services/timer.dart';
 import '../Widgets/AnimatedStempelButton.dart';
+import '../Widgets/OvertimeCardsList.dart';
 import '../Widgets/Settings/SettingsButton.dart';
+import '../Widgets/background_copy.dart';
 
 final getIt = GetIt.instance;
 
@@ -109,8 +107,8 @@ class _homePageState extends State<homePage> {
 
   @override
   void dispose() {
-    getIt<Data>().dispose();
-    getIt<HiveDB>().dispose();
+/*    getIt<Data>().dispose();
+    getIt<HiveDB>().dispose();*/
     print("home - DISPOSING-----------------");
     super.dispose();
   }

@@ -181,13 +181,16 @@ class HiveDB {
 
   Future<void> changeState(String state, int index) async {
     zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
+    print("HiveDB - changeState - 1 $index");
 
     Zeitnahme _updated = zeitenBox.getAt(index);
+    print("HiveDB - changeState - 2 ${_updated.state}");
     _updated.state = state;
     zeitenBox.putAt(index, _updated);
 
     listChangesStream.sink.add(changeNumber++);
     updateGesamtUeberstunden();
+    print("HiveDB - changeState - 3 ${_updated.state}");
   }
 
   void dispose() {
@@ -210,6 +213,33 @@ class HiveDB {
 
     print("HiveDB - updateStartEndZeit - gespeichert");
   }
+
+  Future<void> updateTag(String tag, int index) async{
+    zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
+    print("HiveDB - changeTag - 1 $index");
+
+    Zeitnahme _updated = zeitenBox.getAt(index);
+    print("HiveDB - changeTag - 2 ${_updated.tag}");
+    _updated.tag = tag;
+    zeitenBox.putAt(index, _updated);
+
+    listChangesStream.sink.add(changeNumber++);
+    print("HiveDB - changeTag - 3 ${_updated.tag}");
+  }
+
+  Future<void> updateEditMilli(int editMilli, int index) async{
+    zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
+    print("HiveDB - changeEditMilli - 1 $index");
+
+    Zeitnahme _updated = zeitenBox.getAt(index);
+    print("HiveDB - changeEditMilli - 2 ${Duration(milliseconds: _updated.editMilli)}");
+    _updated.editMilli = editMilli;
+    zeitenBox.putAt(index, _updated);
+
+    listChangesStream.sink.add(changeNumber++);
+    print("HiveDB - changeEditMilli - 3 ${Duration(milliseconds: _updated.editMilli)}");
+  }
+
 }
 
 extension DateOnlyCompare on DateTime {

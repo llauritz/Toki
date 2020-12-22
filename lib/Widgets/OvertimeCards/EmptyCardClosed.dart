@@ -3,12 +3,12 @@ import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_animations/simple_animations.dart';
-import 'package:work_in_progress/Services/Data.dart';
-import 'package:work_in_progress/Services/Theme.dart';
-import 'package:work_in_progress/Widgets/TimerTextWidget.dart';
-import 'package:work_in_progress/hiveClasses/Zeitnahme.dart';
 
+import '../../Services/Data.dart';
 import '../../Services/HiveDB.dart';
+import '../../Services/Theme.dart';
+import '../../Widgets/TimerTextWidget.dart';
+import '../../hiveClasses/Zeitnahme.dart';
 
 final getIt = GetIt.instance;
 
@@ -61,7 +61,7 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
               height: 65,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(1000),
-                color: _colorTranslucent,
+                color: grayTranslucent.withAlpha(100),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -69,12 +69,12 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                 children: [
                   Text(
                     wochentag.format(_day).substring(0, 2),
-                    style: TextStyle(color: _colorAccent, fontSize: 18.0),
+                    style: TextStyle(color: gray, fontSize: 18.0),
                     textAlign: TextAlign.start,
                   ),
                   Text(
                     datum.format(_day),
-                    style: TextStyle(color: _colorAccent, fontSize: 12.0),
+                    style: TextStyle(color: gray, fontSize: 12.0),
                     textAlign: TextAlign.start,
                   )
                 ],
@@ -88,7 +88,7 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
               duration: Duration(milliseconds: 1000),
               height: 65,
               decoration: BoxDecoration(
-                border: Border.all(width: 2.0, color: _color),
+                border: Border.all(width: 2.0, color: grayTranslucent),
                 borderRadius: BorderRadius.circular(1000),
               ),
               child: Padding(
@@ -98,6 +98,7 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(6, 6, 0, 6),
                       child: FlatButton(
+                          minWidth: 0,
                           splashColor: _colorAccent.withAlpha(80),
                           highlightColor: _colorAccent.withAlpha(50),
                           color: _colorTranslucent,
@@ -116,16 +117,44 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                                 color: _colorAccent,
                               ),
                               Text(
-                                "Freier Tag",
+                                "Urlaub",
                                 style: TextStyle(
-                                    color: _colorAccent, fontSize: 12.0),
+                                  fontFamily: "BandeinsSansRegular",
+                                    color: _colorAccent, fontSize: 11.0),
                               )
                             ],
                           )),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(6, 6, 0, 6),
-                      child: FlatButton(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(1000),
+                          color: editColorTranslucent
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal:15.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.edit,
+                                size: 22,
+                                color: editColor,
+                              ),
+                              Text(
+                                "Bearbeiten",
+                                style: TextStyle(
+                                    fontFamily: "BandeinsSansRegular",
+                                    color: editColor, fontSize: 11.0),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      /*FlatButton(
                           clipBehavior: Clip.antiAlias,
                           padding: EdgeInsets.zero,
                           minWidth: 50,
@@ -175,7 +204,7 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                                 ),
                               ),
                             ],
-                          )),
+                          )),*/
                     ),
                     Expanded(child: Text("")),
                     Row(
@@ -186,7 +215,7 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                           style: Theme.of(context)
                               .textTheme
                               .headline4
-                              .copyWith(color: _color),
+                              .copyWith(color: gray),
                         ),
                         Text(
                             Duration(milliseconds: _tagesMillisekunden.abs())
@@ -195,12 +224,12 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                             style: Theme.of(context)
                                 .textTheme
                                 .headline4
-                                .copyWith(color: _color)),
+                                .copyWith(color: gray)),
                         Text(":",
                             style: Theme.of(context)
                                 .textTheme
                                 .headline4
-                                .copyWith(color: _color)),
+                                .copyWith(color: gray)),
                         DoubleDigit(
                             i: Duration(milliseconds: _tagesMillisekunden.abs())
                                     .inMinutes %
@@ -208,7 +237,7 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                             style: Theme.of(context)
                                 .textTheme
                                 .headline4
-                                .copyWith(color: _color))
+                                .copyWith(color: gray))
                       ],
                     ),
                   ],

@@ -2,9 +2,9 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:work_in_progress/Widgets/ZeitenCardWidgets/UeberstundenTextWidget.dart';
 
 import '../../Services/HiveDB.dart';
+import '../OvertimeCards/OvertimeTextWidget.dart';
 
 final getIt = GetIt.instance;
 

@@ -3,11 +3,10 @@ import 'package:day_night_time_picker/lib/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:work_in_progress/Services/Theme.dart';
-import 'package:work_in_progress/Widgets/TimerTextWidget.dart';
 
 import '../../../Services/HiveDB.dart';
 import '../../../Services/Theme.dart';
+import '../../../Widgets/TimerTextWidget.dart';
 
 final getIt = GetIt.instance;
 
@@ -91,12 +90,7 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
                         padding: const EdgeInsets.only(right: 10.0),
                         child: DoubleDigit(
                             i: editedTime.minute,
-                            style: TextStyle(
-                              fontSize: 60,
-                              color: grayDark,
-                              fontFamily: "Roboto-Mono",
-                              letterSpacing: 0,
-                            )),
+                            style: dayNightNumbers),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),

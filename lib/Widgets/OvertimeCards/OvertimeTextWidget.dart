@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../Services/Theme.dart';
 import '../TimerTextWidget.dart';
 
 class UeberstundenTextWidget extends StatelessWidget {
@@ -9,6 +10,7 @@ class UeberstundenTextWidget extends StatelessWidget {
   }) : super(key: key);
 
   final int ueberMilliseconds;
+
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +24,7 @@ class UeberstundenTextWidget extends StatelessWidget {
     print("timer - elapsed Seconds" + elapsedSeconds.toString());*/
 
     Color _color = isNegative ? Colors.blueGrey[300] : Colors.tealAccent;
-    TextStyle _style = Theme.of(context)
-        .textTheme
-        .headline1
-        .copyWith(fontSize: 58, color: _color);
+    TextStyle _style = dayNightNumbers;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -33,7 +32,7 @@ class UeberstundenTextWidget extends StatelessWidget {
       children: [
         isNegative ? Text("-", style: _style) : Text("", style: _style),
         Text(elapsedHours.toString(), style: _style),
-        Text(":", style: _style),
+        Text(":", style: _style.copyWith(fontFamily: "BandeinsSans")),
         DoubleDigit(i: elapsedMinutes, style: _style),
       ],
     );

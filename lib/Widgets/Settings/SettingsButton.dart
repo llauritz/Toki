@@ -1,10 +1,10 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:work_in_progress/Services/HiveDB.dart';
 
 import '../../Pages/SettingsPage.dart';
 import '../../Services/Data.dart';
+import '../../Services/HiveDB.dart';
 
 final getIt = GetIt.instance;
 

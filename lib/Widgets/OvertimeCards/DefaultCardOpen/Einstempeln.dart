@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:work_in_progress/hiveClasses/Zeitnahme.dart';
 
 import '../../../Services/Data.dart';
+import '../../../hiveClasses/Zeitnahme.dart';
 import 'DayNightPickerEdit.dart';
 import 'DottedLine.dart';
 

@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:work_in_progress/Services/Theme.dart';
-import 'package:work_in_progress/Widgets/TimerTextWidget.dart';
-import 'package:work_in_progress/hiveClasses/Zeitnahme.dart';
 
 import '../../../Services/HiveDB.dart';
+import '../../../Services/Theme.dart';
+import '../../../Widgets/TimerTextWidget.dart';
+import '../../../hiveClasses/Zeitnahme.dart';
 import 'TimesList.dart';
 
 final getIt = GetIt.instance;
@@ -16,6 +16,7 @@ class DefaultCardOpen extends StatefulWidget {
     @required this.i,
     @required this.index,
     @required this.zeitnahme,
+    @required this.callback,
     Key key,
   }) : super(key: key);
 
@@ -25,6 +26,7 @@ class DefaultCardOpen extends StatefulWidget {
   // Tatsächlicher Punkt in der ListView // 0 = ganz oben
   final int index;
   final Zeitnahme zeitnahme;
+  final Function callback;
 
   @override
   _DefaultCardOpenState createState() => _DefaultCardOpenState();
@@ -263,13 +265,91 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                       )),
                   Flexible(
                       flex: 7,
-                      child: Theme(
-                          data: Theme.of(context)
-                              .copyWith(accentColor: Colors.white),
-                          child: TimesList(
-                              zeitnahme: _zeitnahme,
-                              uhrzeit: uhrzeit,
-                              widget: widget))),
+                      child: Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom:50.0),
+                            child: Theme(
+                                data: Theme.of(context)
+                                    .copyWith(accentColor: Colors.white),
+                                child: ShaderMask(
+                                  shaderCallback: (Rect bounds) {
+                                    return LinearGradient(
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment(0, 0.8),
+                                      colors: <Color>[
+                                        Colors.white.withAlpha(0),
+                                        Colors.white,
+                                      ],
+                                    ).createShader(bounds);
+                                  },
+                                  blendMode: BlendMode.dstATop,
+                                  child: TimesList(
+                                      zeitnahme: _zeitnahme,
+                                      uhrzeit: uhrzeit,
+                                      widget: widget)),
+                                ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                RaisedButton(
+                                    onPressed: (){
+                                      getIt<HiveDB>().changeState("free", widget.i);
+                                      widget.callback();
+                                    },
+                                    splashColor: free.withAlpha(150),
+                                    highlightColor: free.withAlpha(80),
+                                    elevation: 5,
+                                    shape: StadiumBorder(),
+                                    color: freeTranslucent,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical:15.0, horizontal: 8),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.beach_access, color: free, size: 20,),
+                                          SizedBox(width: 5),
+                                          Text("Urlaub", style: openButtonText.copyWith(
+                                              color: free
+                                          ),),
+                                        ],
+                                      ),
+                                    )
+                                ),
+                                SizedBox(width: 10),
+                                RaisedButton(
+                                    onPressed: (){
+                                      getIt<HiveDB>().changeState("edited", widget.i);
+                                      widget.callback();
+                                    },
+                                    splashColor: editColor.withAlpha(150),
+                                    highlightColor: editColor.withAlpha(80),
+                                    elevation: 5,
+                                    shape: StadiumBorder(),
+                                    color: editColorTranslucent,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical:15.0, horizontal: 8),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.edit, color: editColor, size: 20,),
+                                          SizedBox(width: 5),
+                                          Text("Zeit nachtragen", style: openButtonText.copyWith(
+                                              color: editColor
+                                          ),),
+                                        ],
+                                      ),
+                                    )
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )),
                 ],
               ),
             ),

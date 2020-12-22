@@ -23,6 +23,12 @@ class Zeitnahme {
   @HiveField(3)
   List<int> endTimes;
 
+  @HiveField(4)
+  String tag = "Urlaub";
+
+  @HiveField(5)
+  int editMilli = 0;
+
   int getElapsedTime() {
     int n = startTimes.length > endTimes.length
         ? endTimes.length
@@ -36,7 +42,7 @@ class Zeitnahme {
   }
 
   int getUeberstunden() {
-    if (state != "free") {
+    if (state == "default") {
       int tagesHours = getIt<Data>().tagesstunden.truncate();
       int tagesMinutes =
           ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
@@ -46,6 +52,14 @@ class Zeitnahme {
           getKorrektur();
       print("Zeitnahme - day" + day.toString());
       return uebermilliseconds;
+
+    } else if(state == "edited"){
+        int tagesHours = getIt<Data>().tagesstunden.truncate();
+        int tagesMinutes =
+            ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
+        int uebermilliseconds = editMilli - Duration(hours: tagesHours, minutes: tagesMinutes).inMilliseconds;
+        return uebermilliseconds;
+
     } else {
       return 0;
     }

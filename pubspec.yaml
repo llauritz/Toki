@@ -1,4 +1,4 @@
-name: work_in_progress
+name: Timo
 description: A new Flutter application.
 
 # The following line prevents the package from being accidentally published to
@@ -95,6 +95,10 @@ flutter:
     - family: BandeinsSans
       fonts:
         - asset: fonts/BandeinsSansBold.otf
+
+    - family: BandeinsSansRegular
+      fonts:
+        - asset: fonts/BandeinsSansRegular.otf
 
     - family: MajorMono
       fonts:

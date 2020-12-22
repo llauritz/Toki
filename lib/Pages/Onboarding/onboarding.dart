@@ -1,8 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:work_in_progress/Widgets/background_copy.dart';
 
+import '../../Widgets/background_copy.dart';
 import 'Onboarding1.dart';
 import 'Onboarding2.dart';
 import 'Onboarding3.dart';

@@ -1,7 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:get_it/get_it.dart';
 
 import '../Services/Data.dart';
@@ -38,13 +37,13 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Stack(
         children: [
-          /*StreamBuilder<Color>(
+          StreamBuilder<Color>(
             stream: getIt<Data>().primaryColorStream.stream,
             initialData: getIt<Data>().primaryColor,
             builder: (context, snapshot) {
               return AnimatedContainer(color: snapshot.data, duration: Duration(milliseconds: 1000),);
             }
-          ),*/
+          ),
         /*StreamBuilder<AssetImage>(
             stream: getIt<Data>().currentImageStream.stream,
             initialData: getIt<Data>().currentImage,
@@ -66,7 +65,7 @@ class _SettingsPageState extends State<SettingsPage> {
         /* BackdropFilter(filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
           child: Container(color: Colors.transparent)),*/
 
-        StreamBuilder<String>(
+        /*StreamBuilder<String>(
             stream: getIt<Data>().backgroundHashStream.stream,
             initialData: getIt<Data>().backgroundHash,
             builder: (context, snapshot) {
@@ -81,7 +80,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
               );
-            }),
+            }),*/
         SafeArea(
           child: SingleChildScrollView(
             child: Column(
