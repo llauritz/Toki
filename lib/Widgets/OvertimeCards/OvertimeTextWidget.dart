@@ -24,7 +24,7 @@ class UeberstundenTextWidget extends StatelessWidget {
     print("timer - elapsed Seconds" + elapsedSeconds.toString());*/
 
     Color _color = isNegative ? Colors.blueGrey[300] : Colors.tealAccent;
-    TextStyle _style = dayNightNumbers;
+    TextStyle _style = overTimeNumbers.copyWith(color: _color);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

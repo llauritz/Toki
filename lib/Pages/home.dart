@@ -42,7 +42,7 @@ class _homePageState extends State<homePage> {
       backgroundColor: Color(0xff0EE796),
       body: SlidingUpPanel(
         minHeight: 240.0,
-        maxHeight: 700.0,
+        maxHeight: 658.0,
         backdropTapClosesPanel: true,
         controller: pc,
         backdropEnabled: true,
@@ -69,6 +69,7 @@ class _homePageState extends State<homePage> {
               ),
               ZeitenPanel(
                 panelController: pc,
+                updateTimer: timerText.update,
               )
             ],
           ),

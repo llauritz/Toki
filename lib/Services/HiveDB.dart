@@ -165,7 +165,7 @@ class HiveDB {
                 startTimes: [],
                 endTimes: []));
             if (animatedListkey.currentState != null) {
-              animatedListkey.currentState.insertItem(0);
+              animatedListkey.currentState.insertItem(0, duration: Duration(milliseconds: 1000));
             }
             print("HiveDB - urlaubscheck Tag ergänzt");
           } else {

@@ -43,14 +43,14 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
       final DateTime _day = _zeitnahme.day;
 
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             AnimatedContainer(
               duration: Duration(milliseconds: 1000),
-              width: 65,
-              height: 65,
+              width: 60,
+              height: 60,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(1000),
                 color: _colorTranslucent,
@@ -61,30 +61,30 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
                 children: [
                   Text(
                     wochentag.format(_day).substring(0, 2),
-                    style: TextStyle(color: _colorAccent, fontSize: 18.0),
+                    style: TextStyle(color: _colorAccent, fontSize: 16.0),
                     textAlign: TextAlign.start,
                   ),
                   Text(
                     datum.format(_day),
-                    style: TextStyle(color: _colorAccent, fontSize: 12.0),
+                    style: TextStyle(color: _colorAccent, fontSize: 11.0),
                     textAlign: TextAlign.start,
                   )
                 ],
               ),
             ),
             SizedBox(
-              width: 20.0,
+              width: 30.0,
             ),
             AnimatedContainer(
-              width: 260,
+              width: 240,
               duration: Duration(milliseconds: 1000),
-              height: 65,
+              height: 60,
               decoration: BoxDecoration(
                 border: Border.all(width: 2.0, color: _color),
                 borderRadius: BorderRadius.circular(1000),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.fromLTRB(18, 0, 15, 0),
                 child: Row(
                   children: [
                     Row(
@@ -92,7 +92,7 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
                       children: [
                         Text(
                           _zeitnahme.tag.toString(),overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 18, color: _color),
+                          style: TextStyle(fontSize: 14, color: _color),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 3.0),
@@ -107,7 +107,7 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
                             child: Icon(
                               Icons.replay_rounded,
                               color: _colorAccent,
-                              size: 28,
+                              size: 24,
                             ),
                             splashColor: _colorAccent.withAlpha(80),
                             highlightColor: _colorAccent.withAlpha(50),

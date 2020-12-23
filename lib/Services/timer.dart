@@ -14,7 +14,6 @@ final getIt = GetIt.instance;
 
 class TimerText extends StatefulWidget {
   final _TimerTextState ts = _TimerTextState();
-  @override
 
   final Timer t = Timer.periodic(Duration(hours: 1), (timer) {});
 

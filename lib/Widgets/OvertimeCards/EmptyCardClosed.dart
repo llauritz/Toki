@@ -51,14 +51,14 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
       final int index = widget.index;
 
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             AnimatedContainer(
               duration: Duration(milliseconds: 500),
-              width: 65,
-              height: 65,
+              width: 60,
+              height: 60,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(1000),
                 color: grayTranslucent.withAlpha(100),
@@ -69,34 +69,34 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                 children: [
                   Text(
                     wochentag.format(_day).substring(0, 2),
-                    style: TextStyle(color: gray, fontSize: 18.0),
+                    style: TextStyle(color: gray, fontSize: 16.0),
                     textAlign: TextAlign.start,
                   ),
                   Text(
                     datum.format(_day),
-                    style: TextStyle(color: gray, fontSize: 12.0),
+                    style: TextStyle(color: gray, fontSize: 11.0),
                     textAlign: TextAlign.start,
                   )
                 ],
               ),
             ),
             SizedBox(
-              width: 20.0,
+              width: 30.0,
             ),
             AnimatedContainer(
-              width: 260,
+              width: 240,
               duration: Duration(milliseconds: 1000),
-              height: 65,
+              height: 60,
               decoration: BoxDecoration(
                 border: Border.all(width: 2.0, color: grayTranslucent),
                 borderRadius: BorderRadius.circular(1000),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(right: 25.0),
+                padding: const EdgeInsets.only(right: 18.0),
                 child: Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(6, 6, 0, 6),
+                      padding: const EdgeInsets.fromLTRB(3, 3, 0, 3),
                       child: FlatButton(
                           minWidth: 0,
                           splashColor: _colorAccent.withAlpha(80),
@@ -113,20 +113,20 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                             children: [
                               Icon(
                                 Icons.beach_access,
-                                size: 22,
+                                size: 18,
                                 color: _colorAccent,
                               ),
                               Text(
                                 "Urlaub",
                                 style: TextStyle(
-                                  fontFamily: "BandeinsSansRegular",
+                                    fontFamily: "BandeinsSansRegular",
                                     color: _colorAccent, fontSize: 11.0),
                               )
                             ],
                           )),
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(6, 6, 0, 6),
+                      padding: const EdgeInsets.fromLTRB(3, 3, 0, 3),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(1000),
@@ -140,7 +140,7 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                             children: [
                               Icon(
                                 Icons.edit,
-                                size: 22,
+                                size: 18,
                                 color: editColor,
                               ),
                               Text(

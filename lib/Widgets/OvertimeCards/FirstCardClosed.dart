@@ -37,7 +37,7 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
   Color _color;
   Color _colorAccent;
   Color _colorTranslucent;
-  double _width = 260;
+  double _width = 240;
   int keyInt = 0;
 
   @override
@@ -59,22 +59,22 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
     }
 
     if (widget.index == 0 && widget.isRunning) {
-      _width = 165;
+      _width = 150;
       print("DefaultCardClosed - width $_width");
     } else {
-      _width = 260;
+      _width = 240;
       print("DefaultCardClosed - width $_width");
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           AnimatedContainer(
               duration: Duration(milliseconds: 700),
-              width: 65,
-              height: 65,
+              width: 60,
+              height: 60,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(1000),
                 color: _colorTranslucent,
@@ -89,12 +89,12 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
                     children: [
                       Text(
                         wochentag.format(_day).substring(0, 2),
-                        style: TextStyle(color: _colorAccent, fontSize: 18.0),
+                        style: TextStyle(color: _colorAccent, fontSize: 16.0),
                         textAlign: TextAlign.start,
                       ),
                       Text(
                         datum.format(_day),
-                        style: TextStyle(color: _colorAccent, fontSize: 12.0),
+                        style: TextStyle(color: _colorAccent, fontSize: 11.0),
                         textAlign: TextAlign.start,
                       )
                     ],
@@ -102,26 +102,26 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
                 ),
               )),
           SizedBox(
-            width: 20.0,
+            width: 30.0,
           ),
           AnimatedContainer(
             width: _width,
             curve:
                 getIt<Data>().isRunning ? Curves.easeInOutCubic : Curves.ease,
             duration: Duration(milliseconds: 700),
-            height: 65,
+            height: 60,
             decoration: BoxDecoration(
               border: Border.all(width: 2.0, color: _color),
               borderRadius: BorderRadius.circular(1000),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.fromLTRB(20, 0, 15, 0),
               child: Row(
                 children: [
                   Text(
                     Uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(
                         _zeitnahme.startTimes[0])),
-                    style: TextStyle(fontSize: 18, color: Colors.blueGrey),
+                    style: TextStyle(fontSize: 14, color: Colors.blueGrey),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 2.0, 8.0, 0.0),
@@ -332,7 +332,7 @@ class _EndTimeWidgetState extends State<EndTimeWidget> {
       _widget = Text(
         widget.Uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(
             widget._zeitnahme.endTimes.last)),
-        style: TextStyle(fontSize: 18, color: Colors.blueGrey),
+        style: TextStyle(fontSize: 14, color: Colors.blueGrey),
         key: ValueKey<int>(i),
       );
     } else {
@@ -348,7 +348,7 @@ class _EndTimeWidgetState extends State<EndTimeWidget> {
       });
       _widget = Text(
         widget.Uhrzeit.format(_now),
-        style: TextStyle(fontSize: 18, color: Colors.black.withAlpha(50)),
+        style: TextStyle(fontSize: 14, color: Colors.black.withAlpha(50)),
         key: ValueKey<int>(i),
       );
     }

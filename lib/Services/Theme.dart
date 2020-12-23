@@ -35,3 +35,7 @@ TextStyle closedCardsNumbers = TextStyle(
   fontSize: 16.0,
   height: 1.05,
 color: Colors.white);
+
+TextStyle overTimeNumbers = TextStyle(
+  fontSize: 46
+);

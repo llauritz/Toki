@@ -49,14 +49,14 @@ class _EditedCardClosedState extends State<EditedCardClosed> {
       int editMinutes = (editMilli/Duration.millisecondsPerMinute).truncate();
 
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             AnimatedContainer(
               duration: Duration(milliseconds: 1000),
-              width: 65,
-              height: 65,
+              width: 60,
+              height: 60,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(1000),
                 color: editColorTranslucent,
@@ -67,30 +67,30 @@ class _EditedCardClosedState extends State<EditedCardClosed> {
                 children: [
                   Text(
                     wochentag.format(_day).substring(0, 2),
-                    style: TextStyle(color: editColor, fontSize: 18.0),
+                    style: TextStyle(color: editColor, fontSize: 16.0),
                     textAlign: TextAlign.start,
                   ),
                   Text(
                     datum.format(_day),
-                    style: TextStyle(color: editColor, fontSize: 12.0),
+                    style: TextStyle(color: editColor, fontSize: 11.0),
                     textAlign: TextAlign.start,
                   )
                 ],
               ),
             ),
             SizedBox(
-              width: 20.0,
+              width: 30.0,
             ),
             AnimatedContainer(
-              width: 260,
+              width: 240,
               duration: Duration(milliseconds: 1000),
-              height: 65,
+              height: 60,
               decoration: BoxDecoration(
                 border: Border.all(width: 2.0, color: editColor),
                 borderRadius: BorderRadius.circular(1000),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.fromLTRB(18, 0, 15, 0),
                 child: Row(
                   children: [
                     Row(
@@ -98,7 +98,7 @@ class _EditedCardClosedState extends State<EditedCardClosed> {
                       children: [
                         Text(
                           "Bearbeitet",overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 18, color: editColor),
+                          style: TextStyle(fontSize: 14, color: editColor),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 3.0),
@@ -113,7 +113,7 @@ class _EditedCardClosedState extends State<EditedCardClosed> {
                             child: Icon(
                               Icons.replay_rounded,
                               color: editColor,
-                              size: 28,
+                              size: 22,
                             ),
                             splashColor: editColor.withAlpha(80),
                             highlightColor: editColor.withAlpha(50),

@@ -22,10 +22,12 @@ final getIt = GetIt.instance;
 class ZeitenPanel extends StatefulWidget {
   const ZeitenPanel({
     Key key,
+    @required this.updateTimer,
     @required this.panelController,
   }) : super(key: key);
 
   final PanelController panelController;
+  final Function updateTimer;
 
   @override
   _ZeitenPanelState createState() => _ZeitenPanelState();
@@ -42,7 +44,7 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         child: LimitedBox(
-          maxHeight: 500,
+          maxHeight: 460,
           child: StreamBuilder<Color>(
               stream: getIt<Data>().primaryColorStream.stream,
               initialData: getIt<Data>().primaryColor,
@@ -238,9 +240,11 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
                                                           action) {
                                                     return OpenCard(state: _state, index: index, i: i, zeitnahme: _zeitnahme,);
                                                   },
-                                                  onClosed: (o) {
+                                                  onClosed: (o) async{
                                                     getIt<HiveDB>()
                                                         .updateGesamtUeberstunden();
+                                                    await getIt<HiveDB>().calculateTodayElapsedTime();
+                                                    widget.updateTimer();
                                                   },
                                                 ));
                                           }),

@@ -32,10 +32,10 @@ class _FirstWidgetState extends State<FirstWidget> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 24.0, 0, 10),
+              padding: const EdgeInsets.fromLTRB(0, 27.0, 0, 20),
               child: SizedBox(
-                  height: 10,
-                  width: 60,
+                  height: 8,
+                  width: 50,
                   child: Center(
                       child: Container(
                     decoration: BoxDecoration(
@@ -78,7 +78,7 @@ class _FirstWidgetState extends State<FirstWidget> {
                           duration: const Duration(milliseconds: 600),
                         ),
                         Text(
-                          "Überstunden",
+                          snapshot.data.isNegative?"Stunden":"Überstunden",
                           style: TextStyle(
                               fontSize: 20, color: Colors.blueGrey[300]),
                         )
