@@ -1,3 +1,4 @@
+import 'package:Timo/Services/Theme.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -145,9 +146,12 @@ class _EinstempelnState extends State<Einstempeln> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 22.0),
-            child: Text(
-              "Einstempeln",
-              style: TextStyle(color: Colors.blueGrey[300]),
+            child: Container(
+              width: 120,
+              child: Text(
+                "Einstempeln",
+                style: headline3.copyWith(color: gray),
+              ),
             ),
           )
         ],

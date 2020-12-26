@@ -83,95 +83,164 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
           print("ueberHoras $ueberHours");
           print("ueberMinutes $ueberMinutes");
 
-          TextStyle numbers = TextStyle(color: _colorAccent, fontSize: 32);
+          TextStyle numbers = openCardsNumbers.copyWith(color: _colorAccent);
 
-          return Container(
-            color: Colors.white,
-            child: SafeArea(
-              child: Column(
+          return Scaffold(
+
+            backgroundColor: Colors.white,
+            body: SafeArea(
+              child: Stack(
                 children: [
-                  Flexible(
-                      flex: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                        child: Container(
-                          padding: EdgeInsets.all(20.0),
-                          decoration: BoxDecoration(
-                              color: _colorTranslucent,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  offset: Offset(0, 5),
-                                  color: _colorTranslucent.withAlpha(150),
-                                  blurRadius: 10,
-                                  spreadRadius: 0,
-                                )
-                              ]),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
+                    children: [
+                      Flexible(flex: 4, child: Container(),),
+                      Flexible(
+                          flex: 7,
+                          child: Stack(
+                            alignment: Alignment.bottomCenter,
                             children: [
-                              Row(
-                                children: [
-                                  IconButton(
-                                      splashColor: _colorAccent.withAlpha(80),
-                                      highlightColor:
-                                          _colorAccent.withAlpha(50),
-                                      padding: EdgeInsets.all(0),
-                                      visualDensity: VisualDensity(),
-                                      icon: Icon(Icons.close,
-                                          color: _colorAccent, size: 30),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      })
-                                ],
-                              ),
                               Padding(
-                                padding: const EdgeInsets.only(bottom: 12.0),
-                                child: Text(
-                                  tag.format(_day) + ", " + datum.format(_day),
-                                  style: TextStyle(
-                                      fontSize: 42, color: _colorAccent),
+                                padding: const EdgeInsets.only(bottom:65.0),
+                                child: Theme(
+                                  data: Theme.of(context)
+                                      .copyWith(accentColor: Colors.white),
+                                  child: ShaderMask(
+                                      shaderCallback: (Rect bounds) {
+                                        return LinearGradient(
+                                          begin: Alignment.bottomCenter,
+                                          end: Alignment(0, 0.8),
+                                          colors: <Color>[
+                                            Colors.white.withAlpha(0),
+                                            Colors.white,
+                                          ],
+                                        ).createShader(bounds);
+                                      },
+                                      blendMode: BlendMode.dstATop,
+                                      child: TimesList(
+                                          zeitnahme: _zeitnahme,
+                                          uhrzeit: uhrzeit,
+                                          widget: widget)),
                                 ),
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    FlatButton(
+                                        onPressed: (){
+                                          if(widget.zeitnahme.tag == "Stundenabbau"){
+                                            getIt<HiveDB>().updateTag("Urlaub", widget.i);
+                                          }
+                                          getIt<HiveDB>().changeState("free", widget.i);
+                                          widget.callback();
+                                        },
+                                        splashColor: free.withAlpha(150),
+                                        highlightColor: free.withAlpha(80),
+                                        shape: StadiumBorder(),
+                                        color: freeTranslucent,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical:10.0, horizontal: 0),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.beach_access, color: freeAccent, size: 20,),
+                                              SizedBox(width: 5),
+                                              Text("Urlaubstag", style: openButtonText.copyWith(
+                                                  color: freeAccent
+                                              ),),
+                                            ],
+                                          ),
+                                        )
+                                    ),
+                                    SizedBox(width: 12),
+                                    FlatButton(
+                                        onPressed: (){
+                                          if(widget.zeitnahme.tag == "Stundenabbau"){
+                                            getIt<HiveDB>().updateTag("Bearbeitet", widget.i);
+                                          }
+                                          getIt<HiveDB>().changeState("edited", widget.i);
+                                          widget.callback();
+                                        },
+                                        splashColor: editColor.withAlpha(150),
+                                        highlightColor: editColor.withAlpha(80),
+                                        shape: StadiumBorder(),
+                                        color: editColorTranslucent,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical:10.0, horizontal: 0),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.edit, color: editColor, size: 20,),
+                                              SizedBox(width: 5),
+                                              Text("Zeit nachtragen", style: openButtonText.copyWith(
+                                                  color: editColor
+                                              ),),
+                                            ],
+                                          ),
+                                        )
+                                    ),
+                                  ],
+                                )
+                              ),
+                            ],
+                          )),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Flexible(
+                          flex: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                            child: Container(
+                              padding: EdgeInsets.fromLTRB(12.0,12,12,20),
+                              decoration: BoxDecoration(
+                                  color: _colorTranslucent,
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      offset: Offset(0, 5),
+                                      color: _colorTranslucent.withAlpha(150),
+                                      blurRadius: 10,
+                                      spreadRadius: 0,
+                                    )
+                                  ]),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Column(
+                                  Row(
                                     children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            elapsedHours.toString(),
-                                            style: numbers,
-                                          ),
-                                          Text(
-                                            ":",
-                                            style: numbers,
-                                          ),
-                                          DoubleDigit(
-                                              i: elapsedMinutes % 60,
-                                              style: numbers)
-                                        ],
-                                      ),
-                                      Text(
-                                        "Arbeitszeit",
-                                        style: TextStyle(color: _colorAccent),
-                                      ),
+                                      IconButton(
+                                          splashColor: _colorAccent.withAlpha(80),
+                                          highlightColor:
+                                              _colorAccent.withAlpha(50),
+                                          padding: EdgeInsets.all(0),
+                                          visualDensity: VisualDensity(),
+                                          icon: Icon(Icons.close,
+                                              color: _colorAccent, size: 30),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          })
                                     ],
                                   ),
                                   Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 30.0),
-                                      child: Column(
+                                    padding: const EdgeInsets.only(bottom: 12.0),
+                                    child: Text(
+                                      tag.format(_day) + ", " + datum.format(_day),
+                                      style:
+                                          openCardDate.copyWith(color: _colorAccent),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Column(
                                         children: [
-                                          //TODO: Nur anzeigen, wenn nicht erstes Element + isRunning true
-
                                           Row(
                                             children: [
-                                              if (ueberMilliseconds.isNegative)
-                                                Text("-", style: numbers),
                                               Text(
-                                                ueberHours.toString(),
+                                                elapsedHours.toString(),
                                                 style: numbers,
                                               ),
                                               Text(
@@ -179,177 +248,123 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                                 style: numbers,
                                               ),
                                               DoubleDigit(
-                                                  i: ueberMinutes % 60,
+                                                  i: elapsedMinutes % 60,
                                                   style: numbers)
                                             ],
                                           ),
                                           Text(
-                                            "Überstunden",
-                                            style:
-                                                TextStyle(color: _colorAccent),
+                                            "Arbeitszeit",
+                                            style: openCardsLabel.copyWith(color: _colorAccent),
                                           ),
                                         ],
-                                      )),
-                                  Column(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          if (_zeitnahme.getKorrektur() > 0) {
-                                            final dynamic tooltip =
-                                                _toolTipKey.currentState;
-                                            tooltip.ensureTooltipVisible();
-                                          }
-                                        },
-                                        child: Tooltip(
-                                          textStyle: TextStyle(
-                                              color: Colors.blueGrey[700]),
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(100),
-                                              color: Colors.white,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    offset: Offset(0, 5),
-                                                    color: Colors.black12,
-                                                    blurRadius: 10)
-                                              ]),
-                                          key: _toolTipKey,
-                                          verticalOffset: 40,
-                                          message: "Pause korrigiert",
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                pauseHours.toString(),
-                                                style: numbers.copyWith(
-                                                    color: _zeitnahme
-                                                                .getKorrektur() >
-                                                            0
-                                                        ? editColor
-                                                        : _colorAccent),
-                                              ),
-                                              Text(
-                                                ":",
-                                                style: numbers.copyWith(
-                                                    color: _zeitnahme
-                                                                .getKorrektur() >
-                                                            0
-                                                        ? editColor
-                                                        : _colorAccent),
-                                              ),
-                                              DoubleDigit(
-                                                  i: pauseMinutes % 60,
-                                                  style: numbers.copyWith(
-                                                      color: _zeitnahme
-                                                                  .getKorrektur() >
-                                                              0
-                                                          ? editColor
-                                                          : _colorAccent))
-                                            ],
-                                          ),
-                                        ),
                                       ),
-                                      Text(
-                                        "Pause",
-                                        style: TextStyle(
-                                            color: _zeitnahme.getKorrektur() > 0
-                                                ? editColor
-                                                : _colorAccent),
+                                      Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 30.0),
+                                          child: Column(
+                                            children: [
+                                              //TODO: Nur anzeigen, wenn nicht erstes Element + isRunning true
+
+                                              Row(
+                                                children: [
+                                                  if (ueberMilliseconds.isNegative)
+                                                    Text("-", style: numbers),
+                                                  Text(
+                                                    ueberHours.toString(),
+                                                    style: numbers,
+                                                  ),
+                                                  Text(
+                                                    ":",
+                                                    style: numbers,
+                                                  ),
+                                                  DoubleDigit(
+                                                      i: ueberMinutes % 60,
+                                                      style: numbers)
+                                                ],
+                                              ),
+                                              Text(
+                                                "Überstunden",
+                                                style:
+                                                openCardsLabel.copyWith(color: _colorAccent),
+                                              ),
+                                            ],
+                                          )),
+                                      Column(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (_zeitnahme.getKorrektur() > 0) {
+                                                final dynamic tooltip =
+                                                    _toolTipKey.currentState;
+                                                tooltip.ensureTooltipVisible();
+                                              }
+                                            },
+                                            child: Tooltip(
+                                              textStyle: TextStyle(
+                                                  color: Colors.blueGrey[700]),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(100),
+                                                  color: Colors.white,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        offset: Offset(0, 5),
+                                                        color: Colors.black12,
+                                                        blurRadius: 10)
+                                                  ]),
+                                              key: _toolTipKey,
+                                              verticalOffset: 40,
+                                              message: "Pause korrigiert",
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    pauseHours.toString(),
+                                                    style: numbers.copyWith(
+                                                        color: _zeitnahme
+                                                                    .getKorrektur() >
+                                                                0
+                                                            ? editColor
+                                                            : _colorAccent),
+                                                  ),
+                                                  Text(
+                                                    ":",
+                                                    style: numbers.copyWith(
+                                                        color: _zeitnahme
+                                                                    .getKorrektur() >
+                                                                0
+                                                            ? editColor
+                                                            : _colorAccent),
+                                                  ),
+                                                  DoubleDigit(
+                                                      i: pauseMinutes % 60,
+                                                      style: numbers.copyWith(
+                                                          color: _zeitnahme
+                                                                      .getKorrektur() >
+                                                                  0
+                                                              ? editColor
+                                                              : _colorAccent))
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            "Pause",
+                                            style: openCardsLabel.copyWith(
+                                                color: _zeitnahme.getKorrektur() > 0
+                                                    ? editColor
+                                                    : _colorAccent),
+                                          ),
+                                        ],
                                       ),
                                     ],
-                                  ),
+                                  )
                                 ],
-                              )
-                            ],
-                          ),
-                        ),
-                      )),
-                  Flexible(
-                      flex: 7,
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom:50.0),
-                            child: Theme(
-                                data: Theme.of(context)
-                                    .copyWith(accentColor: Colors.white),
-                                child: ShaderMask(
-                                  shaderCallback: (Rect bounds) {
-                                    return LinearGradient(
-                                      begin: Alignment.bottomCenter,
-                                      end: Alignment(0, 0.8),
-                                      colors: <Color>[
-                                        Colors.white.withAlpha(0),
-                                        Colors.white,
-                                      ],
-                                    ).createShader(bounds);
-                                  },
-                                  blendMode: BlendMode.dstATop,
-                                  child: TimesList(
-                                      zeitnahme: _zeitnahme,
-                                      uhrzeit: uhrzeit,
-                                      widget: widget)),
-                                ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                RaisedButton(
-                                    onPressed: (){
-                                      getIt<HiveDB>().changeState("free", widget.i);
-                                      widget.callback();
-                                    },
-                                    splashColor: free.withAlpha(150),
-                                    highlightColor: free.withAlpha(80),
-                                    elevation: 5,
-                                    shape: StadiumBorder(),
-                                    color: freeTranslucent,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical:15.0, horizontal: 8),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.beach_access, color: free, size: 20,),
-                                          SizedBox(width: 5),
-                                          Text("Urlaub", style: openButtonText.copyWith(
-                                              color: free
-                                          ),),
-                                        ],
-                                      ),
-                                    )
-                                ),
-                                SizedBox(width: 10),
-                                RaisedButton(
-                                    onPressed: (){
-                                      getIt<HiveDB>().changeState("edited", widget.i);
-                                      widget.callback();
-                                    },
-                                    splashColor: editColor.withAlpha(150),
-                                    highlightColor: editColor.withAlpha(80),
-                                    elevation: 5,
-                                    shape: StadiumBorder(),
-                                    color: editColorTranslucent,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical:15.0, horizontal: 8),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.edit, color: editColor, size: 20,),
-                                          SizedBox(width: 5),
-                                          Text("Zeit nachtragen", style: openButtonText.copyWith(
-                                              color: editColor
-                                          ),),
-                                        ],
-                                      ),
-                                    )
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
-                      )),
+                          )),
+                      Flexible(flex:7,child: Container())
+                    ],
+                  )
                 ],
               ),
             ),

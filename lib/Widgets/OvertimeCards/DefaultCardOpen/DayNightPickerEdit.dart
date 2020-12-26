@@ -46,11 +46,11 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
 
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
       ),
       elevation: 10,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -67,43 +67,46 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: IconButton(
-                            icon: Icon(Icons.remove_circle_rounded),
-                            color: grayDark,
-                            onPressed: () {
-                              setState(() {
-                                editedMilli = editedMilli - 60000;
-                              });
-                            }),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child:
-                            Text("${editedTime.hour}:", style: dayNightNumbers),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: DoubleDigit(
-                            i: editedTime.minute,
-                            style: dayNightNumbers),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: IconButton(
-                            icon: Icon(Icons.add_circle_rounded),
-                            color: grayDark,
-                            onPressed: () {
-                              setState(() {
-                                editedMilli = editedMilli + 60000;
-                              });
-                            }),
-                      ),
-                    ],
+                  FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: IconButton(
+                              icon: Icon(Icons.remove_circle_rounded),
+                              color: grayDark,
+                              onPressed: () {
+                                setState(() {
+                                  editedMilli = editedMilli - 60000;
+                                });
+                              }),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child:
+                              Text("${editedTime.hour}:", style: dayNightNumbers),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: DoubleDigit(
+                              i: editedTime.minute,
+                              style: dayNightNumbers),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: IconButton(
+                              icon: Icon(Icons.add_circle_rounded),
+                              color: grayDark,
+                              onPressed: () {
+                                setState(() {
+                                  editedMilli = editedMilli + 60000;
+                                });
+                              }),
+                        ),
+                      ],
+                    ),
                   ),
                   Slider(
                     value: editedMilli * 1.0,
@@ -132,7 +135,7 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
                             },
                             child: Text(
                               "Abbrechen",
-                              style: TextStyle(fontSize: 16),
+                              style: openButtonText,
                             )),
                         FlatButton(
                           onPressed: () {
@@ -146,7 +149,7 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
                           },
                           child: Text(
                             "Speichern",
-                            style: TextStyle(fontSize: 16),
+                            style: openButtonText,
                           ),
                         ),
                       ],

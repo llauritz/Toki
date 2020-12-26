@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
+import '../../../Services/Theme.dart';
 import '../../../hiveClasses/Zeitnahme.dart';
 import 'DayNightPickerEdit.dart';
 
@@ -91,9 +92,12 @@ class _AusstempelnState extends State<Ausstempeln> {
               ),
             ),
           ),
-          Text(
-            "Ausstempeln",
-            style: TextStyle(color: Colors.blueGrey[300]),
+          Container(
+            width: 120,
+            child: Text(
+              "Ausstempeln",
+              style: headline3.copyWith(color: gray),
+            ),
           )
         ],
       ),

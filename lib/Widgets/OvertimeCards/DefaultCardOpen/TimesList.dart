@@ -29,6 +29,18 @@ class TimesList extends StatelessWidget {
     return ListView.builder(
         itemCount: _zeitnahme.startTimes.length,
         itemBuilder: (context, index) {
+
+          int pauseMinutes = 0;
+          String pauseString = " Minuten Pause";
+
+          if(_zeitnahme.startTimes.length - 1 > index){
+            pauseMinutes = Duration(milliseconds:
+                _zeitnahme.startTimes[index + 1] -
+                    _zeitnahme.endTimes[index])
+                .inMinutes;
+            pauseString = pauseMinutes==1?" Minute Pause": " Minuten Pause";
+          }
+
           return Column(
             children: [
               index == 0
@@ -81,13 +93,9 @@ class TimesList extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            Duration(
-                                        milliseconds:
-                                            _zeitnahme.startTimes[index + 1] -
-                                                _zeitnahme.endTimes[index])
-                                    .inMinutes
+                            pauseMinutes
                                     .toString() +
-                                " Minuten Pause",
+                                pauseString,
                             style: TextStyle(color: Colors.orangeAccent),
                           ),
                           Padding(

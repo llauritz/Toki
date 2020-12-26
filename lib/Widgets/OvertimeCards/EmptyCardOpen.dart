@@ -7,6 +7,7 @@ import '../../Services/HiveDB.dart';
 import '../../Services/Theme.dart';
 import '../../hiveClasses/Zeitnahme.dart';
 import '../TimerTextWidget.dart';
+import 'TagEditWidget.dart';
 
 final getIt = GetIt.instance;
 
@@ -95,27 +96,28 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                         children: [
                           Text(
                             tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
-                            style: TextStyle(
-                                fontSize: 42, color: gray),
+                            style: openCardDate.copyWith(color: gray),
                           ),
                           SizedBox(
                             height: 30,
                           ),
-                          Text("Stundenabbau".toUpperCase(),
-                            style: TextStyle(
-                                color: gray,
-                                fontSize: 18,
-                                letterSpacing: 1
-                            ),
-                          )
+                          TagEditWidget(
+                            i:widget.i,
+                            zeitnahme: widget.zeitnahme,
+                            color: gray,
+                            colorAccent: grayAccent,)
                         ],
                       ),
                     ),
                     Column(
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
+                              "-",
+                              style: openCardsNumbers,
+                            ),Text(
                               tagesHours.toString(),
                               style: openCardsNumbers,
                             ),
@@ -129,7 +131,7 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                           ],
                         ),
                         Text(
-                          "Arbeitszeit",
+                          "Stunden",
                           style: TextStyle(color: gray),
                         ),
                       ],
@@ -143,6 +145,9 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
               children: [
                 FlatButton(
                     onPressed: (){
+                      if(widget.zeitnahme.tag == "Stundenabbau"){
+                        getIt<HiveDB>().updateTag("Urlaub", widget.i);
+                      }
                       getIt<HiveDB>().changeState("free", widget.i);
                       widget.callback();
                     },
@@ -167,6 +172,9 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                 SizedBox(width: 12),
                 FlatButton(
                     onPressed: (){
+                      if(widget.zeitnahme.tag == "Stundenabbau"){
+                        getIt<HiveDB>().updateTag("Bearbeitet", widget.i);
+                      }
                       getIt<HiveDB>().changeState("edited", widget.i);
                       widget.callback();
                     },

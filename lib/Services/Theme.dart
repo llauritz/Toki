@@ -18,13 +18,13 @@ Color editColorTranslucent = Colors.lightBlue[50];
 
 TextStyle dayNightNumbers = TextStyle(
     fontFamily: "Roboto-Mono_bold",
-    fontSize: 60,
+    fontSize: 46,
     letterSpacing: -2,
     color: grayDark);
 
 TextStyle openCardsNumbers = TextStyle(
     color: gray,
-    fontSize: 32);
+    fontSize: 28);
 
 TextStyle openButtonText = TextStyle(
     fontSize: 12,
@@ -36,6 +36,27 @@ TextStyle closedCardsNumbers = TextStyle(
   height: 1.05,
 color: Colors.white);
 
+TextStyle openCardsLabel = TextStyle(
+  fontSize: 13,
+    //fontFamily: "BandeinsSansRegular"
+);
+
+TextStyle openCardDate = TextStyle(
+  fontSize: 36
+);
+
 TextStyle overTimeNumbers = TextStyle(
-  fontSize: 46
+  fontSize: 46,
+  height: 1.0
+);
+
+// Overtime Offset Title
+TextStyle headline2 = TextStyle(
+  fontSize: 18,
+  color: grayDark
+);
+
+TextStyle headline3 = TextStyle(
+    fontSize: 16,
+    color: grayDark
 );

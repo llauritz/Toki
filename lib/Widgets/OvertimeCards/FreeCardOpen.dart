@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../Services/HiveDB.dart';
 import '../../Services/Theme.dart';
 import '../../hiveClasses/Zeitnahme.dart';
+import 'TagEditWidget.dart';
 
 final getIt = GetIt.instance;
 
@@ -40,6 +41,7 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       color: Colors.white,
       child: SafeArea(
@@ -82,22 +84,22 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical:100.0),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
-                            style: TextStyle(
-                                fontSize: 42, color: free),
+                            style: openCardDate.copyWith(color: free),
                           ),
                           SizedBox(
                             height: 30,
                           ),
-                          Text("Freier Tag".toUpperCase(),
-                          style: TextStyle(
+
+                          TagEditWidget(
+                            i:widget.i,
+                            zeitnahme: widget.zeitnahme,
                             color: free,
-                            fontSize: 18,
-                            letterSpacing: 1
-                          ),
-                          )
+                            colorAccent: freeAccent,)
+
                         ],
                       ),
                     ),
@@ -123,8 +125,14 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                 FlatButton(
                     onPressed: (){
                       if(widget.zeitnahme.startTimes.length>0){
+                        if(widget.zeitnahme.tag == "Urlaub"){
+                          getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
+                        }
                         getIt<HiveDB>().changeState("default", widget.i);
                       }else{
+                        if(widget.zeitnahme.tag == "Urlaub"){
+                          getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
+                        }
                         getIt<HiveDB>().changeState("empty", widget.i);
                       }
                       widget.callback();
@@ -148,7 +156,9 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                 SizedBox(width: 12),
                 FlatButton(
                     onPressed: (){
-
+                      if(widget.zeitnahme.tag == "Urlaub"){
+                        getIt<HiveDB>().updateTag("Bearbeitet", widget.i);
+                      }
                         getIt<HiveDB>().changeState("edited", widget.i);
 
                       widget.callback();
@@ -178,5 +188,6 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
       ),
     );
   }
+
 }
 

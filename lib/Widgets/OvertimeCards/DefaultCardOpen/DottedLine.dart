@@ -13,10 +13,10 @@ class DottedLine extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 3.0),
           child: SizedBox(
             width: 3,
-            height: 10,
+            height: 8,
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.blueGrey[100],
+                  color: Colors.blueGrey[50],
                   borderRadius: BorderRadius.circular(100)),
             ),
           ),
@@ -25,10 +25,10 @@ class DottedLine extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 3.0),
           child: SizedBox(
             width: 3,
-            height: 10,
+            height: 8,
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.blueGrey[100],
+                  color: Colors.blueGrey[50],
                   borderRadius: BorderRadius.circular(100)),
             ),
           ),
@@ -37,10 +37,10 @@ class DottedLine extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 3.0),
           child: SizedBox(
             width: 3,
-            height: 10,
+            height: 8,
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.blueGrey[100],
+                  color: Colors.blueGrey[50],
                   borderRadius: BorderRadius.circular(100)),
             ),
           ),
@@ -49,10 +49,10 @@ class DottedLine extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 3.0),
           child: SizedBox(
             width: 3,
-            height: 10,
+            height: 8,
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.blueGrey[100],
+                  color: Colors.blueGrey[50],
                   borderRadius: BorderRadius.circular(100)),
             ),
           ),

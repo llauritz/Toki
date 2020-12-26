@@ -27,6 +27,7 @@ class UeberstundenTextWidget extends StatelessWidget {
     TextStyle _style = overTimeNumbers.copyWith(color: _color);
 
     return Row(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

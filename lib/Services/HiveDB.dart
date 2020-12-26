@@ -14,10 +14,11 @@ class HiveDB {
   int todayElapsedTime = 0;
   bool isRunning = false;
 
-  final ueberMillisekundenGesamtStream = StreamController<int>();
+  final ueberMillisekundenGesamtStream = StreamController<int>.broadcast();
   int ueberMillisekundenGesamt = 0;
 
   Future<void> initHiveDB() async {
+
     zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
     if (zeitenBox.length > 0) {
       calculateTodayElapsedTime();
@@ -44,9 +45,10 @@ class HiveDB {
     print("HiveDB - startTime - length is" + zeitenBox.length.toString());
     if (zeitenBox.length >= 1) {
       Zeitnahme latest = zeitenBox.getAt(zeitenBox.length - 1);
-      // Checks if latest entry in list is from tody
+      // Checks if latest entry in list is from today
       if (latest.day.isSameDate(DateTime.now())) {
         print("HiveDB - startTime - today already exists");
+        changeState("default", zeitenBox.length - 1);
         //Checks if the Lists are the same length before putting in new time
         if (latest.startTimes.length == latest.endTimes.length) {
           if (latest.endTimes.last > DateTime.now().millisecondsSinceEpoch) {
@@ -54,8 +56,16 @@ class HiveDB {
                 "endTime wurde in die Zukunft korrigiert -> wieder auf kurz vor jetzt");
             latest.endTimes.last = DateTime.now().millisecondsSinceEpoch - 1;
           }
-          //Adds new Time to the List
-          latest.startTimes.add(startTime);
+
+          // checks if at least a few seconds have passed
+            int davor = latest.endTimes.last;
+            if (startTime-davor < Duration.millisecondsPerSecond*10){
+              latest.endTimes.removeLast();
+            }else{
+              //Adds new Time to the List
+              latest.startTimes.add(startTime);
+            }
+
           //Saves the List
           zeitenBox.putAt(zeitenBox.length - 1, latest);
         } else {
@@ -71,7 +81,7 @@ class HiveDB {
             startTimes: [startTime],
             endTimes: []));
         print("HiveDB - neue Zeitnahme + startZeit hinzugefügt");
-        animatedListkey.currentState.insertItem(0);
+        animatedListkey.currentState.insertItem(0, duration: Duration(milliseconds: 1000));
       }
     } else {
       // First Entry ever -> Create new Entry with default values
@@ -96,7 +106,19 @@ class HiveDB {
     Zeitnahme latest = zeitenBox.getAt(zeitenBox.length - 1);
 
     if (latest.startTimes.length == latest.endTimes.length + 1) {
-      latest.endTimes.add(endTime);
+
+      if(latest.startTimes.length>1){
+        int davor = latest.startTimes.last;
+        if (endTime - davor < Duration.millisecondsPerSecond * 10) {
+          latest.startTimes.removeLast();
+        } else {
+          //Adds new Time to the List
+          latest.endTimes.add(endTime);
+        }
+      }else{
+        latest.endTimes.add(endTime);
+      }
+
       zeitenBox.putAt(zeitenBox.length - 1, latest);
       print("neue endTime an neuster Zeitnahme hinzugefügt" +
           latest.endTimes.toString());
@@ -131,6 +153,9 @@ class HiveDB {
       ueberMillisekundenGesamt = ueberMillisekundenGesamt + z.getUeberstunden();
       print("HiveDB - ueberMSG: " + ueberMillisekundenGesamt.toString());
     }
+
+    ueberMillisekundenGesamt = ueberMillisekundenGesamt
+      + await getIt<Data>().getOffset();
 
     print("HiveDB - final ueberMSG: " + ueberMillisekundenGesamt.toString());
 

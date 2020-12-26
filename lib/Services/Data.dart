@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../main.dart';
+import 'HiveDB.dart';
+
 class Data{
   SharedPreferences prefs;
   final isRunningStream = StreamController<bool>.broadcast();
@@ -192,6 +195,30 @@ class Data{
     print("Data - pausenKorrekturBool " + prefs.getBool("pausenKorrektur").toString());
   }
 
+  Future<void> addOffset(int milliseconds) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int newValue = prefs.containsKey("OvertimeOffset")
+        ? prefs.getInt("OvertimeOffset") + milliseconds
+        : milliseconds;
+    prefs.setInt("OvertimeOffset", newValue);
+
+    print("Data - OvertimeOffset " + prefs.getInt("OvertimeOffset").toString());
+    getIt<HiveDB>().updateGesamtUeberstunden();
+  }
+
+  Future<int> getOffset() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.containsKey("OvertimeOffset")?
+    prefs.getInt("OvertimeOffset"): 0;
+  }
+
+  Future<void> setOffset(int milliseconds) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt("OvertimeOffset", milliseconds);
+
+    print("Data - OvertimeOffset " + prefs.getInt("OvertimeOffset").toString());
+    getIt<HiveDB>().updateGesamtUeberstunden();
+  }
 
   void dispose(){
     primaryColorStream.close();

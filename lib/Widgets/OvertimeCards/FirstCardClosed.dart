@@ -102,7 +102,7 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
                 ),
               )),
           SizedBox(
-            width: 30.0,
+            width: 20.0,
           ),
           AnimatedContainer(
             width: _width,
@@ -319,12 +319,10 @@ class EndTimeWidget extends StatefulWidget {
 class _EndTimeWidgetState extends State<EndTimeWidget> {
   Timer endTracker = Timer.periodic(Duration(hours: 1), (timer) {});
   DateTime _now = DateTime.now();
-  int i = 0;
 
   @override
   Widget build(BuildContext context) {
     Widget _widget;
-    i == 0 ? i = 1 : i = 0;
 
     if (widget._zeitnahme.endTimes.length ==
         widget._zeitnahme.startTimes.length) {
@@ -333,7 +331,7 @@ class _EndTimeWidgetState extends State<EndTimeWidget> {
         widget.Uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(
             widget._zeitnahme.endTimes.last)),
         style: TextStyle(fontSize: 14, color: Colors.blueGrey),
-        key: ValueKey<int>(i),
+        key: ValueKey<int>(widget._zeitnahme.endTimes.last),
       );
     } else {
       _now = DateTime.now();
@@ -349,7 +347,7 @@ class _EndTimeWidgetState extends State<EndTimeWidget> {
       _widget = Text(
         widget.Uhrzeit.format(_now),
         style: TextStyle(fontSize: 14, color: Colors.black.withAlpha(50)),
-        key: ValueKey<int>(i),
+        key: ValueKey<int>(DateTime.now().millisecondsSinceEpoch),
       );
     }
 

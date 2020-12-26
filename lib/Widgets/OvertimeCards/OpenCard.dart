@@ -102,7 +102,8 @@ class _OpenCardState extends State<OpenCard> {
       stream: getIt<HiveDB>().listChangesStream.stream,
       builder: (context, snapshot) {
         return PageTransitionSwitcher(
-          reverse: widget.zeitnahme.state == "empty",
+          reverse: widget.zeitnahme.state == "empty"
+              || widget.zeitnahme.state == "default",
           transitionBuilder: (
               Widget child,
               Animation<double>

@@ -57,10 +57,18 @@ class Zeitnahme {
         int tagesHours = getIt<Data>().tagesstunden.truncate();
         int tagesMinutes =
             ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
+        print("Zeitnahme - tageshrs: $tagesHours");
+        print("Zeitnahme - tagesmin: $tagesMinutes");
         int uebermilliseconds = editMilli - Duration(hours: tagesHours, minutes: tagesMinutes).inMilliseconds;
+        print("Zeitnahme - uebermilliEDITED: ${Duration(milliseconds: uebermilliseconds)}");
         return uebermilliseconds;
 
-    } else {
+    } else if(state == "empty"){
+        int tagesHours = getIt<Data>().tagesstunden.truncate();
+        int tagesMinutes =
+        ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
+        return -Duration(hours: tagesHours, minutes: tagesMinutes).inMilliseconds;
+    } else{
       return 0;
     }
   }

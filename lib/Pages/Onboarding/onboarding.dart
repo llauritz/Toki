@@ -140,10 +140,6 @@ class _OnboardingState extends State<Onboarding> {
                     ),
                   ),
                 ),
-                SizedBox(
-                    height: MediaQuery.of(context).viewInsets.bottom > 260
-                        ? (MediaQuery.of(context).viewInsets.bottom) - 260
-                        : MediaQuery.of(context).viewInsets.bottom)
               ],
             ),
           ),

@@ -7,6 +7,7 @@ import '../../Services/HiveDB.dart';
 import '../../Services/Theme.dart';
 import '../../hiveClasses/Zeitnahme.dart';
 import '../TimerTextWidget.dart';
+import 'TagEditWidget.dart';
 
 final getIt = GetIt.instance;
 
@@ -105,18 +106,16 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                         children: [
                           Text(
                             tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
-                            style: TextStyle(
-                                fontSize: 42, color: editColor),
+                            style: openCardDate.copyWith(color: editColor),
                           ),
                           SizedBox(
                             height: 20,
                           ),
-                          Text("Zeit nachgetragen".toUpperCase(),
-                          style: TextStyle(
+                          TagEditWidget(
+                            i:widget.i,
+                            zeitnahme: widget.zeitnahme,
                             color: editColor,
-                            fontSize: 18,
-                            letterSpacing: 1
-                          ),
+                            colorAccent: editColor,
                           ),
                           SizedBox(height: 30),
                           Slider.adaptive(
@@ -208,8 +207,14 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                 FlatButton(
                     onPressed: (){
                       if(widget.zeitnahme.startTimes.length>0){
+                        if(widget.zeitnahme.tag == "Bearbeitet"){
+                          getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
+                        }
                         getIt<HiveDB>().changeState("default", widget.i);
                       }else{
+                        if(widget.zeitnahme.tag == "Bearbeitet"){
+                          getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
+                        }
                         getIt<HiveDB>().changeState("empty", widget.i);
                       }
                       widget.callback();
@@ -233,6 +238,9 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                 SizedBox(width: 12),
                 FlatButton(
                     onPressed: (){
+                      if(widget.zeitnahme.tag == "Bearbeitet"){
+                        getIt<HiveDB>().updateTag("Urlaub", widget.i);
+                      }
                       getIt<HiveDB>().changeState("free", widget.i);
                       widget.callback();
                     },

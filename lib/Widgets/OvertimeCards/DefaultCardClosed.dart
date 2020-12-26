@@ -85,7 +85,7 @@ class _DefaultCardClosedState extends State<DefaultCardClosed> {
               ),
             ),
             SizedBox(
-              width: 30.0,
+              width: 20.0,
             ),
             Container(
               width: _width,

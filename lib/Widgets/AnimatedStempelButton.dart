@@ -62,7 +62,7 @@ class StempelButtonSTOP extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 0.0),
+      padding: EdgeInsets.only(bottom: 20),
       child: RaisedButton(
         elevation: 10.0,
         onPressed: callback,
@@ -99,7 +99,7 @@ class StempelButtonSTART extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 0.0),
+      padding: EdgeInsets.only(bottom: 20),
       child: RaisedButton(
         elevation: 10.0,
         onPressed: callback,

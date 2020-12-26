@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -19,6 +21,7 @@ class homePage extends StatefulWidget {
 class _homePageState extends State<homePage> {
   PanelController pc = new PanelController();
   TimerText timerText = TimerText();
+  StreamController<Color> containerColorStream = StreamController<Color>();
 
   void prechacheImages() {
     precacheImage(AssetImage("assets/background/clouds/clouds1.jpg"), context);
@@ -38,41 +41,65 @@ class _homePageState extends State<homePage> {
   @override
   Widget build(BuildContext context) {
     print("home - build start");
+    double bottomInset = MediaQuery.of(context).viewPadding.bottom != 0
+                          ? MediaQuery.of(context).viewPadding.bottom
+                          : MediaQuery.of(context).systemGestureInsets.bottom;
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xff0EE796),
       body: SlidingUpPanel(
-        minHeight: 240.0,
-        maxHeight: 658.0,
+        //Höhe des Stempelbuttons + Padding + Wie viel von der Karte rausschauen darf
+        minHeight: 130 + 20 + 58.0 + bottomInset,
+        //Höhe des Stempelbuttons + Padding +Höhe der Karte
+        maxHeight: 130 + 20 +MediaQuery.of(context).size.height*0.6 + bottomInset,
         backdropTapClosesPanel: true,
         controller: pc,
         backdropEnabled: true,
         renderPanelSheet: false,
-        /*boxShadow: [
-          BoxShadow(
+        onPanelSlide: (value){
+          value>0.1
+            ? containerColorStream.sink.add(Colors.white.withAlpha(0))
+            : containerColorStream.sink.add(Colors.white);
+        },
+        onPanelClosed: (){
+          containerColorStream.sink.add(Colors.white);
+        },
+        footer: Padding(
+          padding: const EdgeInsets.symmetric(horizontal:8.0),
+          child: SizedBox(
+          height: bottomInset,
+            width: MediaQuery.of(context).size.width-16,
+            child: StreamBuilder<Color>(
+              stream: containerColorStream.stream,
+              initialData: Colors.white,
+              builder: (context, snapshot) {
+                return AnimatedContainer(
+                  duration: Duration(milliseconds: 200),
+                  color: snapshot.data,
+                );
+              }
+            ),
+          ),
+        ),
+        panel: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
               color: Colors.transparent,
-              spreadRadius: 0.0,
-              blurRadius: 0.0
-          )
-        ],*/
-
-        panel: Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                color: Colors.transparent,
-                width: double.infinity,
-                child: AnimatedStempelButton(
-                    callbackTurnOff: timerText.stop,
-                    callbackTurnOn: timerText.start),
-              ),
-              ZeitenPanel(
+              width: double.infinity,
+              child: AnimatedStempelButton(
+                  callbackTurnOff: timerText.stop,
+                  callbackTurnOn: timerText.start),
+            ),
+            LimitedBox(
+              maxHeight: MediaQuery.of(context).size.height*0.6,
+              child: ZeitenPanel(
                 panelController: pc,
                 updateTimer: timerText.update,
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
         body: Stack(
           children: [
@@ -85,7 +112,7 @@ class _homePageState extends State<homePage> {
                     children: [
                       IconButton(
                           icon:
-                              Icon(Icons.refresh_rounded, color: Colors.white),
+                              Icon(Icons.refresh_rounded, color: Colors.transparent),
                           onPressed: () {
                             Navigator.pushNamed(context, "/onboarding");
                           }),
@@ -110,6 +137,7 @@ class _homePageState extends State<homePage> {
   void dispose() {
 /*    getIt<Data>().dispose();
     getIt<HiveDB>().dispose();*/
+    containerColorStream.close();
     print("home - DISPOSING-----------------");
     super.dispose();
   }

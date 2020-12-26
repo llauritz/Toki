@@ -73,7 +73,7 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
               ),
             ),
             SizedBox(
-              width: 30.0,
+              width: 20.0,
             ),
             AnimatedContainer(
               width: 240,
@@ -86,42 +86,51 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(18, 0, 15, 0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          _zeitnahme.tag.toString(),overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 14, color: _color),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 3.0),
-                          child: FlatButton(
-                            onPressed: () {
-                              if(widget.zeitnahme.startTimes.length>0){
-                                getIt<HiveDB>().changeState("default", widget.i);
-                              }else{
-                                getIt<HiveDB>().changeState("empty", widget.i);
-                              }
-                            },
-                            child: Icon(
-                              Icons.replay_rounded,
-                              color: _colorAccent,
-                              size: 24,
+                    Flexible(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Flexible(
+                            child: Container(
+                              child: Text(
+                                _zeitnahme.tag.toString(),overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontSize: 14, color: _color),
+                              ),
                             ),
-                            splashColor: _colorAccent.withAlpha(80),
-                            highlightColor: _colorAccent.withAlpha(50),
-                            color: _colorTranslucent,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(1000)),
-                            padding: EdgeInsets.all(5),
-                            minWidth: 40,
-                            height: 40,
                           ),
-                        ),
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.only(left: 3.0),
+                            child: FlatButton(
+                              onPressed: () {
+                                if(widget.zeitnahme.startTimes.length>0){
+                                  getIt<HiveDB>().changeState("default", widget.i);
+                                }else{
+                                  if(widget.zeitnahme.tag == "Urlaub"){
+                                    getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
+                                  }
+                                  getIt<HiveDB>().changeState("empty", widget.i);
+                                }
+                              },
+                              child: Icon(
+                                Icons.replay_rounded,
+                                color: _colorAccent,
+                                size: 24,
+                              ),
+                              splashColor: _colorAccent.withAlpha(80),
+                              highlightColor: _colorAccent.withAlpha(50),
+                              color: _colorTranslucent,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(1000)),
+                              padding: EdgeInsets.all(5),
+                              minWidth: 40,
+                              height: 40,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    Expanded(child: Text("")),
                     Container(
                       alignment: Alignment.center,
                       height: 30.0,

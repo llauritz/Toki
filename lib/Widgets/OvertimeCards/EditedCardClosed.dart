@@ -31,9 +31,6 @@ class _EditedCardClosedState extends State<EditedCardClosed> {
   var Uhrzeit = DateFormat("H:mm");
   var wochentag = new DateFormat("EE", "de_DE");
   var datum = DateFormat("dd.MM", "de_DE");
-  Color _color = Color(0xffFFB77F);
-  Color _colorAccent = Color(0xffFFA55F);
-  Color _colorTranslucent = Color(0xffFFB77F).withAlpha(40);
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +41,9 @@ class _EditedCardClosedState extends State<EditedCardClosed> {
       final Zeitnahme _zeitnahme = widget.zeitnahme;
       final DateTime _day = _zeitnahme.day;
 
-      int editMilli = _zeitnahme.editMilli;
-      int editHours = (editMilli/Duration.millisecondsPerHour).truncate();
-      int editMinutes = (editMilli/Duration.millisecondsPerMinute).truncate();
+      int ueberMilli = _zeitnahme.getUeberstunden();
+      int ueberHours = (ueberMilli/Duration.millisecondsPerHour).truncate();
+      int overMinutes = (ueberMilli/Duration.millisecondsPerMinute).truncate();
 
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -79,7 +76,7 @@ class _EditedCardClosedState extends State<EditedCardClosed> {
               ),
             ),
             SizedBox(
-              width: 30.0,
+              width: 20.0,
             ),
             AnimatedContainer(
               width: 240,
@@ -92,42 +89,51 @@ class _EditedCardClosedState extends State<EditedCardClosed> {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(18, 0, 15, 0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Bearbeitet",overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 14, color: editColor),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 3.0),
-                          child: FlatButton(
-                            onPressed: () {
-                              if(widget.zeitnahme.startTimes.length>0){
-                                getIt<HiveDB>().changeState("default", widget.i);
-                              }else{
-                                getIt<HiveDB>().changeState("empty", widget.i);
-                              }
-                            },
-                            child: Icon(
-                              Icons.replay_rounded,
-                              color: editColor,
-                              size: 22,
+                    Flexible(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Flexible(
+                            child: Container(
+                              child: Text(
+                                _zeitnahme.tag.toString(),overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontSize: 14, color: editColor),
+                              ),
                             ),
-                            splashColor: editColor.withAlpha(80),
-                            highlightColor: editColor.withAlpha(50),
-                            color: editColorTranslucent,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(1000)),
-                            padding: EdgeInsets.all(5),
-                            minWidth: 40,
-                            height: 40,
                           ),
-                        ),
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.only(left: 3.0),
+                            child: FlatButton(
+                              onPressed: () {
+                                if(widget.zeitnahme.startTimes.length>0){
+                                  getIt<HiveDB>().changeState("default", widget.i);
+                                }else{
+                                  if(widget.zeitnahme.tag == "Bearbeitet"){
+                                    getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
+                                  }
+                                  getIt<HiveDB>().changeState("empty", widget.i);
+                                }
+                              },
+                              child: Icon(
+                                Icons.replay_rounded,
+                                color: editColor,
+                                size: 22,
+                              ),
+                              splashColor: editColor.withAlpha(80),
+                              highlightColor: editColor.withAlpha(50),
+                              color: editColorTranslucent,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(1000)),
+                              padding: EdgeInsets.all(5),
+                              minWidth: 40,
+                              height: 40,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    Expanded(child: Container()),
                     Container(
                       alignment: Alignment.center,
                       height: 30.0,
@@ -135,17 +141,13 @@ class _EditedCardClosedState extends State<EditedCardClosed> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          editMilli.isNegative
-                          ? Text(
-                                "-",
-                                style: closedCardsNumbers,
-                                )
-                          : Text(
+                          if(!ueberMilli.isNegative)
+                          Text(
                                  "+",
                                  style: closedCardsNumbers,
                                 ),
                           Text(
-                            editHours.toString(),
+                            ueberHours.toString(),
                             style: closedCardsNumbers,
                           ),
                           Text(
@@ -153,7 +155,7 @@ class _EditedCardClosedState extends State<EditedCardClosed> {
                               style: closedCardsNumbers
                           ),
                           DoubleDigit(
-                              i: editMinutes % 60,
+                              i: overMinutes % 60,
                               style: closedCardsNumbers)
                         ],
                       ),
