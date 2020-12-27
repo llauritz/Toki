@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../OvertimeChangeWidget.dart';
+import 'OvertimeChangeWidget.dart';
 
 final getIt = GetIt.instance;
 

@@ -107,10 +107,10 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
                                 if(widget.zeitnahme.startTimes.length>0){
                                   getIt<HiveDB>().changeState("default", widget.i);
                                 }else{
-                                  if(widget.zeitnahme.tag == "Urlaub"){
-                                    getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
-                                  }
                                   getIt<HiveDB>().changeState("empty", widget.i);
+                                }
+                                if(widget.zeitnahme.tag == "Urlaub"){
+                                  getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
                                 }
                               },
                               child: Icon(

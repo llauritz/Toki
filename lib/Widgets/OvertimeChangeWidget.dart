@@ -19,7 +19,7 @@ class OvertimeChangeWidget extends StatefulWidget {
   final double closedContainerWidth = 0.0;
   final double openContainerWidth = 100;
   final double closedDividerPadding = 0.0;
-  final double opendividerPadding = 20;
+  final double opendividerPadding = 15;
 
 
   @override
@@ -136,7 +136,7 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                         color: Colors.transparent,
                           duration: widget.durationShort,
                           curve: widget.curve,
-                          width: isOpen?35:0,
+                          width: isOpen?30:0,
                           child: FadeTransition(opacity: animationFade,
                               child: IconButton(
                                 padding: EdgeInsets.all(0),
@@ -158,9 +158,12 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                                 : neon;
                             int stunden = (snapshot.data / Duration.millisecondsPerHour).truncate();
 
+                            String addMinus = snapshot.data.isNegative && stunden==0
+                              ? "-" : "";
+
                             Widget _widget = KeyedSubtree(
-                                key: ValueKey<int>(stunden),
-                                child: Text(stunden.toString(),
+                                key: stunden==0?ValueKey<Color>(_color):ValueKey<int>(stunden),
+                                child: Text(addMinus + stunden.toString(),
                                   style: overTimeNumbers.copyWith(color: _color),
                                 )
                             );
@@ -170,9 +173,9 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                               curve: widget.curve,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
-                                color: isOpen?_color.withAlpha(25):_color.withAlpha(0),
+                                color: isOpen?_color.withAlpha(40):_color.withAlpha(0),
                               ),
-                              padding: isOpen? EdgeInsets.symmetric(horizontal: 10, vertical: 5): EdgeInsets.symmetric(horizontal: 0),
+                              padding: isOpen? EdgeInsets.symmetric(horizontal: 4, vertical: 2): EdgeInsets.zero,
                               child: AnimatedSize(
                                 vsync: this,
                                 duration: Duration(milliseconds: 400),
@@ -202,7 +205,7 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                           color: Colors.transparent,
                           duration: widget.durationShort,
                           curve: widget.curve,
-                          width: isOpen?35:0,
+                          width: isOpen?30:0,
                           child: FadeTransition(opacity: animationFade,
                               child: IconButton(
                                 padding: EdgeInsets.all(0),
@@ -232,8 +235,13 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
 
                                 Widget _widget = KeyedSubtree(
                                     key: ValueKey<Color>(_color),
-                                    child: Text(":",
-                                      style: overTimeNumbers.copyWith(color: _color),
+                                    child: AnimatedOpacity(
+                                      duration: widget.durationShort,
+                                      curve: widget.curve,
+                                      opacity: isOpen?0.2:1,
+                                      child: Text(":",
+                                        style: overTimeNumbers.copyWith(color: _color),
+                                      ),
                                     )
                                 );
 
@@ -261,7 +269,7 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                           color: Colors.transparent,
                         duration: widget.durationShort,
                         curve: widget.curve,
-                        width: isOpen?35:0,
+                        width: isOpen?30:0,
                             child: FadeTransition(opacity: animationFade,
                                 child: IconButton(
                                   padding: EdgeInsets.all(0),
@@ -281,13 +289,18 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                             Color _color = snapshot.data.isNegative
                                 ? gray
                                 : neon;
-                            int minuten = ((snapshot.data / Duration.millisecondsPerMinute)%60).truncate();
+                            int minuten = ((snapshot.data.abs() / Duration.millisecondsPerMinute)%60).truncate();
 
                             Widget _minuten = KeyedSubtree(
                                 key: ValueKey<int>(minuten),
-                                child: DoubleDigit(
-                                    i:minuten,
-                                    style: overTimeNumbers.copyWith(color: _color))
+                                child: AnimatedDefaultTextStyle(
+                                  duration: Duration(milliseconds: 300),
+                                  style: overTimeNumbers.copyWith(color: _color),
+                                  child: DoubleDigit(
+                                    i: minuten,
+                                    style: overTimeNumbers,
+                                  ),
+                                )
                             );
 
                             return AnimatedContainer(
@@ -295,9 +308,9 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                               curve: widget.curve,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
-                                color: isOpen?_color.withAlpha(25):_color.withAlpha(0),
+                                color: isOpen?_color.withAlpha(40):_color.withAlpha(0),
                               ),
-                              padding: isOpen? EdgeInsets.symmetric(horizontal: 10, vertical: 5): EdgeInsets.symmetric(horizontal: 0),
+                              padding: isOpen? EdgeInsets.symmetric(horizontal: 4, vertical: 2): EdgeInsets.zero,
                               child: AnimatedSize(
                                 vsync: this,
                                 duration: Duration(milliseconds: 300),
@@ -331,7 +344,7 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
 
                           duration: widget.durationShort,
                           curve: widget.curve,
-                          width: isOpen?35:0,
+                          width: isOpen?30:0,
                           child: FadeTransition(opacity: animationFade,
                               child: IconButton(
                                 padding: EdgeInsets.all(0),

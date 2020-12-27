@@ -110,10 +110,10 @@ class _EditedCardClosedState extends State<EditedCardClosed> {
                                 if(widget.zeitnahme.startTimes.length>0){
                                   getIt<HiveDB>().changeState("default", widget.i);
                                 }else{
-                                  if(widget.zeitnahme.tag == "Bearbeitet"){
-                                    getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
-                                  }
                                   getIt<HiveDB>().changeState("empty", widget.i);
+                                }
+                                if(widget.zeitnahme.tag == "Bearbeitet"){
+                                  getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
                                 }
                               },
                               child: Icon(

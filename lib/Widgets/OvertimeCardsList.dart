@@ -9,13 +9,13 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../Services/Data.dart';
 import '../Services/HiveDB.dart';
 import '../Widgets/OvertimeCards/EmptyCardClosed.dart';
-import '../Widgets/OvertimeCards/firstWidget.dart';
 import '../hiveClasses/Zeitnahme.dart';
 import 'OvertimeCards/DefaultCardClosed.dart';
 import 'OvertimeCards/EditedCardClosed.dart';
 import 'OvertimeCards/FirstCardClosed.dart';
 import 'OvertimeCards/FreeCardClosed.dart';
 import 'OvertimeCards/OpenCard.dart';
+import 'firstWidget.dart';
 
 final getIt = GetIt.instance;
 

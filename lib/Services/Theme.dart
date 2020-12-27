@@ -47,7 +47,8 @@ TextStyle openCardDate = TextStyle(
 
 TextStyle overTimeNumbers = TextStyle(
   fontSize: 46,
-  height: 1.0
+  height: 1.0,
+  fontFamily: "BandeinsSans"
 );
 
 // Overtime Offset Title
