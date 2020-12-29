@@ -29,8 +29,7 @@ class DayNightDialogEdited extends StatefulWidget {
   final bool isStartTime;
 
   @override
-  _DayNightDialogEditedState createState() =>
-      _DayNightDialogEditedState(editedMilli: selectedMilli);
+  _DayNightDialogEditedState createState() => _DayNightDialogEditedState(editedMilli: selectedMilli);
 }
 
 class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
@@ -75,7 +74,7 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: IconButton(
-                              icon: Icon(Icons.remove_circle_rounded),
+                              icon: const Icon(Icons.remove_circle_rounded),
                               color: grayDark,
                               onPressed: () {
                                 setState(() {
@@ -97,7 +96,7 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: IconButton(
-                              icon: Icon(Icons.add_circle_rounded),
+                              icon: const Icon(Icons.add_circle_rounded),
                               color: grayDark,
                               onPressed: () {
                                 setState(() {
@@ -133,7 +132,7 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
                                   .sink
                                   .add(getIt<HiveDB>().changeNumber++);
                             },
-                            child: Text(
+                            child: const Text(
                               "Abbrechen",
                               style: openButtonText,
                             )),
@@ -147,7 +146,7 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
                                 .sink
                                 .add(getIt<HiveDB>().changeNumber++);
                           },
-                          child: Text(
+                          child: const Text(
                             "Speichern",
                             style: openButtonText,
                           ),

@@ -25,18 +25,18 @@ class DefaultCardClosed extends StatefulWidget {
 }
 
 class _DefaultCardClosedState extends State<DefaultCardClosed> {
-  var fullDate = new DateFormat('dd.MM.yyyy');
-  var Uhrzeit = DateFormat("H:mm");
-  var wochentag = new DateFormat("EE", "de_DE");
-  var datum = DateFormat("dd.MM", "de_DE");
+  DateFormat fullDate = DateFormat('dd.MM.yyyy');
+  DateFormat uhrzeit = DateFormat("H:mm");
+  DateFormat wochentag = DateFormat("EE", "de_DE");
+  DateFormat datum = DateFormat("dd.MM", "de_DE");
   Color _color;
   Color _colorAccent;
   Color _colorTranslucent;
-  double _width = 240;
+  static const double _width = 240;
 
   @override
   Widget build(BuildContext context) {
-    int ueberMilliseconds = widget.zeitnahme.getUeberstunden();
+    final int ueberMilliseconds = widget.zeitnahme.getUeberstunden();
     if (!ueberMilliseconds.isNegative) {
       _color = Colors.tealAccent;
       _colorAccent = Colors.tealAccent[400];
@@ -48,8 +48,6 @@ class _DefaultCardClosedState extends State<DefaultCardClosed> {
     }
 
     if (widget.i >= 0) {
-      final Zeitnahme _zeitnahme = widget.zeitnahme;
-      final DateTime _day = _zeitnahme.day;
 
       print("DefaultCardClosed - isRunning " +
           getIt<Data>().isRunning.toString());
@@ -72,19 +70,19 @@ class _DefaultCardClosedState extends State<DefaultCardClosed> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    wochentag.format(_day).substring(0, 2),
+                    wochentag.format(widget.zeitnahme.day).substring(0, 2),
                     style: TextStyle(color: _colorAccent, fontSize: 16.0),
                     textAlign: TextAlign.start,
                   ),
                   Text(
-                    datum.format(_day),
+                    datum.format(widget.zeitnahme.day),
                     style: TextStyle(color: _colorAccent, fontSize: 11.0),
                     textAlign: TextAlign.start,
                   )
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 20.0,
             ),
             Container(
@@ -99,12 +97,12 @@ class _DefaultCardClosedState extends State<DefaultCardClosed> {
                 child: Row(
                   children: [
                     Text(
-                      Uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(
-                          _zeitnahme.startTimes[0])),
-                      style: TextStyle(fontSize: 14, color: Colors.blueGrey),
+                      uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(
+                          widget.zeitnahme.startTimes[0])),
+                      style: const TextStyle(fontSize: 14, color: Colors.blueGrey),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 2.0, 8.0, 0.0),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(8.0, 2.0, 8.0, 0.0),
                       child: Icon(
                         Icons.east_rounded,
                         size: 20.0,
@@ -112,10 +110,10 @@ class _DefaultCardClosedState extends State<DefaultCardClosed> {
                       ),
                     ),
                     Text(
-                        Uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(
-                            _zeitnahme.endTimes.last)),
-                        style: TextStyle(fontSize: 14, color: Colors.blueGrey)),
-                    Expanded(child: Text("")),
+                        uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(
+                            widget.zeitnahme.endTimes.last)),
+                        style: const TextStyle(fontSize: 14, color: Colors.blueGrey)),
+                    const Expanded(child: Text("")),
                     _Ueberstunden(ueberMilliseconds: ueberMilliseconds)
                   ],
                 ),
@@ -127,7 +125,7 @@ class _DefaultCardClosedState extends State<DefaultCardClosed> {
     } else {
       print("DefaultCard - wtf");
       return Container(
-        child: Text("wtf"),
+        child: const Text("wtf"),
       );
     }
   }
@@ -144,9 +142,9 @@ class _Ueberstunden extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle greenStyle =
+    final TextStyle greenStyle =
         Theme.of(context).textTheme.headline4.copyWith(color: Colors.white);
-    TextStyle blueGreyStyle =
+    final TextStyle blueGreyStyle =
         Theme.of(context).textTheme.headline4.copyWith(color: Colors.white);
 
     //TODO: Test what happens if Zeit == Tagesstunden
@@ -215,7 +213,7 @@ class _Ueberstunden extends StatelessWidget {
           borderRadius: BorderRadius.circular(1000),
         ),
         child: KeyedSubtree(
-          key: ValueKey<int>(2),
+          key: const ValueKey<int>(2),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

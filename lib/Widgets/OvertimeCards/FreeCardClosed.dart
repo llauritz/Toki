@@ -1,4 +1,5 @@
 
+import 'package:Timo/Services/Theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
@@ -25,13 +26,10 @@ class FreeCardClosed extends StatefulWidget {
 }
 
 class _FreeCardClosedState extends State<FreeCardClosed> {
-  var fullDate = new DateFormat('dd.MM.yyyy');
-  var Uhrzeit = DateFormat("H:mm");
-  var wochentag = new DateFormat("EE", "de_DE");
-  var datum = DateFormat("dd.MM", "de_DE");
-  Color _color = Color(0xffFFB77F);
-  Color _colorAccent = Color(0xffFFA55F);
-  Color _colorTranslucent = Color(0xffFFB77F).withAlpha(40);
+  DateFormat fullDate = DateFormat('dd.MM.yyyy');
+  DateFormat Uhrzeit = DateFormat("H:mm");
+  DateFormat wochentag = DateFormat("EE", "de_DE");
+  DateFormat datum = DateFormat("dd.MM", "de_DE");
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +46,12 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             AnimatedContainer(
-              duration: Duration(milliseconds: 1000),
+              duration: const Duration(milliseconds: 1000),
               width: 60,
               height: 60,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(1000),
-                color: _colorTranslucent,
+                color: freeTranslucent,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -61,26 +59,26 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
                 children: [
                   Text(
                     wochentag.format(_day).substring(0, 2),
-                    style: TextStyle(color: _colorAccent, fontSize: 16.0),
+                    style: const TextStyle(color: freeAccent, fontSize: 16.0),
                     textAlign: TextAlign.start,
                   ),
                   Text(
                     datum.format(_day),
-                    style: TextStyle(color: _colorAccent, fontSize: 11.0),
+                    style: const TextStyle(color: freeAccent, fontSize: 11.0),
                     textAlign: TextAlign.start,
                   )
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 20.0,
             ),
             AnimatedContainer(
               width: 240,
-              duration: Duration(milliseconds: 1000),
+              duration: const Duration(milliseconds: 1000),
               height: 60,
               decoration: BoxDecoration(
-                border: Border.all(width: 2.0, color: _color),
+                border: Border.all(width: 2.0, color: free),
                 borderRadius: BorderRadius.circular(1000),
               ),
               child: Padding(
@@ -96,7 +94,7 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
                             child: Container(
                               child: Text(
                                 _zeitnahme.tag.toString(),overflow: TextOverflow.ellipsis,
-                                style: TextStyle(fontSize: 14, color: _color),
+                                style: const TextStyle(fontSize: 14, color: free),
                               ),
                             ),
                           ),
@@ -104,7 +102,7 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
                             padding: const EdgeInsets.only(left: 3.0),
                             child: FlatButton(
                               onPressed: () {
-                                if(widget.zeitnahme.startTimes.length>0){
+                                if(widget.zeitnahme.startTimes.isNotEmpty){
                                   getIt<HiveDB>().changeState("default", widget.i);
                                 }else{
                                   getIt<HiveDB>().changeState("empty", widget.i);
@@ -113,17 +111,17 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
                                   getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
                                 }
                               },
-                              child: Icon(
+                              child: const Icon(
                                 Icons.replay_rounded,
-                                color: _colorAccent,
+                                color: freeAccent,
                                 size: 24,
                               ),
-                              splashColor: _colorAccent.withAlpha(80),
-                              highlightColor: _colorAccent.withAlpha(50),
-                              color: _colorTranslucent,
+                              splashColor: freeAccent.withAlpha(80),
+                              highlightColor: freeAccent.withAlpha(50),
+                              color: freeTranslucent,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(1000)),
-                              padding: EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(5),
                               minWidth: 40,
                               height: 40,
                             ),
@@ -141,7 +139,7 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
                               .headline4
                               .copyWith(color: Colors.white)),
                       decoration: BoxDecoration(
-                        color: _color,
+                        color: free,
                         borderRadius: BorderRadius.circular(1000),
                       ),
                     ),

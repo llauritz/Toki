@@ -8,7 +8,7 @@ import 'OvertimeChangeWidget.dart';
 final getIt = GetIt.instance;
 
 class FirstWidget extends StatefulWidget {
-  FirstWidget({@required this.panelController});
+  const FirstWidget({@required this.panelController});
 
   final PanelController panelController;
 
@@ -44,7 +44,7 @@ class _FirstWidgetState extends State<FirstWidget> {
                 ))),
           ),
 
-          OvertimeChangeWidget(),
+          const OvertimeChangeWidget(),
 
           /*Stack(
             children: [
@@ -118,23 +118,6 @@ class _FirstWidgetState extends State<FirstWidget> {
                         ),
                       );
                     }),
-              ),
-              Tooltip(
-                message: "Zeit hinzufügen",
-                verticalOffset: 30,
-                textStyle: TextStyle(color: gray),
-                margin: EdgeInsets.only(left: 10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(1000),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(blurRadius: 6, color: Colors.black12, offset: Offset(0, 3))
-                    ]
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left:20.0),
-                  child: OverTimeOffsetPage(),
-                ),
               ),
             ],
           )*/

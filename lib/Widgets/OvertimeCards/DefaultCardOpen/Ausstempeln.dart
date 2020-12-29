@@ -36,11 +36,11 @@ class _AusstempelnState extends State<Ausstempeln> {
   Widget build(BuildContext context) {
     return FlatButton(
       highlightColor: Colors.transparent,
-      splashColor: Color(0xffE4FFFB),
+      splashColor: neonTranslucent,
       onPressed: () {
-        int selectedMilli = widget._zeitnahme.endTimes[widget.uhrzeitenIndex];
+        final int selectedMilli = widget._zeitnahme.endTimes[widget.uhrzeitenIndex];
 
-        int previousMilli = widget._zeitnahme.startTimes[widget.uhrzeitenIndex];
+        final int previousMilli = widget._zeitnahme.startTimes[widget.uhrzeitenIndex];
 
         int followingMilli = 0;
         if (widget._zeitnahme.startTimes.length - 1 > widget.uhrzeitenIndex) {
@@ -56,7 +56,7 @@ class _AusstempelnState extends State<Ausstempeln> {
         }
         showModal(
             context: context,
-            configuration: FadeScaleTransitionConfiguration(
+            configuration: const FadeScaleTransitionConfiguration(
                 transitionDuration: Duration(milliseconds: 300),
                 reverseTransitionDuration: Duration(milliseconds: 200)),
             builder: (context) {
@@ -87,7 +87,7 @@ class _AusstempelnState extends State<Ausstempeln> {
                 child: Text(
                   widget.uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(
                       widget._zeitnahme.endTimes[widget.uhrzeitenIndex])),
-                  style: TextStyle(fontSize: 18, color: Colors.blueGrey[300]),
+                  style: TextStyle(fontSize: 18, color: gray),
                 ),
               ),
             ),

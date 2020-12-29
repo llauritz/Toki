@@ -202,12 +202,13 @@ class Data{
         : milliseconds;
     prefs.setInt("OvertimeOffset", newValue);
 
-    print("Data - OvertimeOffset " + prefs.getInt("OvertimeOffset").toString());
+    print("Data - addOffset - OvertimeOffset " + prefs.getInt("OvertimeOffset").toString());
     getIt<HiveDB>().updateGesamtUeberstunden();
   }
 
   Future<int> getOffset() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("Data - getOffset");
     return prefs.containsKey("OvertimeOffset")?
     prefs.getInt("OvertimeOffset"): 0;
   }

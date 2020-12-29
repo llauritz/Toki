@@ -27,6 +27,7 @@ class TimesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 30),
         itemCount: _zeitnahme.startTimes.length,
         itemBuilder: (context, index) {
 
@@ -43,11 +44,6 @@ class TimesList extends StatelessWidget {
 
           return Column(
             children: [
-              index == 0
-                  ? SizedBox(
-                      height: 30,
-                    )
-                  : Container(),
 
               Einstempeln(
                   uhrzeit: uhrzeit,
@@ -57,18 +53,16 @@ class TimesList extends StatelessWidget {
                   closedCardIndex: widget.index),
 
               // Latest Widget of the Day, Timer is Running, Last Widget in Timeline
-              widget.index == 0 &&
+              if (widget.index == 0 &&
                       getIt<Data>().isRunning &&
-                      index == _zeitnahme.startTimes.length - 1
-                  ? SizedBox(
+                      index == _zeitnahme.startTimes.length - 1) SizedBox(
                       width: 60,
                       height: 60,
                       child: CircularProgressIndicator(
                         strokeWidth: 3,
                         valueColor:
                             AlwaysStoppedAnimation<Color>(Colors.blueGrey[50]),
-                      ))
-                  : Ausstempeln(
+                      )) else Ausstempeln(
                       uhrzeit: uhrzeit,
                       zeitnahme: _zeitnahme,
                       uhrzeitenIndex: index,
@@ -76,8 +70,7 @@ class TimesList extends StatelessWidget {
                       closedCardIndex: widget.index),
 
               // There is another Time coming after this -> break between them
-              _zeitnahme.startTimes.length - 1 > index
-                  ? Padding(
+              if (_zeitnahme.startTimes.length - 1 > index) Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -96,7 +89,7 @@ class TimesList extends StatelessWidget {
                             pauseMinutes
                                     .toString() +
                                 pauseString,
-                            style: TextStyle(color: Colors.orangeAccent),
+                            style: const TextStyle(color: Colors.orangeAccent),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 15.0),
@@ -110,8 +103,7 @@ class TimesList extends StatelessWidget {
                           ),
                         ],
                       ),
-                    )
-                  : SizedBox(height: 50)
+                    ) else const SizedBox(height: 50)
             ],
           );
         });

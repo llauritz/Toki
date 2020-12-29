@@ -36,48 +36,53 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
   Color _color;
   Color _colorAccent;
   Color _colorTranslucent;
-  double _width = 260;
   DateFormat uhrzeit = DateFormat("H:mm");
-  DateFormat wochentag = new DateFormat("EE", "de_DE");
+  DateFormat wochentag = DateFormat("EE", "de_DE");
   DateFormat datum = DateFormat("dd.MM", "de_DE");
   DateFormat tag = DateFormat(DateFormat.WEEKDAY, "de_DE");
 
-  GlobalKey _toolTipKey = GlobalKey();
+  final GlobalKey _toolTipKey = GlobalKey();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final Zeitnahme _zeitnahme = widget.zeitnahme;
+    final DateTime _day = _zeitnahme.day;
+
     return StreamBuilder<int>(
         stream: getIt<HiveDB>().listChangesStream.stream,
         builder: (context, snapshot) {
-          int ueberMilliseconds = widget.zeitnahme.getUeberstunden();
+          final int ueberMilliseconds = widget.zeitnahme.getUeberstunden();
           if (!ueberMilliseconds.isNegative) {
-            _color = Colors.tealAccent;
-            _colorAccent = Color(0xff00FFDC);
-            _colorTranslucent = Color(0xffE4FFFB);
+            _color = neon;
+            _colorAccent = neonAccent;
+            _colorTranslucent = neonTranslucent;
           } else {
-            _color = Colors.blueGrey[300];
-            _colorAccent = Colors.blueGrey[300];
-            _colorTranslucent = Colors.blueGrey[50];
+            _color = gray;
+            _colorAccent = grayAccent;
+            _colorTranslucent = grayTranslucent;
           }
 
-          final Zeitnahme _zeitnahme = widget.zeitnahme;
-          final DateTime _day = _zeitnahme.day;
-
-          int elapsedMilliseconds = _zeitnahme.getElapsedTime();
-          int elapsedHours =
+          final int elapsedMilliseconds = _zeitnahme.getElapsedTime();
+          final int elapsedHours =
               Duration(milliseconds: elapsedMilliseconds).inHours;
-          int elapsedMinutes =
+          final int elapsedMinutes =
               Duration(milliseconds: elapsedMilliseconds).inMinutes;
 
-          int pauseMilliseconds =
+          final int pauseMilliseconds =
               _zeitnahme.getPause() + _zeitnahme.getKorrektur();
-          int pauseHours = Duration(milliseconds: pauseMilliseconds).inHours;
-          int pauseMinutes =
+          final int pauseHours = Duration(milliseconds: pauseMilliseconds).inHours;
+          final int pauseMinutes =
               Duration(milliseconds: pauseMilliseconds).inMinutes;
 
-          int ueberHours =
+          final int ueberHours =
               Duration(milliseconds: ueberMilliseconds.abs()).inHours;
-          int ueberMinutes =
+          final int ueberMinutes =
               Duration(milliseconds: ueberMilliseconds.abs()).inMinutes;
 
           print("ueberHoras $ueberHours");
@@ -108,7 +113,7 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                       shaderCallback: (Rect bounds) {
                                         return LinearGradient(
                                           begin: Alignment.bottomCenter,
-                                          end: Alignment(0, 0.8),
+                                          end: const Alignment(0, 0.8),
                                           colors: <Color>[
                                             Colors.white.withAlpha(0),
                                             Colors.white,
@@ -137,15 +142,15 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                         },
                                         splashColor: free.withAlpha(150),
                                         highlightColor: free.withAlpha(80),
-                                        shape: StadiumBorder(),
+                                        shape: const StadiumBorder(),
                                         color: freeTranslucent,
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(vertical:10.0, horizontal: 0),
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              Icon(Icons.beach_access, color: freeAccent, size: 20,),
-                                              SizedBox(width: 5),
+                                              const Icon(Icons.beach_access, color: freeAccent, size: 20,),
+                                              const SizedBox(width: 5),
                                               Text("Urlaubstag", style: openButtonText.copyWith(
                                                   color: freeAccent
                                               ),),
@@ -153,7 +158,7 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                           ),
                                         )
                                     ),
-                                    SizedBox(width: 12),
+                                    const SizedBox(width: 12),
                                     FlatButton(
                                         onPressed: (){
                                           if(widget.zeitnahme.tag == "Stundenabbau"){
@@ -164,7 +169,7 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                         },
                                         splashColor: editColor.withAlpha(150),
                                         highlightColor: editColor.withAlpha(80),
-                                        shape: StadiumBorder(),
+                                        shape: const StadiumBorder(),
                                         color: editColorTranslucent,
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(vertical:10.0, horizontal: 0),
@@ -172,7 +177,7 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               Icon(Icons.edit, color: editColor, size: 20,),
-                                              SizedBox(width: 5),
+                                              const SizedBox(width: 5),
                                               Text("Zeit nachtragen", style: openButtonText.copyWith(
                                                   color: editColor
                                               ),),
@@ -194,13 +199,13 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
                             child: Container(
-                              padding: EdgeInsets.fromLTRB(12.0,12,12,20),
+                              padding: const EdgeInsets.fromLTRB(12.0,12,12,20),
                               decoration: BoxDecoration(
                                   color: _colorTranslucent,
                                   borderRadius: BorderRadius.circular(20),
                                   boxShadow: [
                                     BoxShadow(
-                                      offset: Offset(0, 5),
+                                      offset: const Offset(0, 5),
                                       color: _colorTranslucent.withAlpha(150),
                                       blurRadius: 10,
                                       spreadRadius: 0,
@@ -215,8 +220,8 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                           splashColor: _colorAccent.withAlpha(80),
                                           highlightColor:
                                               _colorAccent.withAlpha(50),
-                                          padding: EdgeInsets.all(0),
-                                          visualDensity: VisualDensity(),
+                                          padding: const EdgeInsets.all(0),
+                                          visualDensity: const VisualDensity(),
                                           icon: Icon(Icons.close,
                                               color: _colorAccent, size: 30),
                                           onPressed: () {
@@ -227,7 +232,7 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 12.0),
                                     child: Text(
-                                      tag.format(_day) + ", " + datum.format(_day),
+                                      tag.format(_day) + ', ' + datum.format(_day),
                                       style:
                                           openCardDate.copyWith(color: _colorAccent),
                                     ),
@@ -307,8 +312,8 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                                       BorderRadius.circular(100),
                                                   color: Colors.white,
                                                   boxShadow: [
-                                                    BoxShadow(
-                                                        offset: Offset(0, 5),
+                                                    const BoxShadow(
+                                                        offset: const Offset(0, 5),
                                                         color: Colors.black12,
                                                         blurRadius: 10)
                                                   ]),

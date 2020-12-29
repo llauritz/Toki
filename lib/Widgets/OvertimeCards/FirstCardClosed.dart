@@ -12,7 +12,7 @@ import '../../hiveClasses/Zeitnahme.dart';
 final getIt = GetIt.instance;
 
 class FirstCardClosed extends StatefulWidget {
-  FirstCardClosed({
+  const FirstCardClosed({
     @required this.i,
     @required this.index,
     @required this.zeitnahme,
@@ -23,17 +23,17 @@ class FirstCardClosed extends StatefulWidget {
   final int i;
   final int index;
   final Zeitnahme zeitnahme;
-  bool isRunning;
+  final bool isRunning;
 
   @override
   _FirstCardClosedState createState() => _FirstCardClosedState();
 }
 
 class _FirstCardClosedState extends State<FirstCardClosed> {
-  var fullDate = new DateFormat('dd.MM.yyyy');
-  var Uhrzeit = DateFormat("H:mm");
-  var wochentag = new DateFormat("EE", "de_DE");
-  var datum = DateFormat("dd.MM", "de_DE");
+  DateFormat fullDate = DateFormat('dd.MM.yyyy');
+  DateFormat Uhrzeit = DateFormat("H:mm");
+  DateFormat wochentag = DateFormat("EE", "de_DE");
+  DateFormat datum = DateFormat("dd.MM", "de_DE");
   Color _color;
   Color _colorAccent;
   Color _colorTranslucent;
@@ -45,7 +45,7 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
     final Zeitnahme _zeitnahme = widget.zeitnahme;
     final DateTime _day = _zeitnahme.day;
 
-    int ueberMilliseconds = widget.zeitnahme.getUeberstunden();
+    final int ueberMilliseconds = widget.zeitnahme.getUeberstunden();
     if (!ueberMilliseconds.isNegative && !widget.isRunning) {
       _color = Colors.tealAccent;
       _colorAccent = Colors.tealAccent[400];
@@ -72,7 +72,7 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           AnimatedContainer(
-              duration: Duration(milliseconds: 700),
+              duration: const Duration(milliseconds: 700),
               width: 60,
               height: 60,
               decoration: BoxDecoration(
@@ -80,7 +80,7 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
                 color: _colorTranslucent,
               ),
               child: AnimatedSwitcher(
-                duration: Duration(milliseconds: 700),
+                duration: const Duration(milliseconds: 700),
                 child: KeyedSubtree(
                   key: ValueKey<int>(keyInt),
                   child: Column(
@@ -101,14 +101,14 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
                   ),
                 ),
               )),
-          SizedBox(
+          const SizedBox(
             width: 20.0,
           ),
           AnimatedContainer(
             width: _width,
             curve:
                 getIt<Data>().isRunning ? Curves.easeInOutCubic : Curves.ease,
-            duration: Duration(milliseconds: 700),
+            duration: const Duration(milliseconds: 700),
             height: 60,
             decoration: BoxDecoration(
               border: Border.all(width: 2.0, color: _color),
@@ -123,8 +123,8 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
                         _zeitnahme.startTimes[0])),
                     style: TextStyle(fontSize: 14, color: Colors.blueGrey),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 2.0, 8.0, 0.0),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(8.0, 2.0, 8.0, 0.0),
                     child: Icon(
                       Icons.east_rounded,
                       size: 20.0,
@@ -136,7 +136,7 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
                     zeitnahme: _zeitnahme,
                     index: widget.index,
                   ),
-                  Expanded(child: Text("")),
+                  const Expanded(child: Text("")),
                   Ueberstunden(
                       ueberMilliseconds: ueberMilliseconds,
                       index: widget.index,
@@ -179,7 +179,7 @@ class Ueberstunden extends StatelessWidget {
       //TODO: Test what happens if Zeit = Tagesstunden
       if ((_ueberMilliseconds / 60000).truncate() == 0) {
         _widget = KeyedSubtree(
-          key: ValueKey<int>(0),
+          key: const ValueKey<int>(0),
           child: Container(
             alignment: Alignment.center,
             height: 30.0,
@@ -209,7 +209,7 @@ class Ueberstunden extends StatelessWidget {
       }
       if (_ueberMilliseconds.isNegative) {
         _widget = KeyedSubtree(
-          key: ValueKey<int>(1),
+          key: const ValueKey<int>(1),
           child: Container(
             alignment: Alignment.center,
             height: 30.0,
@@ -242,7 +242,7 @@ class Ueberstunden extends StatelessWidget {
         );
       } else {
         _widget = KeyedSubtree(
-          key: ValueKey<int>(2),
+          key: const ValueKey<int>(2),
           child: Container(
             alignment: Alignment.center,
             height: 30.0,
@@ -276,7 +276,7 @@ class Ueberstunden extends StatelessWidget {
       }
     } else {
       print("DefaultCardClosed - ueberMilli " + _ueberMilliseconds.toString());
-      _widget = KeyedSubtree(key: ValueKey<int>(3), child: Container());
+      _widget = KeyedSubtree(key: const ValueKey<int>(3), child: Container());
     }
     return PageTransitionSwitcher(
       transitionBuilder: (
@@ -317,7 +317,7 @@ class EndTimeWidget extends StatefulWidget {
 }
 
 class _EndTimeWidgetState extends State<EndTimeWidget> {
-  Timer endTracker = Timer.periodic(Duration(hours: 1), (timer) {});
+  Timer endTracker = Timer.periodic(const Duration(hours: 1), (timer) {});
   DateTime _now = DateTime.now();
 
   @override
@@ -330,13 +330,13 @@ class _EndTimeWidgetState extends State<EndTimeWidget> {
       _widget = Text(
         widget.Uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(
             widget._zeitnahme.endTimes.last)),
-        style: TextStyle(fontSize: 14, color: Colors.blueGrey),
+        style: const TextStyle(fontSize: 14, color: Colors.blueGrey),
         key: ValueKey<int>(widget._zeitnahme.endTimes.last),
       );
     } else {
       _now = DateTime.now();
       endTracker.cancel();
-      endTracker = Timer.periodic(Duration(seconds: 1), (timer) {
+      endTracker = Timer.periodic(Duration(seconds: 1), (Timer timer) {
         if (_now.minute != DateTime.now().minute) {
           setState(() {
             _now = DateTime.now();

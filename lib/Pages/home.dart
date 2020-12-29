@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Timo/Services/Theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -13,23 +14,23 @@ import '../Widgets/background_copy.dart';
 
 final getIt = GetIt.instance;
 
-class homePage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  _homePageState createState() => _homePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _homePageState extends State<homePage> {
-  PanelController pc = new PanelController();
+class _HomePageState extends State<HomePage> {
+  PanelController pc = PanelController();
   TimerText timerText = TimerText();
   StreamController<Color> containerColorStream = StreamController<Color>();
 
   void prechacheImages() {
-    precacheImage(AssetImage("assets/background/clouds/clouds1.jpg"), context);
-    precacheImage(AssetImage("assets/background/clouds/clouds2.jpg"), context);
-    precacheImage(AssetImage("assets/background/clouds/clouds3.jpg"), context);
-    precacheImage(AssetImage("assets/background/clouds/clouds4.jpg"), context);
-    precacheImage(AssetImage("assets/background/clouds/clouds5.jpg"), context);
-    precacheImage(AssetImage("assets/background/clouds/clouds6.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds1.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds2.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds3.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds4.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds5.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds6.jpg"), context);
   }
 
   @override
@@ -40,14 +41,14 @@ class _homePageState extends State<homePage> {
 
   @override
   Widget build(BuildContext context) {
-    print("home - build start");
-    double bottomInset = MediaQuery.of(context).viewPadding.bottom != 0
+    print('home - build start');
+    final double bottomInset = MediaQuery.of(context).viewPadding.bottom != 0
                           ? MediaQuery.of(context).viewPadding.bottom
                           : MediaQuery.of(context).systemGestureInsets.bottom;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xff0EE796),
+      backgroundColor: neon,
       body: SlidingUpPanel(
         //Höhe des Stempelbuttons + Padding + Wie viel von der Karte rausschauen darf
         minHeight: 130 + 20 + 58.0 + bottomInset,
@@ -57,7 +58,7 @@ class _homePageState extends State<homePage> {
         controller: pc,
         backdropEnabled: true,
         renderPanelSheet: false,
-        onPanelSlide: (value){
+        onPanelSlide: (double value){
           value>0.1
             ? containerColorStream.sink.add(Colors.white.withAlpha(0))
             : containerColorStream.sink.add(Colors.white);
@@ -73,9 +74,9 @@ class _homePageState extends State<homePage> {
             child: StreamBuilder<Color>(
               stream: containerColorStream.stream,
               initialData: Colors.white,
-              builder: (context, snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<Color> snapshot) {
                 return AnimatedContainer(
-                  duration: Duration(milliseconds: 200),
+                  duration: const Duration(milliseconds: 200),
                   color: snapshot.data,
                 );
               }
@@ -103,7 +104,7 @@ class _homePageState extends State<homePage> {
         ),
         body: Stack(
           children: [
-            Background_legacy(),
+            const Background_legacy(),
             SafeArea(
               child: Column(
                 children: [
@@ -112,14 +113,14 @@ class _homePageState extends State<homePage> {
                     children: [
                       IconButton(
                           icon:
-                              Icon(Icons.refresh_rounded, color: Colors.transparent),
+                              const Icon(Icons.refresh_rounded, color: Colors.transparent),
                           onPressed: () {
-                            Navigator.pushNamed(context, "/onboarding");
+                            Navigator.pushNamed(context, '/onboarding');
                           }),
                       SettingsButton()
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 50,
                   ),
                   timerText,
@@ -138,7 +139,7 @@ class _homePageState extends State<homePage> {
 /*    getIt<Data>().dispose();
     getIt<HiveDB>().dispose();*/
     containerColorStream.close();
-    print("home - DISPOSING-----------------");
+    print('home - DISPOSING-----------------');
     super.dispose();
   }
 }

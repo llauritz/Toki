@@ -1,63 +1,83 @@
 import 'package:flutter/material.dart';
 
-Color neon = Colors.tealAccent;
-Color neonAccent = Color(0xff00FFDC);
-Color neonTranslucent = Color(0xffE4FFFB);
+const Color neon = Colors.tealAccent;
+const Color neonAccent = Color(0xff00FFDC);
+const Color neonTranslucent = Color(0xffE4FFFB);
 
-Color gray = Colors.blueGrey[300];
-Color grayAccent = Colors.blueGrey;
-Color grayTranslucent = Colors.blueGrey[50];
-Color grayDark = Colors.blueGrey[700];
+final Color gray = Colors.blueGrey[300];
+final Color grayAccent = Colors.blueGrey;
+final Color grayTranslucent = Colors.blueGrey[50];
+final Color grayDark = Colors.blueGrey[700];
 
-Color free = Color(0xffFFB77F);
-Color freeAccent = Color(0xffFFA55F);
-Color freeTranslucent = Color(0xffFFF6EF);
+const Color free = Color(0xffFFB77F);
+const Color freeAccent = Color(0xffFFA55F);
+const Color freeTranslucent = Color(0xffFFF6EF);
 
-Color editColor = Colors.blue[400];
-Color editColorTranslucent = Colors.lightBlue[50];
+final Color editColor = Colors.blue[400];
+final Color editColorTranslucent = Colors.lightBlue[50];
 
-TextStyle dayNightNumbers = TextStyle(
+const TextStyle timerTextNumbers = TextStyle(
+  fontSize: 80,
+  color: Colors.white,
+  height: 0.79,
+);
+
+final TextStyle dayNightNumbers = TextStyle(
     fontFamily: "Roboto-Mono_bold",
     fontSize: 46,
     letterSpacing: -2,
     color: grayDark);
 
-TextStyle openCardsNumbers = TextStyle(
+final TextStyle openCardsNumbers = TextStyle(
     color: gray,
     fontSize: 28);
 
-TextStyle openButtonText = TextStyle(
+const TextStyle openButtonText = TextStyle(
     fontSize: 12,
   fontFamily: "BandeinsSansRegular"
 );
 
-TextStyle closedCardsNumbers = TextStyle(
+const TextStyle closedCardsNumbers = TextStyle(
   fontSize: 16.0,
   height: 1.05,
 color: Colors.white);
 
-TextStyle openCardsLabel = TextStyle(
+const TextStyle openCardsLabel = TextStyle(
   fontSize: 13,
     //fontFamily: "BandeinsSansRegular"
 );
 
-TextStyle openCardDate = TextStyle(
+const TextStyle openCardDate = TextStyle(
   fontSize: 36
 );
 
-TextStyle overTimeNumbers = TextStyle(
+const TextStyle overTimeNumbers = TextStyle(
   fontSize: 46,
   height: 1.0,
   fontFamily: "BandeinsSans"
 );
 
 // Overtime Offset Title
-TextStyle headline2 = TextStyle(
+final TextStyle headline2 = TextStyle(
   fontSize: 18,
   color: grayDark
 );
 
-TextStyle headline3 = TextStyle(
+final TextStyle headline3 = TextStyle(
     fontSize: 16,
     color: grayDark
+);
+
+final TextStyle onboardingTitle = TextStyle(
+    color: editColor,
+    fontSize: 30.0,
+    fontWeight: FontWeight.bold,
+    fontFamily: "BandeinsStrange"
+);
+
+final TextStyle onboardingBody = TextStyle(
+    fontSize: 14.0,
+    fontWeight: FontWeight.bold,
+    color: editColor,
+    height: 1.4
 );

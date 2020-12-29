@@ -17,8 +17,8 @@ class NamePicker extends StatefulWidget {
 
 class _NamePickerState extends State<NamePicker> {
 
-  FocusNode _focusNode = FocusNode();
-  Function _button = null;
+  final FocusNode _focusNode = FocusNode();
+  Function _button;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class _NamePickerState extends State<NamePicker> {
         elevation: 10.0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               gradient: LinearGradient(
                   begin: Alignment.bottomLeft,
                   end: Alignment.topRight,
@@ -51,7 +51,7 @@ class _NamePickerState extends State<NamePicker> {
                       width: 60.0,
                       height: 60.0,
                       decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-                      child: Center(
+                      child: const Center(
                         child: Icon(Icons.sentiment_satisfied_rounded,color: Colors.cyanAccent,size: 30.0,),
                       ),
                     ),

@@ -27,15 +27,13 @@ class EmptyCardClosed extends StatefulWidget {
 }
 
 class _EmptyCardClosedState extends State<EmptyCardClosed> {
-  var fullDate = new DateFormat('dd.MM.yyyy');
-  var Uhrzeit = DateFormat("H:mm");
-  var wochentag = new DateFormat("EE", "de_DE");
-  var datum = DateFormat("dd.MM", "de_DE");
-  Color _colorAccent = Color(0xffFFA55F);
-  Color _colorTranslucent = Color(0xffFFF6EF);
+  DateFormat fullDate = DateFormat('dd.MM.yyyy');
+  DateFormat Uhrzeit = DateFormat("H:mm");
+  DateFormat wochentag = DateFormat("EE", "de_DE");
+  DateFormat datum = DateFormat("dd.MM", "de_DE");
 
   //Tagesstunden in Millisekunden
-  int _tagesMillisekunden = (getIt<Data>().tagesstunden * 3600000).truncate();
+  final int _tagesMillisekunden = (getIt<Data>().tagesstunden * 3600000).truncate();
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +47,7 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             AnimatedContainer(
-              duration: Duration(milliseconds: 500),
+              duration: const Duration(milliseconds: 500),
               width: 60,
               height: 60,
               decoration: BoxDecoration(
@@ -73,12 +71,12 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 20.0,
             ),
             AnimatedContainer(
               width: 240,
-              duration: Duration(milliseconds: 1000),
+              duration: const Duration(milliseconds: 1000),
               height: 60,
               decoration: BoxDecoration(
                 border: Border.all(width: 2.0, color: grayTranslucent),
@@ -92,9 +90,9 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                       padding: const EdgeInsets.fromLTRB(3, 3, 0, 3),
                       child: FlatButton(
                           minWidth: 0,
-                          splashColor: _colorAccent.withAlpha(80),
-                          highlightColor: _colorAccent.withAlpha(50),
-                          color: _colorTranslucent,
+                          splashColor: freeAccent.withAlpha(80),
+                          highlightColor: freeAccent.withAlpha(50),
+                          color: freeTranslucent,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(1000)),
                           onPressed: () {
@@ -107,16 +105,16 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.beach_access,
                                 size: 18,
-                                color: _colorAccent,
+                                color: freeAccent,
                               ),
-                              Text(
+                              const Text(
                                 "Urlaub",
                                 style: TextStyle(
                                     fontFamily: "BandeinsSansRegular",
-                                    color: _colorAccent, fontSize: 11.0),
+                                    color: freeAccent, fontSize: 11.0),
                               )
                             ],
                           )),
@@ -150,7 +148,7 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                         ),
                       ),
                     ),
-                    Expanded(child: Text("")),
+                    const Expanded(child: Text("")),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -194,7 +192,7 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
     } else {
       print("DefaultCard - wtf");
       return Container(
-        child: Text("wtf"),
+        child: const Text('wtf'),
       );
     }
   }

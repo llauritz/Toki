@@ -13,7 +13,7 @@ final getIt = GetIt.instance;
 
 class OpenCard extends StatefulWidget {
 
-  OpenCard({
+  const OpenCard({
     @required this.state,
     @required this.i,
     @required this.index,

@@ -11,7 +11,7 @@ final getIt = GetIt.instance;
 
 class FreeCardOpen extends StatefulWidget {
 
-  FreeCardOpen ({
+  const FreeCardOpen ({
     @required this.i,
     @required this.index,
     @required this.zeitnahme,
@@ -33,7 +33,7 @@ class FreeCardOpen extends StatefulWidget {
 class _FreeCardOpenState extends State<FreeCardOpen> {
   DateFormat uhrzeit = DateFormat("H:mm");
 
-  DateFormat wochentag = new DateFormat("EE", "de_DE");
+  DateFormat wochentag = DateFormat("EE", "de_DE");
 
   DateFormat datum = DateFormat("dd.MM", "de_DE");
 
@@ -56,7 +56,7 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        offset: Offset(0, 5),
+                        offset: const Offset(0, 5),
                         color: free.withAlpha(80),
                         blurRadius: 10,
                         spreadRadius: 0,
@@ -72,9 +72,9 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                             splashColor: freeAccent.withAlpha(80),
                             highlightColor:
                             freeAccent.withAlpha(50),
-                            padding: EdgeInsets.all(0),
-                            visualDensity: VisualDensity(),
-                            icon: Icon(Icons.close,
+                            padding: const EdgeInsets.all(0),
+                            visualDensity: const VisualDensity(),
+                            icon: const Icon(Icons.close,
                                 color: freeAccent, size: 30),
                             onPressed: () {
                               Navigator.pop(context);
@@ -90,7 +90,7 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                             tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
                             style: openCardDate.copyWith(color: free),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 30,
                           ),
 
@@ -109,7 +109,7 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                           "0:00",
                           style: openCardsNumbers.copyWith(color: free),
                         ),
-                        Text(
+                        const Text(
                           "Überstunden",
                           style: TextStyle(color: free),
                         ),
@@ -124,7 +124,7 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
               children: [
                 FlatButton(
                     onPressed: (){
-                      if(widget.zeitnahme.startTimes.length>0){
+                      if(widget.zeitnahme.startTimes.isNotEmpty){
                         if(widget.zeitnahme.tag == "Urlaub"){
                           getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
                         }
@@ -137,7 +137,7 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                       }
                       widget.callback();
                     },
-                    shape: StadiumBorder(),
+                    shape: const StadiumBorder(),
                     color: grayTranslucent,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical:10.0, horizontal: 0),
@@ -145,7 +145,7 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.replay_rounded, color: grayAccent, size: 20,),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 5),
                           Text("Zurücksetzen", style: openButtonText.copyWith(
                             color: grayAccent
                           ),),
@@ -153,7 +153,7 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                       ),
                     )
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 FlatButton(
                     onPressed: (){
                       if(widget.zeitnahme.tag == "Urlaub"){
@@ -165,7 +165,7 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                     },
                     splashColor: editColor.withAlpha(150),
                     highlightColor: editColor.withAlpha(80),
-                    shape: StadiumBorder(),
+                    shape: const StadiumBorder(),
                     color: editColorTranslucent,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical:10.0, horizontal: 0),
@@ -173,7 +173,7 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.edit, color: editColor, size: 20,),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 5),
                           Text("Zeit nachtragen", style: openButtonText.copyWith(
                               color: editColor
                           ),),

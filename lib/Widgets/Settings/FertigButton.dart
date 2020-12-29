@@ -1,3 +1,4 @@
+import 'package:Timo/Services/Theme.dart';
 import 'package:flutter/material.dart';
 
 class FertigButton extends StatelessWidget {
@@ -22,29 +23,12 @@ class FertigButton extends StatelessWidget {
         elevation: 5.0,
         padding: EdgeInsets.all(0),
         shape: StadiumBorder(),
-        color: Colors.greenAccent,
+        color: neonAccent,
         onPressed: callback,
-        child: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
-                  colors: [
-                    Colors.tealAccent,
-                    Colors.greenAccent
-                  ]
-              )
-          ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical:20.0, horizontal: 50.0),
-            child: Text("Fertig", style:
-            TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
-                letterSpacing: 1.0,
-                fontWeight: FontWeight.bold
-            ),),
-          ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical:20.0, horizontal: 50.0),
+          child: Text("Fertig", style:
+          openButtonText.copyWith(color: grayDark)),
         ),
       ),
     );

@@ -8,37 +8,28 @@ import 'Data.dart';
 
 class HiveDB {
   Box zeitenBox;
-  final animatedListkey = GlobalKey<AnimatedListState>();
-  final listChangesStream = StreamController<int>.broadcast();
+  final GlobalKey<AnimatedListState> animatedListkey = GlobalKey<AnimatedListState>();
+  final StreamController<int> listChangesStream = StreamController<int>.broadcast();
   int changeNumber = 0;
   int todayElapsedTime = 0;
   bool isRunning = false;
+  final int ausVersehenWertSekunden = 5;
 
-  final ueberMillisekundenGesamtStream = StreamController<int>.broadcast();
+  final StreamController<int> ueberMillisekundenGesamtStream = StreamController<int>.broadcast();
   int ueberMillisekundenGesamt = 0;
 
   Future<void> initHiveDB() async {
 
     zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
     if (zeitenBox.length > 0) {
+      urlaubsTageCheck();
       calculateTodayElapsedTime();
       updateGesamtUeberstunden();
-      //addMockData();
     }
-    urlaubsTageCheck();
   }
 
-  void addMockData() async {
-    zeitenBox.clear();
-/*    zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
 
-    Zeitnahme z1 = Zeitnahme(day: DateTime(5, 3, 2000));
-    print("HiveDB - " + DateTime(5, 3, 2000).toString());
-
-    zeitenBox.add(z1);*/
-  }
-
-  void startTime(int startTime) async {
+  void startTime(int startTime) async{
     print("HiveDB - startTime - start");
     zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
     // Heutiger Tag in Variable
@@ -59,7 +50,7 @@ class HiveDB {
 
           // checks if at least a few seconds have passed
             int davor = latest.endTimes.last;
-            if (startTime-davor < Duration.millisecondsPerSecond*10){
+            if (startTime-davor < Duration.millisecondsPerSecond*ausVersehenWertSekunden){
               latest.endTimes.removeLast();
             }else{
               //Adds new Time to the List
@@ -109,7 +100,7 @@ class HiveDB {
 
       if(latest.startTimes.length>1){
         int davor = latest.startTimes.last;
-        if (endTime - davor < Duration.millisecondsPerSecond * 10) {
+        if (endTime - davor < (Duration.millisecondsPerSecond * ausVersehenWertSekunden)) {
           latest.startTimes.removeLast();
         } else {
           //Adds new Time to the List
@@ -120,21 +111,36 @@ class HiveDB {
       }
 
       zeitenBox.putAt(zeitenBox.length - 1, latest);
-      print("neue endTime an neuster Zeitnahme hinzugefügt" +
+      print('neue endTime an neuster Zeitnahme hinzugefügt' +
           latest.endTimes.toString());
     } else {
-      print("HiveDB - endTime - ERROR: StartTimes war nicht um eins größer");
+      print('HiveDB - endTime - ERROR: StartTimes war nicht um eins größer');
     }
 
     listChangesStream.sink.add(changeNumber++);
   }
 
   Future<void> calculateTodayElapsedTime() async {
-    zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
-    Zeitnahme neusete = zeitenBox.getAt(zeitenBox.length - 1);
-    if (neusete.day.isSameDate(DateTime.now())) {
-      todayElapsedTime = neusete.getElapsedTime();
-      print("HiveDB - today Elapsed Time is " + todayElapsedTime.toString());
+    zeitenBox = await Hive.openBox<Zeitnahme>('zeitenBox');
+    if (zeitenBox.length>0){
+      Zeitnahme neusete = zeitenBox.getAt(zeitenBox.length - 1) as Zeitnahme;
+      if (neusete.day.isSameDate(DateTime.now())) {
+        todayElapsedTime = neusete.getElapsedTime();
+        print("HiveDB - today Elapsed Time is " + Duration(milliseconds:todayElapsedTime).toString());
+      }
+    }
+  }
+
+  int getTodayElapsedTime(){
+    if (zeitenBox.length>0){
+      Zeitnahme neusete = zeitenBox.getAt(zeitenBox.length - 1) as Zeitnahme;
+      if (neusete.day.isSameDate(DateTime.now())) {
+        return neusete.getElapsedTime();
+      }else{
+        return 0;
+      }
+    }else{
+      return 0;
     }
   }
 
@@ -149,7 +155,7 @@ class HiveDB {
         continue;
       }
 
-      Zeitnahme z = zeitenBox.getAt(i);
+      Zeitnahme z = zeitenBox.getAt(i) as Zeitnahme;
       ueberMillisekundenGesamt = ueberMillisekundenGesamt + z.getUeberstunden();
       print("HiveDB - ueberMSG: " + ueberMillisekundenGesamt.toString());
     }
@@ -173,9 +179,9 @@ class HiveDB {
     zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
 
     if (zeitenBox.length > 0) {
-      DateTime latestDate = zeitenBox.getAt(zeitenBox.length - 1).day;
+      final DateTime latestDate = zeitenBox.getAt(zeitenBox.length - 1).day as DateTime;
       print("HiveDB - last date " + latestDate.toString());
-      DateTime checkedDate = latestDate.add(Duration(days: 1));
+      DateTime checkedDate = latestDate.add(const Duration(days: 1));
 
       if (!isSameDate(checkedDate, DateTime.now()) &&
           checkedDate.isBefore(DateTime.now())) {
@@ -190,13 +196,13 @@ class HiveDB {
                 startTimes: [],
                 endTimes: []));
             if (animatedListkey.currentState != null) {
-              animatedListkey.currentState.insertItem(0, duration: Duration(milliseconds: 1000));
+              animatedListkey.currentState.insertItem(0, duration: const Duration(milliseconds: 1000));
             }
             print("HiveDB - urlaubscheck Tag ergänzt");
           } else {
             print("HiveDB - urlaubscheck Wochentag kein Arbeitstag");
           }
-          checkedDate = checkedDate.add(Duration(days: 1));
+          checkedDate = checkedDate.add(const Duration(days: 1));
         }
       }
     }
@@ -208,7 +214,7 @@ class HiveDB {
     zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
     print("HiveDB - changeState - 1 $index");
 
-    Zeitnahme _updated = zeitenBox.getAt(index);
+    final Zeitnahme _updated = zeitenBox.getAt(index) as Zeitnahme;
     print("HiveDB - changeState - 2 ${_updated.state}");
     _updated.state = state;
     zeitenBox.putAt(index, _updated);
@@ -228,7 +234,7 @@ class HiveDB {
       int zeitnahmeIndex, int startEndIndex, bool start, int value) async {
     zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
 
-    Zeitnahme edit = zeitenBox.getAt(zeitnahmeIndex);
+    final Zeitnahme edit = zeitenBox.getAt(zeitnahmeIndex) as Zeitnahme;
 
     start
         ? edit.startTimes[startEndIndex] = value
@@ -243,7 +249,7 @@ class HiveDB {
     zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
     print("HiveDB - changeTag - 1 $index");
 
-    Zeitnahme _updated = zeitenBox.getAt(index);
+    Zeitnahme _updated = zeitenBox.getAt(index) as Zeitnahme;
     print("HiveDB - changeTag - 2 ${_updated.tag}");
     _updated.tag = tag;
     zeitenBox.putAt(index, _updated);
@@ -256,7 +262,7 @@ class HiveDB {
     zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
     print("HiveDB - changeEditMilli - 1 $index");
 
-    Zeitnahme _updated = zeitenBox.getAt(index);
+    Zeitnahme _updated = zeitenBox.getAt(index) as Zeitnahme;
     print("HiveDB - changeEditMilli - 2 ${Duration(milliseconds: _updated.editMilli)}");
     _updated.editMilli = editMilli;
     zeitenBox.putAt(index, _updated);

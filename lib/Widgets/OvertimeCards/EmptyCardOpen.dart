@@ -35,7 +35,7 @@ class EmptyCardOpen extends StatefulWidget {
 class _EmptyCardOpenState extends State<EmptyCardOpen> {
   DateFormat uhrzeit = DateFormat("H:mm");
 
-  DateFormat wochentag = new DateFormat("EE", "de_DE");
+  DateFormat wochentag = DateFormat("EE", "de_DE");
 
   DateFormat datum = DateFormat("dd.MM", "de_DE");
 
@@ -45,10 +45,10 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
   @override
   Widget build(BuildContext context) {
     //Tagesstunden in Millisekunden
-    int tagesMillisekunden = (getIt<Data>().tagesstunden * 3600000).truncate();
-    int tagesHours =
+    final int tagesMillisekunden = (getIt<Data>().tagesstunden * 3600000).truncate();
+    final int tagesHours =
         Duration(milliseconds: tagesMillisekunden.abs()).inHours;
-    int tagesMinutes =
+    final int tagesMinutes =
         Duration(milliseconds: tagesMillisekunden.abs()).inMinutes;
 
     return Container(
@@ -65,7 +65,7 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        offset: Offset(0, 5),
+                        offset: const Offset(0, 5),
                         color: grayTranslucent,
                         blurRadius: 10,
                         spreadRadius: 0,
@@ -81,8 +81,8 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                             splashColor: grayAccent.withAlpha(80),
                             highlightColor:
                             grayAccent.withAlpha(50),
-                            padding: EdgeInsets.all(0),
-                            visualDensity: VisualDensity(),
+                            padding: const EdgeInsets.all(0),
+                            visualDensity: const VisualDensity(),
                             icon: Icon(Icons.close,
                                 color: grayAccent, size: 30),
                             onPressed: () {
@@ -98,7 +98,7 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                             tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
                             style: openCardDate.copyWith(color: gray),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 30,
                           ),
                           TagEditWidget(
@@ -153,15 +153,15 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                     },
                     splashColor: free.withAlpha(150),
                     highlightColor: free.withAlpha(80),
-                    shape: StadiumBorder(),
+                    shape: const StadiumBorder(),
                     color: freeTranslucent,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical:10.0, horizontal: 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.beach_access, color: freeAccent, size: 20,),
-                          SizedBox(width: 5),
+                          const Icon(Icons.beach_access, color: freeAccent, size: 20,),
+                          const SizedBox(width: 5),
                           Text("Urlaubstag", style: openButtonText.copyWith(
                               color: freeAccent
                           ),),
@@ -169,7 +169,7 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                       ),
                     )
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 FlatButton(
                     onPressed: (){
                       if(widget.zeitnahme.tag == "Stundenabbau"){
@@ -180,7 +180,7 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                     },
                     splashColor: editColor.withAlpha(150),
                     highlightColor: editColor.withAlpha(80),
-                    shape: StadiumBorder(),
+                    shape: const StadiumBorder(),
                     color: editColorTranslucent,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical:10.0, horizontal: 0),
@@ -188,7 +188,7 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.edit, color: editColor, size: 20,),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 5),
                           Text("Zeit nachtragen", style: openButtonText.copyWith(
                               color: editColor
                           ),),

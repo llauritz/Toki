@@ -13,7 +13,7 @@ import 'DottedLine.dart';
 final getIt = GetIt.instance;
 
 class Einstempeln extends StatefulWidget {
-  Einstempeln({
+  const Einstempeln({
     Key key,
     @required this.uhrzeitenIndex,
     @required this.uhrzeit,
@@ -38,9 +38,9 @@ class _EinstempelnState extends State<Einstempeln> {
   Widget build(BuildContext context) {
     return FlatButton(
       highlightColor: Colors.transparent,
-      splashColor: Color(0xffE4FFFB),
+      splashColor: neonTranslucent,
       onPressed: () {
-        int selectedMilli = widget._zeitnahme.startTimes[widget.uhrzeitenIndex];
+        final int selectedMilli = widget._zeitnahme.startTimes[widget.uhrzeitenIndex];
 
         int previousMilli = 0;
         if (widget.uhrzeitenIndex != 0) {
@@ -69,7 +69,7 @@ class _EinstempelnState extends State<Einstempeln> {
 
         showModal(
             context: context,
-            configuration: FadeScaleTransitionConfiguration(
+            configuration: const FadeScaleTransitionConfiguration(
                 transitionDuration: Duration(milliseconds: 300),
                 reverseTransitionDuration: Duration(milliseconds: 200)),
             builder: (context) {
@@ -82,32 +82,6 @@ class _EinstempelnState extends State<Einstempeln> {
                 isStartTime: true,
               );
             });
-
-        /*Navigator.of(context).push(
-            PageRouteBuilder(
-                pageBuilder: (context, _, __){
-                  return DayNightDialogEdited(selectedMilli: selectedMilli, previousMilli: previousMilli, followingMilli: followingMilli, index: uhrzeitenIndex, listindex: zeitnahmeIndex);
-                },
-                transitionDuration: Duration(milliseconds: 200),
-                transitionsBuilder: (context, anim, secondAnim, child) => SlideTransition(
-                  position: anim.drive(
-                    Tween(
-                      begin: const Offset(0, 0.15),
-                      end: const Offset(0, 0),
-                    ).chain(
-                      CurveTween(curve: Curves.ease),
-                    ),
-                  ),
-                  child: FadeTransition(
-                    opacity: anim,
-                    child: child,
-                  ),
-                ),
-                opaque: false,
-                barrierColor: Colors.black54
-
-            )
-        );*/
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,8 +99,8 @@ class _EinstempelnState extends State<Einstempeln> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: Color(0xffE4FFFB), shape: BoxShape.circle),
+                  decoration: const BoxDecoration(
+                      color: neonTranslucent, shape: BoxShape.circle),
                   child: Padding(
                     padding: const EdgeInsets.all(22.0),
                     child: Center(
@@ -135,13 +109,13 @@ class _EinstempelnState extends State<Einstempeln> {
                             DateTime.fromMillisecondsSinceEpoch(widget
                                 ._zeitnahme.startTimes[widget.uhrzeitenIndex])),
                         style:
-                            TextStyle(fontSize: 18, color: Color(0xff00FFDC)),
+                            const TextStyle(fontSize: 18, color: Color(0xff00FFDC)),
                       ),
                     ),
                   ),
                 ),
               ),
-              DottedLine(),
+              const DottedLine(),
             ],
           ),
           Padding(
@@ -149,7 +123,7 @@ class _EinstempelnState extends State<Einstempeln> {
             child: Container(
               width: 120,
               child: Text(
-                "Einstempeln",
+                'Einstempeln',
                 style: headline3.copyWith(color: gray),
               ),
             ),

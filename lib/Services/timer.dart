@@ -15,7 +15,7 @@ final getIt = GetIt.instance;
 class TimerText extends StatefulWidget {
   final _TimerTextState ts = _TimerTextState();
 
-  final Timer t = Timer.periodic(Duration(hours: 1), (timer) {});
+  final Timer t = Timer.periodic(const Duration(hours: 1), (Timer timer) {});
 
   void start(){
     ts.timerStart();
@@ -29,6 +29,7 @@ class TimerText extends StatefulWidget {
     ts.updateTime(t);
   }
 
+  @override
   _TimerTextState createState() => ts;
 }
 
@@ -37,8 +38,8 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
   int _startTime = 0;
   int _elapsedTime = 0;
   SharedPreferences prefs;
-  Timer _timer = Timer.periodic(Duration(hours: 1), (timer) {});
-  final _timeController = StreamController<int>();
+  Timer _timer = Timer.periodic(const Duration(hours: 1), (Timer timer) {});
+  final StreamController<int> _timeController = StreamController<int>();
 
   void initSharedPreferences()async{
     _startTime = getIt<Data>().prefs.getInt("startTime");
@@ -49,13 +50,14 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
       getIt<Data>().prefs.setInt("startTime", 0);
     } else if (_startTime != 0) {
       print("timer - restored Time" + _startTime.toString());
-      _timer = Timer.periodic(Duration(milliseconds: 100), updateTime);
+      _timer = Timer.periodic(const Duration(milliseconds: 100), updateTime);
       updateTime(_timer);
       getIt<Data>().isRunningStream.sink.add(true);
       getIt<Data>().isRunning = true;
       getIt<HiveDB>().isRunning = true;
     }
     await getIt<HiveDB>().calculateTodayElapsedTime();
+    await getIt<HiveDB>().updateGesamtUeberstunden();
     updateTime(_timer);
     print("timer - init ready");
   }
@@ -86,12 +88,14 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
   void timerStart(){
     print("timer - start");
     print("timer - timer " + _timer.isActive.toString());
-    if (_timer.isActive == false) {
-      _timer = Timer.periodic(Duration(milliseconds: 100), updateTime);
+
+      _timer = Timer.periodic(const Duration(milliseconds: 200), updateTime);
       _startTime = DateTime.now().millisecondsSinceEpoch;
       getIt<Data>().prefs.setInt("startTime", _startTime);
       print("timer - started, startTime = " + _startTime.toString());
-    }
+
+    print("timer - timer " + _timer.isActive.toString());
+
     getIt<Data>().isRunningStream.sink.add(true);
     getIt<Data>().isRunning = true;
     getIt<HiveDB>().isRunning = true;
@@ -123,21 +127,25 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
     //print("timer - update Time start Time" + startTime.toString());
     //print("timer - current Time" + DateTime.now().microsecondsSinceEpoch.toString());
     if (_startTime != 0) {
-      int elapsedTimeMilliseconds = DateTime
-          .now()
-          .millisecondsSinceEpoch - _startTime +
-          getIt<HiveDB>().todayElapsedTime;
+      int elapsedTimeMilliseconds = getIt<HiveDB>().getTodayElapsedTime();
 
       //print("timer - updateTime elapsed Time "+ _elapsedTime.toString());
+      //print("timer - ${Duration(milliseconds: elapsedTimeMilliseconds).inSeconds}");
+      //print("timer - ${Duration(milliseconds: _elapsedTime).inSeconds}");
+      /*print("${
+      Duration(milliseconds: elapsedTimeMilliseconds).inSeconds
+      - Duration(milliseconds: _elapsedTime).inSeconds
+      }");*/
 
       //rebuild only if value changed at least one Second
       if (
       Duration(milliseconds: elapsedTimeMilliseconds).inSeconds
-          - Duration(milliseconds: _elapsedTime).inSeconds >= 1
+          - Duration(milliseconds: _elapsedTime).inSeconds != 0
       ) {
         //print("timer - update");
         _elapsedTime = elapsedTimeMilliseconds;
         _timeController.sink.add(_elapsedTime);
+        getIt<HiveDB>().calculateTodayElapsedTime();
       }
     } else {
       _timeController.sink.add(getIt<HiveDB>().todayElapsedTime);

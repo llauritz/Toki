@@ -30,14 +30,16 @@ class Zeitnahme {
   int editMilli = 0;
 
   int getElapsedTime() {
-    int n = startTimes.length > endTimes.length
-        ? endTimes.length
-        : startTimes.length;
+    int startLength = startTimes.length;
+    int endLength = endTimes.length;
     int _elapsedTime = 0;
-    for (int i = 0; i < n; i++) {
-      _elapsedTime = _elapsedTime + endTimes[i] - startTimes[i];
+    for (int i = 0; i < startLength; i++) {
+      int e = i==endLength
+        ? DateTime.now().millisecondsSinceEpoch
+        : endTimes[i];
+      _elapsedTime = _elapsedTime + e - startTimes[i];
     }
-    print("Zeitnahme - elapsed time ${Duration(milliseconds: _elapsedTime)}");
+    //print("Zeitnahme - elapsed time ${Duration(milliseconds: _elapsedTime)}");
     return _elapsedTime;
   }
 
@@ -100,7 +102,7 @@ class Zeitnahme {
   }
 
   int getPause() {
-    if (state != "free" && endTimes.length > 0) {
+    if (state != 'free' && endTimes.isNotEmpty) {
       int fromStartToFinish = endTimes.last - startTimes[0];
       return fromStartToFinish - getElapsedTime();
     } else {

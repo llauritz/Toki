@@ -42,7 +42,7 @@ class _TagEditWidgetState extends State<TagEditWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           AnimatedFittedTextFieldContainer(
-            growDuration: Duration(milliseconds: 200),
+            growDuration: const Duration(milliseconds: 200),
             growCurve: Curves.easeOutQuart,
             shrinkCurve: Curves.ease,
             child: TextField(
@@ -55,9 +55,8 @@ class _TagEditWidgetState extends State<TagEditWidget> {
                 fontSize: 18,
                 letterSpacing: 1,
               ),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 contentPadding: EdgeInsets.only(left: 10),
-
                 prefixText: "    ",
                 counterText: "",
                 disabledBorder: InputBorder.none,

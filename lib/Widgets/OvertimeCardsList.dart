@@ -59,7 +59,7 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
                       child: ValueListenableBuilder(
                         valueListenable:
                             getIt<HiveDB>().zeitenBox.listenable(),
-                        builder: (context, Box box, _) {
+                        builder: (BuildContext context, Box box, _) {
                           return StreamBuilder(
                               stream:
                                   getIt<HiveDB>().listChangesStream.stream,
@@ -192,7 +192,7 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
                                                       case "edited":
                                                         {
                                                           _widget =
-                                                              EditedCardClosed(
+                                                              EditedCardClosedStl(
                                                                   i: i,
                                                                   index:
                                                                   index,

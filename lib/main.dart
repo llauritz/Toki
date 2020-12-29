@@ -31,8 +31,8 @@ void main() async {
 
   runApp(MaterialApp(
     routes: {
-      "/": (context) => homePage(),
-      "/home": (context) => homePage(),
+      "/": (context) => HomePage(),
+      "/home": (context) => HomePage(),
       "/onboarding": (context) => Onboarding(),
     },
     theme: ThemeData(

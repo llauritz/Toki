@@ -26,16 +26,21 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   Background backgroundWidget;
+  bool isDay = true;
 
   @override
   void initState() {
     print("SettingsPage - init");
+    if (DateTime.now().hour>18 || DateTime.now().hour<8){
+      isDay = false;
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
+      alignment: Alignment.bottomCenter,
         children: [
           StreamBuilder<Color>(
             stream: getIt<Data>().primaryColorStream.stream,
@@ -64,7 +69,6 @@ class _SettingsPageState extends State<SettingsPage> {
           ),*/
         /* BackdropFilter(filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
           child: Container(color: Colors.transparent)),*/
-
         /*StreamBuilder<String>(
             stream: getIt<Data>().backgroundHashStream.stream,
             initialData: getIt<Data>().backgroundHash,
@@ -83,20 +87,27 @@ class _SettingsPageState extends State<SettingsPage> {
             }),*/
         SafeArea(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                FadeIn(delay: 300, fadeChild: SettingsTitle()),
-                FadeIn(delay: 350, fadeChild: NamePicker()),
-                FadeIn(delay: 400, fadeChild: TagesstundenPicker()),
-                FadeIn(delay: 450, fadeChild: WochentagePicker()),
-                FadeIn(delay: 500, fadeChild:PausenkorrekturPicker()),
-                  FadeIn(
-                      delay: 550,
-                      fadeChild:FertigButton(callback: (){Navigator.pop(context);},)),
-                ],
-              ),
+          padding: EdgeInsets.only(bottom: 70),
+          child: Column(
+            children: [
+              FadeIn(delay: 300, fadeChild: SettingsTitle()),
+              FadeIn(delay: 350, fadeChild: NamePicker()),
+              FadeIn(delay: 400, fadeChild: TagesstundenPicker()),
+              FadeIn(delay: 450, fadeChild: WochentagePicker()),
+              FadeIn(delay: 500, fadeChild:PausenkorrekturPicker()),
+
+              ],
             ),
-          )
+          ),
+          ),
+          SafeArea(
+            child: FadeIn(
+                delay: 550,
+                fadeChild:Padding(
+                  padding: const EdgeInsets.only(bottom:20.0),
+                  child: FertigButton(callback: (){Navigator.pop(context);},),
+                )),
+          ),
         ],
 
     );

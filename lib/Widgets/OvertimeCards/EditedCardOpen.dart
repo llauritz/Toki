@@ -13,7 +13,7 @@ final getIt = GetIt.instance;
 
 class EditedCardOpen extends StatefulWidget {
 
-  EditedCardOpen ({
+  const EditedCardOpen ({
     @required this.i,
     @required this.index,
     @required this.zeitnahme,
@@ -35,7 +35,7 @@ class EditedCardOpen extends StatefulWidget {
 class _EditedCardOpenState extends State<EditedCardOpen> {
   DateFormat uhrzeit = DateFormat("H:mm");
 
-  DateFormat wochentag = new DateFormat("EE", "de_DE");
+  DateFormat wochentag = DateFormat("EE", "de_DE");
 
   DateFormat datum = DateFormat("dd.MM", "de_DE");
 
@@ -54,12 +54,12 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
   @override
   Widget build(BuildContext context) {
 
-    int editHours = (editMilli/Duration.millisecondsPerHour).truncate();
-    int editMinutes = (editMilli/Duration.millisecondsPerMinute).truncate();
+    final int editHours = (editMilli/Duration.millisecondsPerHour).truncate();
+    final int editMinutes = (editMilli/Duration.millisecondsPerMinute).truncate();
 
-    int ueberMilli = widget.zeitnahme.getUeberstunden();
-    int ueberHours = (ueberMilli/Duration.millisecondsPerHour).truncate();
-    int ueberMinutes = (ueberMilli/Duration.millisecondsPerMinute).truncate();
+    final int ueberMilli = widget.zeitnahme.getUeberstunden();
+    final int ueberHours = (ueberMilli/Duration.millisecondsPerHour).truncate();
+    final int ueberMinutes = (ueberMilli/Duration.millisecondsPerMinute).truncate();
 
     return Container(
       color: Colors.white,
@@ -75,7 +75,7 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        offset: Offset(0, 5),
+                        offset: const Offset(0, 5),
                         color: editColorTranslucent.withAlpha(150),
                         blurRadius: 10,
                         spreadRadius: 0,
@@ -91,8 +91,8 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                             splashColor: editColor.withAlpha(80),
                             highlightColor:
                             editColor.withAlpha(50),
-                            padding: EdgeInsets.all(0),
-                            visualDensity: VisualDensity(),
+                            padding: const EdgeInsets.all(0),
+                            visualDensity: const VisualDensity(),
                             icon: Icon(Icons.close,
                                 color: editColor, size: 30),
                             onPressed: () {
@@ -108,7 +108,7 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                             tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
                             style: openCardDate.copyWith(color: editColor),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           TagEditWidget(
@@ -117,19 +117,19 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                             color: editColor,
                             colorAccent: editColor,
                           ),
-                          SizedBox(height: 30),
+                          const SizedBox(height: 30),
                           Slider.adaptive(
                               value: changeMilli*1.0,
                               min: 0,
                               max: Duration.millisecondsPerHour*12.0,
                               divisions: 24,
-                              onChanged: (value){
+                              onChanged: (double value){
                                 setState(() {
                                   changeMilli = value.truncate();
                                   editMilli = value.truncate();
                                 });
                               },
-                            onChangeEnd: (value){
+                            onChangeEnd: (double value){
                                 setState(() {
                                   getIt<HiveDB>().updateEditMilli(
                                       value.truncate(), widget.i);
@@ -168,7 +168,7 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 30),
+                        const SizedBox(width: 30),
                         Column(
                           children: [
                             Row(
@@ -206,7 +206,7 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
               children: [
                 FlatButton(
                     onPressed: (){
-                      if(widget.zeitnahme.startTimes.length>0){
+                      if(widget.zeitnahme.startTimes.isNotEmpty){
                         if(widget.zeitnahme.tag == "Bearbeitet"){
                           getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
                         }
@@ -219,7 +219,7 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                       }
                       widget.callback();
                     },
-                    shape: StadiumBorder(),
+                    shape: const StadiumBorder(),
                     color: grayTranslucent,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical:10.0, horizontal: 0),
@@ -227,7 +227,7 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.replay_rounded, color: grayAccent, size: 20,),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 5),
                           Text("Zurücksetzen", style: openButtonText.copyWith(
                             color: grayAccent
                           ),),
@@ -235,7 +235,7 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                       ),
                     )
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 FlatButton(
                     onPressed: (){
                       if(widget.zeitnahme.tag == "Bearbeitet"){
@@ -246,15 +246,15 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                     },
                     splashColor: free.withAlpha(150),
                     highlightColor: free.withAlpha(80),
-                    shape: StadiumBorder(),
+                    shape: const StadiumBorder(),
                     color: freeTranslucent,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical:10.0, horizontal: 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.beach_access, color: freeAccent, size: 20,),
-                          SizedBox(width: 5),
+                          const Icon(Icons.beach_access, color: freeAccent, size: 20,),
+                          const SizedBox(width: 5),
                           Text("Urlaubstag", style: openButtonText.copyWith(
                               color: freeAccent
                           ),),

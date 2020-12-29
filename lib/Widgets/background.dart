@@ -46,7 +46,7 @@ class _BackgroundState extends State<Background> with WidgetsBindingObserver{
     return FadeInImage(
       height: MediaQuery.of(context).size.height,
       fit: BoxFit.cover,
-      fadeInDuration: Duration(milliseconds: 1000),
+      fadeInDuration: const Duration(milliseconds: 1000),
         placeholder: previousImage,
         image: currentImage);
   }
@@ -59,19 +59,19 @@ class _BackgroundState extends State<Background> with WidgetsBindingObserver{
     // example: 16:35 -> 16.35
 
     if(currentTime <= 6.59 || currentTime >= 20){
-      return AssetImage("assets/background/clouds/clouds1.jpg");
+      return const AssetImage("assets/background/clouds/clouds1.jpg");
     }else if(currentTime >= 7.00 && currentTime < 8.00){
-      return AssetImage("assets/background/clouds/clouds2.jpg");
+      return const AssetImage("assets/background/clouds/clouds2.jpg");
     }else if(currentTime >= 8.00 && currentTime < 11.00){
-      return AssetImage("assets/background/clouds/clouds3.jpg");
+      return const AssetImage("assets/background/clouds/clouds3.jpg");
     }else if(currentTime >= 11.00 && currentTime < 15.30){
-      return AssetImage("assets/background/clouds/clouds4.jpg");
+      return const AssetImage('assets/background/clouds/clouds4.jpg');
     }else if(currentTime >= 15.30 && currentTime < 17.30){
-      return AssetImage("assets/background/clouds/clouds5.jpg");
+      return const AssetImage('assets/background/clouds/clouds5.jpg');
     }else if(currentTime >= 17.30 && currentTime < 20.00){
-      return AssetImage("assets/background/clouds/clouds6.jpg");
+      return const AssetImage('assets/background/clouds/clouds6.jpg');
     }
-      return AssetImage("assets/background/clouds/clouds3.jpg");
+      return const AssetImage("assets/background/clouds/clouds3.jpg");
   }
 
   void updateBackground(){
