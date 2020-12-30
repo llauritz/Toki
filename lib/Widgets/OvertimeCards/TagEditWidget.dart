@@ -3,6 +3,8 @@ import 'package:Timo/hiveClasses/Zeitnahme.dart';
 import 'package:fitted_text_field_container/fitted_text_field_container.dart';
 import 'package:flutter/material.dart';
 
+import '../../Services/Theme.dart';
+
 class TagEditWidget extends StatefulWidget {
 
   const TagEditWidget({

@@ -19,7 +19,7 @@ class FadeIn extends StatelessWidget {
     return PlayAnimation<MultiTweenValues<_AniProps>>(
       delay: Duration(milliseconds: delay),
       tween: _tween,
-      duration: Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 600),
       curve: Curves.ease,
       builder: (context, child, value){
         return Opacity(

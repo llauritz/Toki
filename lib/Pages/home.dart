@@ -4,6 +4,7 @@ import 'package:Timo/Services/Theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logger_flutter/logger_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../Services/timer.dart';
@@ -41,7 +42,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('home - build start');
+    logger.d('home - build start');
     final double bottomInset = MediaQuery.of(context).viewPadding.bottom != 0
                           ? MediaQuery.of(context).viewPadding.bottom
                           : MediaQuery.of(context).systemGestureInsets.bottom;
@@ -116,6 +117,12 @@ class _HomePageState extends State<HomePage> {
                               const Icon(Icons.refresh_rounded, color: Colors.transparent),
                           onPressed: () {
                             Navigator.pushNamed(context, '/onboarding');
+                          }),
+                      IconButton(
+                          icon:
+                              Icon(Icons.bug_report_outlined, color: Colors.white24),
+                          onPressed: () {
+                            LogConsole.open(context);
                           }),
                       SettingsButton()
                     ],

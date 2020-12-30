@@ -1,3 +1,4 @@
+import 'package:Timo/Services/Theme.dart';
 import 'package:flutter/material.dart';
 
 class SettingsTitle extends StatelessWidget {
@@ -7,13 +8,10 @@ class SettingsTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.symmetric(vertical: 80.0),
-        child: Center(
-            child: Text(
-              "Einstellungen",
-              style: Theme.of(context).textTheme.headline2,
-            )
+    return const Center(
+        child: const Text(
+          "Einstellungen",
+          style: settingsHeadline,
         )
     );
   }

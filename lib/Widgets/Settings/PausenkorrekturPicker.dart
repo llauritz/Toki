@@ -1,3 +1,4 @@
+import 'package:Timo/Services/Theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get_it/get_it.dart';
@@ -9,7 +10,11 @@ final getIt = GetIt.instance;
 class PausenkorrekturPicker extends StatefulWidget {
   PausenkorrekturPicker({
     Key key,
+    @required
+    this.isDay,
   }) : super(key: key);
+
+  final bool isDay;
 
   @override
   _PausenkorrekturPickerState createState() => _PausenkorrekturPickerState();
@@ -18,6 +23,85 @@ class PausenkorrekturPicker extends StatefulWidget {
 class _PausenkorrekturPickerState extends State<PausenkorrekturPicker> {
   @override
   Widget build(BuildContext context) {
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 60.0,
+            height: 60.0,
+            decoration: BoxDecoration(shape: BoxShape.circle, color: widget.isDay
+                ? neonTranslucent
+                : neon.withAlpha(100)),
+            child: const Center(
+              child: Icon(Icons.schedule,color: neonAccent,size: 26.0,),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                      color: neon,
+                      width: 2.5
+                  )
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left:16.0),
+                        child: Text("Tagesstunden", style: widget.isDay
+                            ? settingsTitle
+                            : settingsTitle.copyWith(color: Colors.white)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right:8.0),
+                        child: Switch.adaptive(
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            activeColor: neon,
+                            activeTrackColor: neon.withAlpha(100),
+                            value: getIt<Data>().pausenKorrektur,
+                            onChanged:(newValue){
+                              setState(() {
+                                getIt<Data>().updatePausenKorrektur(newValue);
+                                getIt<Data>().pausenKorrektur = newValue;
+                              });
+                            }
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 5),
+                  Container(
+                    height: 80,
+                    child: AnimatedList(
+                        scrollDirection: Axis.horizontal,
+                        padding: EdgeInsets.only(left: 16),
+                        shrinkWrap: true,
+                        initialItemCount: getIt<Data>().korrekturAB.length,
+                        itemBuilder: (context, index, animation){
+                          return KorrekturListItem(listIndex: index, buttonColor: neon,
+                            isDay: widget.isDay,
+                          );
+                        }
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+
     return StreamBuilder<Color>(
         stream: getIt<Data>().primaryColorStream.stream,
         initialData: getIt<Data>().primaryColor,
@@ -126,11 +210,14 @@ class KorrekturListItem extends StatelessWidget {
     @required
     this.listIndex,
     @required
-    this.buttonColor
+    this.buttonColor,
+    @required
+    this.isDay
   }) : super(key: key);
 
   final Color buttonColor;
   final int listIndex;
+  final bool isDay;
 
   @override
   Widget build(BuildContext context) {
@@ -142,28 +229,28 @@ class KorrekturListItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 3.0),
-                child: Text("Ab"),
+                padding: const EdgeInsets.fromLTRB(3.0, 0, 0, 3.0),
+                child: Text("Ab", style: TextStyle(color: isDay?gray:Colors.white, fontSize: 12),),
               ),
               KorrekturTile(
                   buttonColor: buttonColor,
                   value: getIt<Data>().korrekturAB[listIndex],
                   label: "Stunden",
-                  callback: (){}),
+                  callback: (){}, isDay: isDay,),
             ],
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(2.0, 0, 0, 3.0),
-                child: Text("Mindestens"),
+                padding: const EdgeInsets.fromLTRB(3.0, 0, 0, 3.0),
+                child: Text("Mindestens", style: TextStyle(color: isDay?grayAccent:Colors.white, fontSize: 12),),
               ),
               KorrekturTile(
                   buttonColor: buttonColor,
                   value: getIt<Data>().korrekturUM[listIndex],
                   label: "Minuten",
-                  callback: (){}),
+                  callback: (){}, isDay: isDay,),
             ],
           ),
         ],
@@ -179,28 +266,34 @@ class KorrekturTile extends StatelessWidget {
     @required this.value,
     @required this.callback,
     @required this.label,
+    @required this.isDay,
   }) : super(key: key);
 
   final Color buttonColor;
   final int value;
   final Function callback;
   final String label;
+  final bool isDay;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: RaisedButton(
+        elevation: 0,
         splashColor: Colors.white.withAlpha(100),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
         color: buttonColor,
         onPressed: callback,
         child: Padding(
-          padding: const EdgeInsets.only(bottom:10.0),
+          padding: const EdgeInsets.only(bottom:3.0),
           child: Column(
             children: [
-              Text(value.toString(), style: TextStyle(color: Colors.white, fontSize: 48)),
-              Text(label, style: Theme.of(context).textTheme.headline3.copyWith(color: Colors.white))
+              Text(value.toString(), style: TextStyle(color:
+                  isDay?Colors.white:darkBackground,
+                  fontSize: 24)),
+              Text(label, style: Theme.of(context).textTheme.headline3
+                  .copyWith(fontSize: 14,color: isDay?Colors.white:darkBackground))
             ],
           ),
         ),

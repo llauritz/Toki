@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 
 import '../Services/HiveDB.dart';
 import '../Services/Theme.dart';
-import '../main.dart';
 
 class OvertimeChangeWidget extends StatefulWidget {
   const OvertimeChangeWidget({
@@ -224,7 +223,7 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                                           border: InputBorder.none,
                                           focusedBorder: InputBorder.none,
                                           enabledBorder: InputBorder.none,
-                                        contentPadding: EdgeInsets.fromLTRB(0, 0, -2, 0)
+                                        contentPadding: EdgeInsets.fromLTRB(0, 0, -2.5, 0)
                                       ),
                                       onChanged: (v){
                                         setState(() {
@@ -247,7 +246,7 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                               duration: widget.duration,
                               curve: widget.curve,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
+                                borderRadius: BorderRadius.circular(8),
                                 color: isOpen?_color.withAlpha(40):_color.withAlpha(0),
                               ),
                               padding: isOpen? const EdgeInsets.symmetric(horizontal: 4, vertical: 2): EdgeInsets.zero,
@@ -427,7 +426,7 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                                           border: InputBorder.none,
                                           focusedBorder: InputBorder.none,
                                           enabledBorder: InputBorder.none,
-                                          contentPadding: EdgeInsets.zero
+                                          contentPadding: EdgeInsets.fromLTRB(0, 0, -2.5, 0)
                                       ),
                                       onChanged: (v){
                                         setState(() {
@@ -455,7 +454,7 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                               duration: widget.duration,
                               curve: widget.curve,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
+                                borderRadius: BorderRadius.circular(8),
                                 color: isOpen?_color.withAlpha(40):_color.withAlpha(0),
                               ),
                               padding: isOpen? const EdgeInsets.symmetric(horizontal: 4, vertical: 2): EdgeInsets.zero,

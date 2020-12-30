@@ -5,31 +5,29 @@ class FertigButton extends StatelessWidget {
   const FertigButton({
     Key key,
     @required
-    this.callback
+    this.isDay,
   }) : super(key: key);
 
-  final Function callback;
+  final bool isDay;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top:20.0),
+      padding: const EdgeInsets.only(bottom:20.0),
       child: RaisedButton(
-        splashColor: Colors.teal,
-        highlightColor: Colors.white,
-        clipBehavior: Clip.antiAlias,
-        focusElevation: 20.0,
+        splashColor: neonTranslucent,
+        highlightColor: neonTranslucent.withAlpha(80),
         highlightElevation: 12.0,
-        elevation: 5.0,
-        padding: EdgeInsets.all(0),
-        shape: StadiumBorder(),
+        elevation: 0,
+        padding: const EdgeInsets.symmetric(vertical:20.0, horizontal: 50.0),
+        shape: const StadiumBorder(),
         color: neonAccent,
-        onPressed: callback,
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical:20.0, horizontal: 50.0),
-          child: Text("Fertig", style:
-          openButtonText.copyWith(color: grayDark)),
-        ),
+        onPressed: (){
+          Navigator.pop(context);
+        },
+        child: Text("Fertig", style:openButtonText.copyWith(
+          color: isDay?darkBackground:Colors.white
+        )),
       ),
     );
   }

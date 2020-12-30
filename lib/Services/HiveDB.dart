@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 
 import '../hiveClasses/Zeitnahme.dart';
 import 'Data.dart';
+import 'Theme.dart';
 
 class HiveDB {
   Box zeitenBox;
@@ -111,10 +112,10 @@ class HiveDB {
       }
 
       zeitenBox.putAt(zeitenBox.length - 1, latest);
-      print('neue endTime an neuster Zeitnahme hinzugefügt' +
+      logger.d('neue endTime an neuster Zeitnahme hinzugefügt' +
           latest.endTimes.toString());
     } else {
-      print('HiveDB - endTime - ERROR: StartTimes war nicht um eins größer');
+      logger.d('HiveDB - endTime - ERROR: StartTimes war nicht um eins größer');
     }
 
     listChangesStream.sink.add(changeNumber++);
@@ -126,7 +127,7 @@ class HiveDB {
       Zeitnahme neusete = zeitenBox.getAt(zeitenBox.length - 1) as Zeitnahme;
       if (neusete.day.isSameDate(DateTime.now())) {
         todayElapsedTime = neusete.getElapsedTime();
-        print("HiveDB - today Elapsed Time is " + Duration(milliseconds:todayElapsedTime).toString());
+        logger.v("HiveDB - today Elapsed Time is " + Duration(milliseconds:todayElapsedTime).toString());
       }
     }
   }

@@ -1,5 +1,3 @@
-
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -9,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Widgets/TimerTextWidget.dart';
 import 'Data.dart';
 import 'HiveDB.dart';
+import 'Theme.dart';
 
 final getIt = GetIt.instance;
 
@@ -43,13 +42,13 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
 
   void initSharedPreferences()async{
     _startTime = getIt<Data>().prefs.getInt("startTime");
-    print("timer - previous startTime is " +
+    logger.d("timer - previous startTime is " +
         getIt<Data>().prefs.getInt("startTime").toString());
     if (_startTime == null) {
       _startTime = 0;
       getIt<Data>().prefs.setInt("startTime", 0);
     } else if (_startTime != 0) {
-      print("timer - restored Time" + _startTime.toString());
+      logger.d("timer - restored Time" + _startTime.toString());
       _timer = Timer.periodic(const Duration(milliseconds: 100), updateTime);
       updateTime(_timer);
       getIt<Data>().isRunningStream.sink.add(true);
@@ -59,7 +58,7 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
     await getIt<HiveDB>().calculateTodayElapsedTime();
     await getIt<HiveDB>().updateGesamtUeberstunden();
     updateTime(_timer);
-    print("timer - init ready");
+    logger.d("timer - init ready");
   }
 
   @override
@@ -86,15 +85,15 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
   }
 
   void timerStart(){
-    print("timer - start");
-    print("timer - timer " + _timer.isActive.toString());
+    logger.i("timer - start");
+    logger.d("timer - timer " + _timer.isActive.toString());
 
       _timer = Timer.periodic(const Duration(milliseconds: 200), updateTime);
       _startTime = DateTime.now().millisecondsSinceEpoch;
       getIt<Data>().prefs.setInt("startTime", _startTime);
-      print("timer - started, startTime = " + _startTime.toString());
+      logger.d("timer - started, startTime = " + _startTime.toString());
 
-    print("timer - timer " + _timer.isActive.toString());
+    logger.d("timer - timer " + _timer.isActive.toString());
 
     getIt<Data>().isRunningStream.sink.add(true);
     getIt<Data>().isRunning = true;
@@ -105,7 +104,7 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
   }
 
   void timerStop() async{
-    //print("timer - stop");
+    logger.i("timer - stop");
     _timer.cancel();
     //print("timer - afterTimerCancel" + _timer.isActive.toString());
     getIt<Data>().prefs.setInt("startTime", 0);
@@ -132,17 +131,17 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
       //print("timer - updateTime elapsed Time "+ _elapsedTime.toString());
       //print("timer - ${Duration(milliseconds: elapsedTimeMilliseconds).inSeconds}");
       //print("timer - ${Duration(milliseconds: _elapsedTime).inSeconds}");
-      /*print("${
+      logger.v("${
       Duration(milliseconds: elapsedTimeMilliseconds).inSeconds
       - Duration(milliseconds: _elapsedTime).inSeconds
-      }");*/
+      }");
 
       //rebuild only if value changed at least one Second
       if (
       Duration(milliseconds: elapsedTimeMilliseconds).inSeconds
           - Duration(milliseconds: _elapsedTime).inSeconds != 0
       ) {
-        //print("timer - update");
+        logger.v("timer - update");
         _elapsedTime = elapsedTimeMilliseconds;
         _timeController.sink.add(_elapsedTime);
         getIt<HiveDB>().calculateTodayElapsedTime();
@@ -158,7 +157,7 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
     //Make sure Timer is running
 
     if (state.index == 0) {
-      print("timer - resumed");
+      logger.i("timer - resumed $_timer");
       updateTime(_timer);
       getIt<HiveDB>().calculateTodayElapsedTime();
       getIt<HiveDB>().urlaubsTageCheck();

@@ -1,11 +1,9 @@
-import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
 import '../Services/Data.dart';
+import '../Services/Theme.dart';
 
 part 'Zeitnahme.g.dart';
-
-final getIt = GetIt.instance;
 
 @HiveType(typeId: 1)
 class Zeitnahme {

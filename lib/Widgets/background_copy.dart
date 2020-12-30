@@ -65,7 +65,7 @@ class _Background_legacyState extends State<Background_legacy> with WidgetsBindi
       // eigentlich clouds 1
       getIt<Data>().updateSettingsBackground(
           r"+36uL#E100_39F%h%MDi00s:_NIUxGDiRi?c^+Rj9ExuIV%Ms:9FX8j[%NWBRPWVkCxv");
-      return const AssetImage('assets/background/clouds/clouds3.jpg');
+      return const AssetImage('assets/background/clouds/clouds1.jpg');
     } else if (currentTime >= 7.00 && currentTime < 8.00) {
       getIt<Data>().updateSettingsBackground(
           r'+MLxSt9ZELNb%2EM$%WC0ft8t7sn}sR*IpxZtRr?s.s:wJt6ofR*IoShR,s.j[WBbHs:');

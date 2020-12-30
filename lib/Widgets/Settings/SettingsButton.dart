@@ -1,3 +1,4 @@
+import 'package:Timo/Services/Theme.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -26,25 +27,27 @@ class _SettingsButtonState extends State<SettingsButton> {
           padding: const EdgeInsets.all(15.0),
           child: OpenContainer(
             transitionType: ContainerTransitionType.fade,
-              transitionDuration: Duration(milliseconds: 500),
-              closedColor: snapshot.data.withAlpha(0),
-              openColor: Colors.black,
+              transitionDuration: const Duration(milliseconds: 500),
+              closedColor: DateTime.now().hour>18 || DateTime.now().hour<8
+                  ?darkBackground.withAlpha(0):Colors.white.withAlpha(0),
+              openColor: DateTime.now().hour>18 || DateTime.now().hour<8
+                          ?darkBackground:Colors.white,
               closedElevation: 0.0,
               openElevation: 0.0,
-              closedShape: CircleBorder(),
-              openShape: RoundedRectangleBorder(
+              closedShape: const CircleBorder(),
+              openShape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(30.0))),
               onClosed: (context) {
                 getIt<HiveDB>().updateGesamtUeberstunden();
               },
               openBuilder: (BuildContext context,
                   void Function({Object returnValue}) action) {
-                return SettingsPage();
+                return const SettingsPage();
               },
               closedBuilder: (BuildContext context, void Function() action) {
                 return Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
+                  child: const Padding(
+                    padding: EdgeInsets.all(15.0),
                     child: Icon(Icons.settings, color: Colors.white),
                   ),
                 );
