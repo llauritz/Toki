@@ -26,7 +26,7 @@ class FertigButton extends StatelessWidget {
           Navigator.pop(context);
         },
         child: Text("Fertig", style:openButtonText.copyWith(
-          color: isDay?darkBackground:Colors.white
+          color: isDay?Colors.white:darkBackground
         )),
       ),
     );
