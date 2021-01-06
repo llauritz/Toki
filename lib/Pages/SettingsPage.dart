@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import '../Services/Data.dart';
 import '../Widgets/Settings/FadeIn.dart';
 import '../Widgets/Settings/FertigButton.dart';
 import '../Widgets/Settings/NamePicker.dart';
@@ -31,10 +30,10 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   void initState() {
-    print("SettingsPage - init");
+    /*print("SettingsPage - init");
     if (DateTime.now().hour>18 || DateTime.now().hour<8){
       isDay = false;
-    }
+    }*/
     super.initState();
   }
 
@@ -95,11 +94,11 @@ class _SettingsPageState extends State<SettingsPage> {
               children: [
                 Flexible(
                     flex:2,
-                    child: FadeIn(delay: 300-50, fadeChild: const SettingsTitle())),
-                FadeIn(delay: 350-50, fadeChild: NamePicker(isDay: isDay,)),
-                FadeIn(delay: 400-50, fadeChild: TagesstundenPicker(isDay: isDay,)),
-                FadeIn(delay: 450-50, fadeChild: WochentagePicker(isDay: isDay)),
-                FadeIn(delay: 500-50, fadeChild: PausenkorrekturPicker(isDay: isDay)),
+                    child: FadeIn(delay: 300-100, fadeChild: const SettingsTitle())),
+                FadeIn(delay: 350-100, fadeChild: NamePicker(isDay: isDay,)),
+                FadeIn(delay: 400-100, fadeChild: TagesstundenPicker(isDay: isDay,)),
+                FadeIn(delay: 450-100, fadeChild: WochentagePicker(isDay: isDay)),
+                FadeIn(delay: 500-100, fadeChild: PausenkorrekturPicker(isDay: isDay)),
                 Flexible(flex:1,child: Container()),
                 ],
               ),
@@ -108,7 +107,7 @@ class _SettingsPageState extends State<SettingsPage> {
               alignment: Alignment.bottomCenter,
               child: SafeArea(
                 child: FadeIn(
-                    delay: 650,
+                    delay: 650-100,
                     fadeChild:Padding(
                       padding: const EdgeInsets.only(bottom:20.0),
                       child: FertigButton(isDay:isDay),

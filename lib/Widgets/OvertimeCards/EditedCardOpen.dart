@@ -86,14 +86,16 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(
+                            tooltip: "Speichern und schliessen",
                             splashColor: editColor.withAlpha(80),
                             highlightColor:
                             editColor.withAlpha(50),
                             padding: const EdgeInsets.all(0),
                             visualDensity: const VisualDensity(),
-                            icon: Icon(Icons.close,
+                            icon: Icon(Icons.done_rounded,
                                 color: editColor, size: 30),
                             onPressed: () {
                               Navigator.pop(context);

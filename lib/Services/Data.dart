@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Timo/Services/timer.dart';
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,6 +25,8 @@ class Data{
   final backgroundHashStream = StreamController<String>.broadcast();
   String backgroundHash = "cCBYFk?a9K9Ht7of06Rm?Wa%M~WC~ks,9J";
   int backgroundNumber = 1;
+  TimerText timerText = TimerText();
+
 
   Future<void> initSharedPreferences() async {
     prefs = await SharedPreferences.getInstance();
@@ -78,6 +81,9 @@ class Data{
           : prefs.setStringList(
           "korrekturUM", korrekturAB.map((e) => e.toString()).toList());
       print("Data - kUM in local List" + korrekturUM.toString());
+
+      if(!prefs.containsKey("OvertimeOffset"))
+        setOffset(0);
 
       print("Data - Data initialized");
     } else {
@@ -209,8 +215,12 @@ class Data{
   Future<int> getOffset() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print("Data - getOffset");
-    return prefs.containsKey("OvertimeOffset")?
-    prefs.getInt("OvertimeOffset"): 0;
+    if (prefs.containsKey("OvertimeOffset")) {
+      print("Data - getOffset" + prefs.getInt("OvertimeOffset").toString());
+      return prefs.getInt("OvertimeOffset");
+    } else {
+      return 0;
+    }
   }
 
   Future<void> setOffset(int milliseconds) async{

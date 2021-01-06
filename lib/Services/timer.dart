@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Widgets/TimerTextWidget.dart';
@@ -9,9 +8,11 @@ import 'Data.dart';
 import 'HiveDB.dart';
 import 'Theme.dart';
 
-final getIt = GetIt.instance;
-
 class TimerText extends StatefulWidget {
+
+  TimerText({
+    Key key
+  });
   final _TimerTextState ts = _TimerTextState();
 
   final Timer t = Timer.periodic(const Duration(hours: 1), (Timer timer) {});
@@ -33,6 +34,7 @@ class TimerText extends StatefulWidget {
 }
 
 class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
+
 
   int _startTime = 0;
   int _elapsedTime = 0;

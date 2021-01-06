@@ -76,14 +76,16 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(
+                            tooltip: "Speichern und schliessen",
                             splashColor: grayAccent.withAlpha(80),
                             highlightColor:
                             grayAccent.withAlpha(50),
                             padding: const EdgeInsets.all(0),
                             visualDensity: const VisualDensity(),
-                            icon: Icon(Icons.close,
+                            icon: Icon(Icons.done_rounded,
                                 color: grayAccent, size: 30),
                             onPressed: () {
                               Navigator.pop(context);

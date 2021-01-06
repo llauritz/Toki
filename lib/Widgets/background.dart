@@ -23,8 +23,9 @@ class _BackgroundState extends State<Background> with WidgetsBindingObserver{
   AssetImage previousImage;
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async{
     if(state.index == 0){
+      Future.delayed(Duration(seconds: 1));
       print("background - resumed");
       updateBackground();
     }
@@ -67,7 +68,8 @@ class _BackgroundState extends State<Background> with WidgetsBindingObserver{
     }else if(currentTime >= 11.00 && currentTime < 15.30){
       return const AssetImage('assets/background/clouds/clouds4.jpg');
     }else if(currentTime >= 15.30 && currentTime < 17.30){
-      return const AssetImage('assets/background/clouds/clouds5.jpg');
+      // eigentlich 5
+      return const AssetImage('assets/background/clouds/clouds2.jpg');
     }else if(currentTime >= 17.30 && currentTime < 20.00){
       return const AssetImage('assets/background/clouds/clouds6.jpg');
     }

@@ -128,6 +128,9 @@ class HiveDB {
       if (neusete.day.isSameDate(DateTime.now())) {
         todayElapsedTime = neusete.getElapsedTime();
         logger.v("HiveDB - today Elapsed Time is " + Duration(milliseconds:todayElapsedTime).toString());
+      }else{
+        todayElapsedTime = 0;
+        logger.i("New Day -> Today Elapsed Time 0");
       }
     }
   }

@@ -67,14 +67,16 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(
+                            tooltip: "Speichern und schliessen",
                             splashColor: freeAccent.withAlpha(80),
                             highlightColor:
                             freeAccent.withAlpha(50),
                             padding: const EdgeInsets.all(0),
                             visualDensity: const VisualDensity(),
-                            icon: const Icon(Icons.close,
+                            icon: const Icon(Icons.done_rounded,
                                 color: freeAccent, size: 30),
                             onPressed: () {
                               Navigator.pop(context);

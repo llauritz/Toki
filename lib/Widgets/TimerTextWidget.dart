@@ -18,7 +18,7 @@ class _TimerTextWidgetState extends State<TimerTextWidget> with TickerProviderSt
   Duration duration = const Duration(milliseconds: 600);
   Curve curve = Curves.ease;
   GlobalKey zeitRowKey = GlobalKey();
-  double containerWidth = 50;
+  double containerWidth;
   bool skipCallback = false;
 
   void updateWidth(){
@@ -33,6 +33,9 @@ class _TimerTextWidgetState extends State<TimerTextWidget> with TickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+
+    containerWidth = containerWidth ?? MediaQuery.of(context).size.width/3;
+
     !skipCallback
       ?WidgetsBinding.instance.addPostFrameCallback((_) => updateWidth())
       :skipCallback= false;

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Timo/Services/Data.dart';
 import 'package:Timo/Services/Theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,6 @@ import 'package:get_it/get_it.dart';
 import 'package:logger_flutter/logger_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../Services/timer.dart';
 import '../Widgets/AnimatedStempelButton.dart';
 import '../Widgets/OvertimeCardsList.dart';
 import '../Widgets/Settings/SettingsButton.dart';
@@ -22,7 +22,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   PanelController pc = PanelController();
-  TimerText timerText = TimerText();
   StreamController<Color> containerColorStream = StreamController<Color>();
 
   void prechacheImages() {
@@ -91,14 +90,20 @@ class _HomePageState extends State<HomePage> {
               color: Colors.transparent,
               width: double.infinity,
               child: AnimatedStempelButton(
-                  callbackTurnOff: timerText.stop,
-                  callbackTurnOn: timerText.start),
+                  callbackTurnOff: (){
+                    getIt<Data>().timerText.stop();
+                  },
+                  callbackTurnOn: (){
+                    getIt<Data>().timerText.start();
+                  }),
             ),
             LimitedBox(
               maxHeight: MediaQuery.of(context).size.height*0.6,
               child: ZeitenPanel(
                 panelController: pc,
-                updateTimer: timerText.update,
+                updateTimer: (){
+                  getIt<Data>().timerText.update();
+                },
               ),
             )
           ],
@@ -130,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 50,
                   ),
-                  timerText,
+                  getIt<Data>().timerText,
                   //MantraText()
                 ],
               ),

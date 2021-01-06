@@ -1,3 +1,4 @@
+import 'package:Timo/Services/Data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -134,6 +135,7 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                   children: [
                                     FlatButton(
                                         onPressed: (){
+                                          if(widget.i == getIt<HiveDB>().zeitenBox.length-1)getIt<Data>().timerText.stop();
                                           if(widget.zeitnahme.tag == "Stundenabbau"){
                                             getIt<HiveDB>().updateTag("Urlaub", widget.i);
                                           }
@@ -161,6 +163,7 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                     const SizedBox(width: 12),
                                     FlatButton(
                                         onPressed: (){
+                                          if(widget.i == getIt<HiveDB>().zeitenBox.length-1)getIt<Data>().timerText.stop();
                                           if(widget.zeitnahme.tag == "Stundenabbau"){
                                             getIt<HiveDB>().updateTag("Bearbeitet", widget.i);
                                           }
@@ -215,14 +218,16 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       IconButton(
+                                          tooltip: "Speichern und schliessen",
                                           splashColor: _colorAccent.withAlpha(80),
                                           highlightColor:
                                               _colorAccent.withAlpha(50),
                                           padding: const EdgeInsets.all(0),
                                           visualDensity: const VisualDensity(),
-                                          icon: Icon(Icons.close,
+                                          icon: Icon(Icons.done_rounded,
                                               color: _colorAccent, size: 30),
                                           onPressed: () {
                                             Navigator.pop(context);

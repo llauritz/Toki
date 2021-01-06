@@ -49,9 +49,10 @@ const Color editColorTranslucent = Color(0xFFE1F5FE); //lightblue 50
 const Color darkBackground = Color(0xFF110744);
 
 const TextStyle timerTextNumbers = TextStyle(
-  fontSize: 80,
+  fontSize: 70,
   color: Colors.white,
   height: 0.79,
+
 );
 
 const TextStyle dayNightNumbers = TextStyle(
@@ -103,6 +104,7 @@ const TextStyle headline3 = TextStyle(
 
 const TextStyle onboardingTitle = TextStyle(
     color: editColor,
+    height: 1.0,
     fontSize: 30.0,
     fontWeight: FontWeight.bold,
     fontFamily: "BandeinsStrange"

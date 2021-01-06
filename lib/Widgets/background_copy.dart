@@ -24,6 +24,7 @@ class _Background_legacyState extends State<Background_legacy> with WidgetsBindi
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state.index == 0) {
+      Future.delayed(Duration(seconds: 2));
       print("background - resumed");
       updateBackground();
     }
@@ -80,8 +81,9 @@ class _Background_legacyState extends State<Background_legacy> with WidgetsBindi
       return const AssetImage("assets/background/clouds/clouds4.jpg");
     } else if(currentTime >= 15.30 && currentTime < 17.30) {
       getIt<Data>().updateSettingsBackground(
+        // eigentlich 5
           r"+GHx1=cX~B9a0201V@oevf~A9uxt=x%MxFNHWU4:ofsotSV@ozV[EN-ojFW;EN%LNGof");
-      return const AssetImage("assets/background/clouds/clouds5.jpg");
+      return const AssetImage("assets/background/clouds/clouds2.jpg");
     } else if (currentTime >= 17.30 && currentTime < 20.00) {
       getIt<Data>().updateSettingsBackground(
           r"+BDtSjOG0}E$w}R%n~WU0wWU}Y$jt8S4S3a}J5n$$jNuS5xGoLW=w^WUS3snWUWVs:so");

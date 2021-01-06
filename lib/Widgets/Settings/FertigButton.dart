@@ -15,9 +15,9 @@ class FertigButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom:20.0),
       child: RaisedButton(
-        splashColor: neonTranslucent,
+        splashColor: neonTranslucent.withAlpha(150),
         highlightColor: neonTranslucent.withAlpha(80),
-        highlightElevation: 12.0,
+        highlightElevation: 0,
         elevation: 0,
         padding: const EdgeInsets.symmetric(vertical:20.0, horizontal: 50.0),
         shape: const StadiumBorder(),

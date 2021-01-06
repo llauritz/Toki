@@ -77,9 +77,16 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
                               icon: const Icon(Icons.remove_circle_rounded),
                               color: grayDark,
                               onPressed: () {
-                                setState(() {
-                                  editedMilli = editedMilli - 60000;
-                                });
+                                // only if it doesnt go futher than the minimal value
+                                if(editedMilli - widget.previousMilli > Duration.millisecondsPerMinute){
+                                  setState(() {
+                                    editedMilli = editedMilli - 60000;
+                                  });
+                                }else{
+                                  setState(() {
+                                    editedMilli = widget.previousMilli + 1;
+                                  });
+                                }
                               }),
                         ),
                         Padding(
@@ -99,9 +106,16 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
                               icon: const Icon(Icons.add_circle_rounded),
                               color: grayDark,
                               onPressed: () {
-                                setState(() {
-                                  editedMilli = editedMilli + 60000;
-                                });
+                                // only if it doesnt go futher than the maximum value
+                                if(widget.followingMilli - editedMilli > Duration.millisecondsPerMinute){
+                                  setState(() {
+                                    editedMilli = editedMilli + 60000;
+                                  });
+                                }else{
+                                  setState(() {
+                                    editedMilli = widget.followingMilli - 1;
+                                  });
+                                }
                               }),
                         ),
                       ],
@@ -132,9 +146,9 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
                                   .sink
                                   .add(getIt<HiveDB>().changeNumber++);
                             },
-                            child: const Text(
+                            child: Text(
                               "Abbrechen",
-                              style: openButtonText,
+                              style: openButtonText.copyWith(color: grayDark),
                             )),
                         FlatButton(
                           onPressed: () {
@@ -146,9 +160,9 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
                                 .sink
                                 .add(getIt<HiveDB>().changeNumber++);
                           },
-                          child: const Text(
+                          child: Text(
                             "Speichern",
-                            style: openButtonText,
+                            style: openButtonText.copyWith(color: grayDark),
                           ),
                         ),
                       ],

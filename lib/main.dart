@@ -18,7 +18,7 @@ GetIt getIt = GetIt.instance;
 
 void main() async {
 
-  Logger.level = Level.verbose;
+  Logger.level = Level.debug;
   logger.i("Logger is working!");
 
   await Hive.initFlutter();

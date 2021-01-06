@@ -14,7 +14,7 @@ class FadeIn extends StatelessWidget {
 
     var _tween = MultiTween<_AniProps>()
       ..add(_AniProps.opacity, Tween(begin: 0.0,end: 1.0))
-      ..add(_AniProps.offset, Tween(begin: 30.0,end: 0.0));
+      ..add(_AniProps.offset, Tween(begin: 50.0,end: 0.0));
 
     return PlayAnimation<MultiTweenValues<_AniProps>>(
       delay: Duration(milliseconds: delay),

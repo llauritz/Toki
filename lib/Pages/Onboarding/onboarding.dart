@@ -14,7 +14,6 @@ class Onboarding extends StatefulWidget {
 }
 
 class _OnboardingState extends State<Onboarding> {
-  final double _expandedWidth = 300;
   final double _collapsedWidthHeight = 80;
   final double _expandedHeight = 60;
   final Curve curve = Curves.easeInOutQuart;
@@ -30,12 +29,12 @@ class _OnboardingState extends State<Onboarding> {
       Text("Los geht's",
           style: TextStyle(
               fontSize: 16.0,
-              color: neonAccent,
+              color: Colors.white,
               fontWeight: FontWeight.bold)),
       SizedBox(width: 3),
       Icon(
         Icons.arrow_forward_rounded,
-        color: neonAccent,
+        color: Colors.white,
       ),
     ],
   );
@@ -47,6 +46,9 @@ class _OnboardingState extends State<Onboarding> {
 
   @override
   Widget build(BuildContext context) {
+
+    final double _expandedWidth = MediaQuery.of(context).size.width-200;
+
     switch (_index) {
       case 1:
         {
@@ -79,7 +81,7 @@ class _OnboardingState extends State<Onboarding> {
             child: AnimatedPadding(
               duration: duration,
               curve: curve,
-              padding: EdgeInsets.only(bottom: 40+_buttonHeight/2),
+              padding: EdgeInsets.only(bottom: 120+_buttonHeight),
               child: PageTransitionSwitcher(
                 transitionBuilder: (
                     Widget child,
@@ -108,18 +110,17 @@ class _OnboardingState extends State<Onboarding> {
                 child: RaisedButton(
                   splashColor: neon.withAlpha(150),
                   highlightColor: neon.withAlpha(80),
-                  highlightElevation: 3,
+                  highlightElevation: 10,
                   visualDensity:
                       VisualDensity(vertical: 0.0, horizontal: 0.0),
-                  elevation: 0,
+                  elevation: 5,
                   padding: EdgeInsets.all(0),
                   shape: StadiumBorder(),
-                  color: neonTranslucent,
+                  color: neon,
                   onPressed: () {
                     setState(() {
                       _index == 3 ? _index = 1 : _index++;
-                      _buttonWidth = _index == 1 ? 300 : 80;
-                      _buttonHeight = _index == 1 ? 60 : 80;
+                      _buttonHeight = _index == 1 ? _expandedHeight : _collapsedWidthHeight;
                       print("index $_index");
                     });
                     if (_index == 4) {
@@ -129,8 +130,8 @@ class _OnboardingState extends State<Onboarding> {
                   child: AnimatedContainer(
                     padding: EdgeInsets.all(0),
                     curve: curve,
-                    width: _buttonWidth,
-                    height: _buttonHeight,
+                    width: _index == 1 ? _expandedWidth : _collapsedWidthHeight,
+                    height: _index == 1 ? _expandedHeight : _collapsedWidthHeight,
                     duration: duration,
                     child: PageTransitionSwitcher(
                       transitionBuilder: (

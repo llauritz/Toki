@@ -101,7 +101,14 @@ class Zeitnahme {
 
   int getPause() {
     if (state != 'free' && endTimes.isNotEmpty) {
-      int fromStartToFinish = endTimes.last - startTimes[0];
+      int fromStartToFinish = 0;
+      if(startTimes.length>endTimes.length){
+        fromStartToFinish = DateTime.now().millisecondsSinceEpoch - startTimes[0];
+      }else{
+        fromStartToFinish = endTimes.last - startTimes[0];
+      }
+      logger.v("elapsed" + Duration(milliseconds: getElapsedTime()).toString());
+      logger.v("fromStartToFinish" + Duration(milliseconds: fromStartToFinish).toString());
       return fromStartToFinish - getElapsedTime();
     } else {
       return 0;
