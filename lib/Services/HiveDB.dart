@@ -41,6 +41,7 @@ class HiveDB {
       if (latest.day.isSameDate(DateTime.now())) {
         print("HiveDB - startTime - today already exists");
         changeState("default", zeitenBox.length - 1);
+        updateTag("Stundenabbau", zeitenBox.length - 1);
         //Checks if the Lists are the same length before putting in new time
         if (latest.startTimes.length == latest.endTimes.length) {
           if (latest.endTimes.last > DateTime.now().millisecondsSinceEpoch) {
@@ -73,7 +74,7 @@ class HiveDB {
             startTimes: [startTime],
             endTimes: []));
         print("HiveDB - neue Zeitnahme + startZeit hinzugefügt");
-        animatedListkey.currentState.insertItem(0, duration: Duration(milliseconds: 1000));
+        animatedListkey.currentState.insertItem(0, duration: Duration(milliseconds: 600));
       }
     } else {
       // First Entry ever -> Create new Entry with default values
@@ -83,7 +84,7 @@ class HiveDB {
           startTimes: [startTime],
           endTimes: []));
       print("HiveDB - neue Zeitnahme + startZeit hinzugefügt");
-      animatedListkey.currentState.insertItem(0);
+      animatedListkey.currentState.insertItem(0, duration: Duration(milliseconds: 600));
     }
 
     listChangesStream.sink.add(changeNumber++);

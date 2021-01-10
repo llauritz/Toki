@@ -5,7 +5,6 @@ import 'package:Timo/Services/Theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logger_flutter/logger_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../Widgets/AnimatedStempelButton.dart';
@@ -48,7 +47,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: neon,
+      backgroundColor: Colors.white,
       body: SlidingUpPanel(
         //Höhe des Stempelbuttons + Padding + Wie viel von der Karte rausschauen darf
         minHeight: 130 + 20 + 58.0 + bottomInset,
@@ -115,9 +114,9 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      IconButton(
+                      /*IconButton(
                           icon:
                               const Icon(Icons.refresh_rounded, color: Colors.transparent),
                           onPressed: () {
@@ -128,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                               Icon(Icons.bug_report_outlined, color: Colors.white24),
                           onPressed: () {
                             LogConsole.open(context);
-                          }),
+                          }),*/
                       SettingsButton()
                     ],
                   ),

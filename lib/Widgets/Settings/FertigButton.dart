@@ -21,7 +21,7 @@ class FertigButton extends StatelessWidget {
         elevation: 0,
         padding: const EdgeInsets.symmetric(vertical:20.0, horizontal: 50.0),
         shape: const StadiumBorder(),
-        color: neonAccent,
+        color: neon,
         onPressed: (){
           Navigator.pop(context);
         },
