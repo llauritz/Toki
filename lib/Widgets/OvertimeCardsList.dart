@@ -1,3 +1,4 @@
+import 'package:Timo/Services/Theme.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,9 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
 
   @override
   Widget build(BuildContext context) {
+
+    logger.d("OvertimeCardsList build - 1");
+
     return Card(
       margin: EdgeInsets.fromLTRB(8, 0, 8, 8),
       clipBehavior: Clip.antiAlias,
@@ -48,6 +52,9 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
             stream: getIt<Data>().primaryColorStream.stream,
             initialData: getIt<Data>().primaryColor,
             builder: (context, snapshot) {
+
+              logger.d("OvertimeCardsList build - 2");
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -89,6 +96,9 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
                                         padding: EdgeInsets.only(top: 20.0),
                                         itemBuilder:
                                             (context, index, animation) {
+
+                                          logger.d("OvertimeCardsList build - 3");
+
                                           //Liste wird umgekehrt
                                           int i = box.length - index - 1;
                                           Zeitnahme _zeitnahme = box.getAt(i);
@@ -114,7 +124,7 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
                                                                 .circular(
                                                                     10.0)),
                                                 transitionDuration: Duration(
-                                                    milliseconds: 600),
+                                                    milliseconds: 500),
                                                 transitionType:
                                                     ContainerTransitionType
                                                         .fade,
@@ -122,6 +132,9 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
                                                 closedBuilder: (BuildContext
                                                         context,
                                                     void Function() action) {
+
+                                                  logger.d("OvertimeCardsList build - 4");
+
                                                   Widget _widget;
 
                                                   if (index == 0 &&
@@ -236,8 +249,7 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
                                                         milliseconds: 600),
                                                   );
                                                 },
-                                                openBuilder: (BuildContext context, void Function({Object returnValue})
-                                                        action) {
+                                                openBuilder: (context, openContainer) {
                                                   MediaQuery.of(context).removePadding();
                                                   return OpenCard(state: _state, index: index, i: i, zeitnahme: _zeitnahme,);
                                                 },
@@ -262,3 +274,5 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
     );
   }
 }
+
+

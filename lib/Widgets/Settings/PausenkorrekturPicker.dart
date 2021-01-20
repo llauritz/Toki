@@ -10,8 +10,7 @@ final getIt = GetIt.instance;
 class PausenkorrekturPicker extends StatefulWidget {
   PausenkorrekturPicker({
     Key key,
-    @required
-    this.isDay,
+    @required this.isDay,
   }) : super(key: key);
 
   final bool isDay;
@@ -23,7 +22,6 @@ class PausenkorrekturPicker extends StatefulWidget {
 class _PausenkorrekturPickerState extends State<PausenkorrekturPicker> {
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
       child: Row(
@@ -32,11 +30,15 @@ class _PausenkorrekturPickerState extends State<PausenkorrekturPicker> {
           Container(
             width: 60.0,
             height: 60.0,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: widget.isDay
-                ? neonTranslucent
-                : neon.withAlpha(100)),
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: widget.isDay ? neonTranslucent : neon.withAlpha(100)),
             child: const Center(
-              child: Icon(Icons.update_rounded,color: neonAccent,size: 26.0,),
+              child: Icon(
+                Icons.update_rounded,
+                color: neonAccent,
+                size: 26.0,
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -44,11 +46,7 @@ class _PausenkorrekturPickerState extends State<PausenkorrekturPicker> {
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                      color: neon,
-                      width: 2.5
-                  )
-              ),
+                  border: Border.all(color: neon, width: 2.5)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -57,25 +55,26 @@ class _PausenkorrekturPickerState extends State<PausenkorrekturPicker> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left:16.0),
-                        child: Text("Automatische Pausenkorrektur", style: widget.isDay
-                            ? settingsTitle
-                            : settingsTitle.copyWith(color: Colors.white)),
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: Text("Automatische Pausenkorrektur",
+                            style: widget.isDay
+                                ? settingsTitle
+                                : settingsTitle.copyWith(color: Colors.white)),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(right:8.0),
-                        child: Switch.adaptive(
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Switch(
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
                             activeColor: neon,
                             activeTrackColor: neon.withAlpha(100),
                             value: getIt<Data>().pausenKorrektur,
-                            onChanged:(newValue){
+                            onChanged: (newValue) {
                               setState(() {
                                 getIt<Data>().updatePausenKorrektur(newValue);
                                 getIt<Data>().pausenKorrektur = newValue;
                               });
-                            }
-                        ),
+                            }),
                       ),
                     ],
                   ),
@@ -87,12 +86,13 @@ class _PausenkorrekturPickerState extends State<PausenkorrekturPicker> {
                         padding: EdgeInsets.only(left: 16),
                         shrinkWrap: true,
                         initialItemCount: getIt<Data>().korrekturAB.length,
-                        itemBuilder: (context, index, animation){
-                          return KorrekturListItem(listIndex: index, buttonColor: neon,
+                        itemBuilder: (context, index, animation) {
+                          return KorrekturListItem(
+                            listIndex: index,
+                            buttonColor: neon,
                             isDay: widget.isDay,
                           );
-                        }
-                    ),
+                        }),
                   )
                 ],
               ),
@@ -111,21 +111,27 @@ class _PausenkorrekturPickerState extends State<PausenkorrekturPicker> {
             child: Card(
               elevation: 10.0,
               clipBehavior: Clip.antiAlias,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15.0))),
               child: Padding(
-                padding: EdgeInsets.fromLTRB(20.0, 0.0,0.0, 0),
+                padding: EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical:20.0),
+                      padding: const EdgeInsets.symmetric(vertical: 20.0),
                       child: AnimatedContainer(
                         duration: Duration(milliseconds: 500),
                         width: 60.0,
                         height: 60.0,
-                        decoration: BoxDecoration(shape: BoxShape.circle, color: snapshot.data),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: snapshot.data),
                         child: Center(
-                          child: Icon(Icons.update_rounded,color: Colors.white,size: 30.0,),
+                          child: Icon(
+                            Icons.update_rounded,
+                            color: Colors.white,
+                            size: 30.0,
+                          ),
                         ),
                       ),
                     ),
@@ -134,61 +140,77 @@ class _PausenkorrekturPickerState extends State<PausenkorrekturPicker> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(24.0, 11.0, 25.0, 0.0),
+                            padding: const EdgeInsets.fromLTRB(
+                                24.0, 11.0, 25.0, 0.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Automatische Pausenkorrektur", style: Theme.of(context).textTheme.headline3),
+                                Text("Automatische Pausenkorrektur",
+                                    style:
+                                        Theme.of(context).textTheme.headline3),
                                 Switch.adaptive(
-                                  activeColor: snapshot.data,
-                                    activeTrackColor: snapshot.data.withAlpha(100),
+                                    activeColor: snapshot.data,
+                                    activeTrackColor:
+                                        snapshot.data.withAlpha(100),
                                     value: getIt<Data>().pausenKorrektur,
-                                    onChanged:(newValue){
+                                    onChanged: (newValue) {
                                       setState(() {
-                                        getIt<Data>().updatePausenKorrektur(newValue);
-                                        getIt<Data>().pausenKorrektur = newValue;
+                                        getIt<Data>()
+                                            .updatePausenKorrektur(newValue);
+                                        getIt<Data>().pausenKorrektur =
+                                            newValue;
                                       });
-                                    }
-                                )
+                                    })
                               ],
                             ),
                           ),
                           Container(
                             height: 120,
                             child: ShaderMask(
-                              shaderCallback: (Rect bounds){
+                              shaderCallback: (Rect bounds) {
                                 return LinearGradient(
                                   begin: Alignment.centerLeft,
                                   end: Alignment(-0.85, 0),
-                                  colors: <Color>[Colors.white.withAlpha(0),Colors.white,],
+                                  colors: <Color>[
+                                    Colors.white.withAlpha(0),
+                                    Colors.white,
+                                  ],
                                 ).createShader(bounds);
                               },
                               blendMode: BlendMode.dstATop,
                               child: AnimatedList(
-                                scrollDirection: Axis.horizontal,
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  initialItemCount:
+                                      getIt<Data>().korrekturAB.length,
+                                  itemBuilder: (context, index, animation) {
+                                    return index !=
+                                            getIt<Data>().korrekturAB.length - 1
+                                        // Regular Listelement
 
-                                shrinkWrap: true,
-                                initialItemCount: getIt<Data>().korrekturAB.length,
-                                  itemBuilder: (context, index, animation){
-                                    return index != getIt<Data>().korrekturAB.length-1
-                                      // Regular Listelement
-
-                                    //TODO: REMOVE PADDING -> INSTEAD switch to get first Widget
+                                        //TODO: REMOVE PADDING -> INSTEAD switch to get first Widget
 
                                         ? Padding(
-                                          padding: const EdgeInsets.only(left:20.0),
-                                          child: KorrekturListItem(listIndex: index, buttonColor: snapshot.data,),
-                                        )
-                                      // Last Listelement
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0),
+                                            child: KorrekturListItem(
+                                              listIndex: index,
+                                              buttonColor: snapshot.data,
+                                            ),
+                                          )
+                                        // Last Listelement
                                         : Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            KorrekturListItem(listIndex: index,buttonColor: snapshot.data,),
-                                            KorrekturAddButton()
-                                          ],
-                                        );
-                                  }
-                              ),
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              KorrekturListItem(
+                                                listIndex: index,
+                                                buttonColor: snapshot.data,
+                                              ),
+                                              KorrekturAddButton()
+                                            ],
+                                          );
+                                  }),
                             ),
                           )
                         ],
@@ -199,21 +221,17 @@ class _PausenkorrekturPickerState extends State<PausenkorrekturPicker> {
               ),
             ),
           );
-        }
-    );
+        });
   }
 }
 
 class KorrekturListItem extends StatelessWidget {
-  const KorrekturListItem({
-    Key key,
-    @required
-    this.listIndex,
-    @required
-    this.buttonColor,
-    @required
-    this.isDay
-  }) : super(key: key);
+  const KorrekturListItem(
+      {Key key,
+      @required this.listIndex,
+      @required this.buttonColor,
+      @required this.isDay})
+      : super(key: key);
 
   final Color buttonColor;
   final int listIndex;
@@ -222,7 +240,7 @@ class KorrekturListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right:8.0),
+      padding: const EdgeInsets.only(right: 8.0),
       child: Row(
         children: [
           Column(
@@ -230,13 +248,19 @@ class KorrekturListItem extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(3.0, 0, 0, 3.0),
-                child: Text("Ab", style: TextStyle(color: isDay?gray:Colors.white, fontSize: 12),),
+                child: Text(
+                  "Ab",
+                  style: TextStyle(
+                      color: isDay ? gray : Colors.white, fontSize: 12),
+                ),
               ),
               KorrekturTile(
-                  buttonColor: buttonColor,
-                  value: getIt<Data>().korrekturAB[listIndex],
-                  label: "Stunden",
-                  callback: (){}, isDay: isDay,),
+                buttonColor: buttonColor,
+                value: getIt<Data>().korrekturAB[listIndex],
+                label: "Stunden",
+                callback: () {},
+                isDay: isDay,
+              ),
             ],
           ),
           Column(
@@ -244,13 +268,19 @@ class KorrekturListItem extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(3.0, 0, 0, 3.0),
-                child: Text("Mindestens", style: TextStyle(color: isDay?grayAccent:Colors.white, fontSize: 12),),
+                child: Text(
+                  "Mindestens",
+                  style: TextStyle(
+                      color: isDay ? grayAccent : Colors.white, fontSize: 12),
+                ),
               ),
               KorrekturTile(
-                  buttonColor: buttonColor,
-                  value: getIt<Data>().korrekturUM[listIndex],
-                  label: "Minuten",
-                  callback: (){}, isDay: isDay,),
+                buttonColor: buttonColor,
+                value: getIt<Data>().korrekturUM[listIndex],
+                label: "Minuten",
+                callback: () {},
+                isDay: isDay,
+              ),
             ],
           ),
         ],
@@ -282,18 +312,22 @@ class KorrekturTile extends StatelessWidget {
       child: RaisedButton(
         elevation: 0,
         splashColor: Colors.white.withAlpha(100),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0))),
         color: buttonColor,
         onPressed: callback,
         child: Padding(
-          padding: const EdgeInsets.only(bottom:3.0),
+          padding: const EdgeInsets.only(bottom: 3.0),
           child: Column(
             children: [
-              Text(value.toString(), style: TextStyle(color:
-                  isDay?Colors.white:darkBackground,
-                  fontSize: 24)),
-              Text(label, style: Theme.of(context).textTheme.headline3
-                  .copyWith(fontSize: 14,color: isDay?Colors.white:darkBackground))
+              Text(value.toString(),
+                  style: TextStyle(
+                      color: isDay ? Colors.white : darkBackground,
+                      fontSize: 24)),
+              Text(label,
+                  style: Theme.of(context).textTheme.headline3.copyWith(
+                      fontSize: 14,
+                      color: isDay ? Colors.white : darkBackground))
             ],
           ),
         ),
@@ -306,8 +340,11 @@ class KorrekturAddButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      //TODO: Add Function
-        icon: Icon(Icons.add_circle_outline, size: 30.0,), onPressed: null)
-      ;
+        //TODO: Add Function
+        icon: Icon(
+          Icons.add_circle_outline,
+          size: 30.0,
+        ),
+        onPressed: null);
   }
 }

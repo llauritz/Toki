@@ -58,6 +58,9 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
     return StreamBuilder<int>(
         stream: getIt<HiveDB>().listChangesStream.stream,
         builder: (context, snapshot) {
+
+          print("build");
+
           final int ueberMilliseconds = widget.zeitnahme.getUeberstunden();
           if (!ueberMilliseconds.isNegative) {
             _color = neon;
@@ -135,7 +138,8 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                   children: [
                                     FlatButton(
                                         onPressed: (){
-                                          if(widget.i == getIt<HiveDB>().zeitenBox.length-1)getIt<Data>().timerText.stop();
+                                          if(widget.i == getIt<HiveDB>().zeitenBox.length-1)
+                                            getIt<Data>().timerText.stop();
                                           if(widget.zeitnahme.tag == "Stundenabbau"){
                                             getIt<HiveDB>().updateTag("Urlaub", widget.i);
                                           }
@@ -372,7 +376,7 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                               ),
                             ),
                           )),
-                      Flexible(flex:7,child: Container())
+                      const Flexible(flex:7,child: SizedBox())
                     ],
                   )
                 ],

@@ -17,7 +17,6 @@ import 'hiveClasses/Zeitnahme.dart';
 GetIt getIt = GetIt.instance;
 
 void main() async {
-
   Logger.level = Level.debug;
   logger.i("Logger is working!");
 
@@ -37,10 +36,11 @@ void main() async {
 
   runApp(MaterialApp(
     routes: {
-      "/": (context) => HomePage(),
-      "/home": (context) => HomePage(),
-      "/onboarding": (context) => Onboarding(),
+      "/": (context) => const HomePage(),
+      "/home": (context) => const HomePage(),
+      "/onboarding": (context) => const Onboarding(),
     },
+    initialRoute: getIt<Data>().finishedOnboarding ? "/" : "/onboarding",
     theme: ThemeData(
         backgroundColor: Colors.indigoAccent[700],
         fontFamily: "BandeinsSans",

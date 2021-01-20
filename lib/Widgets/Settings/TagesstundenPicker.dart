@@ -8,8 +8,7 @@ final getIt = GetIt.instance;
 
 class TagesstundenPicker extends StatefulWidget {
   const TagesstundenPicker({
-    @required
-    this.isDay,
+    @required this.isDay,
     Key key,
   }) : super(key: key);
 
@@ -20,7 +19,6 @@ class TagesstundenPicker extends StatefulWidget {
 }
 
 class _TagesstundenPickerState extends State<TagesstundenPicker> {
-
   double _tagesstunden;
 
   @override
@@ -32,7 +30,6 @@ class _TagesstundenPickerState extends State<TagesstundenPicker> {
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
       child: Row(
@@ -40,11 +37,15 @@ class _TagesstundenPickerState extends State<TagesstundenPicker> {
           Container(
             width: 60.0,
             height: 60.0,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: widget.isDay
-                ? neonTranslucent
-                : neon.withAlpha(100)),
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: widget.isDay ? neonTranslucent : neon.withAlpha(100)),
             child: const Center(
-              child: Icon(Icons.schedule,color: neonAccent,size: 26.0,),
+              child: Icon(
+                Icons.schedule,
+                color: neonAccent,
+                size: 26.0,
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -53,45 +54,45 @@ class _TagesstundenPickerState extends State<TagesstundenPicker> {
               height: 70,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                      color: neon,
-                      width: 2.5
-                  )
-              ),
+                  border: Border.all(color: neon, width: 2.5)),
               child: Padding(
                 padding: const EdgeInsets.only(left: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Tagesstunden", style: widget.isDay
-                        ? settingsTitle
-                        : settingsTitle.copyWith(color: Colors.white)),
+                    Text("Tagesstunden",
+                        style: widget.isDay
+                            ? settingsTitle
+                            : settingsTitle.copyWith(color: Colors.white)),
                     SizedBox(height: 5),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
                       child: SliderTheme(
                         data: SliderTheme.of(context).copyWith(
-                          overlayShape: SliderComponentShape.noOverlay,
-                          thumbShape: CustomSliderThumbRect(
-                            min: 0,max: 12,
-                            thumbHeight: 32.0,
-                            thumbWidth: 45.0,
-                            thumbRadius: 10,
-                            color: neon,
-                            textcolor: widget.isDay ? Colors.white : darkBackground,
-                          ),
-                          activeTickMarkColor: neonAccent,
-                          inactiveTickMarkColor: neonAccent.withAlpha(100),
-                          inactiveTrackColor: neon.withAlpha(10),
-                          activeTrackColor: neon.withAlpha(20),
-                          valueIndicatorShape: PaddleSliderValueIndicatorShape(),
-                          valueIndicatorColor: neon,
-                          valueIndicatorTextStyle: widget.isDay
-                              ? settingsTitle.copyWith(color: Colors.white)
-                              : settingsTitle.copyWith(color: darkBackground)
-                        ),
-                        child: Slider.adaptive(
+                            overlayShape: SliderComponentShape.noOverlay,
+                            thumbShape: CustomSliderThumbRect(
+                              min: 0,
+                              max: 12,
+                              thumbHeight: 32.0,
+                              thumbWidth: 45.0,
+                              thumbRadius: 10,
+                              color: neon,
+                              textcolor:
+                                  widget.isDay ? Colors.white : darkBackground,
+                            ),
+                            activeTickMarkColor: neonAccent,
+                            inactiveTickMarkColor: neonAccent.withAlpha(100),
+                            inactiveTrackColor: neon.withAlpha(10),
+                            activeTrackColor: neon.withAlpha(20),
+                            valueIndicatorShape:
+                                RectangularSliderValueIndicatorShape(),
+                            valueIndicatorColor: neon,
+                            valueIndicatorTextStyle: widget.isDay
+                                ? settingsTitle.copyWith(color: Colors.white)
+                                : settingsTitle.copyWith(
+                                    color: darkBackground)),
+                        child: Slider(
                           label: "$_tagesstunden Stunden",
                           value: _tagesstunden,
                           onChanged: (newTagesstunden) {
@@ -145,24 +146,23 @@ class CustomSliderThumbRect extends SliderComponentShape {
 
   @override
   void paint(
-      PaintingContext context,
-      Offset center, {
-        Animation<double> activationAnimation,
-        Animation<double> enableAnimation,
-        bool isDiscrete,
-        TextPainter labelPainter,
-        RenderBox parentBox,
-        SliderThemeData sliderTheme,
-        TextDirection textDirection,
-        double value,
-        double textScaleFactor,
-        Size sizeWithOverflow,
-      }) {
+    PaintingContext context,
+    Offset center, {
+    Animation<double> activationAnimation,
+    Animation<double> enableAnimation,
+    bool isDiscrete,
+    TextPainter labelPainter,
+    RenderBox parentBox,
+    SliderThemeData sliderTheme,
+    TextDirection textDirection,
+    double value,
+    double textScaleFactor,
+    Size sizeWithOverflow,
+  }) {
     final Canvas canvas = context.canvas;
 
     final rRect = RRect.fromRectAndRadius(
-      Rect.fromCenter(
-          center: center, width: thumbWidth, height: thumbHeight),
+      Rect.fromCenter(center: center, width: thumbWidth, height: thumbHeight),
       Radius.circular(thumbRadius * .4),
     );
 
@@ -183,13 +183,13 @@ class CustomSliderThumbRect extends SliderComponentShape {
         textDirection: TextDirection.ltr);
     tp.layout();
     Offset textCenter =
-    Offset(center.dx - (tp.width / 2), center.dy - (tp.height / 2)+1.5);
+        Offset(center.dx - (tp.width / 2), center.dy - (tp.height / 2) + 1.5);
 
     canvas.drawRRect(rRect, paint);
     tp.paint(canvas, textCenter);
   }
 
   String getValue(double value) {
-    return (min+(max-min)*value).toString();
+    return (min + (max - min) * value).toString();
   }
 }

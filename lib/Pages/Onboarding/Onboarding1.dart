@@ -1,6 +1,4 @@
-import 'package:Timo/Services/Data.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../Services/Theme.dart';
 
@@ -12,33 +10,33 @@ class Onboarding1 extends StatelessWidget {
       children: [
         Stack(
           children: [
-            Card(
-              elevation: 3,
-              margin: EdgeInsets.symmetric(horizontal: 40),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(50, 30, 30, 30),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text("Willkommen",
-                        style:onboardingTitle.copyWith(color: getIt<Data>().primaryColor)),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Text(
-                        """timo hilft dir dabei, den Überblick über deine Überstunden zu behalten.""",
-                        textAlign: TextAlign.start,
-                        style: onboardingBody.copyWith(color: getIt<Data>().primaryColor)),
-                  ],
-                ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  /*SvgPicture.asset("assets/timo/timo_happy_1_white.svg"),*/
+                  SizedBox(height: 70),
+                  Text("Willkommen",
+                      style:onboardingTitle.copyWith(color: Colors.white)),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                      """Timo hilft dir dabei, den Überblick über deine Überstunden zu behalten.""",
+                      textAlign: TextAlign.center,
+                      style: onboardingBody.copyWith(color: Colors.white)),
+                  SizedBox(
+                    height: 20,
+                  )
+                ],
               ),
             ),
-            Positioned(
-                top: -30,
-                left: 10,
-                child: SvgPicture.asset("assets/timo/timo_happy_1.svg")),
+            /*Positioned(
+                top: -45,
+                left: 20,
+                child: SvgPicture.asset("assets/timo/timo_happy_1.svg")),*/
           ],
           overflow: Overflow.visible,
         ),

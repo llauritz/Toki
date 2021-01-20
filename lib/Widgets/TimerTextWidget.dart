@@ -25,10 +25,17 @@ class _TimerTextWidgetState extends State<TimerTextWidget> with TickerProviderSt
     //print("sers");
     RenderBox row = zeitRowKey.currentContext.findRenderObject() as RenderBox;
     //print(row.size.width.toString());
+
+    if(containerWidth == MediaQuery.of(context).size.width/2-row.size.width/2){
+      return ;
+    }
+
+    if(!skipCallback){
+      setState(() {
+        containerWidth = MediaQuery.of(context).size.width/2-row.size.width/2;
+      });
+    }
     skipCallback=true;
-    setState(() {
-      containerWidth = MediaQuery.of(context).size.width/2-row.size.width/2;
-    });
   }
 
   @override

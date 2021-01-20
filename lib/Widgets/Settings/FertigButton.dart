@@ -12,23 +12,20 @@ class FertigButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom:20.0),
-      child: RaisedButton(
-        splashColor: neonTranslucent.withAlpha(150),
-        highlightColor: neonTranslucent.withAlpha(80),
-        highlightElevation: 0,
-        elevation: 0,
-        padding: const EdgeInsets.symmetric(vertical:20.0, horizontal: 50.0),
-        shape: const StadiumBorder(),
-        color: neon,
-        onPressed: (){
-          Navigator.pop(context);
-        },
-        child: Text("Fertig", style:openButtonText.copyWith(
-          color: isDay?Colors.white:darkBackground
-        )),
-      ),
+    return RaisedButton(
+      splashColor: neonTranslucent.withAlpha(150),
+      highlightColor: neonTranslucent.withAlpha(80),
+      highlightElevation: 0,
+      elevation: 0,
+      padding: const EdgeInsets.symmetric(vertical:20.0, horizontal: 50.0),
+      shape: const StadiumBorder(),
+      color: neon,
+      onPressed: (){
+        Navigator.pop(context);
+      },
+      child: Text("Fertig", style:openButtonText.copyWith(
+        color: isDay?Colors.white:darkBackground
+      )),
     );
   }
 }

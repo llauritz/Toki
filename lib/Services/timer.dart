@@ -40,9 +40,10 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
   int _elapsedTime = 0;
   SharedPreferences prefs;
   Timer _timer = Timer.periodic(const Duration(hours: 1), (Timer timer) {});
-  final StreamController<int> _timeController = StreamController<int>();
+  StreamController<int> _timeController;
 
   void initSharedPreferences()async{
+    _timeController = StreamController<int>();
     _startTime = getIt<Data>().prefs.getInt("startTime");
     logger.d("timer - previous startTime is " +
         getIt<Data>().prefs.getInt("startTime").toString());

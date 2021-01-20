@@ -26,6 +26,7 @@ class Data{
   String backgroundHash = "cCBYFk?a9K9Ht7of06Rm?Wa%M~WC~ks,9J";
   int backgroundNumber = 1;
   TimerText timerText = TimerText();
+  bool finishedOnboarding = false;
 
 
   Future<void> initSharedPreferences() async {
@@ -39,10 +40,13 @@ class Data{
     await initSharedPreferences();
 
     if (prefs != null) {
+      prefs.containsKey("finishedOnboarding")
+          ? finishedOnboarding = prefs.getBool("finishedOnboarding")
+          : setFinishedOnboarding(false);
+
       prefs.containsKey("name")
           ? username = prefs.getString("name")
-          //TODO: generate Random Name
-          : updateName("");
+          : updateName("Dein Name");
 
       prefs.containsKey("tagesstunden")
           ? tagesstunden = prefs.getDouble("tagesstunden")
@@ -133,6 +137,13 @@ class Data{
     prefs.setString("name", newName);
     username = newName;
     print("Data - updated Username: " + prefs.getString("name").toString());
+  }
+
+  void setFinishedOnboarding(bool b) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("finishedOnboarding", b);
+    finishedOnboarding = b;
+    print("Data - updated finishedOnboarding: " + prefs.getBool("finishedOnboarding").toString());
   }
 
   Future<void> updateWochentage(List<bool> list) async {

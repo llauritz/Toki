@@ -39,58 +39,15 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: isDay
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: isDay
         ?Colors.white
         :darkBackground,
-      child: Stack(
-          children: [
-            /*StreamBuilder<Color>(
-              stream: getIt<Data>().primaryColorStream.stream,
-              initialData: getIt<Data>().primaryColor,
-              builder: (context, snapshot) {
-                return AnimatedContainer(color: snapshot.data, duration: Duration(milliseconds: 1000),);
-              }
-            ),*/
-            /*Expanded(child: Container(color: Colors.white,)),*/
-          /*StreamBuilder<AssetImage>(
-              stream: getIt<Data>().currentImageStream.stream,
-              initialData: getIt<Data>().currentImage,
-              builder: (context, snapshot) {
-                return AnimatedContainer(
-                  decoration: BoxDecoration(image: DecorationImage(
-                      image: snapshot.data, fit: BoxFit.cover
-                  )),
-                  duration: Duration(milliseconds: 1000),);
-              }
-            ),*/
-          /*Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/background/clouds/clouds2.jpg"), fit: BoxFit.cover
-                  )
-              ),
-            ),*/
-          /* BackdropFilter(filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
-            child: Container(color: Colors.transparent)),*/
-          /*StreamBuilder<String>(
-              stream: getIt<Data>().backgroundHashStream.stream,
-              initialData: getIt<Data>().backgroundHash,
-              builder: (context, snapshot) {
-                return AnimatedSwitcher(
-                  duration: Duration(milliseconds: 2000),
-                  child: KeyedSubtree(
-                    key: ValueKey<int>(getIt<Data>().backgroundNumber),
-                    child: BlurHash(
-                      hash: snapshot.data,
-                      imageFit: BoxFit.fill,
-                      duration: Duration(microseconds: 1),
-                    ),
-                  ),
-                );
-              }),*/
-          SafeArea(
-            child: Column(
+      body: SafeArea(
+        child: Stack(
+            children: [
+            Column(
               children: [
                 Flexible(
                     flex:2,
@@ -102,10 +59,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 Flexible(flex:1,child: Container()),
                 ],
               ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: SafeArea(
+              Align(
+                alignment: Alignment.bottomCenter,
                 child: FadeIn(
                     delay: 650-100,
                     fadeChild:Padding(
@@ -113,9 +68,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: FertigButton(isDay:isDay),
                     )),
               ),
-            ),
-          ],
+            ],
 
+        ),
       ),
     );
   }
