@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.4.0+8
+version: 0.5.0+10
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -39,7 +39,6 @@ dependencies:
   logger: ^0.9.4
   logger_flutter:
     git: https://github.com/ewertonrp/logger_flutter.git
-  flutter_svg: ^0.19.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -49,8 +48,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_native_splash: ^0.1.9
-  flutter_launcher_icons: ^0.7.5
+  flutter_native_splash: ^1.1.5+1
+  flutter_launcher_icons: ^0.9.0
   hive_generator: ^0.8.2
   build_runner: ^1.10.6
 
@@ -59,9 +58,9 @@ dev_dependencies:
 
 flutter_native_splash:
   image: assets/icon/icon_white_shadow.png
-  color: "0ee796"
+  color: "#0ee796"
   image_dark: assets/icon/icon_white_shadow.png
-  color_dark: "0ee796"
+  color_dark: "#0ee796"
 
 flutter_icons:
   android: "launcher_icon"

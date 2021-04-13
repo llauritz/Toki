@@ -9,23 +9,21 @@ import 'HiveDB.dart';
 import 'Theme.dart';
 
 class TimerText extends StatefulWidget {
-
-  TimerText({
-    Key key
-  });
+  TimerText({Key key});
   final _TimerTextState ts = _TimerTextState();
 
   final Timer t = Timer.periodic(const Duration(hours: 1), (Timer timer) {});
 
-  void start(){
+  void start() {
     ts.timerStart();
   }
 
-  void stop(){
+  // ignore: missing_return
+  Future<void> stop() {
     ts.timerStop();
   }
 
-  void update(){
+  void update() {
     ts.updateTime(t);
   }
 
@@ -33,16 +31,14 @@ class TimerText extends StatefulWidget {
   _TimerTextState createState() => ts;
 }
 
-class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
-
-
+class _TimerTextState extends State<TimerText> with WidgetsBindingObserver {
   int _startTime = 0;
   int _elapsedTime = 0;
   SharedPreferences prefs;
   Timer _timer = Timer.periodic(const Duration(hours: 1), (Timer timer) {});
   StreamController<int> _timeController;
 
-  void initSharedPreferences()async{
+  void initSharedPreferences() async {
     _timeController = StreamController<int>();
     _startTime = getIt<Data>().prefs.getInt("startTime");
     logger.d("timer - previous startTime is " +
@@ -65,7 +61,7 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
   }
 
   @override
-  void initState(){
+  void initState() {
     // TODO: implement initState
     _timer.cancel();
     initSharedPreferences();
@@ -73,13 +69,12 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
     WidgetsBinding.instance.addObserver(this);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: _timeController.stream,
       initialData: 200,
-      builder: (context, snapshot){
+      builder: (context, snapshot) {
         //TODO add error exceptions
         //print("timer - building stream");
         return Center(child: TimerTextWidget(elapsedTime: snapshot.data));
@@ -87,14 +82,14 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
     );
   }
 
-  void timerStart(){
+  void timerStart() {
     logger.i("timer - start");
     logger.d("timer - timer " + _timer.isActive.toString());
 
-      _timer = Timer.periodic(const Duration(milliseconds: 200), updateTime);
-      _startTime = DateTime.now().millisecondsSinceEpoch;
-      getIt<Data>().prefs.setInt("startTime", _startTime);
-      logger.d("timer - started, startTime = " + _startTime.toString());
+    _timer = Timer.periodic(const Duration(milliseconds: 200), updateTime);
+    _startTime = DateTime.now().millisecondsSinceEpoch;
+    getIt<Data>().prefs.setInt("startTime", _startTime);
+    logger.d("timer - started, startTime = " + _startTime.toString());
 
     logger.d("timer - timer " + _timer.isActive.toString());
 
@@ -106,7 +101,7 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
     getIt<HiveDB>().updateGesamtUeberstunden();
   }
 
-  void timerStop() async{
+  Future<void> timerStop() async {
     logger.i("timer - stop");
     _timer.cancel();
     //print("timer - afterTimerCancel" + _timer.isActive.toString());
@@ -116,9 +111,7 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
     getIt<Data>().isRunningStream.sink.add(false);
     getIt<Data>().isRunning = false;
     getIt<HiveDB>().isRunning = false;
-    getIt<HiveDB>().endTime(DateTime
-        .now()
-        .millisecondsSinceEpoch);
+    getIt<HiveDB>().endTime(DateTime.now().millisecondsSinceEpoch);
     await getIt<HiveDB>().calculateTodayElapsedTime();
     await getIt<HiveDB>().updateGesamtUeberstunden();
     updateTime(_timer);
@@ -134,16 +127,13 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver{
       //print("timer - updateTime elapsed Time "+ _elapsedTime.toString());
       //print("timer - ${Duration(milliseconds: elapsedTimeMilliseconds).inSeconds}");
       //print("timer - ${Duration(milliseconds: _elapsedTime).inSeconds}");
-      logger.v("${
-      Duration(milliseconds: elapsedTimeMilliseconds).inSeconds
-      - Duration(milliseconds: _elapsedTime).inSeconds
-      }");
+      logger.v(
+          "${Duration(milliseconds: elapsedTimeMilliseconds).inSeconds - Duration(milliseconds: _elapsedTime).inSeconds}");
 
       //rebuild only if value changed at least one Second
-      if (
-      Duration(milliseconds: elapsedTimeMilliseconds).inSeconds
-          - Duration(milliseconds: _elapsedTime).inSeconds != 0
-      ) {
+      if (Duration(milliseconds: elapsedTimeMilliseconds).inSeconds -
+              Duration(milliseconds: _elapsedTime).inSeconds !=
+          0) {
         logger.v("timer - update");
         _elapsedTime = elapsedTimeMilliseconds;
         _timeController.sink.add(_elapsedTime);

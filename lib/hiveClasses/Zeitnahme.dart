@@ -22,7 +22,7 @@ class Zeitnahme {
   List<int> endTimes;
 
   @HiveField(4)
-  String tag = "Urlaub";
+  String tag = "Stundenabbau";
 
   @HiveField(5)
   int editMilli = 0;
@@ -32,9 +32,8 @@ class Zeitnahme {
     int endLength = endTimes.length;
     int _elapsedTime = 0;
     for (int i = 0; i < startLength; i++) {
-      int e = i==endLength
-        ? DateTime.now().millisecondsSinceEpoch
-        : endTimes[i];
+      int e =
+          i == endLength ? DateTime.now().millisecondsSinceEpoch : endTimes[i];
       _elapsedTime = _elapsedTime + e - startTimes[i];
     }
     //print("Zeitnahme - elapsed time ${Duration(milliseconds: _elapsedTime)}");
@@ -52,23 +51,23 @@ class Zeitnahme {
           getKorrektur();
       print("Zeitnahme - day" + day.toString());
       return uebermilliseconds;
-
-    } else if(state == "edited"){
-        int tagesHours = getIt<Data>().tagesstunden.truncate();
-        int tagesMinutes =
-            ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
-        print("Zeitnahme - tageshrs: $tagesHours");
-        print("Zeitnahme - tagesmin: $tagesMinutes");
-        int uebermilliseconds = editMilli - Duration(hours: tagesHours, minutes: tagesMinutes).inMilliseconds;
-        print("Zeitnahme - uebermilliEDITED: ${Duration(milliseconds: uebermilliseconds)}");
-        return uebermilliseconds;
-
-    } else if(state == "empty"){
-        int tagesHours = getIt<Data>().tagesstunden.truncate();
-        int tagesMinutes =
-        ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
-        return -Duration(hours: tagesHours, minutes: tagesMinutes).inMilliseconds;
-    } else{
+    } else if (state == "edited") {
+      int tagesHours = getIt<Data>().tagesstunden.truncate();
+      int tagesMinutes =
+          ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
+      print("Zeitnahme - tageshrs: $tagesHours");
+      print("Zeitnahme - tagesmin: $tagesMinutes");
+      int uebermilliseconds = editMilli -
+          Duration(hours: tagesHours, minutes: tagesMinutes).inMilliseconds;
+      print(
+          "Zeitnahme - uebermilliEDITED: ${Duration(milliseconds: uebermilliseconds)}");
+      return uebermilliseconds;
+    } else if (state == "empty") {
+      int tagesHours = getIt<Data>().tagesstunden.truncate();
+      int tagesMinutes =
+          ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
+      return -Duration(hours: tagesHours, minutes: tagesMinutes).inMilliseconds;
+    } else {
       return 0;
     }
   }
@@ -102,13 +101,15 @@ class Zeitnahme {
   int getPause() {
     if (state != 'free' && endTimes.isNotEmpty) {
       int fromStartToFinish = 0;
-      if(startTimes.length>endTimes.length){
-        fromStartToFinish = DateTime.now().millisecondsSinceEpoch - startTimes[0];
-      }else{
+      if (startTimes.length > endTimes.length) {
+        fromStartToFinish =
+            DateTime.now().millisecondsSinceEpoch - startTimes[0];
+      } else {
         fromStartToFinish = endTimes.last - startTimes[0];
       }
       logger.v("elapsed" + Duration(milliseconds: getElapsedTime()).toString());
-      logger.v("fromStartToFinish" + Duration(milliseconds: fromStartToFinish).toString());
+      logger.v("fromStartToFinish" +
+          Duration(milliseconds: fromStartToFinish).toString());
       return fromStartToFinish - getElapsedTime();
     } else {
       return 0;

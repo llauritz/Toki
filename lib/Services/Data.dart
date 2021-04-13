@@ -46,7 +46,7 @@ class Data{
 
       prefs.containsKey("name")
           ? username = prefs.getString("name")
-          : updateName("Dein Name");
+          : updateName("Name");
 
       prefs.containsKey("tagesstunden")
           ? tagesstunden = prefs.getDouble("tagesstunden")
