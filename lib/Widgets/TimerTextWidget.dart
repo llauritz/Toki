@@ -5,51 +5,54 @@ class TimerTextWidget extends StatefulWidget {
   const TimerTextWidget({
     Key key,
     @required this.elapsedTime,
+    @required this.constrainedWidth,
   }) : super(key: key);
 
   final int elapsedTime;
+  final double constrainedWidth;
 
   @override
   _TimerTextWidgetState createState() => _TimerTextWidgetState();
 }
 
-class _TimerTextWidgetState extends State<TimerTextWidget> with TickerProviderStateMixin{
-
+class _TimerTextWidgetState extends State<TimerTextWidget>
+    with TickerProviderStateMixin {
   Duration duration = const Duration(milliseconds: 600);
   Curve curve = Curves.ease;
   GlobalKey zeitRowKey = GlobalKey();
   double containerWidth;
   bool skipCallback = false;
 
-  void updateWidth(){
+  void updateWidth() {
     //print("sers");
     RenderBox row = zeitRowKey.currentContext.findRenderObject() as RenderBox;
     //print(row.size.width.toString());
 
-    if(containerWidth == MediaQuery.of(context).size.width/2-row.size.width/2){
-      return ;
+    if (containerWidth == widget.constrainedWidth / 2 - row.size.width / 2) {
+      return;
     }
 
-    if(!skipCallback){
+    if (!skipCallback) {
       setState(() {
-        containerWidth = MediaQuery.of(context).size.width/2-row.size.width/2;
+        containerWidth = widget.constrainedWidth / 2 - row.size.width / 2;
       });
     }
-    skipCallback=true;
+    skipCallback = true;
   }
 
   @override
   Widget build(BuildContext context) {
-
-    containerWidth = containerWidth ?? MediaQuery.of(context).size.width/3;
+    containerWidth = containerWidth ?? widget.constrainedWidth / 3;
 
     !skipCallback
-      ?WidgetsBinding.instance.addPostFrameCallback((_) => updateWidth())
-      :skipCallback= false;
+        ? WidgetsBinding.instance.addPostFrameCallback((_) => updateWidth())
+        : skipCallback = false;
 
     final int elapsedSeconds = ((widget.elapsedTime / (1000)) % 60).truncate();
-    final int elapsedMinutes = ((widget.elapsedTime / (60 * 1000)) % 60).truncate();
-    final int elapsedHours = ((widget.elapsedTime / (60 * 60 * 1000)) % 60).truncate();
+    final int elapsedMinutes =
+        ((widget.elapsedTime / (60 * 1000)) % 60).truncate();
+    final int elapsedHours =
+        ((widget.elapsedTime / (60 * 60 * 1000)) % 60).truncate();
 /*    print("timer - elapsed Hours" + elapsedHours.toString());
     print("timer - elapsed Minutes" + elapsedMinutes.toString());
     print("timer - elapsed Seconds" + elapsedSeconds.toString());*/
@@ -66,7 +69,8 @@ class _TimerTextWidgetState extends State<TimerTextWidget> with TickerProviderSt
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                AnimatedContainer(duration: duration,
+                AnimatedContainer(
+                  duration: duration,
                   width: containerWidth,
                   curve: curve,
                 ),
@@ -77,10 +81,8 @@ class _TimerTextWidgetState extends State<TimerTextWidget> with TickerProviderSt
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text('0', style: timerTextNumbers),
-                const Text(':',
-                    style: timerTextNumbers),
-                DoubleDigit(
-                    i: elapsedSeconds, style: timerTextNumbers),
+                const Text(':', style: timerTextNumbers),
+                DoubleDigit(i: elapsedSeconds, style: timerTextNumbers),
               ],
             ),
           ],
@@ -98,7 +100,8 @@ class _TimerTextWidgetState extends State<TimerTextWidget> with TickerProviderSt
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                AnimatedContainer(duration: duration,
+                AnimatedContainer(
+                  duration: duration,
                   width: containerWidth,
                   curve: curve,
                 ),
@@ -109,18 +112,16 @@ class _TimerTextWidgetState extends State<TimerTextWidget> with TickerProviderSt
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                DoubleDigit(
-                    i: elapsedMinutes, style: timerTextNumbers),
-                const Text(":",
-                    style: timerTextNumbers),
-                DoubleDigit(
-                    i: elapsedSeconds, style: timerTextNumbers),
+                DoubleDigit(i: elapsedMinutes, style: timerTextNumbers),
+                const Text(":", style: timerTextNumbers),
+                DoubleDigit(i: elapsedSeconds, style: timerTextNumbers),
               ],
             ),
           ],
         ),
       );
-    }else if(elapsedHours>0){ // ab 60 Minuten
+    } else if (elapsedHours > 0) {
+      // ab 60 Minuten
       return Align(
         alignment: Alignment.centerLeft,
         child: Row(
@@ -131,7 +132,8 @@ class _TimerTextWidgetState extends State<TimerTextWidget> with TickerProviderSt
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                AnimatedContainer(duration: duration,
+                AnimatedContainer(
+                  duration: duration,
                   width: containerWidth,
                   curve: curve,
                 ),
@@ -147,7 +149,9 @@ class _TimerTextWidgetState extends State<TimerTextWidget> with TickerProviderSt
                 const Text(":", style: timerTextNumbers),
                 DoubleDigit(i: elapsedMinutes, style: timerTextNumbers),
                 const SizedBox(width: 5),
-                DoubleDigit(i: elapsedSeconds, style: timerTextNumbers.copyWith(fontSize: 34)),
+                DoubleDigit(
+                    i: elapsedSeconds,
+                    style: timerTextNumbers.copyWith(fontSize: 34)),
               ],
             ),
           ],
@@ -158,29 +162,27 @@ class _TimerTextWidgetState extends State<TimerTextWidget> with TickerProviderSt
     return Column(
       children: [
         Text(elapsedMinutes.toString()),
-        Text(DateTime.fromMicrosecondsSinceEpoch(widget.elapsedTime).second.toString()),
+        Text(DateTime.fromMicrosecondsSinceEpoch(widget.elapsedTime)
+            .second
+            .toString()),
       ],
     );
   }
 }
 
 class DoubleDigit extends StatelessWidget {
-  const DoubleDigit({
-    Key key,
-    @required this.i,
-    @required this.style
-  }) : super(key: key);
+  const DoubleDigit({Key key, @required this.i, @required this.style})
+      : super(key: key);
 
   final int i;
   final TextStyle style;
 
   @override
   Widget build(BuildContext context) {
-    if(i <= 9){
+    if (i <= 9) {
       return Text('0' + i.toString(), style: style);
-    }else{
+    } else {
       return Text(i.toString(), style: style);
     }
-
   }
 }
