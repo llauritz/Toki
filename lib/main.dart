@@ -41,6 +41,7 @@ void main() async {
       "/onboarding": (context) => const Onboarding(),
     },
     initialRoute: getIt<Data>().finishedOnboarding ? "/" : "/onboarding",
+    title: "Timo",
     theme: ThemeData(
         backgroundColor: Colors.indigoAccent[700],
         fontFamily: "BandeinsSans",

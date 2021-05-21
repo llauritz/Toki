@@ -1,5 +1,6 @@
 import 'package:Timo/Services/Data.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
@@ -58,7 +59,6 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
     return StreamBuilder<int>(
         stream: getIt<HiveDB>().listChangesStream.stream,
         builder: (context, snapshot) {
-
           print("build");
 
           final int ueberMilliseconds = widget.zeitnahme.getUeberstunden();
@@ -80,7 +80,8 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
 
           final int pauseMilliseconds =
               _zeitnahme.getPause() + _zeitnahme.getKorrektur();
-          final int pauseHours = Duration(milliseconds: pauseMilliseconds).inHours;
+          final int pauseHours =
+              Duration(milliseconds: pauseMilliseconds).inHours;
           final int pauseMinutes =
               Duration(milliseconds: pauseMilliseconds).inMinutes;
 
@@ -95,106 +96,149 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
           TextStyle numbers = openCardsNumbers.copyWith(color: _colorAccent);
 
           return Scaffold(
-
             backgroundColor: Colors.white,
             body: SafeArea(
               child: Stack(
                 children: [
                   Column(
                     children: [
-                      Flexible(flex: 4, child: Container(),),
+                      Flexible(
+                        flex: 4,
+                        child: Container(),
+                      ),
                       Flexible(
                           flex: 7,
                           child: Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom:65.0),
-                                child: Theme(
-                                  data: Theme.of(context)
-                                      .copyWith(accentColor: Colors.white),
-                                  child: ShaderMask(
-                                      shaderCallback: (Rect bounds) {
-                                        return LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: const Alignment(0, 0.8),
-                                          colors: <Color>[
-                                            Colors.white.withAlpha(0),
-                                            Colors.white,
-                                          ],
-                                        ).createShader(bounds);
-                                      },
-                                      blendMode: BlendMode.dstATop,
+                              !kIsWeb
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 65.0),
+                                      child: Theme(
+                                        data: Theme.of(context).copyWith(
+                                            accentColor: Colors.white),
+                                        child: ShaderMask(
+                                            shaderCallback: (Rect bounds) {
+                                              return LinearGradient(
+                                                begin: Alignment.bottomCenter,
+                                                end: const Alignment(0, 0.8),
+                                                colors: <Color>[
+                                                  Colors.white.withAlpha(0),
+                                                  Colors.white,
+                                                ],
+                                              ).createShader(bounds);
+                                            },
+                                            blendMode: BlendMode.dstATop,
+                                            child: TimesList(
+                                                zeitnahme: _zeitnahme,
+                                                uhrzeit: uhrzeit,
+                                                widget: widget)),
+                                      ),
+                                    )
+                                  : Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 80.0),
                                       child: TimesList(
                                           zeitnahme: _zeitnahme,
                                           uhrzeit: uhrzeit,
-                                          widget: widget)),
-                                ),
-                              ),
+                                          widget: widget),
+                                    ),
                               Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    FlatButton(
-                                        onPressed: (){
-                                          if(widget.i == getIt<HiveDB>().zeitenBox.length-1)
-                                            getIt<Data>().timerText.stop();
-                                          if(widget.zeitnahme.tag == "Stundenabbau"){
-                                            getIt<HiveDB>().updateTag("Urlaub", widget.i);
-                                          }
-                                          getIt<HiveDB>().changeState("free", widget.i);
-                                          widget.callback();
-                                        },
-                                        splashColor: free.withAlpha(150),
-                                        highlightColor: free.withAlpha(80),
-                                        shape: const StadiumBorder(),
-                                        color: freeTranslucent,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(vertical:10.0, horizontal: 0),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              const Icon(Icons.beach_access, color: freeAccent, size: 20,),
-                                              const SizedBox(width: 5),
-                                              Text("Urlaubstag", style: openButtonText.copyWith(
-                                                  color: freeAccent
-                                              ),),
-                                            ],
-                                          ),
-                                        )
-                                    ),
-                                    const SizedBox(width: 12),
-                                    FlatButton(
-                                        onPressed: (){
-                                          if(widget.i == getIt<HiveDB>().zeitenBox.length-1)getIt<Data>().timerText.stop();
-                                          if(widget.zeitnahme.tag == "Stundenabbau"){
-                                            getIt<HiveDB>().updateTag("Bearbeitet", widget.i);
-                                          }
-                                          getIt<HiveDB>().changeState("edited", widget.i);
-                                          widget.callback();
-                                        },
-                                        splashColor: editColor.withAlpha(150),
-                                        highlightColor: editColor.withAlpha(80),
-                                        shape: const StadiumBorder(),
-                                        color: editColorTranslucent,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(vertical:10.0, horizontal: 0),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Icon(Icons.edit, color: editColor, size: 20,),
-                                              const SizedBox(width: 5),
-                                              Text("Zeit nachtragen", style: openButtonText.copyWith(
-                                                  color: editColor
-                                              ),),
-                                            ],
-                                          ),
-                                        )
-                                    ),
-                                  ],
-                                )
-                              ),
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      FlatButton(
+                                          onPressed: () {
+                                            if (widget.i ==
+                                                getIt<HiveDB>()
+                                                        .zeitenBox
+                                                        .length -
+                                                    1)
+                                              getIt<Data>().timerText.stop();
+                                            if (widget.zeitnahme.tag ==
+                                                "Stundenabbau") {
+                                              getIt<HiveDB>().updateTag(
+                                                  "Urlaub", widget.i);
+                                            }
+                                            getIt<HiveDB>()
+                                                .changeState("free", widget.i);
+                                            widget.callback();
+                                          },
+                                          splashColor: free.withAlpha(150),
+                                          highlightColor: free.withAlpha(80),
+                                          shape: const StadiumBorder(),
+                                          color: freeTranslucent,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10.0, horizontal: 0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                const Icon(
+                                                  Icons.beach_access,
+                                                  color: freeAccent,
+                                                  size: 20,
+                                                ),
+                                                const SizedBox(width: 5),
+                                                Text(
+                                                  "Urlaubstag",
+                                                  style:
+                                                      openButtonText.copyWith(
+                                                          color: freeAccent),
+                                                ),
+                                              ],
+                                            ),
+                                          )),
+                                      const SizedBox(width: 12),
+                                      FlatButton(
+                                          onPressed: () {
+                                            if (widget.i ==
+                                                getIt<HiveDB>()
+                                                        .zeitenBox
+                                                        .length -
+                                                    1)
+                                              getIt<Data>().timerText.stop();
+                                            if (widget.zeitnahme.tag ==
+                                                "Stundenabbau") {
+                                              getIt<HiveDB>().updateTag(
+                                                  "Bearbeitet", widget.i);
+                                            }
+                                            getIt<HiveDB>().changeState(
+                                                "edited", widget.i);
+                                            widget.callback();
+                                          },
+                                          splashColor: editColor.withAlpha(150),
+                                          highlightColor:
+                                              editColor.withAlpha(80),
+                                          shape: const StadiumBorder(),
+                                          color: editColorTranslucent,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10.0, horizontal: 0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.edit,
+                                                  color: editColor,
+                                                  size: 20,
+                                                ),
+                                                const SizedBox(width: 5),
+                                                Text(
+                                                  "Zeit nachtragen",
+                                                  style:
+                                                      openButtonText.copyWith(
+                                                          color: editColor),
+                                                ),
+                                              ],
+                                            ),
+                                          )),
+                                    ],
+                                  )),
                             ],
                           )),
                     ],
@@ -206,7 +250,8 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
                             child: Container(
-                              padding: const EdgeInsets.fromLTRB(12.0,12,12,20),
+                              padding:
+                                  const EdgeInsets.fromLTRB(12.0, 12, 12, 20),
                               decoration: BoxDecoration(
                                   color: _colorTranslucent,
                                   borderRadius: BorderRadius.circular(20),
@@ -219,14 +264,16 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                     )
                                   ]),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       IconButton(
                                           tooltip: "Speichern und schliessen",
-                                          splashColor: _colorAccent.withAlpha(80),
+                                          splashColor:
+                                              _colorAccent.withAlpha(80),
                                           highlightColor:
                                               _colorAccent.withAlpha(50),
                                           padding: const EdgeInsets.all(0),
@@ -239,11 +286,14 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                     ],
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(bottom: 12.0),
+                                    padding:
+                                        const EdgeInsets.only(bottom: 12.0),
                                     child: Text(
-                                      tag.format(_day) + ', ' + datum.format(_day),
-                                      style:
-                                          openCardDate.copyWith(color: _colorAccent),
+                                      tag.format(_day) +
+                                          ', ' +
+                                          datum.format(_day),
+                                      style: openCardDate.copyWith(
+                                          color: _colorAccent),
                                     ),
                                   ),
                                   Row(
@@ -268,7 +318,8 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                           ),
                                           Text(
                                             "Arbeitszeit",
-                                            style: openCardsLabel.copyWith(color: _colorAccent),
+                                            style: openCardsLabel.copyWith(
+                                                color: _colorAccent),
                                           ),
                                         ],
                                       ),
@@ -281,7 +332,8 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
 
                                               Row(
                                                 children: [
-                                                  if (ueberMilliseconds.isNegative)
+                                                  if (ueberMilliseconds
+                                                      .isNegative)
                                                     Text("-", style: numbers),
                                                   Text(
                                                     ueberHours.toString(),
@@ -298,8 +350,8 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                               ),
                                               Text(
                                                 "Überstunden",
-                                                style:
-                                                openCardsLabel.copyWith(color: _colorAccent),
+                                                style: openCardsLabel.copyWith(
+                                                    color: _colorAccent),
                                               ),
                                             ],
                                           )),
@@ -307,7 +359,8 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                         children: [
                                           GestureDetector(
                                             onTap: () {
-                                              if (_zeitnahme.getKorrektur() > 0) {
+                                              if (_zeitnahme.getKorrektur() >
+                                                  0) {
                                                 final dynamic tooltip =
                                                     _toolTipKey.currentState;
                                                 tooltip.ensureTooltipVisible();
@@ -318,11 +371,13 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                                   color: Colors.blueGrey[700]),
                                               decoration: BoxDecoration(
                                                   borderRadius:
-                                                      BorderRadius.circular(100),
+                                                      BorderRadius.circular(
+                                                          100),
                                                   color: Colors.white,
                                                   boxShadow: [
                                                     const BoxShadow(
-                                                        offset: const Offset(0, 5),
+                                                        offset:
+                                                            const Offset(0, 5),
                                                         color: Colors.black12,
                                                         blurRadius: 10)
                                                   ]),
@@ -364,9 +419,11 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                           Text(
                                             "Pause",
                                             style: openCardsLabel.copyWith(
-                                                color: _zeitnahme.getKorrektur() > 0
-                                                    ? editColor
-                                                    : _colorAccent),
+                                                color:
+                                                    _zeitnahme.getKorrektur() >
+                                                            0
+                                                        ? editColor
+                                                        : _colorAccent),
                                           ),
                                         ],
                                       ),
@@ -376,7 +433,7 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                               ),
                             ),
                           )),
-                      const Flexible(flex:7,child: SizedBox())
+                      const Flexible(flex: 7, child: SizedBox())
                     ],
                   )
                 ],

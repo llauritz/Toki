@@ -19,11 +19,11 @@ class FirstWidget extends StatefulWidget {
 class _FirstWidgetState extends State<FirstWidget> {
   int i = 0;
 
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
       splashColor: Colors.tealAccent.withAlpha(100),
+      hoverColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
         widget.panelController.open();
@@ -43,7 +43,6 @@ class _FirstWidgetState extends State<FirstWidget> {
                       borderRadius: BorderRadius.circular(100)),
                 ))),
           ),
-
           const OvertimeChangeWidget(),
 
           /*Stack(
@@ -126,5 +125,3 @@ class _FirstWidgetState extends State<FirstWidget> {
     );
   }
 }
-
-

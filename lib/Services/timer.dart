@@ -71,15 +71,17 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return LayoutBuilder(builder: (_, constraints){
+      return StreamBuilder(
       stream: _timeController.stream,
       initialData: 200,
       builder: (context, snapshot) {
         //TODO add error exceptions
         //print("timer - building stream");
-        return Center(child: TimerTextWidget(elapsedTime: snapshot.data));
+        return Center(child: TimerTextWidget(elapsedTime: snapshot.data, constrainedWidth: constraints.maxWidth));
       },
     );
+    });
   }
 
   void timerStart() {

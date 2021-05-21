@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:Timo/Services/Data.dart';
 import 'package:Timo/Services/Theme.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -75,77 +76,84 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.black,
-      body: SlidingUpPanel(
-        //Höhe des Stempelbuttons + Padding + Wie viel von der Karte rausschauen darf
-        minHeight: 130 + 20 + 58.0 + bottomInset,
-        //Höhe des Stempelbuttons + Padding +Höhe der Karte
-        maxHeight:
-            130 + 20 + MediaQuery.of(context).size.height * 0.6 + bottomInset,
-        backdropTapClosesPanel: true,
-        controller: pc,
-        backdropEnabled: true,
-        renderPanelSheet: false,
-        onPanelSlide: (double value) {
-          if (value > 0.1 && _cardPosition <= 0.1) {
-            containerColorStream.sink.add(Colors.white.withAlpha(0));
-            _cardPosition = value;
-            logger.v(_cardPosition);
-          } else if (value < 0.1 && _cardPosition <= 0.11) {
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.black,
+        body:
+            //MediaQuery.of(context).size.width <= 1000            ?
+            SlidingUpPanel(
+          //Höhe des Stempelbuttons + Padding + Wie viel von der Karte rausschauen darf
+          minHeight: 130 + 20 + 58.0 + bottomInset,
+          //Höhe des Stempelbuttons + Padding +Höhe der Karte
+          maxHeight:
+              130 + 20 + MediaQuery.of(context).size.height * 0.6 + bottomInset,
+          backdropTapClosesPanel: true,
+          controller: pc,
+          backdropEnabled: true,
+          renderPanelSheet: false,
+          onPanelSlide: (double value) {
+            if (value > 0.1 && _cardPosition <= 0.1) {
+              containerColorStream.sink.add(Colors.white.withAlpha(0));
+              _cardPosition = value;
+              logger.v(_cardPosition);
+            } else if (value < 0.1 && _cardPosition <= 0.11) {
+              containerColorStream.sink.add(Colors.white);
+              _cardPosition = value;
+              logger.v(_cardPosition);
+            } else {
+              _cardPosition = value;
+            }
+            blurValueStream.sink.add((8 * value) + 0.001);
+          },
+          onPanelClosed: () {
             containerColorStream.sink.add(Colors.white);
-            _cardPosition = value;
-            logger.v(_cardPosition);
-          } else {
-            _cardPosition = value;
-          }
-          blurValueStream.sink.add(8 * value);
-        },
-        onPanelClosed: () {
-          containerColorStream.sink.add(Colors.white);
-        },
-        footer: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: SizedBox(
-            height: bottomInset,
-            width: MediaQuery.of(context).size.width - 16,
-            child: StreamBuilder<Color>(
-                stream: containerColorStream.stream,
-                initialData: Colors.white,
-                builder: (BuildContext context, AsyncSnapshot<Color> snapshot) {
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    color: snapshot.data,
-                  );
-                }),
-          ),
-        ),
-        panel: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              color: Colors.transparent,
-              width: double.infinity,
-              child: AnimatedStempelButton(callbackTurnOff: () {
-                getIt<Data>().timerText.stop();
-              }, callbackTurnOn: () {
-                getIt<Data>().timerText.start();
-              }),
+          },
+          footer: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: SizedBox(
+              height: bottomInset,
+              width: MediaQuery.of(context).size.width - 16,
+              child: StreamBuilder<Color>(
+                  stream: containerColorStream.stream,
+                  initialData: Colors.white,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<Color> snapshot) {
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      color: snapshot.data,
+                    );
+                  }),
             ),
-            LimitedBox(
-              maxHeight: MediaQuery.of(context).size.height * 0.6,
-              child: ZeitenPanel(
-                panelController: pc,
-                updateTimer: () {
-                  getIt<Data>().timerText.update();
-                },
+          ),
+          panel: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                color: Colors.transparent,
+                width: double.infinity,
+                child: AnimatedStempelButton(callbackTurnOff: () {
+                  getIt<Data>().timerText.stop();
+                }, callbackTurnOn: () {
+                  getIt<Data>().timerText.start();
+                }),
               ),
-            )
-          ],
-        ),
-        body: Stack(
-          children: [
-            /*const Background_legacy(),
+              //if (MediaQuery.of(context).size.width <= 1000)
+              LimitedBox(
+                maxHeight: MediaQuery.of(context).size.height * 0.6,
+                child: Container(
+                  constraints: BoxConstraints(maxWidth: 600),
+                  child: ZeitenPanel(
+                    panelController: pc,
+                    updateTimer: () {
+                      getIt<Data>().timerText.update();
+                    },
+                  ),
+                ),
+              )
+            ],
+          ),
+          body: Stack(
+            children: [
+              /*const Background_legacy(),
             SafeArea(
               child: Column(
                 children: [
@@ -175,22 +183,74 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),*/
-            StreamBuilder<double>(
-              stream: blurValueStream.stream,
-              initialData: 0,
-              builder: (context, snapshot) {
-                logger.v(snapshot.data);
-                return ImageFiltered(
-                  imageFilter: ImageFilter.blur(
-                      sigmaX: snapshot.data, sigmaY: snapshot.data),
-                  child: const HomeContent(),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+              StreamBuilder<double>(
+                stream: blurValueStream.stream,
+                initialData: 0.001,
+                builder: (context, snapshot) {
+                  logger.v(snapshot.data);
+                  return ImageFiltered(
+                    imageFilter: ImageFilter.blur(
+                        sigmaX: snapshot.data, sigmaY: snapshot.data),
+                    child: const HomeContent(),
+                  );
+                },
+              ),
+            ],
+          ),
+        )
+        /*
+            : Stack(
+                children: [
+                  const Background_legacy(),
+                  Padding(
+                    padding: const EdgeInsets.all(80.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              getIt<Data>().timerText,
+                              SizedBox(height: 100,),
+                              AnimatedStempelButton(callbackTurnOff: () {
+                                getIt<Data>().timerText.stop();
+                              }, callbackTurnOn: () {
+                                getIt<Data>().timerText.start();
+                              }),
+                            ],
+                          ),
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Flexible(
+                                child: Container(
+                                  constraints: BoxConstraints(
+                                      maxWidth: 500, maxHeight: 800),
+                                  child: ZeitenPanel(
+                                    panelController: pc,
+                                    updateTimer: () {
+                                      getIt<Data>().timerText.update();
+                                    },
+                                  ),
+                                ),
+                              ),
+                              SettingsButton(),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )*/
+        );
   }
 
   @override
