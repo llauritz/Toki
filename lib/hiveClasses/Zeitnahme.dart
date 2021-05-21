@@ -27,6 +27,9 @@ class Zeitnahme {
   @HiveField(5)
   int editMilli = 0;
 
+  @HiveField(6)
+  bool autoStoppedTime = false;
+
   int getElapsedTime() {
     int startLength = startTimes.length;
     int endLength = endTimes.length;

@@ -23,13 +23,14 @@ class ZeitnahmeAdapter extends TypeAdapter<Zeitnahme> {
       startTimes: (fields[2] as List)?.cast<int>(),
     )
       ..tag = fields[4] as String
-      ..editMilli = fields[5] as int;
+      ..editMilli = fields[5] as int
+      ..autoStoppedTime = fields[6] as bool;
   }
 
   @override
   void write(BinaryWriter writer, Zeitnahme obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.day)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class ZeitnahmeAdapter extends TypeAdapter<Zeitnahme> {
       ..writeByte(4)
       ..write(obj.tag)
       ..writeByte(5)
-      ..write(obj.editMilli);
+      ..write(obj.editMilli)
+      ..writeByte(6)
+      ..write(obj.autoStoppedTime);
   }
 
   @override

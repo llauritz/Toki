@@ -75,23 +75,22 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
                               print("Zeiten Card - box length is " +
                                   box.length.toString());
 
-                                  return Container(
-                                      child: ShaderMask(
-                                        shaderCallback: (Rect bounds) {
-                                          return LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment(0, -0.9),
-                                            colors: <Color>[
-                                              Colors.white.withAlpha(0),
-                                              Colors.white,
-                                            ],
-                                          ).createShader(bounds);
-                                        },
-                                        blendMode: BlendMode.dstATop,
-                                        child: ListContent(
-                                            widget: widget, box: box),
-                                      ),
-                                    );
+                              return Container(
+                                child: ShaderMask(
+                                  shaderCallback: (Rect bounds) {
+                                    return LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment(0, -0.9),
+                                      colors: <Color>[
+                                        Colors.white.withAlpha(0),
+                                        Colors.white,
+                                      ],
+                                    ).createShader(bounds);
+                                  },
+                                  blendMode: BlendMode.dstATop,
+                                  child: ListContent(widget: widget, box: box),
+                                ),
+                              );
                             });
                       },
                     ),

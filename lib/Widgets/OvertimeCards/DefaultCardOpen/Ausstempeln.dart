@@ -38,9 +38,11 @@ class _AusstempelnState extends State<Ausstempeln> {
       highlightColor: Colors.transparent,
       splashColor: neonTranslucent,
       onPressed: () {
-        final int selectedMilli = widget._zeitnahme.endTimes[widget.uhrzeitenIndex];
+        final int selectedMilli =
+            widget._zeitnahme.endTimes[widget.uhrzeitenIndex];
 
-        final int previousMilli = widget._zeitnahme.startTimes[widget.uhrzeitenIndex];
+        final int previousMilli =
+            widget._zeitnahme.startTimes[widget.uhrzeitenIndex];
 
         int followingMilli = 0;
         if (widget._zeitnahme.startTimes.length - 1 > widget.uhrzeitenIndex) {
@@ -70,35 +72,59 @@ class _AusstempelnState extends State<Ausstempeln> {
               );
             });
       },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Column(
         children: [
-          Icon(
-            Icons.edit,
-            color: Colors.blueGrey[300],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.blueGrey[50], shape: BoxShape.circle),
-              child: Padding(
-                padding: const EdgeInsets.all(22.0),
-                child: Text(
-                  widget.uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(
-                      widget._zeitnahme.endTimes[widget.uhrzeitenIndex])),
-                  style: TextStyle(fontSize: 18, color: gray),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.edit,
+                color: Colors.blueGrey[300],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.blueGrey[50], shape: BoxShape.circle),
+                  child: Padding(
+                    padding: const EdgeInsets.all(22.0),
+                    child: Text(
+                      widget.uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(
+                          widget._zeitnahme.endTimes[widget.uhrzeitenIndex])),
+                      style: TextStyle(fontSize: 18, color: gray),
+                    ),
+                  ),
                 ),
               ),
-            ),
+              Container(
+                width: 120,
+                child: Text(
+                  "Ausstempeln",
+                  style: headline3.copyWith(color: gray),
+                ),
+              )
+            ],
           ),
-          Container(
-            width: 120,
-            child: Text(
-              "Ausstempeln",
-              style: headline3.copyWith(color: gray),
-            ),
-          )
+          if (widget._zeitnahme.autoStoppedTime
+              //is last
+              &&
+              widget.uhrzeitenIndex + 1 == widget._zeitnahme.endTimes.length)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.info,
+                    color: Colors.amber[600],
+                  ),
+                  Text(
+                    " wurde automatisch ausgestempelt",
+                    style: TextStyle(color: Colors.amber[600], fontSize: 14),
+                  ),
+                ],
+              ),
+            )
         ],
       ),
     );
