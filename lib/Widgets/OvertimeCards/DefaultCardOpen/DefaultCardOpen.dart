@@ -111,39 +111,29 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                           child: Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
-                              !kIsWeb
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 65.0),
-                                      child: Theme(
-                                        data: Theme.of(context).copyWith(
-                                            accentColor: Colors.white),
-                                        child: ShaderMask(
-                                            shaderCallback: (Rect bounds) {
-                                              return LinearGradient(
-                                                begin: Alignment.bottomCenter,
-                                                end: const Alignment(0, 0.8),
-                                                colors: <Color>[
-                                                  Colors.white.withAlpha(0),
-                                                  Colors.white,
-                                                ],
-                                              ).createShader(bounds);
-                                            },
-                                            blendMode: BlendMode.dstATop,
-                                            child: TimesList(
-                                                zeitnahme: _zeitnahme,
-                                                uhrzeit: uhrzeit,
-                                                widget: widget)),
-                                      ),
-                                    )
-                                  : Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 80.0),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 65.0),
+                                child: Theme(
+                                  data: Theme.of(context)
+                                      .copyWith(accentColor: Colors.white),
+                                  child: ShaderMask(
+                                      shaderCallback: (Rect bounds) {
+                                        return LinearGradient(
+                                          begin: Alignment.bottomCenter,
+                                          end: const Alignment(0, 0.8),
+                                          colors: <Color>[
+                                            Colors.white.withAlpha(0),
+                                            Colors.white,
+                                          ],
+                                        ).createShader(bounds);
+                                      },
+                                      blendMode: BlendMode.dstATop,
                                       child: TimesList(
                                           zeitnahme: _zeitnahme,
                                           uhrzeit: uhrzeit,
-                                          widget: widget),
-                                    ),
+                                          widget: widget)),
+                                ),
+                              ),
                               Padding(
                                   padding: const EdgeInsets.all(20.0),
                                   child: Row(

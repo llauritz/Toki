@@ -75,9 +75,7 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
                               print("Zeiten Card - box length is " +
                                   box.length.toString());
 
-                              return kIsWeb
-                                  ? ListContent(widget: widget, box: box)
-                                  : Container(
+                                  return Container(
                                       child: ShaderMask(
                                         shaderCallback: (Rect bounds) {
                                           return LinearGradient(
