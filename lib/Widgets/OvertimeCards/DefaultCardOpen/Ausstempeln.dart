@@ -119,7 +119,7 @@ class _AusstempelnState extends State<Ausstempeln> {
                     color: Colors.amber[600],
                   ),
                   Text(
-                    " wurde automatisch ausgestempelt",
+                    " Automatisch ausgestempelt.",
                     style: TextStyle(color: Colors.amber[600], fontSize: 14),
                   ),
                 ],
