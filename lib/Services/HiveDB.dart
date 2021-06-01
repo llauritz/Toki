@@ -255,14 +255,17 @@ class HiveDB {
           if (z.startTimes.length - z.endTimes.length == 1) {
             DateTime lastStartTime =
                 DateTime.fromMillisecondsSinceEpoch(z.startTimes.last);
-            DateTime lastEndTime = DateTime(
-              lastStartTime.year,
-              lastStartTime.month,
-              lastStartTime.day,
-              23,
-              59,
-              59,
-            );
+            DateTime lastEndTime;
+            getIt<Data>().automatischAusstempeln == true
+                ? lastEndTime = DateTime(
+                    lastStartTime.year,
+                    lastStartTime.month,
+                    lastStartTime.day,
+                    24,
+                    00,
+                    00,
+                  )
+                : lastEndTime = DateTime.now();
             z.endTimes.add(lastEndTime.millisecondsSinceEpoch);
             if (z.autoStoppedTime != null) z.autoStoppedTime = true;
             zeitenBox.putAt(i, z);

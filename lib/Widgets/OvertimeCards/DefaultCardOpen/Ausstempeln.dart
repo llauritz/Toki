@@ -105,10 +105,8 @@ class _AusstempelnState extends State<Ausstempeln> {
               )
             ],
           ),
-          if (widget._zeitnahme.autoStoppedTime
-              //is last
-              &&
-              widget.uhrzeitenIndex + 1 == widget._zeitnahme.endTimes.length)
+          if (widget._zeitnahme.autoStoppedTime != null)
+          if (widget._zeitnahme.autoStoppedTime && widget.uhrzeitenIndex + 1 == widget._zeitnahme.endTimes.length)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(
