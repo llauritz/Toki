@@ -5,8 +5,8 @@ import 'TimerTextWidget.dart';
 
 class UeberstundenTextWidget extends StatelessWidget {
   const UeberstundenTextWidget({
-    Key key,
-    @required this.ueberMilliseconds,
+    Key? key,
+    required this.ueberMilliseconds,
   }) : super(key: key);
 
   final int ueberMilliseconds;
@@ -23,7 +23,7 @@ class UeberstundenTextWidget extends StatelessWidget {
     print("timer - elapsed Minutes" + elapsedMinutes.toString());
     print("timer - elapsed Seconds" + elapsedSeconds.toString());*/
 
-    Color _color = isNegative ? Colors.blueGrey[300] : Colors.tealAccent;
+    Color _color = isNegative ? Colors.blueGrey[300]! : Colors.tealAccent;
     TextStyle _style = overTimeNumbers.copyWith(color: _color);
 
     return Row(

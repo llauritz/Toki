@@ -19,12 +19,12 @@ class ZeitnahmeAdapter extends TypeAdapter<Zeitnahme> {
     return Zeitnahme(
       day: fields[0] as DateTime,
       state: fields[1] as String,
-      endTimes: (fields[3] as List)?.cast<int>(),
-      startTimes: (fields[2] as List)?.cast<int>(),
+      endTimes: (fields[3] as List).cast<int>(),
+      startTimes: (fields[2] as List).cast<int>(),
     )
       ..tag = fields[4] as String
       ..editMilli = fields[5] as int
-      ..autoStoppedTime = fields[6] as bool;
+      ..autoStoppedTime = fields[6] as bool?;
   }
 
   @override

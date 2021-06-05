@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class TimerTextWidget extends StatefulWidget {
   const TimerTextWidget({
-    Key key,
-    @required this.elapsedTime,
-    @required this.constrainedWidth,
+    Key? key,
+    required this.elapsedTime,
+    required this.constrainedWidth,
   }) : super(key: key);
 
   final int elapsedTime;
@@ -20,12 +20,12 @@ class _TimerTextWidgetState extends State<TimerTextWidget>
   Duration duration = const Duration(milliseconds: 600);
   Curve curve = Curves.ease;
   GlobalKey zeitRowKey = GlobalKey();
-  double containerWidth;
+  double containerWidth = -1;
   bool skipCallback = false;
 
   void updateWidth() {
     //print("sers");
-    RenderBox row = zeitRowKey.currentContext.findRenderObject() as RenderBox;
+    RenderBox row = zeitRowKey.currentContext!.findRenderObject() as RenderBox;
     //print(row.size.width.toString());
 
     if (containerWidth == widget.constrainedWidth / 2 - row.size.width / 2) {
@@ -42,10 +42,11 @@ class _TimerTextWidgetState extends State<TimerTextWidget>
 
   @override
   Widget build(BuildContext context) {
-    containerWidth = containerWidth ?? widget.constrainedWidth / 3;
+    if(containerWidth == -1)
+    containerWidth = widget.constrainedWidth / 3;
 
     !skipCallback
-        ? WidgetsBinding.instance.addPostFrameCallback((_) => updateWidth())
+        ? WidgetsBinding.instance!.addPostFrameCallback((_) => updateWidth())
         : skipCallback = false;
 
     final int elapsedSeconds = ((widget.elapsedTime / (1000)) % 60).truncate();
@@ -171,7 +172,7 @@ class _TimerTextWidgetState extends State<TimerTextWidget>
 }
 
 class DoubleDigit extends StatelessWidget {
-  const DoubleDigit({Key key, @required this.i, @required this.style})
+  const DoubleDigit({Key? key, required this.i, required this.style})
       : super(key: key);
 
   final int i;

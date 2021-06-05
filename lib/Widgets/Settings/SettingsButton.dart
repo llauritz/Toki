@@ -39,11 +39,11 @@ class _SettingsButtonState extends State<SettingsButton> {
               closedShape: const CircleBorder(),
               openShape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(0.0))),
-              onClosed: (context) {
+              onClosed: (dynamic context) {
                 getIt<HiveDB>().updateGesamtUeberstunden();
               },
               openBuilder: (BuildContext context,
-                  void Function({Object returnValue}) action) {
+                  void Function({Object? returnValue}) action) {
                 return const SettingsPage();
               },
               closedBuilder: (BuildContext context, void Function() action) {

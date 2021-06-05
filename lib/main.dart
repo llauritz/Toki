@@ -7,12 +7,12 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:logger/logger.dart';
 
-import 'Pages/Onboarding/onboarding.dart';
 import 'Pages/home.dart';
 import 'Services/Data.dart';
 import 'Services/HiveDB.dart';
 import 'Services/Theme.dart';
 import 'hiveClasses/Zeitnahme.dart';
+import 'Pages/Onboarding/Onboarding.dart';
 
 GetIt getIt = GetIt.instance;
 
@@ -21,9 +21,11 @@ void main() async {
   logger.i("Logger is working!");
 
   await Hive.initFlutter();
+  Hive.registerAdapter(ZeitnahmeAdapter());
+  await Hive.openBox<Zeitnahme>("zeitenBox");
+
   getIt.registerSingleton<Data>(Data());
   getIt.registerSingleton<HiveDB>(HiveDB());
-  Hive.registerAdapter(ZeitnahmeAdapter());
 
   await getIt<Data>().initData();
   await getIt<HiveDB>().initHiveDB();

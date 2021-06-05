@@ -10,10 +10,10 @@ final getIt = GetIt.instance;
 
 class DefaultCardClosed extends StatefulWidget {
   const DefaultCardClosed({
-    @required this.i,
-    @required this.index,
-    @required this.zeitnahme,
-    Key key,
+    required this.i,
+    required this.index,
+    required this.zeitnahme,
+    Key? key,
   }) : super(key: key);
 
   final int i;
@@ -29,9 +29,9 @@ class _DefaultCardClosedState extends State<DefaultCardClosed> {
   DateFormat uhrzeit = DateFormat("H:mm");
   DateFormat wochentag = DateFormat("EE", "de_DE");
   DateFormat datum = DateFormat("dd.MM", "de_DE");
-  Color _color;
-  Color _colorAccent;
-  Color _colorTranslucent;
+  Color _color = Colors.black;
+  Color _colorAccent = Colors.black;
+  Color _colorTranslucent = Colors.black;
   static const double _width = 240;
 
   @override
@@ -39,10 +39,10 @@ class _DefaultCardClosedState extends State<DefaultCardClosed> {
     final int ueberMilliseconds = widget.zeitnahme.getUeberstunden();
     if (!ueberMilliseconds.isNegative) {
       _color = Colors.tealAccent;
-      _colorAccent = Colors.tealAccent[400];
+      _colorAccent = Colors.tealAccent[400]!;
       _colorTranslucent = Colors.tealAccent.withAlpha(50);
     } else {
-      _color = Colors.blueGrey[300];
+      _color = Colors.blueGrey[300]!;
       _colorAccent = Colors.blueGrey;
       _colorTranslucent = Colors.blueGrey.withAlpha(25);
     }
@@ -133,8 +133,8 @@ class _DefaultCardClosedState extends State<DefaultCardClosed> {
 
 class _Ueberstunden extends StatelessWidget {
   const _Ueberstunden({
-    Key key,
-    @required int ueberMilliseconds,
+    Key? key,
+    required int ueberMilliseconds,
   })  : _ueberMilliseconds = ueberMilliseconds,
         super(key: key);
 
@@ -143,9 +143,9 @@ class _Ueberstunden extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextStyle greenStyle =
-        Theme.of(context).textTheme.headline4.copyWith(color: Colors.white);
+        Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white);
     final TextStyle blueGreyStyle =
-        Theme.of(context).textTheme.headline4.copyWith(color: Colors.white);
+        Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white);
 
     //TODO: Test what happens if Zeit == Tagesstunden
     if ((_ueberMilliseconds / 60000).truncate() == 0) {

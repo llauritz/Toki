@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   StreamController<Color> containerColorStream = StreamController<Color>();
   StreamController<double> blurValueStream = StreamController<double>();
   double _cardPosition = 0;
-  double bottomInset;
+  double bottomInset = -1;
 
   void prechacheImages() {
     precacheImage(
@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
         MediaQuery.of(context).systemGestureInsets.bottom.toString());
 
     // is set only once
-    if (bottomInset == null) {
+    if (bottomInset == -1) {
       bottomInset = MediaQuery.of(context).viewInsets.bottom >
               MediaQuery.of(context).viewPadding.bottom
           ? MediaQuery.of(context).viewInsets.bottom
@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                   logger.v(snapshot.data);
                   return ImageFiltered(
                     imageFilter: ImageFilter.blur(
-                        sigmaX: snapshot.data, sigmaY: snapshot.data),
+                        sigmaX: snapshot.data!, sigmaY: snapshot.data!),
                     child: const HomeContent(),
                   );
                 },
@@ -266,7 +266,7 @@ class _HomePageState extends State<HomePage> {
 
 class HomeContent extends StatelessWidget {
   const HomeContent({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

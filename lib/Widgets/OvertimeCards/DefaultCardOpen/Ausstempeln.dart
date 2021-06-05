@@ -12,12 +12,12 @@ final getIt = GetIt.instance;
 
 class Ausstempeln extends StatefulWidget {
   const Ausstempeln({
-    Key key,
-    @required this.uhrzeitenIndex,
-    @required this.uhrzeit,
-    @required Zeitnahme zeitnahme,
-    @required this.zeitnahmeIndex,
-    @required this.closedCardIndex,
+    Key? key,
+    required this.uhrzeitenIndex,
+    required this.uhrzeit,
+    required Zeitnahme zeitnahme,
+    required this.zeitnahmeIndex,
+    required this.closedCardIndex,
   })  : _zeitnahme = zeitnahme,
         super(key: key);
 
@@ -106,7 +106,7 @@ class _AusstempelnState extends State<Ausstempeln> {
             ],
           ),
           if (widget._zeitnahme.autoStoppedTime != null)
-          if (widget._zeitnahme.autoStoppedTime && widget.uhrzeitenIndex + 1 == widget._zeitnahme.endTimes.length)
+          if (widget._zeitnahme.autoStoppedTime! && widget.uhrzeitenIndex + 1 == widget._zeitnahme.endTimes.length)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(

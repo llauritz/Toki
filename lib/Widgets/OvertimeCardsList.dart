@@ -26,9 +26,9 @@ final getIt = GetIt.instance;
 
 class ZeitenPanel extends StatefulWidget {
   const ZeitenPanel({
-    Key key,
-    @required this.updateTimer,
-    @required this.panelController,
+    Key? key,
+    required this.updateTimer,
+    required this.panelController,
   }) : super(key: key);
 
   final PanelController panelController;
@@ -65,7 +65,8 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
                     data: Theme.of(context)
                         .copyWith(accentColor: Colors.tealAccent[100]),
                     child: ValueListenableBuilder(
-                      valueListenable: getIt<HiveDB>().zeitenBox.listenable(),
+                      valueListenable:
+                          Hive.box<Zeitnahme>("zeitenBox").listenable(),
                       builder: (BuildContext context, Box box, _) {
                         return StreamBuilder(
                             stream: getIt<HiveDB>().listChangesStream.stream,
@@ -105,9 +106,9 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
 
 class ListContent extends StatelessWidget {
   const ListContent({
-    Key key,
-    this.box,
-    @required this.widget,
+    Key? key,
+    required this.box,
+    required this.widget,
   }) : super(key: key);
 
   final ZeitenPanel widget;
@@ -116,7 +117,7 @@ class ListContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedList(
-        initialItemCount: getIt<HiveDB>().zeitenBox.length,
+        initialItemCount: Hive.box<Zeitnahme>("zeitenBox").length,
         key: getIt<HiveDB>().animatedListkey,
         padding: EdgeInsets.only(top: 20.0),
         itemBuilder: (context, index, animation) {
@@ -127,7 +128,7 @@ class ListContent extends StatelessWidget {
           Zeitnahme _zeitnahme = box.getAt(i);
           String _state = _zeitnahme.state;
 
-          if (getIt<HiveDB>().zeitenBox.length == 0) return Container();
+          if (Hive.box<Zeitnahme>("zeitenBox").length == 0) return Container();
 
           return Dismissible(
             key: ValueKey<int>(i),
@@ -194,7 +195,7 @@ class ListContent extends StatelessWidget {
                                   i: i,
                                   index: index,
                                   zeitnahme: _zeitnahme,
-                                  isRunning: snapshot.data);
+                                  isRunning: snapshot.data!);
                             }),
                       );
                     } else {
@@ -264,7 +265,7 @@ class ListContent extends StatelessWidget {
                       zeitnahme: _zeitnahme,
                     );
                   },
-                  onClosed: (o) async {
+                  onClosed: (dynamic o) async {
                     getIt<HiveDB>().updateGesamtUeberstunden();
                     await getIt<HiveDB>().calculateTodayElapsedTime();
                     widget.updateTimer();

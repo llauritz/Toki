@@ -7,7 +7,7 @@ GetIt getIt = GetIt.instance;
 
 class MantraText extends StatelessWidget {
   const MantraText({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
 

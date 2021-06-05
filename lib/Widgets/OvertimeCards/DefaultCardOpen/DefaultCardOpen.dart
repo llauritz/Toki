@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
 import '../../../Services/HiveDB.dart';
@@ -15,11 +16,11 @@ final getIt = GetIt.instance;
 
 class DefaultCardOpen extends StatefulWidget {
   const DefaultCardOpen({
-    @required this.i,
-    @required this.index,
-    @required this.zeitnahme,
-    @required this.callback,
-    Key key,
+    required this.i,
+    required this.index,
+    required this.zeitnahme,
+    required this.callback,
+    Key? key,
   }) : super(key: key);
 
   // index in Liste der Zeitnahmen // zeitenBox.length-1 ist gannz oben
@@ -35,9 +36,9 @@ class DefaultCardOpen extends StatefulWidget {
 }
 
 class _DefaultCardOpenState extends State<DefaultCardOpen> {
-  Color _color;
-  Color _colorAccent;
-  Color _colorTranslucent;
+  Color _color = Colors.black;
+  Color _colorAccent = Colors.black;
+  Color _colorTranslucent = Colors.black;
   DateFormat uhrzeit = DateFormat("H:mm");
   DateFormat wochentag = DateFormat("EE", "de_DE");
   DateFormat datum = DateFormat("dd.MM", "de_DE");
@@ -142,9 +143,7 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                       FlatButton(
                                           onPressed: () {
                                             if (widget.i ==
-                                                getIt<HiveDB>()
-                                                        .zeitenBox
-                                                        .length -
+                                                Hive.box<Zeitnahme>("zeitenBox").length -
                                                     1)
                                               getIt<Data>().timerText.stop();
                                             if (widget.zeitnahme.tag ==
@@ -186,8 +185,7 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                       FlatButton(
                                           onPressed: () {
                                             if (widget.i ==
-                                                getIt<HiveDB>()
-                                                        .zeitenBox
+                                                Hive.box<Zeitnahme>("zeitenBox")
                                                         .length -
                                                     1)
                                               getIt<Data>().timerText.stop();

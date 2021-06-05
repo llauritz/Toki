@@ -9,9 +9,9 @@ final getIt = GetIt.instance;
 
 class NamePicker extends StatefulWidget {
   const NamePicker({
-    @required
+    required
     this.isDay,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final bool isDay;
@@ -23,7 +23,7 @@ class NamePicker extends StatefulWidget {
 class _NamePickerState extends State<NamePicker> {
 
   final FocusNode _focusNode = FocusNode();
-  Function _button;
+  Function? _button;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +77,7 @@ class _NamePickerState extends State<NamePicker> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             isDense: true,
-                            hintStyle: Theme.of(context).textTheme.headline2.copyWith(color: neon.withAlpha(250), fontSize: 24.0),
+                            hintStyle: Theme.of(context).textTheme.headline2!.copyWith(color: neon.withAlpha(250), fontSize: 24.0),
                             contentPadding: const EdgeInsets.all(0.0),
                             enabledBorder: UnderlineInputBorder(borderRadius: BorderRadius.circular(1),borderSide: BorderSide(color: neon.withAlpha(50), width: 4)),
                             focusedBorder: const UnderlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(2)),borderSide: BorderSide(color: neon, width: 5)),
@@ -125,7 +125,7 @@ class _NamePickerState extends State<NamePicker> {
                     child: IconButton(
                       icon: const Icon(Icons.check),
                       disabledColor: neon.withAlpha(80),
-                      onPressed: _button,
+                      onPressed: _button as void Function()?,
                       color: neon,
                       splashRadius: 30,
                       highlightColor: neon.withAlpha(80),

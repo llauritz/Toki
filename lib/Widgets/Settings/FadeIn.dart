@@ -7,7 +7,7 @@ class FadeIn extends StatelessWidget {
   final int delay;
   final Widget fadeChild;
 
-  FadeIn({this.delay, this.fadeChild});
+  FadeIn({required this.delay, required this.fadeChild});
 
   @override
   Widget build(BuildContext context) {

@@ -8,7 +8,6 @@ import 'Data.dart';
 import 'Theme.dart';
 
 class HiveDB {
-  Box zeitenBox;
   final GlobalKey<AnimatedListState> animatedListkey =
       GlobalKey<AnimatedListState>();
   final StreamController<int> listChangesStream =
@@ -23,7 +22,7 @@ class HiveDB {
   int ueberMillisekundenGesamt = 0;
 
   Future<void> initHiveDB() async {
-    zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
+    Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
     if (zeitenBox.length > 0) {
       urlaubsTageCheck();
       checkForForgottenEnds();
@@ -34,7 +33,7 @@ class HiveDB {
 
   void startTime(int startTime) async {
     print("HiveDB - startTime - start");
-    zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
+    Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
     // Heutiger Tag in Variable
     print("HiveDB - startTime - length is" + zeitenBox.length.toString());
     if (zeitenBox.length >= 1) {
@@ -78,7 +77,7 @@ class HiveDB {
             startTimes: [startTime],
             endTimes: []));
         print("HiveDB - neue Zeitnahme + startZeit hinzugefügt");
-        animatedListkey.currentState
+        animatedListkey.currentState!
             .insertItem(0, duration: Duration(milliseconds: 600));
       }
     } else {
@@ -89,7 +88,7 @@ class HiveDB {
           startTimes: [startTime],
           endTimes: []));
       print("HiveDB - neue Zeitnahme + startZeit hinzugefügt");
-      animatedListkey.currentState
+      animatedListkey.currentState!
           .insertItem(0, duration: Duration(milliseconds: 600));
     }
 
@@ -99,24 +98,24 @@ class HiveDB {
   }
 
   void deleteAT(int i, int listindex) async {
-    zeitenBox = await Hive.openBox<Zeitnahme>('zeitenBox');
-    animatedListkey.currentState
-        .removeItem(listindex, (context, animation) => null);
+    Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
+    animatedListkey.currentState!
+        .removeItem(listindex, (context, animation) => Container());
     await zeitenBox.deleteAt(i);
     print("HiveDB - deleteAt - fertig");
   }
 
   void putAT(int i, Zeitnahme z, int listindex) async {
-    zeitenBox = await Hive.openBox<Zeitnahme>('zeitenBox');
+    Box zeitenBox = Hive.box<Zeitnahme >("zeitenBox");
     await zeitenBox.put(i, z);
-    animatedListkey.currentState
+    animatedListkey.currentState!
         .insertItem(listindex, duration: Duration(milliseconds: 600));
     logger.i("Zeitnahme hinzugefügt, i:" + i.toString(),
         "listindex: " + listindex.toString());
   }
 
   void endTime(int endTime) async {
-    zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
+    Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
 
     //Adds the End time regardless of the Day -> You can end your workday at 3pm
     Zeitnahme latest = zeitenBox.getAt(zeitenBox.length - 1);
@@ -147,7 +146,7 @@ class HiveDB {
   }
 
   Future<void> calculateTodayElapsedTime() async {
-    zeitenBox = await Hive.openBox<Zeitnahme>('zeitenBox');
+    Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
     if (zeitenBox.length > 0) {
       Zeitnahme neusete = zeitenBox.getAt(zeitenBox.length - 1) as Zeitnahme;
       if (neusete.day.isSameDate(DateTime.now())) {
@@ -162,9 +161,10 @@ class HiveDB {
   }
 
   int getTodayElapsedTime() {
+    Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
     if (zeitenBox.length > 0) {
       Zeitnahme neusete = zeitenBox.getAt(zeitenBox.length - 1) as Zeitnahme;
-      if (neusete.day.isSameDate(DateTime.now())) {
+      if (neusete.day.isSameDate(DateTime.now()) || getIt<Data>().isRunning) {
         return neusete.getElapsedTime();
       } else {
         return 0;
@@ -175,7 +175,7 @@ class HiveDB {
   }
 
   Future<void> updateGesamtUeberstunden() async {
-    zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
+    Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
 
     ueberMillisekundenGesamt = 0;
 
@@ -206,7 +206,7 @@ class HiveDB {
 
   Future<void> urlaubsTageCheck() async {
     print("HiveDB - urlaubscheck start");
-    zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
+    Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
 
     if (zeitenBox.length > 0) {
       final DateTime latestDate =
@@ -227,7 +227,7 @@ class HiveDB {
                 startTimes: [],
                 endTimes: []));
             if (animatedListkey.currentState != null) {
-              animatedListkey.currentState
+              animatedListkey.currentState!
                   .insertItem(0, duration: const Duration(milliseconds: 1000));
             }
             print("HiveDB - urlaubscheck Tag ergänzt");
@@ -245,8 +245,9 @@ class HiveDB {
   //checks if the user forgot to end the time counting and does that for them to avoid bugs
   void checkForForgottenEnds() async {
     print("HiveDB - checkForForgottenEnds - starting");
-    zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
-    for (int i = 0; i < zeitenBox.length; i++) {
+    Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
+    // [-1] every day except the latest so that you can work until early the next day.
+    for (int i = 0; i < zeitenBox.length - 1; i++) {
       Zeitnahme z = zeitenBox.getAt(i);
       if (z.startTimes.isNotEmpty) {
         // Only if it isnt from the current day
@@ -267,6 +268,9 @@ class HiveDB {
                   )
                 : lastEndTime = DateTime.now();
             z.endTimes.add(lastEndTime.millisecondsSinceEpoch);
+
+            //TODO: TESTEN VOR DEM NÄCHSTEN RELEASE. WAS PASSIERT, WENN VON ALTER VERSION KOMMEN
+
             if (z.autoStoppedTime != null) z.autoStoppedTime = true;
             zeitenBox.putAt(i, z);
             getIt<Data>().timerText.stop();
@@ -278,7 +282,7 @@ class HiveDB {
   }
 
   Future<void> changeState(String state, int index) async {
-    zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
+    Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
     print("HiveDB - changeState - 1 $index");
 
     final Zeitnahme _updated = zeitenBox.getAt(index) as Zeitnahme;
@@ -292,14 +296,15 @@ class HiveDB {
   }
 
   void dispose() {
+    Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
     zeitenBox.close();
     listChangesStream.close();
     ueberMillisekundenGesamtStream.close();
   }
 
-  Future<void> updateStartEndZeit(
-      int zeitnahmeIndex, int startEndIndex, bool start, int value) async {
-    zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
+  Future<void> updateStartEndZeit(int zeitnahmeIndex, int startEndIndex,
+      bool start, int value) async {
+    Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
 
     final Zeitnahme edit = zeitenBox.getAt(zeitnahmeIndex) as Zeitnahme;
 
@@ -313,7 +318,7 @@ class HiveDB {
   }
 
   Future<void> updateTag(String tag, int index) async {
-    zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
+    Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
     print("HiveDB - changeTag - 1 $index");
 
     Zeitnahme _updated = zeitenBox.getAt(index) as Zeitnahme;
@@ -326,7 +331,7 @@ class HiveDB {
   }
 
   Future<void> updateEditMilli(int editMilli, int index) async {
-    zeitenBox = await Hive.openBox<Zeitnahme>("zeitenBox");
+    Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
     print("HiveDB - changeEditMilli - 1 $index");
 
     Zeitnahme _updated = zeitenBox.getAt(index) as Zeitnahme;

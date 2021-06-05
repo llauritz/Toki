@@ -13,10 +13,10 @@ final getIt = GetIt.instance;
 class EditedCardClosedStl extends StatelessWidget {
 
   const EditedCardClosedStl({
-    Key key,
-    this.i,
-    this.index,
-    this.zeitnahme}
+    Key? key,
+    required this.i,
+    required this.index,
+    required this.zeitnahme}
     ) : super(key: key);
 
   final int i;

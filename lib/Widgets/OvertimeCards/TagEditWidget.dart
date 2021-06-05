@@ -8,10 +8,10 @@ import '../../Services/Theme.dart';
 class TagEditWidget extends StatefulWidget {
 
   const TagEditWidget({
-    this.i,
-    this.color,
-    this.colorAccent,
-    this.zeitnahme
+    required this.i,
+    required this.color,
+    required this.colorAccent,
+    required this.zeitnahme
   });
 
   final Color colorAccent;
@@ -25,12 +25,11 @@ class TagEditWidget extends StatefulWidget {
 
 class _TagEditWidgetState extends State<TagEditWidget> {
 
-  TextEditingController _textEditingController;
-  FocusNode _textFocus;
+  TextEditingController _textEditingController = TextEditingController();
+  FocusNode _textFocus = FocusNode();
 
   @override
   void initState() {
-    _textFocus = FocusNode();
     _textEditingController = TextEditingController(text: widget.zeitnahme.tag);
     // TODO: implement initState
     super.initState();

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class DottedLine extends StatelessWidget {
   const DottedLine({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

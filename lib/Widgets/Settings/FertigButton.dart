@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 class FertigButton extends StatelessWidget {
   const FertigButton({
-    Key key,
-    @required
+    Key? key,
+    required
     this.isDay,
   }) : super(key: key);
 

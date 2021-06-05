@@ -10,7 +10,7 @@ import '../Services/Theme.dart';
 
 class OvertimeChangeWidget extends StatefulWidget {
   const OvertimeChangeWidget({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final Duration duration = const Duration(milliseconds: 700);
@@ -28,19 +28,19 @@ class OvertimeChangeWidget extends StatefulWidget {
 
 class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with TickerProviderStateMixin{
 
-  AnimationController controller;
-  Animation<double> animationFade;
-  final Color offsetButtonColor = Colors.blueGrey[300];
+  late AnimationController controller;
+  late Animation<double> animationFade;
+  final Color offsetButtonColor = Colors.blueGrey[300]!;
 
   GlobalKey hoursTextEdit = GlobalKey();
-  TextEditingController hoursTextController;
-  int tmpHour;
+  TextEditingController hoursTextController = TextEditingController();
+  int/*!*/ tmpHour = 0;
   bool updateHr = true;
   int hourSnapshotSave = 0;
 
   GlobalKey minutesTextEdit = GlobalKey();
-  TextEditingController minutesTextController;
-  int tmpMinutes;
+  TextEditingController minutesTextController = TextEditingController();
+  int tmpMinutes = 0;
   bool updateMin = true;
   int minutesSnapshotSave = 0;
 
@@ -170,19 +170,19 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                           builder: (context, snapshot) {
 
                             if(hourSnapshotSave != snapshot.data){
-                              hourSnapshotSave = snapshot.data;
+                              hourSnapshotSave = snapshot.data!;
                               updateHr = true;
                             }
 
                             if(updateHr){
-                              tmpHour = snapshot.data;
+                              tmpHour = snapshot.data!;
                             }
 
                             Color _color = tmpHour.isNegative
                                 ? gray
                                 : neon;
                             int stunden = (tmpHour / Duration.millisecondsPerHour).truncate();
-                            int realStunden = (snapshot.data / Duration.millisecondsPerHour).truncate();
+                            int realStunden = (snapshot.data! / Duration.millisecondsPerHour).truncate();
 
                             String addMinus = tmpHour.isNegative && stunden==0
                               ? "-" : "";
@@ -194,9 +194,9 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                               hoursTextController =
                                   TextEditingController.fromValue(
                                 TextEditingValue(
-                                  text: initialString ?? "",
+                                  text: initialString,
                                   selection: TextSelection.collapsed(
-                                      offset: initialString?.length ?? 0),
+                                      offset: initialString.length),
                                 ),
                               );
                               updateHr = false;
@@ -305,7 +305,7 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                               stream: getIt<HiveDB>().ueberMillisekundenGesamtStream.stream,
                               builder: (context, snapshot) {
 
-                                Color _color = snapshot.data.isNegative
+                                Color _color = snapshot.data!.isNegative
                                     ? gray
                                     : neon;
 
@@ -367,21 +367,21 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                           builder: (context, snapshot) {
 
                             if(minutesSnapshotSave != snapshot.data){
-                              minutesSnapshotSave = snapshot.data;
+                              minutesSnapshotSave = snapshot.data!;
                               updateMin = true;
                             }
 
                             if(updateMin){
-                              tmpMinutes = snapshot.data;
+                              tmpMinutes = snapshot.data!;
                             }
 
                             Color _color = tmpMinutes.isNegative
                                 ? gray
                                 : neon;
                             int minutes = ((tmpMinutes.abs() / Duration.millisecondsPerMinute)%60).truncate();
-                            int realMinutes = ((snapshot.data / Duration.millisecondsPerMinute)%60).truncate();
+                            int realMinutes = ((snapshot.data! / Duration.millisecondsPerMinute)%60).truncate();
 
-                            int negativityFactor = snapshot.data.isNegative
+                            int negativityFactor = snapshot.data!.isNegative
                               ? -1
                               :  1  ;
 
@@ -392,16 +392,16 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                               minutesTextController =
                                   TextEditingController.fromValue(
                                     TextEditingValue(
-                                      text: initialString ?? "",
+                                      text: initialString,
                                       selection: TextSelection.collapsed(
-                                          offset: initialString?.length ?? 0),
+                                          offset: initialString.length),
                                     ),
                                   );
                               updateMin = false;
                             }
 
                             Widget _widget = KeyedSubtree(
-                                key: ValueKey<int>(Duration(milliseconds: snapshot.data).inMinutes),
+                                key: ValueKey<int>(Duration(milliseconds: snapshot.data!).inMinutes),
                                 child: AbsorbPointer(
                                   absorbing: !isOpen,
                                   child: AnimatedDefaultTextStyle(
@@ -435,10 +435,10 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                                         });
                                       },
                                       onSubmitted: (v){
-                                        String value = v??"0";
+                                        String value = v;
                                         print("realMinutes $realMinutes");
                                         int newOffset;
-                                        snapshot.data.isNegative
+                                        snapshot.data!.isNegative
                                           ? newOffset = 59-int.parse(value)-realMinutes.abs()
                                           : newOffset = int.parse(value)-realMinutes.abs();
                                         getIt<Data>().addOffset(newOffset*Duration.millisecondsPerMinute);
@@ -606,7 +606,7 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                                 stream: getIt<HiveDB>().ueberMillisekundenGesamtStream.stream,
                                 builder: (context, snapshot) {
 
-                                  String text = snapshot.data.isNegative
+                                  String text = snapshot.data!.isNegative
                                       ? "Stunden"
                                       : "Überstunden";
 

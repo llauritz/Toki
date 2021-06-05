@@ -7,8 +7,8 @@ import '../Services/Data.dart';
 final getIt = GetIt.instance;
 
 class AnimatedStempelButton extends StatefulWidget {
-
-  AnimatedStempelButton({@required this.callbackTurnOff, @required this.callbackTurnOn});
+  AnimatedStempelButton(
+      {required this.callbackTurnOff, required this.callbackTurnOn});
   Function callbackTurnOff;
   Function callbackTurnOn;
 
@@ -17,13 +17,10 @@ class AnimatedStempelButton extends StatefulWidget {
 }
 
 class _AnimatedStempelButtonState extends State<AnimatedStempelButton> {
-
-  Widget button;
-
-  Widget updateButton(bool running){
-    if(running == false){
+  Widget updateButton(bool running) {
+    if (running == false) {
       return StempelButtonSTART(callback: widget.callbackTurnOn);
-    }else{
+    } else {
       return StempelButtonSTOP(callback: widget.callbackTurnOff);
     }
   }
@@ -33,7 +30,7 @@ class _AnimatedStempelButtonState extends State<AnimatedStempelButton> {
     return StreamBuilder(
       stream: getIt<Data>().isRunningStream.stream,
       initialData: getIt<Data>().isRunning,
-      builder: (context, snapshot) {
+      builder: (context, AsyncSnapshot<bool> snapshot) {
         print("AnimatedStempelbutton - build" + snapshot.data.toString());
         //TODO add Error exceptions
         return AnimatedSwitcher(
@@ -42,7 +39,7 @@ class _AnimatedStempelButtonState extends State<AnimatedStempelButton> {
           },
           switchInCurve: Curves.easeOutQuint,
           switchOutCurve: Curves.easeOutQuart,
-          child: updateButton(snapshot.data),
+          child: updateButton(snapshot.data as bool),
           duration: const Duration(milliseconds: 800),
         );
       },
@@ -50,12 +47,8 @@ class _AnimatedStempelButtonState extends State<AnimatedStempelButton> {
   }
 }
 
-
-
-
 class StempelButtonSTOP extends StatelessWidget {
-
-  StempelButtonSTOP({@required this.callback});
+  StempelButtonSTOP({required this.callback});
 
   final Function callback;
 
@@ -64,17 +57,17 @@ class StempelButtonSTOP extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: RaisedButton(
-        splashColor: Colors.red[900].withAlpha(150),
-        highlightColor: Colors.red[900].withAlpha(80),
+        splashColor: Colors.red[900]!.withAlpha(150),
+        highlightColor: Colors.red[900]!.withAlpha(80),
         elevation: 10.0,
-        onPressed: callback,
+        onPressed: callback as void Function()?,
         shape: const CircleBorder(),
         color: Colors.redAccent[100],
         child: AvatarGlow(
           showTwoGlows: false,
           repeatPauseDuration: const Duration(milliseconds: 500),
           duration: const Duration(milliseconds: 1000),
-          glowColor: Colors.red[900],
+          glowColor: Colors.red[900]!,
           curve: Curves.ease,
           endRadius: 65.0,
           child: Center(
@@ -89,12 +82,8 @@ class StempelButtonSTOP extends StatelessWidget {
   }
 }
 
-
-
-
 class StempelButtonSTART extends StatelessWidget {
-
-  StempelButtonSTART({@required this.callback});
+  StempelButtonSTART({required this.callback});
 
   final Function callback;
 
@@ -104,7 +93,7 @@ class StempelButtonSTART extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 20),
       child: RaisedButton(
         elevation: 10.0,
-        onPressed: callback,
+        onPressed: callback as void Function()?,
         shape: const CircleBorder(),
         color: Colors.greenAccent,
         highlightColor: Colors.green.withAlpha(80),
@@ -115,7 +104,11 @@ class StempelButtonSTART extends StatelessWidget {
           child: Center(
             child: Text(
               "START",
-              style: TextStyle(fontSize: 20.0, color: Colors.white, letterSpacing: 0.5, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.white,
+                  letterSpacing: 0.5,
+                  fontWeight: FontWeight.bold),
             ),
           ),
         ),

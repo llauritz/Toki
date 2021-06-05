@@ -12,10 +12,10 @@ final getIt = GetIt.instance;
 class FreeCardOpen extends StatefulWidget {
 
   const FreeCardOpen ({
-    @required this.i,
-    @required this.index,
-    @required this.zeitnahme,
-    @required this.callback,
+    required this.i,
+    required this.index,
+    required this.zeitnahme,
+    required this.callback,
   });
 
   // index in Liste der Zeitnahmen // zeitenBox.length-1 ist gannz oben

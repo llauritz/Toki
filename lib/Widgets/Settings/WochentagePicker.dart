@@ -8,8 +8,8 @@ final getIt = GetIt.instance;
 
 class WochentagePicker extends StatefulWidget {
   WochentagePicker({
-    Key key,
-    @required
+    Key? key,
+    required
     this.isDay,
   }) : super(key: key);
 
@@ -173,7 +173,7 @@ class _WochentagePickerState extends State<WochentagePicker> {
                               child: ToggleButtons(
                                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                 borderColor: Colors.white.withAlpha(100),
-                                color: snapshot.data.withAlpha(30),
+                                color: snapshot.data!.withAlpha(30),
                                 selectedColor: snapshot.data,
                                 fillColor: Colors.transparent,
                                 selectedBorderColor: Colors.white,

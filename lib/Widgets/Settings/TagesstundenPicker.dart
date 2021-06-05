@@ -8,8 +8,8 @@ final getIt = GetIt.instance;
 
 class TagesstundenPicker extends StatefulWidget {
   const TagesstundenPicker({
-    @required this.isDay,
-    Key key,
+    required this.isDay,
+    Key? key,
   }) : super(key: key);
 
   final bool isDay;
@@ -19,7 +19,7 @@ class TagesstundenPicker extends StatefulWidget {
 }
 
 class _TagesstundenPickerState extends State<TagesstundenPicker> {
-  double _tagesstunden;
+  late double _tagesstunden;
 
   @override
   void initState() {
@@ -130,13 +130,13 @@ class CustomSliderThumbRect extends SliderComponentShape {
   final Color textcolor;
 
   const CustomSliderThumbRect({
-    this.thumbRadius,
+    required this.thumbRadius,
     this.thumbHeight,
-    this.min,
-    this.max,
+    required this.min,
+    required this.max,
     this.thumbWidth,
-    this.color,
-    this.textcolor,
+    required this.color,
+    required this.textcolor,
   });
 
   @override
@@ -148,16 +148,16 @@ class CustomSliderThumbRect extends SliderComponentShape {
   void paint(
     PaintingContext context,
     Offset center, {
-    Animation<double> activationAnimation,
-    Animation<double> enableAnimation,
-    bool isDiscrete,
-    TextPainter labelPainter,
-    RenderBox parentBox,
-    SliderThemeData sliderTheme,
-    TextDirection textDirection,
-    double value,
-    double textScaleFactor,
-    Size sizeWithOverflow,
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
   }) {
     final Canvas canvas = context.canvas;
 

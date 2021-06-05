@@ -9,7 +9,7 @@ import 'HiveDB.dart';
 import 'Theme.dart';
 
 class TimerText extends StatefulWidget {
-  TimerText({Key key});
+  TimerText({Key? key});
   final _TimerTextState ts = _TimerTextState();
 
   final Timer t = Timer.periodic(const Duration(hours: 1), (Timer timer) {});
@@ -19,7 +19,7 @@ class TimerText extends StatefulWidget {
   }
 
   // ignore: missing_return
-  Future<void> stop() {
+  Future<void> stop() async {
     ts.timerStop();
   }
 
@@ -34,19 +34,17 @@ class TimerText extends StatefulWidget {
 class _TimerTextState extends State<TimerText> with WidgetsBindingObserver {
   int _startTime = 0;
   int _elapsedTime = 0;
-  SharedPreferences prefs;
+  //SharedPreferences prefs;
   Timer _timer = Timer.periodic(const Duration(hours: 1), (Timer timer) {});
-  StreamController<int> _timeController;
+  StreamController<int> _timeController = StreamController<int>();
 
   void initSharedPreferences() async {
-    _timeController = StreamController<int>();
-    _startTime = getIt<Data>().prefs.getInt("startTime");
+    SharedPreferences prefs =
+        await getIt<Data>().getSharedPreferencesInstance();
+    _startTime = prefs.getInt("startTime")!;
     logger.d("timer - previous startTime is " +
-        getIt<Data>().prefs.getInt("startTime").toString());
-    if (_startTime == null) {
-      _startTime = 0;
-      getIt<Data>().prefs.setInt("startTime", 0);
-    } else if (_startTime != 0) {
+        prefs.getInt("startTime").toString());
+    if (_startTime != 0) {
       logger.d("timer - restored Time" + _startTime.toString());
       _timer = Timer.periodic(const Duration(milliseconds: 100), updateTime);
       updateTime(_timer);
@@ -66,36 +64,41 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver {
     _timer.cancel();
     initSharedPreferences();
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (_, constraints){
+    return LayoutBuilder(builder: (_, constraints) {
       return StreamBuilder(
-      stream: _timeController.stream,
-      initialData: 200,
-      builder: (context, snapshot) {
-        //TODO add error exceptions
-        //print("timer - building stream");
-        return Center(child: TimerTextWidget(elapsedTime: snapshot.data, constrainedWidth: constraints.maxWidth));
-      },
-    );
+        stream: _timeController.stream,
+        initialData: 200,
+        builder: (context, snapshot) {
+          //TODO add error exceptions
+          //print("timer - building stream");
+          return Center(
+              child: TimerTextWidget(
+                  elapsedTime: snapshot.data as int,
+                  constrainedWidth: constraints.maxWidth));
+        },
+      );
     });
   }
 
-  void timerStart() {
+  void timerStart() async {
     logger.i("timer - start");
     logger.d("timer - timer " + _timer.isActive.toString());
 
     _timer = Timer.periodic(const Duration(milliseconds: 200), updateTime);
     _startTime = DateTime.now().millisecondsSinceEpoch;
-    getIt<Data>().prefs.setInt("startTime", _startTime);
+    getIt<Data>().isRunningStream.sink.add(true);
+    SharedPreferences prefs =
+        await getIt<Data>().getSharedPreferencesInstance();
+    prefs.setInt("startTime", _startTime);
     logger.d("timer - started, startTime = " + _startTime.toString());
 
     logger.d("timer - timer " + _timer.isActive.toString());
 
-    getIt<Data>().isRunningStream.sink.add(true);
     getIt<Data>().isRunning = true;
     getIt<HiveDB>().isRunning = true;
 
@@ -106,11 +109,14 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver {
   Future<void> timerStop() async {
     logger.i("timer - stop");
     _timer.cancel();
+    getIt<Data>().isRunningStream.sink.add(false);
+    SharedPreferences prefs =
+        await getIt<Data>().getSharedPreferencesInstance();
     //print("timer - afterTimerCancel" + _timer.isActive.toString());
-    getIt<Data>().prefs.setInt("startTime", 0);
+    prefs.setInt("startTime", 0);
     //print("timer - newStartTime" + getIt<Data>().prefs.getInt("startTime").toString());
     _startTime = 0;
-    getIt<Data>().isRunningStream.sink.add(false);
+
     getIt<Data>().isRunning = false;
     getIt<HiveDB>().isRunning = false;
     getIt<HiveDB>().endTime(DateTime.now().millisecondsSinceEpoch);
@@ -162,7 +168,7 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
     _timeController.close();
     getIt<Data>().isRunningStream.close();

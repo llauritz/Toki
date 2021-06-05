@@ -13,11 +13,11 @@ final getIt = GetIt.instance;
 
 class FirstCardClosed extends StatefulWidget {
   const FirstCardClosed({
-    @required this.i,
-    @required this.index,
-    @required this.zeitnahme,
-    @required this.isRunning,
-    Key key,
+    required this.i,
+    required this.index,
+    required this.zeitnahme,
+    required this.isRunning,
+    Key? key,
   }) : super(key: key);
 
   final int i;
@@ -34,9 +34,9 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
   DateFormat Uhrzeit = DateFormat("H:mm");
   DateFormat wochentag = DateFormat("EE", "de_DE");
   DateFormat datum = DateFormat("dd.MM", "de_DE");
-  Color _color;
-  Color _colorAccent;
-  Color _colorTranslucent;
+  Color _color = Colors.black;
+  Color _colorAccent = Colors.black;
+  Color _colorTranslucent = Colors.black;
   double _width = 240;
   int keyInt = 0;
 
@@ -48,11 +48,11 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
     final int ueberMilliseconds = widget.zeitnahme.getUeberstunden();
     if (!ueberMilliseconds.isNegative && !widget.isRunning) {
       _color = Colors.tealAccent;
-      _colorAccent = Colors.tealAccent[400];
+      _colorAccent = Colors.tealAccent[400]!;
       _colorTranslucent = Colors.tealAccent.withAlpha(50);
       keyInt = 0;
     } else {
-      _color = Colors.blueGrey[300];
+      _color = Colors.blueGrey[300]!;
       _colorAccent = Colors.blueGrey;
       _colorTranslucent = Colors.blueGrey.withAlpha(25);
       keyInt = 1;
@@ -153,10 +153,10 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
 
 class Ueberstunden extends StatelessWidget {
   const Ueberstunden({
-    Key key,
-    @required int index,
-    @required int ueberMilliseconds,
-    @required bool isRunning,
+    Key? key,
+    required int index,
+    required int ueberMilliseconds,
+    required bool isRunning,
   })  : _ueberMilliseconds = ueberMilliseconds,
         _index = index,
         _isRunning = isRunning,
@@ -169,9 +169,9 @@ class Ueberstunden extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextStyle greenStyle =
-        Theme.of(context).textTheme.headline4.copyWith(color: Colors.white);
+        Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white);
     TextStyle blueGreyStyle =
-        Theme.of(context).textTheme.headline4.copyWith(color: Colors.white);
+        Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white);
 
     Widget _widget;
 
@@ -300,10 +300,10 @@ class Ueberstunden extends StatelessWidget {
 
 class EndTimeWidget extends StatefulWidget {
   const EndTimeWidget(
-      {Key key,
-      @required this.Uhrzeit,
-      @required Zeitnahme zeitnahme,
-      @required int index})
+      {Key? key,
+      required this.Uhrzeit,
+      required Zeitnahme zeitnahme,
+      required int index})
       : _zeitnahme = zeitnahme,
         _index = index,
         super(key: key);

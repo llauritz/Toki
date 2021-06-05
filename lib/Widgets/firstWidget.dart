@@ -8,7 +8,7 @@ import 'OvertimeChangeWidget.dart';
 final getIt = GetIt.instance;
 
 class FirstWidget extends StatefulWidget {
-  const FirstWidget({@required this.panelController});
+  const FirstWidget({required this.panelController});
 
   final PanelController panelController;
 

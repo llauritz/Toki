@@ -11,10 +11,10 @@ final getIt = GetIt.instance;
 
 class FreeCardClosed extends StatefulWidget {
   const FreeCardClosed({
-    @required this.i,
-    @required this.index,
-    @required this.zeitnahme,
-    Key key,
+    required this.i,
+    required this.index,
+    required this.zeitnahme,
+    Key? key,
   }) : super(key: key);
 
   final int i;
@@ -136,7 +136,7 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
                       child: Text("0:00",
                           style: Theme.of(context)
                               .textTheme
-                              .headline4
+                              .headline4!
                               .copyWith(color: Colors.white)),
                       decoration: BoxDecoration(
                         color: free,

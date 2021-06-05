@@ -7,7 +7,7 @@ part 'Zeitnahme.g.dart';
 
 @HiveType(typeId: 1)
 class Zeitnahme {
-  Zeitnahme({this.day, this.state, this.endTimes, this.startTimes});
+  Zeitnahme({required this.day, required this.state, required this.endTimes, required this.startTimes});
 
   @HiveField(0)
   DateTime day;
@@ -28,7 +28,7 @@ class Zeitnahme {
   int editMilli = 0;
 
   @HiveField(6)
-  bool autoStoppedTime = false;
+  bool? autoStoppedTime = false;
 
   int getElapsedTime() {
     int startLength = startTimes.length;

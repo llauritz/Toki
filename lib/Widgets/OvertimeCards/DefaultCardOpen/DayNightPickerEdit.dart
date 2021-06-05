@@ -12,13 +12,13 @@ final getIt = GetIt.instance;
 
 class DayNightDialogEdited extends StatefulWidget {
   const DayNightDialogEdited(
-      {Key key,
-      @required this.selectedMilli,
-      @required this.previousMilli,
-      @required this.followingMilli,
-      @required this.index,
-      @required this.listindex,
-      @required this.isStartTime})
+      {Key? key,
+      required this.selectedMilli,
+      required this.previousMilli,
+      required this.followingMilli,
+      required this.index,
+      required this.listindex,
+      required this.isStartTime})
       : super(key: key);
 
   final int selectedMilli;
@@ -33,7 +33,7 @@ class DayNightDialogEdited extends StatefulWidget {
 }
 
 class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
-  _DayNightDialogEditedState({this.editedMilli});
+  _DayNightDialogEditedState({required this.editedMilli});
 
   int editedMilli;
 

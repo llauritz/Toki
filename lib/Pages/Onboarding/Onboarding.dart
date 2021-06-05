@@ -14,7 +14,6 @@ import 'Onboarding5.dart';
 GetIt getIt = GetIt.instance;
 
 class Onboarding extends StatefulWidget {
-
   const Onboarding();
 
   @override
@@ -28,9 +27,9 @@ class _OnboardingState extends State<Onboarding> {
   final Duration duration = const Duration(milliseconds: 500);
   double _buttonWidth = 300;
   double _buttonHeight = 60;
-  Widget _button;
+
   int _index = 1;
-  Widget _widget;
+
   bool _reverse = false;
 
   @override
@@ -42,12 +41,18 @@ class _OnboardingState extends State<Onboarding> {
   }
 
   void prechacheImages() {
-    precacheImage(const AssetImage("assets/background/clouds/clouds1.jpg"), context);
-    precacheImage(const AssetImage("assets/background/clouds/clouds2.jpg"), context);
-    precacheImage(const AssetImage("assets/background/clouds/clouds3.jpg"), context);
-    precacheImage(const AssetImage("assets/background/clouds/clouds4.jpg"), context);
-    precacheImage(const AssetImage("assets/background/clouds/clouds5.jpg"), context);
-    precacheImage(const AssetImage("assets/background/clouds/clouds6.jpg"), context);
+    precacheImage(
+        const AssetImage("assets/background/clouds/clouds1.jpg"), context);
+    precacheImage(
+        const AssetImage("assets/background/clouds/clouds2.jpg"), context);
+    precacheImage(
+        const AssetImage("assets/background/clouds/clouds3.jpg"), context);
+    precacheImage(
+        const AssetImage("assets/background/clouds/clouds4.jpg"), context);
+    precacheImage(
+        const AssetImage("assets/background/clouds/clouds5.jpg"), context);
+    precacheImage(
+        const AssetImage("assets/background/clouds/clouds6.jpg"), context);
   }
 
   Widget _button1 = Row(
@@ -91,13 +96,15 @@ class _OnboardingState extends State<Onboarding> {
 
   @override
   Widget build(BuildContext context) {
-    if(_reverse){
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _reverse=false;
+    if (_reverse) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        _reverse = false;
       });
     }
 
-    final double _expandedWidth = MediaQuery.of(context).size.width-200;
+    final double _expandedWidth = MediaQuery.of(context).size.width - 200;
+    Widget _button = _button1; //initial value
+    Widget _widget = Onboarding1(); //initial value
 
     switch (_index) {
       case 1:
@@ -142,7 +149,7 @@ class _OnboardingState extends State<Onboarding> {
       case 5:
         {
           _button = _button3;
-          _buttonWidth = _expandedWidth-40;
+          _buttonWidth = _expandedWidth - 40;
           _buttonHeight = _expandedHeight;
           break;
         }
@@ -154,18 +161,16 @@ class _OnboardingState extends State<Onboarding> {
         }
     }
 
-
-
     return WillPopScope(
-      onWillPop: (){
-          if(_index>1){
-            setState(() {
-              _reverse = true;
-              _index--;
-            });
-          }
-        return;
-      },
+      onWillPop: () async {
+        if (_index > 1) {
+          setState(() {
+            _reverse = true;
+            _index--;
+          });
+        }
+        return true;
+      }, //as Future<bool> Function()?,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(
@@ -174,21 +179,22 @@ class _OnboardingState extends State<Onboarding> {
             Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: const AssetImage("assets/background/clouds/clouds0.jpg"),
+                      image: const AssetImage(
+                          "assets/background/clouds/clouds0.jpg"),
                       fit: BoxFit.cover)),
             ),
             SafeArea(
               child: AnimatedPadding(
                 duration: duration,
                 curve: curve,
-                padding: EdgeInsets.only(bottom: 120+_buttonHeight),
+                padding: EdgeInsets.only(bottom: 120 + _buttonHeight),
                 child: PageTransitionSwitcher(
                   reverse: _reverse,
                   transitionBuilder: (
-                      Widget child,
-                      Animation<double> primaryAnimation,
-                      Animation<double> secondaryAnimation,
-                      ) {
+                    Widget child,
+                    Animation<double> primaryAnimation,
+                    Animation<double> secondaryAnimation,
+                  ) {
                     return SharedAxisTransition(
                       child: child,
                       animation: primaryAnimation,
@@ -197,7 +203,7 @@ class _OnboardingState extends State<Onboarding> {
                       fillColor: Colors.transparent,
                     );
                   },
-                  child: _widget ?? Onboarding1(),
+                  child: _widget,
                   duration: const Duration(milliseconds: 600),
                 ),
               ),

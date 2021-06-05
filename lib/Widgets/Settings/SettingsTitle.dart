@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class SettingsTitle extends StatelessWidget {
   const SettingsTitle({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

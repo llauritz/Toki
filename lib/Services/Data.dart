@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:Timo/Services/timer.dart';
 import 'package:flutter/material.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
 import 'HiveDB.dart';
 
 class Data {
-  SharedPreferences prefs;
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  //SharedPreferences nullPrefs;
   final isRunningStream = StreamController<bool>.broadcast();
   bool isRunning = false;
   String username = "";
@@ -30,48 +30,52 @@ class Data {
   bool automatischAusstempeln = true;
 
   Future<void> initSharedPreferences() async {
-    prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    //nullPrefs = await SharedPreferences.getInstance();
     print("Data - SharedPreferences initiated " + prefs.toString());
+  }
+
+  Future<SharedPreferences> getSharedPreferencesInstance() async {
+    return await _prefs;
   }
 
   Future<void> initData() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    await initSharedPreferences();
+    final SharedPreferences prefs = await _prefs;
 
-    if (prefs != null) {
       prefs.containsKey("finishedOnboarding")
-          ? finishedOnboarding = prefs.getBool("finishedOnboarding")
+          ? finishedOnboarding = prefs.getBool("finishedOnboarding")!
           : setFinishedOnboarding(false);
 
       prefs.containsKey("name")
-          ? username = prefs.getString("name")
+          ? username = prefs.getString("name")!
           : updateName("Name");
 
       prefs.containsKey("tagesstunden")
-          ? tagesstunden = prefs.getDouble("tagesstunden")
+          ? tagesstunden = prefs.getDouble("tagesstunden")!
           : updateTagesstunden(tagesstunden);
 
       prefs.containsKey("MO")
           ? wochentage = [
-              prefs.getBool("MO"),
-              prefs.getBool("DI"),
-              prefs.getBool("MI"),
-              prefs.getBool("DO"),
-              prefs.getBool("FR"),
-              prefs.getBool("SA"),
-              prefs.getBool("SO"),
+              prefs.getBool("MO")!,
+              prefs.getBool("DI")!,
+              prefs.getBool("MI")!,
+              prefs.getBool("DO")!,
+              prefs.getBool("FR")!,
+              prefs.getBool("SA")!,
+              prefs.getBool("SO")!,
             ]
           : updateWochentage(wochentage);
 
       prefs.containsKey("pausenKorrektur")
-          ? pausenKorrektur = prefs.getBool("pausenKorrektur")
+          ? pausenKorrektur = prefs.getBool("pausenKorrektur")!
           : updatePausenKorrektur(pausenKorrektur);
 
       prefs.containsKey("korrekturAB")
           //converts List of Strings to List of Integers and stores them in local List
           ? korrekturAB =
-              prefs.getStringList("korrekturAB").map(int.parse).toList()
+              prefs.getStringList("korrekturAB")!.map(int.parse).toList()
           //and the other way round
           : prefs.setStringList(
               "korrekturAB", korrekturAB.map((e) => e.toString()).toList());
@@ -80,42 +84,37 @@ class Data {
       prefs.containsKey("korrekturUM")
           //converts List of Strings to List of Integers and stores them in local List
           ? korrekturAB =
-              prefs.getStringList("korrekturUM").map(int.parse).toList()
+              prefs.getStringList("korrekturUM")!.map(int.parse).toList()
           //and the other way round
           : prefs.setStringList(
               "korrekturUM", korrekturAB.map((e) => e.toString()).toList());
       print("Data - kUM in local List" + korrekturUM.toString());
 
       if (!prefs.containsKey("OvertimeOffset")) setOffset(0);
-
-      print("Data - Data initialized");
-    } else {
-      print("Data - SHARED PREFERENCES NOT WORKING -------------------");
-    }
   }
 
   void setUserName(String newName) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
     prefs.setString("name", newName);
     username = newName;
-    print(prefs.getString("Data - new username:" + prefs.getString("name")));
+    print(prefs.getString("Data - new username:" + prefs.getString("name")!));
   }
 
   Future<String> getUserName() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString("Data - username is:" + prefs.getString("name")));
-    return prefs.getString("name");
+    final SharedPreferences prefs = await _prefs;
+    print(prefs.getString("Data - username is:" + prefs.getString("name")!));
+    return prefs.getString("name")!;
   }
 
-  Future<void> updatePrimaryColor(AssetImage image) async {
-    currentImageStream.sink.add(image);
-    currentImage = image;
-    PaletteGenerator paletteGenerator =
-        await PaletteGenerator.fromImageProvider(image);
-    primaryColor = paletteGenerator.dominantColor.color;
-    print(primaryColor.toString());
-    primaryColorStream.sink.add(primaryColor);
-  }
+  // Future<void> updatePrimaryColor(AssetImage image) async {
+  //   currentImageStream.sink.add(image);
+  //   currentImage = image;
+  //   PaletteGenerator paletteGenerator =
+  //       await PaletteGenerator.fromImageProvider(image);
+  //   primaryColor = paletteGenerator.dominantColor.color;
+  //   print(primaryColor.toString());
+  //   primaryColorStream.sink.add(primaryColor);
+  // }
 
   void updateSettingsBackground(String hash) async {
     backgroundHashStream.sink.add(hash);
@@ -124,7 +123,7 @@ class Data {
   }
 
   void updateTagesstunden(double newTagesstunden) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
     prefs.setDouble("tagesstunden", newTagesstunden);
     tagesstunden = newTagesstunden;
     print("Data - updated Tagesstunden: " +
@@ -132,14 +131,14 @@ class Data {
   }
 
   void updateName(String newName) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
     prefs.setString("name", newName);
     username = newName;
     print("Data - updated Username: " + prefs.getString("name").toString());
   }
 
   void setFinishedOnboarding(bool b) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
     prefs.setBool("finishedOnboarding", b);
     finishedOnboarding = b;
     print("Data - updated finishedOnboarding: " +
@@ -147,7 +146,7 @@ class Data {
   }
 
   Future<void> updateWochentage(List<bool> list) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
     prefs.setBool("MO", list[0]);
     prefs.setBool("DI", list[1]);
     prefs.setBool("MI", list[2]);
@@ -159,7 +158,7 @@ class Data {
   }
 
   Future<void> updateKorrekturenAB(int index, int value) async {
-    prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
     korrekturAB[index] = value;
     //converts List of Integers to List of Strings and stores them in SharedPrefs
     prefs.setStringList(
@@ -169,7 +168,7 @@ class Data {
   }
 
   Future<void> updateKorrekturenUM(int index, int value) async {
-    prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
     korrekturAB[index] = value;
     //converts List of Integers to List of Strings and stores them in SharedPrefs
     prefs.setStringList(
@@ -179,7 +178,7 @@ class Data {
   }
 
   Future<void> deleteKorrekturenAB(int index) async {
-    prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
     korrekturAB.removeAt(index);
     //converts List of Integers to List of Strings and stores them in SharedPrefs
     prefs.setStringList(
@@ -189,7 +188,7 @@ class Data {
   }
 
   Future<void> deleteKorrekturenUM(int index) async {
-    prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
     korrekturUM.removeAt(index);
     //converts List of Integers to List of Strings and stores them in SharedPrefs
     prefs.setStringList(
@@ -199,7 +198,7 @@ class Data {
   }
 
   Future<void> addKorrekturenAB(int value) async {
-    prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
     korrekturAB.add(value);
     //converts List of Integers to List of Strings and stores them in SharedPrefs
     prefs.setStringList(
@@ -209,7 +208,7 @@ class Data {
   }
 
   Future<void> addKorrekturenUM(int value) async {
-    prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
     korrekturUM.add(value);
     //converts List of Integers to List of Strings and stores them in SharedPrefs
     prefs.setStringList(
@@ -219,16 +218,16 @@ class Data {
   }
 
   Future<void> updatePausenKorrektur(bool b) async {
-    prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
     prefs.setBool("pausenKorrektur", b);
     print("Data - pausenKorrekturBool " +
         prefs.getBool("pausenKorrektur").toString());
   }
 
   Future<void> addOffset(int milliseconds) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
     int newValue = prefs.containsKey("OvertimeOffset")
-        ? prefs.getInt("OvertimeOffset") + milliseconds
+        ? prefs.getInt("OvertimeOffset")! + milliseconds
         : milliseconds;
     prefs.setInt("OvertimeOffset", newValue);
 
@@ -238,18 +237,18 @@ class Data {
   }
 
   Future<int> getOffset() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
     print("Data - getOffset");
     if (prefs.containsKey("OvertimeOffset")) {
       print("Data - getOffset" + prefs.getInt("OvertimeOffset").toString());
-      return prefs.getInt("OvertimeOffset");
+      return prefs.getInt("OvertimeOffset")!;
     } else {
       return 0;
     }
   }
 
   Future<void> setOffset(int milliseconds) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
     prefs.setInt("OvertimeOffset", milliseconds);
 
     print("Data - OvertimeOffset " + prefs.getInt("OvertimeOffset").toString());

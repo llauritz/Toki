@@ -9,7 +9,7 @@ final getIt = GetIt.instance;
 
 class Background_legacy extends StatefulWidget {
   const Background_legacy({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -19,7 +19,7 @@ class Background_legacy extends StatefulWidget {
 
 class _Background_legacyState extends State<Background_legacy> with WidgetsBindingObserver{
 
-  AssetImage currentImage;
+  late AssetImage currentImage;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -36,7 +36,7 @@ class _Background_legacyState extends State<Background_legacy> with WidgetsBindi
     print("background - init start");
     updateBackground();
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
     print("background - init finished");
   }
 
@@ -97,12 +97,11 @@ class _Background_legacyState extends State<Background_legacy> with WidgetsBindi
     setState(() {
       currentImage = currentBackground();
     });
-    getIt<Data>().updatePrimaryColor(currentImage);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 

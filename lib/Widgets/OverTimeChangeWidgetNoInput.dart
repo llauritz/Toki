@@ -9,7 +9,7 @@ import '../Services/Theme.dart';
 
 class OvertimeChangeWidgetNoInput extends StatefulWidget {
   const OvertimeChangeWidgetNoInput({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final Duration duration = const Duration(milliseconds: 700);
@@ -27,9 +27,9 @@ class OvertimeChangeWidgetNoInput extends StatefulWidget {
 
 class _OvertimeChangeWidgetNoInputState extends State<OvertimeChangeWidgetNoInput> with TickerProviderStateMixin{
 
-  AnimationController controller;
-  Animation<double> animationFade;
-  final Color offsetButtonColor = Colors.blueGrey[300];
+  late AnimationController controller;
+  late Animation<double> animationFade;
+  final Color offsetButtonColor = Colors.blueGrey[300]!;
 
   bool isOpen = false;
 
@@ -151,12 +151,12 @@ class _OvertimeChangeWidgetNoInputState extends State<OvertimeChangeWidgetNoInpu
                           stream: getIt<HiveDB>().ueberMillisekundenGesamtStream.stream,
                           builder: (context, snapshot) {
 
-                            Color _color = snapshot.data.isNegative
+                            Color _color = snapshot.data!.isNegative
                                 ? gray
                                 : neon;
-                            int stunden = (snapshot.data / Duration.millisecondsPerHour).truncate();
+                            int stunden = (snapshot.data! / Duration.millisecondsPerHour).truncate();
 
-                            String addMinus = snapshot.data.isNegative && stunden==0
+                            String addMinus = snapshot.data!.isNegative && stunden==0
                                 ? "-" : "";
 
                             Widget _widget = KeyedSubtree(
@@ -227,7 +227,7 @@ class _OvertimeChangeWidgetNoInputState extends State<OvertimeChangeWidgetNoInpu
                               stream: getIt<HiveDB>().ueberMillisekundenGesamtStream.stream,
                               builder: (context, snapshot) {
 
-                                Color _color = snapshot.data.isNegative
+                                Color _color = snapshot.data!.isNegative
                                     ? gray
                                     : neon;
 
@@ -283,10 +283,10 @@ class _OvertimeChangeWidgetNoInputState extends State<OvertimeChangeWidgetNoInpu
                           stream: getIt<HiveDB>().ueberMillisekundenGesamtStream.stream,
                           builder: (context, snapshot) {
 
-                            Color _color = snapshot.data.isNegative
+                            Color _color = snapshot.data!.isNegative
                                 ? gray
                                 : neon;
-                            int minuten = ((snapshot.data.abs() / Duration.millisecondsPerMinute)%60).truncate();
+                            int minuten = ((snapshot.data!.abs() / Duration.millisecondsPerMinute)%60).truncate();
 
                             Widget _minuten = KeyedSubtree(
                                 key: ValueKey<int>(minuten),
@@ -433,7 +433,7 @@ class _OvertimeChangeWidgetNoInputState extends State<OvertimeChangeWidgetNoInpu
                               stream: getIt<HiveDB>().ueberMillisekundenGesamtStream.stream,
                               builder: (context, snapshot) {
 
-                                String text = snapshot.data.isNegative
+                                String text = snapshot.data!.isNegative
                                     ? "Stunden"
                                     : "Überstunden";
 

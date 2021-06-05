@@ -12,10 +12,10 @@ final getIt = GetIt.instance;
 
 class EmptyCardClosed extends StatefulWidget {
   const EmptyCardClosed({
-    @required this.i,
-    @required this.index,
-    @required this.zeitnahme,
-    Key key,
+    required this.i,
+    required this.index,
+    required this.zeitnahme,
+    Key? key,
   }) : super(key: key);
 
   final int i;
@@ -156,7 +156,7 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                           "-",
                           style: Theme.of(context)
                               .textTheme
-                              .headline4
+                              .headline4!
                               .copyWith(color: gray),
                         ),
                         Text(
@@ -165,12 +165,12 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                                 .toString(),
                             style: Theme.of(context)
                                 .textTheme
-                                .headline4
+                                .headline4!
                                 .copyWith(color: gray)),
                         Text(":",
                             style: Theme.of(context)
                                 .textTheme
-                                .headline4
+                                .headline4!
                                 .copyWith(color: gray)),
                         DoubleDigit(
                             i: Duration(milliseconds: _tagesMillisekunden.abs())
@@ -178,7 +178,7 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                                 60,
                             style: Theme.of(context)
                                 .textTheme
-                                .headline4
+                                .headline4!
                                 .copyWith(color: gray))
                       ],
                     ),

@@ -14,10 +14,10 @@ final getIt = GetIt.instance;
 class EmptyCardOpen extends StatefulWidget {
 
   EmptyCardOpen ({
-    @required this.i,
-    @required this.index,
-    @required this.zeitnahme,
-    @required this.callback,
+    required this.i,
+    required this.index,
+    required this.zeitnahme,
+    required this.callback,
   });
 
   // index in Liste der Zeitnahmen // zeitenBox.length-1 ist gannz oben

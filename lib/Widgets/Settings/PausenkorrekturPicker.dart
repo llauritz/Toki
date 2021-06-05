@@ -9,8 +9,8 @@ final getIt = GetIt.instance;
 
 class PausenkorrekturPicker extends StatefulWidget {
   PausenkorrekturPicker({
-    Key key,
-    @required this.isDay,
+    Key? key,
+    required this.isDay,
   }) : super(key: key);
 
   final bool isDay;
@@ -227,10 +227,10 @@ class _PausenkorrekturPickerState extends State<PausenkorrekturPicker> {
 
 class KorrekturListItem extends StatelessWidget {
   const KorrekturListItem(
-      {Key key,
-      @required this.listIndex,
-      @required this.buttonColor,
-      @required this.isDay})
+      {Key? key,
+      required this.listIndex,
+      required this.buttonColor,
+      required this.isDay})
       : super(key: key);
 
   final Color buttonColor;
@@ -291,12 +291,12 @@ class KorrekturListItem extends StatelessWidget {
 
 class KorrekturTile extends StatelessWidget {
   const KorrekturTile({
-    Key key,
-    @required this.buttonColor,
-    @required this.value,
-    @required this.callback,
-    @required this.label,
-    @required this.isDay,
+    Key? key,
+    required this.buttonColor,
+    required this.value,
+    required this.callback,
+    required this.label,
+    required this.isDay,
   }) : super(key: key);
 
   final Color buttonColor;
@@ -315,7 +315,7 @@ class KorrekturTile extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0))),
         color: buttonColor,
-        onPressed: callback,
+        onPressed: callback as void Function()?,
         child: Padding(
           padding: const EdgeInsets.only(bottom: 3.0),
           child: Column(
@@ -325,7 +325,7 @@ class KorrekturTile extends StatelessWidget {
                       color: isDay ? Colors.white : darkBackground,
                       fontSize: 24)),
               Text(label,
-                  style: Theme.of(context).textTheme.headline3.copyWith(
+                  style: Theme.of(context).textTheme.headline3!.copyWith(
                       fontSize: 14,
                       color: isDay ? Colors.white : darkBackground))
             ],

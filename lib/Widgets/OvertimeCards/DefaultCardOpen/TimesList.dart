@@ -13,10 +13,10 @@ final getIt = GetIt.instance;
 
 class TimesList extends StatelessWidget {
   const TimesList({
-    Key key,
-    @required Zeitnahme zeitnahme,
-    @required this.uhrzeit,
-    @required this.widget,
+    Key? key,
+    required Zeitnahme zeitnahme,
+    required this.uhrzeit,
+    required this.widget,
   })  : _zeitnahme = zeitnahme,
         super(key: key);
 
@@ -61,7 +61,7 @@ class TimesList extends StatelessWidget {
                     child: CircularProgressIndicator(
                       strokeWidth: 3,
                       valueColor:
-                          AlwaysStoppedAnimation<Color>(Colors.blueGrey[50]),
+                          AlwaysStoppedAnimation<Color>(Colors.blueGrey[50]!),
                     ))
               else
                 Ausstempeln(

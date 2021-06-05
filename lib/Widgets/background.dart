@@ -9,7 +9,7 @@ final getIt = GetIt.instance;
 
 class Background extends StatefulWidget {
   const Background({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -19,8 +19,8 @@ class Background extends StatefulWidget {
 
 class _BackgroundState extends State<Background> with WidgetsBindingObserver{
 
-  AssetImage currentImage;
-  AssetImage previousImage;
+  AssetImage? currentImage;
+  AssetImage? previousImage;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async{
@@ -38,7 +38,7 @@ class _BackgroundState extends State<Background> with WidgetsBindingObserver{
     previousImage = currentBackground();
     updateBackground();
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
     print("background - init finished");
   }
 
@@ -48,8 +48,8 @@ class _BackgroundState extends State<Background> with WidgetsBindingObserver{
       height: MediaQuery.of(context).size.height,
       fit: BoxFit.cover,
       fadeInDuration: const Duration(milliseconds: 1000),
-        placeholder: previousImage,
-        image: currentImage);
+        placeholder: previousImage!,
+        image: currentImage!);
   }
 
   AssetImage currentBackground(){
@@ -85,12 +85,11 @@ class _BackgroundState extends State<Background> with WidgetsBindingObserver{
       currentImage = currentBackground();
     });
     previousImage = currentImage;
-    getIt<Data>().updatePrimaryColor(currentImage);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 }

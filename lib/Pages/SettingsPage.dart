@@ -1,5 +1,6 @@
 
 import 'package:Timo/Services/Theme.dart';
+import '../Widgets/Settings/BreakCorrection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -17,7 +18,7 @@ final getIt = GetIt.instance;
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -25,7 +26,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  Background backgroundWidget;
   bool isDay = true;
 
   @override
@@ -53,6 +53,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     flex:2,
                     child: FadeIn(delay: 300-100, fadeChild: const SettingsTitle())),
                 FadeIn(delay: 350-100, fadeChild: NamePicker(isDay: isDay,)),
+                FadeIn(delay: 350-100, fadeChild: BreakCorrection()),
                 FadeIn(delay: 400-100, fadeChild: TagesstundenPicker(isDay: isDay,)),
                 FadeIn(delay: 450-100, fadeChild: WochentagePicker(isDay: isDay)),
                 FadeIn(delay: 500-100, fadeChild: PausenkorrekturPicker(isDay: isDay)),

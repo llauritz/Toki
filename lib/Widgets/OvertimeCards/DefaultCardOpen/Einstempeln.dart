@@ -14,12 +14,12 @@ final getIt = GetIt.instance;
 
 class Einstempeln extends StatefulWidget {
   const Einstempeln({
-    Key key,
-    @required this.uhrzeitenIndex,
-    @required this.uhrzeit,
-    @required Zeitnahme zeitnahme,
-    @required this.zeitnahmeIndex,
-    @required this.closedCardIndex,
+    Key? key,
+    required this.uhrzeitenIndex,
+    required this.uhrzeit,
+    required Zeitnahme zeitnahme,
+    required this.zeitnahmeIndex,
+    required this.closedCardIndex,
   })  : _zeitnahme = zeitnahme,
         super(key: key);
 
