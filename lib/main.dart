@@ -36,6 +36,43 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
+  TextTheme textTheme = TextTheme(
+
+      //Large Numbers (Hours, Minutes)
+      headline1: TextStyle(
+        fontSize: 80.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+        fontFamily: "Roboto-Mono",
+      ),
+
+      //Smaller Numbers (Seconds), Mantra Text
+      headline2: TextStyle(
+        fontSize: 30.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+
+      //Widgets.Settings Cards Titles
+      headline3: TextStyle(
+        fontSize: 16.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.black.withOpacity(0.8),
+      ),
+      button: TextStyle(
+          fontSize: 20.0,
+          color: Colors.white,
+          letterSpacing: 0.5,
+          fontWeight: FontWeight.bold),
+
+      // Wochentag in ZeitCard
+      headline4: TextStyle(
+          fontSize: 16.0, height: 1.05, color: Colors.black.withAlpha(150)),
+
+      // Datum in ZeitCard
+      headline5: TextStyle(
+          fontSize: 12.0, height: 1.1, color: Colors.black.withAlpha(150)));
+
   runApp(MaterialApp(
     routes: {
       "/": (context) => const HomePage(),
@@ -44,48 +81,18 @@ void main() async {
     },
     initialRoute: getIt<Data>().finishedOnboarding ? "/" : "/onboarding",
     title: "Timo ",
+    themeMode: ThemeMode.system,
+    darkTheme: ThemeData(
+        backgroundColor: Colors.black,
+        scaffoldBackgroundColor: Colors.black,
+        primaryColor: Colors.tealAccent,
+        brightness: Brightness.dark,
+        textTheme: textTheme),
     theme: ThemeData(
+        primaryColor: Color(0xFF90A4AE),
+        brightness: Brightness.light,
         backgroundColor: Colors.indigoAccent[700],
         fontFamily: "BandeinsSans",
-        textTheme: TextTheme(
-
-            //Large Numbers (Hours, Minutes)
-            headline1: TextStyle(
-              fontSize: 80.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              fontFamily: "Roboto-Mono",
-            ),
-
-            //Smaller Numbers (Seconds), Mantra Text
-            headline2: TextStyle(
-              fontSize: 30.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-
-            //Widgets.Settings Cards Titles
-            headline3: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.black.withOpacity(0.8),
-            ),
-            button: TextStyle(
-                fontSize: 20.0,
-                color: Colors.white,
-                letterSpacing: 0.5,
-                fontWeight: FontWeight.bold),
-
-            // Wochentag in ZeitCard
-            headline4: TextStyle(
-                fontSize: 16.0,
-                height: 1.05,
-                color: Colors.black.withAlpha(150)),
-
-            // Datum in ZeitCard
-            headline5: TextStyle(
-                fontSize: 12.0,
-                height: 1.1,
-                color: Colors.black.withAlpha(150)))),
+        textTheme: textTheme),
   ));
 }

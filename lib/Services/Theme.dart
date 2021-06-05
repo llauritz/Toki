@@ -10,8 +10,7 @@ var logger = Logger(
       colors: true,
       printEmojis: true,
       printTime: true,
-    )),
-    output: ExampleLogOutput());
+    )));
 
 // class ExampleLogOutput extends ConsoleOutput {
 //   @override
