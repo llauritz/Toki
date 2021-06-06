@@ -9,8 +9,6 @@ import 'Data.dart';
 import 'Theme.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../Services/Data.dart';
-
 class CorrectionDB {
   Future<void> initCorrectionDB() async {
     SharedPreferences prefs =
@@ -18,25 +16,23 @@ class CorrectionDB {
     if (prefs.containsKey("korrekturUM") || prefs.containsKey("korrekturAB")) {
       await migrateData(prefs);
     }
+    resetBox();
   }
 
   Future<void> resetBox() async {
-    Box<Correction> correctionBox = Hive.box("corrections");
-    correctionBox.clear();
-    correctionBox.putAt(
-        1,
-        Correction(
-            ab: 6 * Duration.millisecondsPerHour,
-            um: 30 * Duration.millisecondsPerMinute));
-    correctionBox.putAt(
-        2,
-        Correction(
-            ab: 9 * Duration.millisecondsPerHour,
-            um: 45 * Duration.millisecondsPerMinute));
+    Box correctionBox =  Hive.box<Correction>("corrections");
+    await correctionBox.clear();
+    await correctionBox.add(Correction(
+        ab: 6 * Duration.millisecondsPerHour,
+        um: 30 * Duration.millisecondsPerMinute));
+    await correctionBox.add(Correction(
+        ab: 9 * Duration.millisecondsPerHour,
+        um: 45 * Duration.millisecondsPerMinute));
+    logger.w(correctionBox.length);
   }
 
   Future<void> migrateData(SharedPreferences prefs) async {
-    Box<Correction> correctionBox = Hive.box("corrections");
+    Box correctionBox = Hive.box<Correction>("corrections");
     prefs.remove("korrekturUM");
     prefs.remove("korrekturAB");
     correctionBox.add(Correction(

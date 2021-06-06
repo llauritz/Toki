@@ -1,3 +1,4 @@
+import 'package:Timo/Services/CorrectionDB.dart';
 import 'package:Timo/Services/Theme.dart';
 import 'package:Timo/hiveClasses/Correction.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class BreakCorrection extends StatefulWidget {
 
 class _BreakCorrectionState extends State<BreakCorrection> {
   bool active = true;
+  Box<Correction> correctionBox = Hive.box("corrections");
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
   @override
@@ -85,12 +87,43 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                   AnimatedList(
                       shrinkWrap: true,
                       key: _listKey,
-                      initialItemCount: 3,
+                      initialItemCount: correctionBox.length,
                       itemBuilder: (BuildContext context, int index,
                           Animation<double> animation) {
-                        return Text("hi");
+                        return Text(correctionBox.getAt(index)!.ab.toString() +
+                            ", " +
+                            correctionBox.getAt(index)!.um.toString());
+                      }),
+                  ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: correctionBox.length,
+                      itemBuilder: (_, index) {
+                        return Text(correctionBox.getAt(index)!.ab.toString() +
+                            ", " +
+                            correctionBox.getAt(index)!.um.toString());
                       }),
                   Text("ab 6 Stunden 30 Minuten"),
+                  IconButton(
+                      onPressed: () async {
+                        setState(() async {
+                          await getIt<CorrectionDB>().resetBox();
+                          //_listKey.currentState!.insertItem(0);
+                        });
+                      },
+                      icon: Icon(Icons.ac_unit)),
+                  IconButton(
+                      onPressed: () async {
+                        Box box = Hive.box<Correction>("corrections");
+                        await box.add(Correction(
+                            ab: box.getAt(box.length - 1)!.ab +
+                                Duration.millisecondsPerHour,
+                            um: box.getAt(box.length - 1)!.um +
+                                10 * Duration.millisecondsPerMinute));
+                        setState(() {
+                          //_listKey.currentState!.insertItem(0);
+                        });
+                      },
+                      icon: Icon(Icons.help)),
                   Text("Regel hinzufügen")
                 ],
               ),

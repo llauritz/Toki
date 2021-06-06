@@ -83,8 +83,8 @@ class Zeitnahme {
   }
 
   int getKorrektur() {
-    Box<Correction> corrections = Hive.box("corrections");
-    getIt<CorrectionDB>().resetBox();
+    Box corrections = Hive.box<Correction>("corrections");
+    
     logger.w("Korrektur" + corrections.length.toString());
     // geht davon aus, dass korrekturAB sortiert ist.
     if (getIt<Data>().pausenKorrektur == true && corrections.isNotEmpty) {

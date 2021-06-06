@@ -24,6 +24,7 @@ void main() async {
 
   await Hive.initFlutter();
   Hive.registerAdapter(ZeitnahmeAdapter());
+  Hive.registerAdapter(CorrectionAdapter());
   await Hive.openBox<Zeitnahme>("zeitenBox");
   await Hive.openBox<Correction>("corrections");
 
