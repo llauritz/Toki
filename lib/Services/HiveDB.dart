@@ -106,7 +106,7 @@ class HiveDB {
   }
 
   void putAT(int i, Zeitnahme z, int listindex) async {
-    Box zeitenBox = Hive.box<Zeitnahme >("zeitenBox");
+    Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
     await zeitenBox.put(i, z);
     animatedListkey.currentState!
         .insertItem(listindex, duration: Duration(milliseconds: 600));
@@ -302,8 +302,8 @@ class HiveDB {
     ueberMillisekundenGesamtStream.close();
   }
 
-  Future<void> updateStartEndZeit(int zeitnahmeIndex, int startEndIndex,
-      bool start, int value) async {
+  Future<void> updateStartEndZeit(
+      int zeitnahmeIndex, int startEndIndex, bool start, int value) async {
     Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
 
     final Zeitnahme edit = zeitenBox.getAt(zeitnahmeIndex) as Zeitnahme;

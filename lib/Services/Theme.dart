@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 
 GetIt getIt = GetIt.instance;
+
 var logger = Logger(
     //filter: MyFilter(),
     printer: PrefixPrinter(PrettyPrinter(

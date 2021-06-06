@@ -8,11 +8,10 @@ class SettingsTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-        child: const Text(
-          "Einstellungen",
-          style: settingsHeadline,
-        )
-    );
+    return Center(
+        child: Text(
+      "Einstellungen",
+      style: settingsHeadline.copyWith(color: gray),
+    ));
   }
 }

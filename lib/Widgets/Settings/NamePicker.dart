@@ -28,13 +28,13 @@ class _NamePickerState extends State<NamePicker> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        elevation: 8,
+        elevation: 5,
         shadowColor: Colors.black26,
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(18.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -46,80 +46,6 @@ class _NamePickerState extends State<NamePicker> {
                     .headline4!
                     .copyWith(fontSize: 18),
               )),
-              /*
-              Stack(
-                alignment: Alignment.centerRight,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: TextFormField(
-                      style: settingsBody,
-                      cursorColor: neon,
-                      cursorRadius: const Radius.circular(20),
-                      cursorWidth: 3,
-                      enableSuggestions: false,
-                      initialValue: getIt<Data>().username,
-                      focusNode: _focusNode,
-                      autocorrect: false,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        isDense: true,
-                        hintStyle: Theme.of(context)
-                            .textTheme
-                            .headline2!
-                            .copyWith(color: neon.withAlpha(250), fontSize: 24.0),
-                        contentPadding: const EdgeInsets.all(0.0),
-                        enabledBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(1),
-                            borderSide:
-                                BorderSide(color: neon.withAlpha(50), width: 4)),
-                        focusedBorder: const UnderlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(2)),
-                            borderSide: BorderSide(color: neon, width: 5)),
-                      ),
-                      onEditingComplete: () {
-                        setState(() {
-                          _focusNode.unfocus();
-                          _button = null;
-                        });
-                      },
-                      onTap: () {
-                        setState(() {
-                          _button = () {
-                            _focusNode.unfocus();
-                            setState(() {
-                              _button = null;
-                            });
-                          };
-                        });
-                      },
-                      onChanged: (String str) {
-                        setState(() {
-                          getIt<Data>().updateName(str);
-                          _button = () {
-                            _focusNode.unfocus();
-                            setState(() {
-                              _button = null;
-                            });
-                          };
-                        });
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: IconButton(
-                      icon: const Icon(Icons.check),
-                      disabledColor: neon.withAlpha(80),
-                      onPressed: _button as void Function()?,
-                      color: neon,
-                      splashRadius: 30,
-                      highlightColor: neon.withAlpha(80),
-                      splashColor: neon.withAlpha(150),
-                    ),
-                  )
-                ],
-              ),*/
               FittedBox(
                 fit: BoxFit.fitWidth,
                 child: Row(
@@ -127,8 +53,8 @@ class _NamePickerState extends State<NamePicker> {
                     IconButton(
                       icon: const Icon(Icons.check),
                       visualDensity: VisualDensity.compact,
-                      color: Colors.transparent,
-                      onPressed: () {},
+                      disabledColor: Colors.transparent,
+                      onPressed: null,
                     ),
                     AnimatedFittedTextFieldContainer(
                         growDuration: const Duration(milliseconds: 200),
@@ -138,33 +64,29 @@ class _NamePickerState extends State<NamePicker> {
                           maxLength: 50,
                           cursorColor: neonAccent,
                           cursorWidth: 3,
-                          cursorRadius: const Radius.circular(20),
+                          cursorRadius: const Radius.circular(30),
                           enableInteractiveSelection: true,
-                          enableSuggestions: true,
+                          enableSuggestions: false,
                           focusNode: _focusNode,
                           controller: _controller,
-                          style: TextStyle(
-                            color: neon,
-                            fontSize: 28,
-                          ),
+                          style:
+                              TextStyle(color: neon, fontSize: 28, height: 1),
                           decoration: InputDecoration(
                             isDense: true,
-                            contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            prefixText: "",
+                            contentPadding: EdgeInsets.fromLTRB(0, 3, -3, 3),
+                            suffixText: " ",
+                            prefixText: " ",
                             counterText: "",
                             disabledBorder: InputBorder.none,
-                            border: UnderlineInputBorder(
-                                borderRadius: BorderRadius.circular(1),
-                                borderSide: BorderSide(
-                                    color: neon.withAlpha(50), width: 4)),
-                            enabledBorder: UnderlineInputBorder(
-                                borderRadius: BorderRadius.circular(1),
-                                borderSide: BorderSide(
-                                    color: neon.withAlpha(50), width: 4)),
                             focusedBorder: UnderlineInputBorder(
-                                borderRadius: BorderRadius.circular(1),
+                                borderRadius: BorderRadius.circular(5),
                                 borderSide: BorderSide(
-                                    color: neon.withAlpha(150), width: 4)),
+                                    color: neon.withAlpha(30), width: 100)),
+                            enabledBorder: UnderlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(1)),
+                                borderSide: BorderSide(
+                                    color: neon.withAlpha(80), width: 5)),
                             errorBorder: InputBorder.none,
                           ),
                           onEditingComplete: () {
@@ -202,8 +124,8 @@ class _NamePickerState extends State<NamePicker> {
                       onPressed: _button as void Function()?,
                       color: neon,
                       splashRadius: 30,
-                      highlightColor: neon.withAlpha(30),
-                      splashColor: neon.withAlpha(100),
+                      highlightColor: neon.withAlpha(10),
+                      splashColor: neon.withAlpha(70),
                     )
                   ],
                 ),

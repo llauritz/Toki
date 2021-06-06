@@ -1,3 +1,6 @@
+import 'package:Timo/Services/CorrectionDB.dart';
+import 'package:Timo/hiveClasses/Correction.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
 import '../Services/Data.dart';
@@ -7,7 +10,11 @@ part 'Zeitnahme.g.dart';
 
 @HiveType(typeId: 1)
 class Zeitnahme {
-  Zeitnahme({required this.day, required this.state, required this.endTimes, required this.startTimes});
+  Zeitnahme(
+      {required this.day,
+      required this.state,
+      required this.endTimes,
+      required this.startTimes});
 
   @HiveField(0)
   DateTime day;
@@ -76,23 +83,27 @@ class Zeitnahme {
   }
 
   int getKorrektur() {
+    Box<Correction> corrections = Hive.box("corrections");
+    getIt<CorrectionDB>().resetBox();
+    logger.w("Korrektur" + corrections.length.toString());
     // geht davon aus, dass korrekturAB sortiert ist.
-    if (getIt<Data>().pausenKorrektur == true) {
+    if (getIt<Data>().pausenKorrektur == true && corrections.isNotEmpty) {
       Duration elapsed = Duration(milliseconds: getElapsedTime());
 
-      for (int i = getIt<Data>().korrekturAB.length - 1; i >= 0; i--) {
-        int ab = getIt<Data>().korrekturAB[i];
+      for (int i = corrections.length - 1; i >= 0; i--) {
+        int ab = corrections.getAt(i)!.ab;
         print("Zeitnahme - Korrektur - elapsedhrs ${elapsed.inHours}");
 
-        if (elapsed.inHours >= ab) {
-          int minPau = getIt<Data>().korrekturUM[i];
+        if (elapsed.inMilliseconds >= ab) {
+          int minPau = corrections.getAt(i)!.um;
           Duration pause = Duration(milliseconds: getPause());
           print("Zeitnahme - Korrektur - minPau $minPau");
           print("Zeitnahme - Korrektur - pause $pause");
 
-          if (pause.inMinutes < minPau) {
-            print("Zeitnahme - Korrektur${minPau - pause.inMinutes}");
-            return Duration(minutes: minPau - pause.inMinutes).inMilliseconds;
+          if (pause.inMilliseconds < minPau) {
+            print(
+                "Zeitnahme - Korrektur${(minPau - pause.inMilliseconds) / Duration.millisecondsPerMinute}");
+            return minPau - pause.inMilliseconds;
           }
           break;
         }

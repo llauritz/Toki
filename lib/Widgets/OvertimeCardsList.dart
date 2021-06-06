@@ -117,6 +117,7 @@ class ListContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedList(
+        physics: BouncingScrollPhysics(),
         initialItemCount: Hive.box<Zeitnahme>("zeitenBox").length,
         key: getIt<HiveDB>().animatedListkey,
         padding: EdgeInsets.only(top: 20.0),

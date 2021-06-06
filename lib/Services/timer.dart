@@ -41,9 +41,9 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver {
   void initSharedPreferences() async {
     SharedPreferences prefs =
         await getIt<Data>().getSharedPreferencesInstance();
-    _startTime = prefs.getInt("startTime")!;
+    if(prefs.containsKey("startTime"))_startTime = prefs.getInt("startTime")!;
     logger.d("timer - previous startTime is " +
-        prefs.getInt("startTime").toString());
+       _startTime.toString());
     if (_startTime != 0) {
       logger.d("timer - restored Time" + _startTime.toString());
       _timer = Timer.periodic(const Duration(milliseconds: 100), updateTime);

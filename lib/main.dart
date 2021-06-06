@@ -1,3 +1,5 @@
+import 'package:Timo/Services/CorrectionDB.dart';
+import 'package:Timo/hiveClasses/Correction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,10 +25,13 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(ZeitnahmeAdapter());
   await Hive.openBox<Zeitnahme>("zeitenBox");
+  await Hive.openBox<Correction>("corrections");
 
   getIt.registerSingleton<Data>(Data());
   getIt.registerSingleton<HiveDB>(HiveDB());
+  getIt.registerSingleton<CorrectionDB>(CorrectionDB());
 
+  await getIt<CorrectionDB>().initCorrectionDB();
   await getIt<Data>().initData();
   await getIt<HiveDB>().initHiveDB();
   await initializeDateFormatting("de_DE", null);

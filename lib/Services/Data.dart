@@ -13,13 +13,17 @@ class Data {
   final isRunningStream = StreamController<bool>.broadcast();
   bool isRunning = false;
   String username = "";
+  @deprecated
   double tagesstunden = 8.0;
+  @deprecated
   List<bool> wochentage = [true, true, true, true, true, false, false];
   Color primaryColor = Colors.blueAccent;
   AssetImage currentImage = AssetImage("assets/background/clouds/clouds4.jpg");
   final primaryColorStream = StreamController<Color>.broadcast();
   final currentImageStream = StreamController<AssetImage>.broadcast();
+  @deprecated
   List<int> korrekturAB = [6, 9];
+  @deprecated
   List<int> korrekturUM = [30, 45];
   bool pausenKorrektur = true;
   final backgroundHashStream = StreamController<String>.broadcast();
@@ -28,6 +32,17 @@ class Data {
   TimerText timerText = TimerText();
   bool finishedOnboarding = false;
   bool automatischAusstempeln = true;
+
+  //working time in milliseconds, 0 = free day
+  List<int> workingTime = [
+    8 * Duration.millisecondsPerHour, // 0: Monday
+    8 * Duration.millisecondsPerHour, // 1: Tuesday
+    8 * Duration.millisecondsPerHour, // 2: Wednesday
+    8 * Duration.millisecondsPerHour, // 3: Thursday
+    8 * Duration.millisecondsPerHour, // 4: Friday
+    0, // 5: Saturday
+    0 // 6: Sunday
+  ];
 
   Future<void> initSharedPreferences() async {
     final SharedPreferences prefs = await _prefs;
@@ -44,53 +59,65 @@ class Data {
 
     final SharedPreferences prefs = await _prefs;
 
-      prefs.containsKey("finishedOnboarding")
-          ? finishedOnboarding = prefs.getBool("finishedOnboarding")!
-          : setFinishedOnboarding(false);
+    prefs.containsKey("finishedOnboarding")
+        ? finishedOnboarding = prefs.getBool("finishedOnboarding")!
+        : setFinishedOnboarding(false);
 
-      prefs.containsKey("name")
-          ? username = prefs.getString("name")!
-          : updateName("Name");
+    prefs.containsKey("name")
+        ? username = prefs.getString("name")!
+        : updateName("Name");
 
-      prefs.containsKey("tagesstunden")
-          ? tagesstunden = prefs.getDouble("tagesstunden")!
-          : updateTagesstunden(tagesstunden);
+    prefs.containsKey("tagesstunden")
+        ? tagesstunden = prefs.getDouble("tagesstunden")!
+        : updateTagesstunden(tagesstunden);
 
-      prefs.containsKey("MO")
-          ? wochentage = [
-              prefs.getBool("MO")!,
-              prefs.getBool("DI")!,
-              prefs.getBool("MI")!,
-              prefs.getBool("DO")!,
-              prefs.getBool("FR")!,
-              prefs.getBool("SA")!,
-              prefs.getBool("SO")!,
-            ]
-          : updateWochentage(wochentage);
+    prefs.containsKey("MO")
+        ? wochentage = [
+            prefs.getBool("MO")!,
+            prefs.getBool("DI")!,
+            prefs.getBool("MI")!,
+            prefs.getBool("DO")!,
+            prefs.getBool("FR")!,
+            prefs.getBool("SA")!,
+            prefs.getBool("SO")!,
+          ]
+        : updateWochentage(wochentage);
 
-      prefs.containsKey("pausenKorrektur")
-          ? pausenKorrektur = prefs.getBool("pausenKorrektur")!
-          : updatePausenKorrektur(pausenKorrektur);
+    prefs.containsKey("MOmilli")
+        ? workingTime = [
+            prefs.getInt("MOmilli")!,
+            prefs.getInt("TUmilli")!,
+            prefs.getInt("WEmilli")!,
+            prefs.getInt("THmilli")!,
+            prefs.getInt("FRmilli")!,
+            prefs.getInt("SAmilli")!,
+            prefs.getInt("SUmilli")!,
+          ]
+        : migrateWorkingTime();
 
-      prefs.containsKey("korrekturAB")
-          //converts List of Strings to List of Integers and stores them in local List
-          ? korrekturAB =
-              prefs.getStringList("korrekturAB")!.map(int.parse).toList()
-          //and the other way round
-          : prefs.setStringList(
-              "korrekturAB", korrekturAB.map((e) => e.toString()).toList());
-      print("Data - kAB in local List" + korrekturAB.toString());
+    prefs.containsKey("pausenKorrektur")
+        ? pausenKorrektur = prefs.getBool("pausenKorrektur")!
+        : updatePausenKorrektur(pausenKorrektur);
 
-      prefs.containsKey("korrekturUM")
-          //converts List of Strings to List of Integers and stores them in local List
-          ? korrekturAB =
-              prefs.getStringList("korrekturUM")!.map(int.parse).toList()
-          //and the other way round
-          : prefs.setStringList(
-              "korrekturUM", korrekturAB.map((e) => e.toString()).toList());
-      print("Data - kUM in local List" + korrekturUM.toString());
+    // prefs.containsKey("korrekturAB")
+    //     //converts List of Strings to List of Integers and stores them in local List
+    //     ? korrekturAB =
+    //         prefs.getStringList("korrekturAB")!.map(int.parse).toList()
+    //     //and the other way round
+    //     : prefs.setStringList(
+    //         "korrekturAB", korrekturAB.map((e) => e.toString()).toList());
+    // print("Data - kAB in local List" + korrekturAB.toString());
 
-      if (!prefs.containsKey("OvertimeOffset")) setOffset(0);
+    // prefs.containsKey("korrekturUM")
+    //     //converts List of Strings to List of Integers and stores them in local List
+    //     ? korrekturAB =
+    //         prefs.getStringList("korrekturUM")!.map(int.parse).toList()
+    //     //and the other way round
+    //     : prefs.setStringList(
+    //         "korrekturUM", korrekturAB.map((e) => e.toString()).toList());
+    // print("Data - kUM in local List" + korrekturUM.toString());
+
+    if (!prefs.containsKey("OvertimeOffset")) setOffset(0);
   }
 
   void setUserName(String newName) async {
@@ -122,6 +149,7 @@ class Data {
     print("Data - hash updated");
   }
 
+  @deprecated
   void updateTagesstunden(double newTagesstunden) async {
     final SharedPreferences prefs = await _prefs;
     prefs.setDouble("tagesstunden", newTagesstunden);
@@ -145,6 +173,7 @@ class Data {
         prefs.getBool("finishedOnboarding").toString());
   }
 
+  @deprecated
   Future<void> updateWochentage(List<bool> list) async {
     final SharedPreferences prefs = await _prefs;
     prefs.setBool("MO", list[0]);
@@ -157,65 +186,105 @@ class Data {
     print("Dayrow in Shared Preferences gespeichert");
   }
 
-  Future<void> updateKorrekturenAB(int index, int value) async {
+  Future<void> migrateWorkingTime() async {
     final SharedPreferences prefs = await _prefs;
-    korrekturAB[index] = value;
-    //converts List of Integers to List of Strings and stores them in SharedPrefs
-    prefs.setStringList(
-        "korrekturAB", korrekturAB.map((e) => e.toString()).toList());
-    print("Data - kAB in SharedPrefs" +
-        prefs.getStringList("korrekturAB").toString());
+    if (!prefs.containsKey("MOmilli")) {
+      if (prefs.containsKey("tagesstunden") && prefs.containsKey("MO")) {
+        tagesstunden = prefs.getDouble("tagesstunden")!;
+        List<bool> wochentageTMP = [
+          prefs.getBool("MO")!,
+          prefs.getBool("DI")!,
+          prefs.getBool("MI")!,
+          prefs.getBool("DO")!,
+          prefs.getBool("FR")!,
+          prefs.getBool("SA")!,
+          prefs.getBool("SO")!,
+        ];
+        for (int i = 0; i < wochentageTMP.length; i++) {
+          if (wochentageTMP[i])
+            workingTime[i] =
+                (tagesstunden * Duration.millisecondsPerHour).toInt();
+        }
+      }
+    }
+
+    updateWorkingTime(workingTime);
+
+    print("MIGRATED LIST: " + workingTime.toString());
   }
 
-  Future<void> updateKorrekturenUM(int index, int value) async {
+  Future<void> updateWorkingTime(List<int> list) async {
     final SharedPreferences prefs = await _prefs;
-    korrekturAB[index] = value;
-    //converts List of Integers to List of Strings and stores them in SharedPrefs
-    prefs.setStringList(
-        "korrekturUM", korrekturUM.map((e) => e.toString()).toList());
-    print("Data - kUM in SharedPrefs" +
-        prefs.getStringList("korrekturUM").toString());
+
+    prefs.setInt("MOmilli", list[0]);
+    prefs.setInt("TUmilli", list[1]);
+    prefs.setInt("WEmilli", list[2]);
+    prefs.setInt("THmilli", list[3]);
+    prefs.setInt("FRmilli", list[4]);
+    prefs.setInt("SAmilli", list[5]);
+    prefs.setInt("SUmilli", list[6]);
+    print("Dayrow in Shared Preferences gespeichert");
   }
 
-  Future<void> deleteKorrekturenAB(int index) async {
-    final SharedPreferences prefs = await _prefs;
-    korrekturAB.removeAt(index);
-    //converts List of Integers to List of Strings and stores them in SharedPrefs
-    prefs.setStringList(
-        "korrekturAB", korrekturAB.map((e) => e.toString()).toList());
-    print("Data - kAB in SharedPrefs" +
-        prefs.getStringList("korrekturAB").toString());
-  }
+  // Future<void> updateKorrekturenAB(int index, int value) async {
+  //   final SharedPreferences prefs = await _prefs;
+  //   korrekturAB[index] = value;
+  //   //converts List of Integers to List of Strings and stores them in SharedPrefs
+  //   prefs.setStringList(
+  //       "korrekturAB", korrekturAB.map((e) => e.toString()).toList());
+  //   print("Data - kAB in SharedPrefs" +
+  //       prefs.getStringList("korrekturAB").toString());
+  // }
 
-  Future<void> deleteKorrekturenUM(int index) async {
-    final SharedPreferences prefs = await _prefs;
-    korrekturUM.removeAt(index);
-    //converts List of Integers to List of Strings and stores them in SharedPrefs
-    prefs.setStringList(
-        "korrekturUM", korrekturUM.map((e) => e.toString()).toList());
-    print("Data - kUM in SharedPrefs" +
-        prefs.getStringList("korrekturUM").toString());
-  }
+  // Future<void> updateKorrekturenUM(int index, int value) async {
+  //   final SharedPreferences prefs = await _prefs;
+  //   korrekturAB[index] = value;
+  //   //converts List of Integers to List of Strings and stores them in SharedPrefs
+  //   prefs.setStringList(
+  //       "korrekturUM", korrekturUM.map((e) => e.toString()).toList());
+  //   print("Data - kUM in SharedPrefs" +
+  //       prefs.getStringList("korrekturUM").toString());
+  // }
 
-  Future<void> addKorrekturenAB(int value) async {
-    final SharedPreferences prefs = await _prefs;
-    korrekturAB.add(value);
-    //converts List of Integers to List of Strings and stores them in SharedPrefs
-    prefs.setStringList(
-        "korrekturAB", korrekturAB.map((e) => e.toString()).toList());
-    print("Data - kAB in SharedPrefs" +
-        prefs.getStringList("korrekturAB").toString());
-  }
+  // Future<void> deleteKorrekturenAB(int index) async {
+  //   final SharedPreferences prefs = await _prefs;
+  //   korrekturAB.removeAt(index);
+  //   //converts List of Integers to List of Strings and stores them in SharedPrefs
+  //   prefs.setStringList(
+  //       "korrekturAB", korrekturAB.map((e) => e.toString()).toList());
+  //   print("Data - kAB in SharedPrefs" +
+  //       prefs.getStringList("korrekturAB").toString());
+  // }
 
-  Future<void> addKorrekturenUM(int value) async {
-    final SharedPreferences prefs = await _prefs;
-    korrekturUM.add(value);
-    //converts List of Integers to List of Strings and stores them in SharedPrefs
-    prefs.setStringList(
-        "korrekturUM", korrekturUM.map((e) => e.toString()).toList());
-    print("Data - kUM in SharedPrefs" +
-        prefs.getStringList("korrekturUM").toString());
-  }
+  // Future<void> deleteKorrekturenUM(int index) async {
+  //   final SharedPreferences prefs = await _prefs;
+  //   korrekturUM.removeAt(index);
+  //   //converts List of Integers to List of Strings and stores them in SharedPrefs
+  //   prefs.setStringList(
+  //       "korrekturUM", korrekturUM.map((e) => e.toString()).toList());
+  //   print("Data - kUM in SharedPrefs" +
+  //       prefs.getStringList("korrekturUM").toString());
+  // }
+
+  // Future<void> addKorrekturenAB(int value) async {
+  //   final SharedPreferences prefs = await _prefs;
+  //   korrekturAB.add(value);
+  //   //converts List of Integers to List of Strings and stores them in SharedPrefs
+  //   prefs.setStringList(
+  //       "korrekturAB", korrekturAB.map((e) => e.toString()).toList());
+  //   print("Data - kAB in SharedPrefs" +
+  //       prefs.getStringList("korrekturAB").toString());
+  // }
+
+  // Future<void> addKorrekturenUM(int value) async {
+  //   final SharedPreferences prefs = await _prefs;
+  //   korrekturUM.add(value);
+  //   //converts List of Integers to List of Strings and stores them in SharedPrefs
+  //   prefs.setStringList(
+  //       "korrekturUM", korrekturUM.map((e) => e.toString()).toList());
+  //   print("Data - kUM in SharedPrefs" +
+  //       prefs.getStringList("korrekturUM").toString());
+  // }
 
   Future<void> updatePausenKorrektur(bool b) async {
     final SharedPreferences prefs = await _prefs;
