@@ -153,36 +153,6 @@ class _HomePageState extends State<HomePage> {
           ),
           body: Stack(
             children: [
-              /*const Background_legacy(),
-            SafeArea(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                          icon:
-                              const Icon(Icons.refresh_rounded, color: Colors.transparent),
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/onboarding');
-                          }),
-                      IconButton(
-                          icon:
-                              Icon(Icons.bug_report_outlined, color: Colors.white24),
-                          onPressed: () {
-                            LogConsole.open(context);
-                          }),
-                      const SettingsButton()
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  getIt<Data>().timerText,
-                  //MantraText()
-                ],
-              ),
-            ),*/
               StreamBuilder<double>(
                 stream: blurValueStream.stream,
                 initialData: 0.001,
@@ -198,65 +168,11 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         )
-        /*
-            : Stack(
-                children: [
-                  const Background_legacy(),
-                  Padding(
-                    padding: const EdgeInsets.all(80.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              getIt<Data>().timerText,
-                              SizedBox(height: 100,),
-                              AnimatedStempelButton(callbackTurnOff: () {
-                                getIt<Data>().timerText.stop();
-                              }, callbackTurnOn: () {
-                                getIt<Data>().timerText.start();
-                              }),
-                            ],
-                          ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Flexible(
-                                child: Container(
-                                  constraints: BoxConstraints(
-                                      maxWidth: 500, maxHeight: 800),
-                                  child: ZeitenPanel(
-                                    panelController: pc,
-                                    updateTimer: () {
-                                      getIt<Data>().timerText.update();
-                                    },
-                                  ),
-                                ),
-                              ),
-                              SettingsButton(),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              )*/
         );
   }
 
   @override
   void dispose() {
-/*    getIt<Data>().dispose();
-    getIt<HiveDB>().dispose();*/
     containerColorStream.close();
     blurValueStream.close();
     print('home - DISPOSING-----------------');
@@ -280,41 +196,6 @@ class HomeContent extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                /*SizedBox(
-                  width: 10,
-                ),
-                // Pixel 2xl: 16, Galaxy S9: 0, Pixel Emulator: 0, IOS Simulator: 34
-                Text(
-                  MediaQuery.of(context).viewPadding.bottom.toString(),
-                  style: TextStyle(color: Colors.white),
-                ),
-                // Keyboard offset Value
-                // Pixel 2xl: 0, Galaxy S9: 48, Pixel Emulator: 48, IOS Simulator: 0
-                Text(MediaQuery.of(context).viewInsets.bottom.toString(),
-                    style: TextStyle(color: Colors.white)),
-                // Pixel 2xl: 16, Galaxy S9: 0, Pixel Emulator: 0, IOS Simulator: 34
-                Text(MediaQuery.of(context).padding.bottom.toString(),
-                    style: TextStyle(color: Colors.white)),
-                // Pixel 2xl: 32, Galaxy S9: 48, Pixel Emulator: 0, IOS Simulator: 0
-                Text(
-                    MediaQuery.of(context)
-                        .systemGestureInsets
-                        .bottom
-                        .toString(),
-                    style: TextStyle(color: Colors.white)),
-                Expanded(child: Container()),
-                IconButton(
-                    icon: const Icon(Icons.refresh_rounded,
-                        color: Colors.transparent),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/onboarding');
-                    }),
-                IconButton(
-                    icon:
-                        Icon(Icons.bug_report_outlined, color: Colors.white24),
-                    onPressed: () {
-                      LogConsole.open(context);
-                    }),*/
                 const SettingsButton()
               ],
             ),

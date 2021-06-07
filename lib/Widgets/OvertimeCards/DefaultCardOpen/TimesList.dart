@@ -27,6 +27,7 @@ class TimesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+        physics: BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(vertical: 30),
         itemCount: _zeitnahme.startTimes.length,
         itemBuilder: (context, index) {

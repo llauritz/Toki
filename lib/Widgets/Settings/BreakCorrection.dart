@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
 import '../../Services/Data.dart';
+import 'CorrectionTile.dart';
 
 class BreakCorrection extends StatefulWidget {
   const BreakCorrection({Key? key}) : super(key: key);
@@ -34,140 +35,108 @@ class _BreakCorrectionState extends State<BreakCorrection> {
           child: Center(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            AnimatedOpacity(
-                              opacity: active ? 1 : 0.2,
-                              duration: Duration(milliseconds: 500),
-                              curve: Curves.easeOutCubic,
-                              child: Text(
-                                "Pausenkorrektur",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline4!
-                                    .copyWith(fontSize: 18),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Column(
+                  children: [
+                    Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              AnimatedOpacity(
+                                opacity: active ? 1 : 0.2,
+                                duration: Duration(milliseconds: 500),
+                                curve: Curves.easeOutCubic,
+                                child: Text(
+                                  "Pausenkorrektur",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4!
+                                      .copyWith(fontSize: 18),
+                                ),
                               ),
-                            ),
-                            Positioned(
-                                right: -20,
-                                top: -5,
-                                child: Icon(
-                                  Icons.help_rounded,
-                                  size: 17,
-                                  color: Colors.black.withAlpha(150),
-                                ))
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        right: 0,
-                        top: -13,
-                        child: Switch(
-                            materialTapTargetSize: MaterialTapTargetSize.padded,
-                            activeColor: neon,
-                            activeTrackColor: neon.withAlpha(100),
-                            value: getIt<Data>().pausenKorrektur,
-                            onChanged: (newValue) {
-                              setState(() {
-                                getIt<Data>().updatePausenKorrektur(newValue);
-                                getIt<Data>().pausenKorrektur = newValue;
-                              });
-                            }),
-                      ),
-                    ],
-                  ),
-                  AnimatedList(
-                      physics: BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      key: _listKey,
-                      initialItemCount: correctionBox.length,
-                      itemBuilder: (BuildContext context, int index,
-                          Animation<double> animation) {
-                        return SizeTransition(
-                          sizeFactor: CurvedAnimation(
-                              parent: animation, curve: Curves.ease),
-                          child: CorrectionTile(
-                            correction: correctionBox.getAt(index)!,
-                            listKey: _listKey,
-                            index: index,
+                              Positioned(
+                                  right: -20,
+                                  top: -5,
+                                  child: Icon(
+                                    Icons.help_rounded,
+                                    size: 17,
+                                    color: Colors.black.withAlpha(150),
+                                  ))
+                            ],
                           ),
-                        );
-                      }),
-                  Row(
-                    children: [
-                      IconButton(
-                          onPressed: () async {
-                            setState(() async {
-                              await getIt<CorrectionDB>().resetBox();
-                              //_listKey.currentState!.insertItem(0);
-                            });
-                          },
-                          icon: Icon(Icons.ac_unit)),
-                      IconButton(
-                          onPressed: () async {
-                            Box box = Hive.box<Correction>("corrections");
-                            await box.add(Correction(
-                                ab: box.getAt(box.length - 1)!.ab +
-                                    Duration.millisecondsPerHour,
-                                um: box.getAt(box.length - 1)!.um +
-                                    10 * Duration.millisecondsPerMinute));
-                            setState(() {
-                              _listKey.currentState!
-                                  .insertItem(correctionBox.length - 1);
-                            });
-                          },
-                          icon: Icon(Icons.help)),
-                    ],
-                  ),
-                ],
+                        ),
+                        Positioned(
+                          right: 0,
+                          top: -13,
+                          child: Switch(
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.padded,
+                              activeColor: neon,
+                              activeTrackColor: neon.withAlpha(100),
+                              value: getIt<Data>().pausenKorrektur,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  getIt<Data>().updatePausenKorrektur(newValue);
+                                  getIt<Data>().pausenKorrektur = newValue;
+                                });
+                              }),
+                        ),
+                      ],
+                    ),
+                    AnimatedList(
+                        padding: EdgeInsets.only(top: 25),
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        key: _listKey,
+                        initialItemCount: correctionBox.length,
+                        itemBuilder: (BuildContext context, int index,
+                            Animation<double> animation) {
+                          return SizeTransition(
+                            sizeFactor: CurvedAnimation(
+                                parent: animation, curve: Curves.ease),
+                            child: CorrectionTile(
+                              correction: correctionBox.getAt(index)!,
+                              listKey: _listKey,
+                              index: index,
+                            ),
+                          );
+                        }),
+                    Row(
+                      children: [
+                        IconButton(
+                            onPressed: () async {
+                              setState(() async {
+                                await getIt<CorrectionDB>().resetBox();
+                                //_listKey.currentState!.insertItem(0);
+                              });
+                            },
+                            icon: Icon(Icons.ac_unit)),
+                        IconButton(
+                            onPressed: () async {
+                              Box box = Hive.box<Correction>("corrections");
+                              await box.add(Correction(
+                                  ab: box.getAt(box.length - 1)!.ab +
+                                      Duration.millisecondsPerHour,
+                                  um: box.getAt(box.length - 1)!.um +
+                                      10 * Duration.millisecondsPerMinute));
+                              setState(() {
+                                _listKey.currentState!
+                                    .insertItem(correctionBox.length - 1);
+                              });
+                            },
+                            icon: Icon(Icons.help)),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           )),
-    );
-  }
-}
-
-class CorrectionTile extends StatefulWidget {
-  const CorrectionTile(
-      {Key? key,
-      required this.correction,
-      required this.listKey,
-      required this.index})
-      : super(key: key);
-  final Correction correction;
-  final GlobalKey<AnimatedListState> listKey;
-  final int index;
-
-  @override
-  _CorrectionTileState createState() => _CorrectionTileState();
-}
-
-class _CorrectionTileState extends State<CorrectionTile> {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text("Ab"),
-        Text((widget.correction.ab / Duration.millisecondsPerHour).toString()),
-        Text("Stunden, Mindestens"),
-        Text(
-            (widget.correction.um / Duration.millisecondsPerMinute).toString()),
-        Text("Minuten."),
-        IconButton(
-            onPressed: () {
-              getIt<CorrectionDB>()
-                  .deleteCorrection(widget.index, widget.listKey, context);
-            },
-            icon: Icon(Icons.close_rounded))
-      ],
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:Timo/Widgets/Settings/BreakCorrection.dart';
+import 'package:Timo/Widgets/Settings/CorrectionTile.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -67,8 +68,18 @@ class CorrectionDB {
               ),
             ),
         duration: Duration(milliseconds: 300));
-    ScaffoldMessenger.of(listKey.currentContext!)
-        .showSnackBar(SnackBar(content: Text("hi")));
+    ScaffoldMessenger.of(listKey.currentContext!).showSnackBar(SnackBar(
+      content: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text("hi"),
+        ),
+      ),
+      padding: EdgeInsets.all(0),
+      
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+    ));
     correctionBox.deleteAt(index);
   }
 }

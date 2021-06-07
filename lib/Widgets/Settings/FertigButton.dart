@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 class FertigButton extends StatelessWidget {
   const FertigButton({
     Key? key,
-    required this.isDay,
   }) : super(key: key);
-
-  final bool isDay;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +40,7 @@ class FertigButton extends StatelessWidget {
       },
       child: Text("Fertig",
           style: openButtonText.copyWith(
-              color: isDay ? Colors.white : darkBackground)),
+              color: Colors.white)),
     );
   }
 }

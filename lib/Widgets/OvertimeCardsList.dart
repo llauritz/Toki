@@ -145,8 +145,8 @@ class ListContent extends StatelessWidget {
               Zeitnahme _deleted = await box.getAt(i);
               getIt<HiveDB>().deleteAT(i, index);
 
-              Scaffold.of(context).removeCurrentSnackBar();
-              Scaffold.of(context).showSnackBar(
+              ScaffoldMessenger.of(context).removeCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   margin: EdgeInsets.all(20),
                   shape: RoundedRectangleBorder(

@@ -40,26 +40,24 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: ListView(physics: BouncingScrollPhysics(), children: [
-          FadeIn(delay: 300 - 100, fadeChild: const SettingsTitle()),
-          FadeIn(delay: 350 - 100, fadeChild: NamePicker()),
-          FadeIn(delay: 350 - 100, fadeChild: BreakCorrection()),
-          FadeIn(
-              delay: 400 - 100,
-              fadeChild: TagesstundenPicker(
-                isDay: isDay,
-              )),
-          FadeIn(delay: 450 - 100, fadeChild: WochentagePicker(isDay: isDay)),
-          FadeIn(
-              delay: 500 - 100, fadeChild: PausenkorrekturPicker(isDay: isDay)),
-          SizedBox(
-            height: 80,
-          )
-        ]),
-      ),
+      body: ListView(physics: BouncingScrollPhysics(), children: [
+        FadeIn(delay: 300 - 100, fadeChild: const SettingsTitle()),
+        FadeIn(delay: 350 - 100, fadeChild: NamePicker()),
+        FadeIn(delay: 350 - 100, fadeChild: BreakCorrection()),
+        FadeIn(
+            delay: 400 - 100,
+            fadeChild: TagesstundenPicker(
+              isDay: isDay,
+            )),
+        FadeIn(delay: 450 - 100, fadeChild: WochentagePicker(isDay: isDay)),
+        FadeIn(
+            delay: 500 - 100, fadeChild: PausenkorrekturPicker(isDay: isDay)),
+        SizedBox(
+          height: 80,
+        )
+      ]),
       floatingActionButton:
-          FadeIn(delay: 650 - 100, fadeChild: FertigButton(isDay: isDay)),
+          FadeIn(delay: 350, fadeChild: FertigButton()),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
