@@ -9,9 +9,12 @@ class SettingsTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Text(
-      "Einstellungen",
-      style: settingsHeadline.copyWith(color: gray),
+        child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 100.0),
+      child: Text(
+        "Einstellungen",
+        style: settingsHeadline.copyWith(color: grayAccent.withAlpha(200)),
+      ),
     ));
   }
 }

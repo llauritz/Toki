@@ -3,6 +3,7 @@ import 'package:Timo/hiveClasses/Correction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -79,7 +80,7 @@ void main() async {
       headline5: TextStyle(
           fontSize: 12.0, height: 1.1, color: Colors.black.withAlpha(150)));
 
-  runApp(MaterialApp(
+  runApp(GetMaterialApp(
     routes: {
       "/": (context) => const HomePage(),
       "/home": (context) => const HomePage(),

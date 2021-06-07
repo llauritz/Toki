@@ -5,8 +5,6 @@ import '../Services/Data.dart';
 
 final getIt = GetIt.instance;
 
-
-
 class Background_legacy extends StatefulWidget {
   const Background_legacy({
     Key? key,
@@ -16,9 +14,8 @@ class Background_legacy extends StatefulWidget {
   _Background_legacyState createState() => _Background_legacyState();
 }
 
-
-class _Background_legacyState extends State<Background_legacy> with WidgetsBindingObserver{
-
+class _Background_legacyState extends State<Background_legacy>
+    with WidgetsBindingObserver {
   late AssetImage currentImage;
 
   @override
@@ -55,7 +52,7 @@ class _Background_legacyState extends State<Background_legacy> with WidgetsBindi
     );
   }
 
-  AssetImage currentBackground(){
+  AssetImage currentBackground() {
     int hourNow = DateTime.now().hour;
     int minuteNow = DateTime.now().minute;
 
@@ -66,7 +63,7 @@ class _Background_legacyState extends State<Background_legacy> with WidgetsBindi
       // eigentlich clouds 1
       getIt<Data>().updateSettingsBackground(
           r"+36uL#E100_39F%h%MDi00s:_NIUxGDiRi?c^+Rj9ExuIV%Ms:9FX8j[%NWBRPWVkCxv");
-      return const AssetImage('assets/background/clouds/clouds1.jpg');
+      return const AssetImage('assets/background/clouds/clouds1_alt.jpg');
     } else if (currentTime >= 7.00 && currentTime < 8.00) {
       getIt<Data>().updateSettingsBackground(
           r'+MLxSt9ZELNb%2EM$%WC0ft8t7sn}sR*IpxZtRr?s.s:wJt6ofR*IoShR,s.j[WBbHs:');
@@ -79,9 +76,9 @@ class _Background_legacyState extends State<Background_legacy> with WidgetsBindi
       getIt<Data>().updateSettingsBackground(
           r"+CBYFl?a9LNM9Ht7ofWE06Rm?Wxrb0M~WCxr~ks,9KM~Rpxrs.IX9KRl-mt5tRM~Rl%J");
       return const AssetImage("assets/background/clouds/clouds4.jpg");
-    } else if(currentTime >= 15.30 && currentTime < 17.30) {
+    } else if (currentTime >= 15.30 && currentTime < 17.30) {
       getIt<Data>().updateSettingsBackground(
-        // eigentlich 5
+          // eigentlich 5
           r"+GHx1=cX~B9a0201V@oevf~A9uxt=x%MxFNHWU4:ofsotSV@ozV[EN-ojFW;EN%LNGof");
       return const AssetImage("assets/background/clouds/clouds2.jpg");
     } else if (currentTime >= 17.30 && currentTime < 20.00) {
@@ -105,27 +102,26 @@ class _Background_legacyState extends State<Background_legacy> with WidgetsBindi
     super.dispose();
   }
 
-  int getKeyInt(){
+  int getKeyInt() {
     final int hourNow = DateTime.now().hour;
     final int minuteNow = DateTime.now().minute;
 
-    final double currentTime = hourNow + minuteNow/100;
+    final double currentTime = hourNow + minuteNow / 100;
     // example: 16:35 -> 16.35
 
-    if(currentTime <= 6.59 || currentTime >= 20){
+    if (currentTime <= 6.59 || currentTime >= 20) {
       return 1;
-    }else if(currentTime >= 7.00 && currentTime < 8.00){
+    } else if (currentTime >= 7.00 && currentTime < 8.00) {
       return 2;
-    }else if(currentTime >= 8.00 && currentTime < 11.00){
+    } else if (currentTime >= 8.00 && currentTime < 11.00) {
       return 3;
-    }else if(currentTime >= 11.00 && currentTime < 15.30){
+    } else if (currentTime >= 11.00 && currentTime < 15.30) {
       return 4;
-    }else if(currentTime >= 15.30 && currentTime < 17.30){
+    } else if (currentTime >= 15.30 && currentTime < 17.30) {
       return 5;
-    }else if(currentTime >= 17.30 && currentTime < 20.00){
+    } else if (currentTime >= 17.30 && currentTime < 20.00) {
       return 6;
     }
     return 7;
   }
-
 }
