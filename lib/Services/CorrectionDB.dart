@@ -49,37 +49,36 @@ class CorrectionDB {
     print(correctionBox.length);
   }
 
-  Future<void> deleteCorrection(
-      int index, GlobalKey<AnimatedListState> listKey, context) async {
+  Future<void> deleteCorrection(int index, context) async {
     Box correctionBox = Hive.box<Correction>("corrections");
     Correction removedItem = correctionBox.getAt(index);
-    listKey.currentState!.removeItem(
-        index,
-        (context, animation) => SizeTransition(
-              sizeFactor: CurvedAnimation(
-                  parent: animation, curve: Curves.ease.flipped),
-              child: AbsorbPointer(
-                absorbing: true,
-                child: CorrectionTile(
-                  correction: removedItem,
-                  listKey: listKey,
-                  index: index,
-                ),
-              ),
-            ),
-        duration: Duration(milliseconds: 300));
-    ScaffoldMessenger.of(listKey.currentContext!).showSnackBar(SnackBar(
-      content: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text("hi"),
-        ),
-      ),
-      padding: EdgeInsets.all(0),
-      
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-    ));
+
+    // listKey.currentState!.removeItem(
+    //     index,
+    //     (context, animation) => SizeTransition(
+    //           sizeFactor: CurvedAnimation(
+    //               parent: animation, curve: Curves.ease.flipped),
+    //           child: AbsorbPointer(
+    //             absorbing: true,
+    //             child: CorrectionTile(
+    //               correction: removedItem,
+    //               listKey: listKey,
+    //               index: index,
+    //             ),
+    //           ),
+    //         ),
+    //     duration: Duration(milliseconds: 300));
+    // ScaffoldMessenger.of(listKey.currentContext!).showSnackBar(SnackBar(
+    //   content: Card(
+    //     child: Padding(
+    //       padding: const EdgeInsets.all(8.0),
+    //       child: Text("hi"),
+    //     ),
+    //   ),
+    //   padding: EdgeInsets.all(0),
+    //   backgroundColor: Colors.transparent,
+    //   elevation: 0,
+    // ));
     correctionBox.deleteAt(index);
   }
 }
