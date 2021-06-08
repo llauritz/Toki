@@ -12,13 +12,10 @@ import 'BreakCorrection.dart';
 
 class CorrectionTile extends StatefulWidget {
   const CorrectionTile(
-      {Key? key,
-      required this.correction,
-      required this.listKey,
-      required this.index})
+      {Key? key, required this.correction, required this.closeCallback, required this.index})
       : super(key: key);
   final Correction correction;
-  final GlobalKey<AnimatedListState> listKey;
+  final Function closeCallback;
   final int index;
 
   @override
@@ -53,9 +50,47 @@ class _CorrectionTileState extends State<CorrectionTile> {
                     ),
                     Row(
                       children: [
-                        Text((widget.correction.ab /
-                                Duration.millisecondsPerHour)
-                            .toString()),
+                        InkWell(
+                          splashColor: neon.withAlpha(100),
+                          child: Ink(
+                            decoration: BoxDecoration(
+                                color: neonTranslucent,
+                                borderRadius: BorderRadius.circular(5)),
+                            padding: const EdgeInsets.all(5),
+                            child: Text(
+                              (widget.correction.ab /
+                                      Duration.millisecondsPerHour)
+                                  .toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4!
+                                  .copyWith(fontSize: 20, color: neon),
+                            ),
+                          ),
+                          onTap: () async {
+                            int initHour = widget.correction.ab ~/
+                                Duration.millisecondsPerHour;
+                            int initMinute = (widget.correction.ab -
+                                    initHour * Duration.millisecondsPerHour) ~/
+                                Duration.millisecondsPerMinute;
+                            final TimeOfDay? newTime = await showTimePicker(
+                              context: context,
+                              initialTime:
+                                  TimeOfDay(hour: initHour, minute: initMinute),
+                            );
+                            if (newTime != null) {
+                              setState(() {
+                                getIt<CorrectionDB>().changeAB(
+                                    widget.index,
+                                    newTime.hour *
+                                            Duration.millisecondsPerHour +
+                                        newTime.minute *
+                                            Duration.millisecondsPerMinute,
+                                    widget.correction);
+                              });
+                            }
+                          },
+                        ),
                         Text(
                           "Stunden",
                           style: Theme.of(context)
@@ -97,9 +132,7 @@ class _CorrectionTileState extends State<CorrectionTile> {
           IconButton(
               visualDensity: VisualDensity.compact,
               onPressed: () {
-                getIt<CorrectionDB>()
-                    .deleteCorrection(widget.index, context);
-                impicitListKey.currentState!.setState(() {});
+                widget.closeCallback();
               },
               icon: Icon(Icons.close_rounded))
         ],
@@ -108,14 +141,25 @@ class _CorrectionTileState extends State<CorrectionTile> {
   }
 }
 
-class timePicker extends StatefulWidget {
-  const timePicker({Key? key}) : super(key: key);
+class TimePicker extends StatefulWidget {
+  const TimePicker({Key? key, required this.correction, required this.index})
+      : super(key: key);
+
+  final Correction correction;
+  final int index;
 
   @override
-  _timePickerState createState() => _timePickerState();
+  _TimePickerState createState() => _TimePickerState();
 }
 
-class _timePickerState extends State<timePicker> {
+class _TimePickerState extends State<TimePicker> {
+  TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FittedBox(

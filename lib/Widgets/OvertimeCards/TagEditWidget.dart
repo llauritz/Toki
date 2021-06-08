@@ -6,13 +6,11 @@ import 'package:flutter/material.dart';
 import '../../Services/Theme.dart';
 
 class TagEditWidget extends StatefulWidget {
-
-  const TagEditWidget({
-    required this.i,
-    required this.color,
-    required this.colorAccent,
-    required this.zeitnahme
-  });
+  const TagEditWidget(
+      {required this.i,
+      required this.color,
+      required this.colorAccent,
+      required this.zeitnahme});
 
   final Color colorAccent;
   final Color color;
@@ -24,7 +22,6 @@ class TagEditWidget extends StatefulWidget {
 }
 
 class _TagEditWidgetState extends State<TagEditWidget> {
-
   TextEditingController _textEditingController = TextEditingController();
   FocusNode _textFocus = FocusNode();
 
@@ -38,6 +35,7 @@ class _TagEditWidgetState extends State<TagEditWidget> {
   @override
   Widget build(BuildContext context) {
     return FittedBox(
+      clipBehavior: Clip.none,
       fit: BoxFit.fitWidth,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -66,7 +64,7 @@ class _TagEditWidgetState extends State<TagEditWidget> {
                 focusedBorder: InputBorder.none,
                 errorBorder: InputBorder.none,
               ),
-              onChanged: (value){
+              onChanged: (value) {
                 setState(() {
                   getIt<HiveDB>().updateTag(value, widget.i);
                 });
@@ -74,13 +72,16 @@ class _TagEditWidgetState extends State<TagEditWidget> {
               textCapitalization: TextCapitalization.words,
             ),
           ),
-          IconButton(icon: Icon(Icons.edit, color: widget.color), onPressed: (){
-            _textFocus.requestFocus();
-          })
+          IconButton(
+              icon: Icon(Icons.edit, color: widget.color),
+              onPressed: () {
+                _textFocus.requestFocus();
+              })
         ],
       ),
     );
   }
+
   @override
   void dispose() {
     _textEditingController.dispose();

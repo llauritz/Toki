@@ -48,6 +48,7 @@ class _NamePickerState extends State<NamePicker> {
               )),
               FittedBox(
                 fit: BoxFit.fitWidth,
+                clipBehavior: Clip.antiAlias,
                 child: Row(
                   children: [
                     IconButton(

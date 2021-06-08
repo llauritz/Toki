@@ -49,9 +49,8 @@ class CorrectionDB {
     print(correctionBox.length);
   }
 
-  Future<void> deleteCorrection(int index, context) async {
+  Future<void> deleteCorrection(int index) async {
     Box correctionBox = Hive.box<Correction>("corrections");
-    Correction removedItem = correctionBox.getAt(index);
 
     // listKey.currentState!.removeItem(
     //     index,
@@ -80,5 +79,11 @@ class CorrectionDB {
     //   elevation: 0,
     // ));
     correctionBox.deleteAt(index);
+  }
+
+  Future<void> changeAB(int index, int newMilli, Correction correction) async {
+    Box correctionBox = Hive.box<Correction>("corrections");
+    correction.ab = newMilli;
+    correctionBox.putAt(index, correction);
   }
 }

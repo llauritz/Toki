@@ -115,7 +115,7 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                     //         ),
                     //       );
                     //     }),
-                    Divider(),
+
                     StreamBuilder(
                         stream: correctionBox.watch(),
                         builder: (context, snapshot) {
@@ -126,29 +126,36 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                             physics: BouncingScrollPhysics(),
                             shrinkWrap: true,
                             key: impicitListKey,
-                            removeItemBuilder:
-                                (context, animation, Correction correction) {
-                              return SizeFadeTransition(
-                                sizeFraction: 0.25,
-                                curve: Curves.easeInCubic,
-                                animation: animation,
-                                child: CorrectionTile(
-                                  correction: correction,
-                                  index: 0,
-                                  listKey: _listKey,
+                            itemBuilder: (context, animation,
+                                Correction correction, index) {
+                              return SizeTransition(
+                                axisAlignment: -1.0,
+                                sizeFactor: CurvedAnimation(
+                                    parent: animation, curve: Curves.ease),
+                                child: FadeTransition(
+                                  opacity: CurvedAnimation(
+                                      parent: animation, curve: Curves.ease),
+                                  child: CorrectionTile(
+                                    index: index,
+                                    correction: correction,
+                                    closeCallback: () {
+                                      getIt<CorrectionDB>()
+                                          .deleteCorrection(index);
+                                    },
+                                  ),
                                 ),
                               );
                             },
-                            itemBuilder: (context, animation,
-                                Correction correction, index) {
+                            removeItemBuilder:
+                                (context, animation, Correction correction) {
                               return SizeFadeTransition(
-                                sizeFraction: 0.9,
-                                curve: Curves.easeInOutQuart,
+                                sizeFraction: 0.75,
+                                curve: Curves.easeInOutCubic,
                                 animation: animation,
                                 child: CorrectionTile(
+                                  index: 0,
                                   correction: correction,
-                                  index: index,
-                                  listKey: _listKey,
+                                  closeCallback: () {},
                                 ),
                               );
                             },
