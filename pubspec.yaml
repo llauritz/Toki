@@ -39,6 +39,7 @@ dependencies:
   logger: ^1.0.0
   get: ^4.1.4
   implicitly_animated_reorderable_list: ^0.4.0
+  auto_animated: ^3.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:Timo/Services/CorrectionDB.dart';
 import 'package:Timo/Services/Theme.dart';
 import 'package:Timo/Transitions/SizeScaleFadeTransition.dart';
 import 'package:Timo/hiveClasses/Correction.dart';
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get_it/get_it.dart';
@@ -33,41 +36,54 @@ class _BreakCorrectionState extends State<BreakCorrection> {
   @override
   Widget build(BuildContext context) {
     active = getIt<Data>().pausenKorrektur;
-    logger.w(boxToList(correctionBox).length);
+    //logger.w(boxToList(correctionBox).length);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
       child: Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           elevation: 5,
           shadowColor: Colors.black26,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 5.0),
-                child: Column(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            child: Column(
+              children: [
+                Stack(
+                  clipBehavior: Clip.none,
                   children: [
-                    Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Align(
+                    InkWell(
+                      onTap: () {
+                        showModal(
+                            configuration: FadeScaleTransitionConfiguration(
+                                transitionDuration: Duration(milliseconds: 300), reverseTransitionDuration: Duration(milliseconds: 100)),
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text("Automatische Pausenkorrektur"),
+                                titleTextStyle: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 22),
+                                content: Text(
+                                    """Sobald deine Arbeitszeit die Stundenzahl "Ab" überschreitet, wird deine Pausenzeit automatisch auf den Wert "Mindestens" erhöht. Wenn du mehr Pause gemacht hast, passiert nichts."""),
+                                contentTextStyle: TextStyle(fontWeight: FontWeight.bold, color: grayAccent),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("Okay"))
+                                ],
+                              );
+                            });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 25.0),
+                        child: Align(
                           alignment: Alignment.center,
                           child: Stack(
                             clipBehavior: Clip.none,
                             children: [
-                              AnimatedOpacity(
-                                opacity: active ? 1 : 0.2,
-                                duration: Duration(milliseconds: 500),
-                                curve: Curves.easeOutCubic,
-                                child: Text(
-                                  "Pausenkorrektur",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline4!
-                                      .copyWith(fontSize: 18),
-                                ),
+                              Text(
+                                "Pausenkorrektur",
+                                style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18),
                               ),
                               Positioned(
                                   right: -20,
@@ -80,70 +96,57 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                             ],
                           ),
                         ),
-                        Positioned(
-                          right: 0,
-                          top: -13,
-                          child: Switch(
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.padded,
-                              activeColor: neon,
-                              activeTrackColor: neon.withAlpha(100),
-                              value: getIt<Data>().pausenKorrektur,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  getIt<Data>().updatePausenKorrektur(newValue);
-                                  getIt<Data>().pausenKorrektur = newValue;
-                                });
-                              }),
-                        ),
-                      ],
+                      ),
                     ),
-                    // AnimatedList(
-                    //     padding: EdgeInsets.only(top: 25),
-                    //     physics: BouncingScrollPhysics(),
-                    //     shrinkWrap: true,
-                    //     key: _listKey,
-                    //     initialItemCount: correctionBox.length,
-                    //     itemBuilder: (BuildContext context, int index,
-                    //         Animation<double> animation) {
-                    //       return SizeTransition(
-                    //         sizeFactor: CurvedAnimation(
-                    //             parent: animation, curve: Curves.ease),
-                    //         child: CorrectionTile(
-                    //           correction: correctionBox.getAt(index)!,
-                    //           listKey: _listKey,
-                    //           index: index,
-                    //         ),
-                    //       );
-                    //     }),
-
-                    StreamBuilder(
+                    Positioned(
+                      right: 0,
+                      top: -13,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 25.0),
+                        child: Switch(
+                            materialTapTargetSize: MaterialTapTargetSize.padded,
+                            activeColor: neon,
+                            activeTrackColor: neon.withAlpha(100),
+                            value: getIt<Data>().pausenKorrektur,
+                            onChanged: (newValue) {
+                              setState(() {
+                                getIt<Data>().updatePausenKorrektur(newValue);
+                                getIt<Data>().pausenKorrektur = newValue;
+                              });
+                            }),
+                      ),
+                    ),
+                  ],
+                ),
+                AnimatedOpacity(
+                  opacity: active ? 1 : 0.4,
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                  child: AbsorbPointer(
+                    absorbing: !active,
+                    child: StreamBuilder(
                         stream: correctionBox.watch(),
                         builder: (context, snapshot) {
                           return ImplicitlyAnimatedList(
-                            padding: const EdgeInsets.only(top: 25),
                             insertDuration: Duration(milliseconds: 350),
                             removeDuration: Duration(milliseconds: 400),
                             updateDuration: Duration(milliseconds: 400),
                             physics: BouncingScrollPhysics(),
                             shrinkWrap: true,
                             key: impicitListKey,
-                            itemBuilder: (context, animation,
-                                Correction correction, index) {
+                            itemBuilder: (context, animation, Correction correction, index) {
                               return SizeScaleFadeTransition(
                                 animation: animation,
                                 child: CorrectionTile(
                                   index: index,
                                   correction: correction,
                                   closeCallback: () {
-                                    getIt<CorrectionDB>()
-                                        .deleteCorrection(index);
+                                    getIt<CorrectionDB>().deleteCorrection(index);
                                   },
                                 ),
                               );
                             },
-                            removeItemBuilder:
-                                (context, animation, Correction correction) {
+                            removeItemBuilder: (context, animation, Correction correction) {
                               return SizeFadeTransition(
                                 sizeFraction: 0.75,
                                 curve: Curves.easeInOutCubic,
@@ -155,8 +158,7 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                                 ),
                               );
                             },
-                            updateItemBuilder:
-                                (context, animation, Correction correction) {
+                            updateItemBuilder: (context, animation, Correction correction) {
                               return SizeFadeTransition(
                                 sizeFraction: 0.75,
                                 curve: Curves.easeInOutCubic,
@@ -168,47 +170,62 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                                 ),
                               );
                             },
-                            areItemsTheSame:
-                                (Correction oldItem, Correction newItem) {
+                            areItemsTheSame: (Correction oldItem, Correction newItem) {
                               return oldItem.ab == newItem.ab;
                             },
                             items: boxToList(correctionBox),
                           );
                         }),
-                    Row(
+                  ),
+                ),
+                AnimatedOpacity(
+                  opacity: active ? 1 : 0.4,
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.ease,
+                  child: AbsorbPointer(
+                    absorbing: !active,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton(
-                            onPressed: () async {
-                              setState(() async {
-                                await getIt<CorrectionDB>().resetBox();
-                                //_listKey.currentState!.insertItem(0);
-                              });
-                            },
-                            icon: Icon(Icons.ac_unit)),
-                        IconButton(
+                        FlatButton(
                             onPressed: () async {
                               Box box = Hive.box<Correction>("corrections");
-                              await box.add(Correction(
-                                  ab: box.getAt(box.length - 1)!.ab +
-                                      Duration.millisecondsPerHour,
-                                  um: box.getAt(box.length - 1)!.um +
-                                      10 * Duration.millisecondsPerMinute));
+                              box.isNotEmpty
+                                  ? await box.add(Correction(
+                                      ab: box.getAt(box.length - 1)!.ab + Duration.millisecondsPerHour,
+                                      um: box.getAt(box.length - 1)!.um + 10 * Duration.millisecondsPerMinute))
+                                  : await box.add(Correction(ab: 6 * Duration.millisecondsPerHour, um: 30 * Duration.millisecondsPerMinute));
                               setState(() {
                                 // _listKey.currentState!
                                 //     .insertItem(correctionBox.length - 1);
                               });
                             },
-                            icon: Icon(Icons.help)),
-                        IconButton(
-                            onPressed: () async {
-                              getIt<CorrectionDB>().switch12();
-                            },
-                            icon: Icon(Icons.ac_unit)),
+                            shape: const StadiumBorder(),
+                            color: grayTranslucent,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(width: 3),
+                                  Text(
+                                    "Regel hinzufügen",
+                                    style: openButtonText.copyWith(color: grayAccent),
+                                  ),
+                                  const SizedBox(width: 1),
+                                  Icon(
+                                    Icons.add_rounded,
+                                    color: grayAccent,
+                                    size: 20,
+                                  ),
+                                ],
+                              ),
+                            ))
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           )),
     );

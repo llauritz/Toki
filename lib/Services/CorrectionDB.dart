@@ -14,8 +14,7 @@ import 'package:get/get.dart';
 
 class CorrectionDB {
   Future<void> initCorrectionDB() async {
-    SharedPreferences prefs =
-        await getIt<Data>().getSharedPreferencesInstance();
+    SharedPreferences prefs = await getIt<Data>().getSharedPreferencesInstance();
     if (prefs.containsKey("korrekturUM") || prefs.containsKey("korrekturAB")) {
       await migrateData(prefs);
     }
@@ -25,12 +24,8 @@ class CorrectionDB {
   Future<void> resetBox() async {
     Box correctionBox = Hive.box<Correction>("corrections");
     await correctionBox.clear();
-    await correctionBox.add(Correction(
-        ab: 6 * Duration.millisecondsPerHour,
-        um: 30 * Duration.millisecondsPerMinute));
-    await correctionBox.add(Correction(
-        ab: 9 * Duration.millisecondsPerHour,
-        um: 45 * Duration.millisecondsPerMinute));
+    await correctionBox.add(Correction(ab: 6 * Duration.millisecondsPerHour, um: 30 * Duration.millisecondsPerMinute));
+    await correctionBox.add(Correction(ab: 9 * Duration.millisecondsPerHour, um: 45 * Duration.millisecondsPerMinute));
     logger.w(correctionBox.length);
   }
 
@@ -94,5 +89,63 @@ class CorrectionDB {
     Box correctionBox = Hive.box<Correction>("corrections");
     correction.ab = newMilli;
     correctionBox.putAt(index, correction);
+    sortBox();
+  }
+
+  Future<void> changeUM(int index, int newMilli, Correction correction) async {
+    Box correctionBox = Hive.box<Correction>("corrections");
+    correction.um = newMilli;
+    correctionBox.putAt(index, correction);
+    sortBox();
+  }
+
+  Future<void> sortBox() async {
+    Box correctionBox = Hive.box<Correction>("corrections");
+    if (correctionBox.isEmpty) return;
+    int n = correctionBox.length;
+    int i, j;
+    Correction temp;
+
+    List<Correction> correctionList = List<Correction>.generate(correctionBox.length, (index) => correctionBox.getAt(index));
+    // logger.w("start");
+    //print(correctionList);
+    // for (int x = 0; x < correctionList.length; x++) {
+    //   logger.i(correctionList[x].ab);
+    // }
+
+    for (i = 1; i < n; i++) {
+      temp = correctionList[i];
+      j = i - 1;
+      while (j >= 0 && temp.ab < correctionList[j].ab) {
+        correctionList[j + 1] = correctionList[j];
+        --j;
+      }
+      correctionList[j + 1] = temp;
+    }
+
+    //print(correctionList);
+    // for (int x = 0; x < correctionList.length; x++) {
+    //   logger.i(correctionList[x].ab);
+    // }
+
+    for (int x = 0; x < correctionList.length; x++) {
+      correctionBox.putAt(x, correctionList[x]);
+    }
   }
 }
+
+// void insertionSort(Box<Correction> box) {
+//   if (box.length == 0) return;
+//   int n = box.length;
+//   int temp, i, j;
+
+//   for (i = 1; i < n; i++) {
+//     temp = list[i];
+//     j = i - 1;
+//     while (j >= 0 && temp < list[j]) {
+//       list[j + 1] = list[j];
+//       --j;
+//     }
+//     list[j + 1] = temp;
+//   }
+// }

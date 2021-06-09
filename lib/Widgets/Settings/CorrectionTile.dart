@@ -11,12 +11,7 @@ import '../../Services/Data.dart';
 import 'BreakCorrection.dart';
 
 class CorrectionTile extends StatefulWidget {
-  const CorrectionTile(
-      {Key? key,
-      required this.correction,
-      required this.closeCallback,
-      required this.index})
-      : super(key: key);
+  const CorrectionTile({Key? key, required this.correction, required this.closeCallback, required this.index}) : super(key: key);
   final Correction correction;
   final Function closeCallback;
   final int index;
@@ -41,164 +36,127 @@ class _CorrectionTileState extends State<CorrectionTile> {
               elevation: 0,
               color: Colors.transparent,
               clipBehavior: Clip.antiAlias,
-              shape: StadiumBorder(
-                  side: BorderSide(color: grayTranslucent, width: 2)),
+              shape: StadiumBorder(side: BorderSide(color: grayTranslucent, width: 2)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Flexible(
                     child: InkWell(
-                        highlightColor: Colors.transparent,
-                        splashColor: neonTranslucent,
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Ab",
-                                style: TextStyle(
-                                    fontSize: 12, color: gray.withAlpha(170)),
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: neonTranslucent,
-                                              width: 3)),
-                                      //color: neonTranslucent,
-                                      //borderRadius: BorderRadius.circular(5)
+                        splashColor: neon.withAlpha(100),
+                        highlightColor: neon.withAlpha(30),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 14.0),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Ab",
+                                  style: TextStyle(fontSize: 12, color: gray.withAlpha(170)),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        border: Border(bottom: BorderSide(color: neonTranslucent, width: 3)),
+                                        //color: neonTranslucent,
+                                        //borderRadius: BorderRadius.circular(5)
+                                      ),
+                                      padding: const EdgeInsets.only(top: 1),
+                                      child: Text(
+                                        widget.correction.ab % Duration.millisecondsPerHour == 0
+                                            ? (widget.correction.ab ~/ Duration.millisecondsPerHour).toString()
+                                            : (widget.correction.ab / Duration.millisecondsPerHour).toString().replaceAll(".", ","),
+                                        style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 20, color: neon),
+                                      ),
                                     ),
-                                    padding: const EdgeInsets.only(top: 1),
-                                    child: Text(
-                                      widget.correction.ab %
-                                                  Duration
-                                                      .millisecondsPerHour ==
-                                              0
-                                          ? (widget.correction.ab ~/
-                                                  Duration.millisecondsPerHour)
-                                              .toString()
-                                          : (widget.correction.ab /
-                                                  Duration.millisecondsPerHour)
-                                              .toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4!
-                                          .copyWith(fontSize: 20, color: neon),
+                                    SizedBox(width: 3),
+                                    Text(
+                                      "Stunden",
+                                      style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18, color: grayAccent),
                                     ),
-                                  ),
-                                  SizedBox(width: 3),
-                                  Text(
-                                    "Stunden",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline4!
-                                        .copyWith(
-                                            fontSize: 18, color: grayAccent),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         onTap: () async {
-                          int initHour = widget.correction.ab ~/
-                              Duration.millisecondsPerHour;
-                          int initMinute = (widget.correction.ab -
-                                  initHour * Duration.millisecondsPerHour) ~/
-                              Duration.millisecondsPerMinute;
+                          int initHour = widget.correction.ab ~/ Duration.millisecondsPerHour;
+                          int initMinute = (widget.correction.ab - initHour * Duration.millisecondsPerHour) ~/ Duration.millisecondsPerMinute;
                           final TimeOfDay? newTime = await showTimePicker(
+                            initialEntryMode: TimePickerEntryMode.input,
+                            cancelText: "Abbrechen",
+                            confirmText: "Speichern",
+                            helpText: "Stunden auswählen",
                             context: context,
-                            initialTime:
-                                TimeOfDay(hour: initHour, minute: initMinute),
+                            initialTime: TimeOfDay(hour: initHour, minute: initMinute),
                           );
                           if (newTime != null) {
-                            setState(() {
-                              getIt<CorrectionDB>().changeAB(
-                                  widget.index,
-                                  newTime.hour * Duration.millisecondsPerHour +
-                                      newTime.minute *
-                                          Duration.millisecondsPerMinute,
-                                  widget.correction);
-                            });
+                            getIt<CorrectionDB>().changeAB(widget.index,
+                                newTime.hour * Duration.millisecondsPerHour + newTime.minute * Duration.millisecondsPerMinute, widget.correction);
                           }
                         }),
                   ),
                   Flexible(
                     child: InkWell(
-                        highlightColor: Colors.transparent,
-                        splashColor: neonTranslucent,
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Mindestens",
-                                style: TextStyle(
-                                    fontSize: 12, color: gray.withAlpha(170)),
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: neonTranslucent,
-                                              width: 3)),
-                                      //color: neonTranslucent,
-                                      //borderRadius: BorderRadius.circular(5)
+                        splashColor: neon.withAlpha(100),
+                        highlightColor: neon.withAlpha(30),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 14.0),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Mindestens",
+                                  style: TextStyle(fontSize: 12, color: gray.withAlpha(170)),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        border: Border(bottom: BorderSide(color: neonTranslucent, width: 3)),
+                                        //color: neonTranslucent,
+                                        //borderRadius: BorderRadius.circular(5)
+                                      ),
+                                      padding: const EdgeInsets.only(top: 1),
+                                      child: Text(
+                                        (widget.correction.um ~/ Duration.millisecondsPerMinute).toString(),
+                                        style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 20, color: neon),
+                                      ),
                                     ),
-                                    padding: const EdgeInsets.only(top: 1),
-                                    child: Text(
-                                      (widget.correction.um ~/
-                                              Duration.millisecondsPerMinute)
-                                          .toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4!
-                                          .copyWith(fontSize: 20, color: neon),
+                                    SizedBox(
+                                      width: 3,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 3,
-                                  ),
-                                  Text(
-                                    "Minuten",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline4!
-                                        .copyWith(
-                                            fontSize: 18, color: grayAccent),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                    Text(
+                                      "Minuten",
+                                      style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18, color: grayAccent),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         onTap: () async {
-                          int initHour = widget.correction.um ~/
-                              Duration.millisecondsPerHour;
-                          int initMinute = (widget.correction.um -
-                                  initHour * Duration.millisecondsPerHour) ~/
-                              Duration.millisecondsPerMinute;
+                          int initHour = widget.correction.um ~/ Duration.millisecondsPerHour;
+                          int initMinute = (widget.correction.um - initHour * Duration.millisecondsPerHour) ~/ Duration.millisecondsPerMinute;
                           final TimeOfDay? newTime = await showTimePicker(
+                            cancelText: "Abbrechen",
+                            confirmText: "Speichern",
+                            helpText: "Minuten auswählen",
                             context: context,
-                            initialTime:
-                                TimeOfDay(hour: initHour, minute: initMinute),
+                            initialTime: TimeOfDay(hour: initHour, minute: initMinute),
                           );
                           if (newTime != null) {
                             setState(() {
-                              getIt<CorrectionDB>().changeAB(
-                                  widget.index,
-                                  newTime.hour * Duration.millisecondsPerHour +
-                                      newTime.minute *
-                                          Duration.millisecondsPerMinute,
-                                  widget.correction);
+                              getIt<CorrectionDB>().changeUM(widget.index,
+                                  newTime.hour * Duration.millisecondsPerHour + newTime.minute * Duration.millisecondsPerMinute, widget.correction);
                             });
                           }
                         }),
@@ -218,81 +176,3 @@ class _CorrectionTileState extends State<CorrectionTile> {
     );
   }
 }
-
-/*
-class TimePicker extends StatefulWidget {
-  const TimePicker({Key? key, required this.correction, required this.index})
-      : super(key: key);
-
-  final Correction correction;
-  final int index;
-
-  @override
-  _TimePickerState createState() => _TimePickerState();
-}
-
-class _TimePickerState extends State<TimePicker> {
-  TextEditingController _controller = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.fitWidth,
-      child: Row(
-        children: [
-          IconButton(
-            icon: const Icon(Icons.check),
-            visualDensity: VisualDensity.compact,
-            disabledColor: Colors.transparent,
-            onPressed: null,
-          ),
-          AnimatedFittedTextFieldContainer(
-              growDuration: const Duration(milliseconds: 200),
-              growCurve: Curves.easeOutQuart,
-              shrinkCurve: Curves.ease,
-              child: TextField(
-                maxLength: 50,
-                cursorColor: neonAccent,
-                cursorWidth: 3,
-                cursorRadius: const Radius.circular(30),
-                enableInteractiveSelection: true,
-                enableSuggestions: false,
-                style: TextStyle(color: neon, fontSize: 28, height: 1),
-                decoration: InputDecoration(
-                  isDense: true,
-                  contentPadding: EdgeInsets.fromLTRB(0, 3, -3, 3),
-                  suffixText: " ",
-                  prefixText: " ",
-                  counterText: "",
-                  disabledBorder: InputBorder.none,
-                  focusedBorder: UnderlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      borderSide:
-                          BorderSide(color: neon.withAlpha(30), width: 100)),
-                  enabledBorder: UnderlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(1)),
-                      borderSide:
-                          BorderSide(color: neon.withAlpha(80), width: 5)),
-                  errorBorder: InputBorder.none,
-                ),
-                onEditingComplete: () {
-                  // Liste sortieren
-                  setState(() {});
-                },
-                onChanged: (String str) {
-                  // Liste updaten
-                  setState(() {});
-                },
-              )),
-        ],
-      ),
-    );
-  }
-}
-
-*/

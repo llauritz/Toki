@@ -10,11 +10,7 @@ part 'Zeitnahme.g.dart';
 
 @HiveType(typeId: 1)
 class Zeitnahme {
-  Zeitnahme(
-      {required this.day,
-      required this.state,
-      required this.endTimes,
-      required this.startTimes});
+  Zeitnahme({required this.day, required this.state, required this.endTimes, required this.startTimes});
 
   @HiveField(0)
   DateTime day;
@@ -42,8 +38,7 @@ class Zeitnahme {
     int endLength = endTimes.length;
     int _elapsedTime = 0;
     for (int i = 0; i < startLength; i++) {
-      int e =
-          i == endLength ? DateTime.now().millisecondsSinceEpoch : endTimes[i];
+      int e = i == endLength ? DateTime.now().millisecondsSinceEpoch : endTimes[i];
       _elapsedTime = _elapsedTime + e - startTimes[i];
     }
     //print("Zeitnahme - elapsed time ${Duration(milliseconds: _elapsedTime)}");
@@ -53,29 +48,22 @@ class Zeitnahme {
   int getUeberstunden() {
     if (state == "default") {
       int tagesHours = getIt<Data>().tagesstunden.truncate();
-      int tagesMinutes =
-          ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
+      int tagesMinutes = ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
 
-      int uebermilliseconds = getElapsedTime() -
-          Duration(hours: tagesHours, minutes: tagesMinutes).inMilliseconds -
-          getKorrektur();
+      int uebermilliseconds = getElapsedTime() - Duration(hours: tagesHours, minutes: tagesMinutes).inMilliseconds - getKorrektur();
       print("Zeitnahme - day" + day.toString());
       return uebermilliseconds;
     } else if (state == "edited") {
       int tagesHours = getIt<Data>().tagesstunden.truncate();
-      int tagesMinutes =
-          ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
+      int tagesMinutes = ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
       print("Zeitnahme - tageshrs: $tagesHours");
       print("Zeitnahme - tagesmin: $tagesMinutes");
-      int uebermilliseconds = editMilli -
-          Duration(hours: tagesHours, minutes: tagesMinutes).inMilliseconds;
-      print(
-          "Zeitnahme - uebermilliEDITED: ${Duration(milliseconds: uebermilliseconds)}");
+      int uebermilliseconds = editMilli - Duration(hours: tagesHours, minutes: tagesMinutes).inMilliseconds;
+      print("Zeitnahme - uebermilliEDITED: ${Duration(milliseconds: uebermilliseconds)}");
       return uebermilliseconds;
     } else if (state == "empty") {
       int tagesHours = getIt<Data>().tagesstunden.truncate();
-      int tagesMinutes =
-          ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
+      int tagesMinutes = ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
       return -Duration(hours: tagesHours, minutes: tagesMinutes).inMilliseconds;
     } else {
       return 0;
@@ -84,8 +72,8 @@ class Zeitnahme {
 
   int getKorrektur() {
     Box corrections = Hive.box<Correction>("corrections");
-    
-    logger.w("Korrektur" + corrections.length.toString());
+
+    //logger.w("Korrektur" + corrections.length.toString());
     // geht davon aus, dass korrekturAB sortiert ist.
     if (getIt<Data>().pausenKorrektur == true && corrections.isNotEmpty) {
       Duration elapsed = Duration(milliseconds: getElapsedTime());
@@ -101,8 +89,7 @@ class Zeitnahme {
           print("Zeitnahme - Korrektur - pause $pause");
 
           if (pause.inMilliseconds < minPau) {
-            print(
-                "Zeitnahme - Korrektur${(minPau - pause.inMilliseconds) / Duration.millisecondsPerMinute}");
+            print("Zeitnahme - Korrektur${(minPau - pause.inMilliseconds) / Duration.millisecondsPerMinute}");
             return minPau - pause.inMilliseconds;
           }
           break;
@@ -116,14 +103,12 @@ class Zeitnahme {
     if (state != 'free' && endTimes.isNotEmpty) {
       int fromStartToFinish = 0;
       if (startTimes.length > endTimes.length) {
-        fromStartToFinish =
-            DateTime.now().millisecondsSinceEpoch - startTimes[0];
+        fromStartToFinish = DateTime.now().millisecondsSinceEpoch - startTimes[0];
       } else {
         fromStartToFinish = endTimes.last - startTimes[0];
       }
       logger.v("elapsed" + Duration(milliseconds: getElapsedTime()).toString());
-      logger.v("fromStartToFinish" +
-          Duration(milliseconds: fromStartToFinish).toString());
+      logger.v("fromStartToFinish" + Duration(milliseconds: fromStartToFinish).toString());
       return fromStartToFinish - getElapsedTime();
     } else {
       return 0;
