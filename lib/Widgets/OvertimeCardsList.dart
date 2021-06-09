@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:Timo/Services/Theme.dart';
+import 'package:Timo/Transitions/SizeScaleFadeTransition.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -132,43 +133,42 @@ class ListContent extends StatelessWidget {
           if (Hive.box<Zeitnahme>("zeitenBox").length == 0) return Container();
 
           return Dismissible(
-            key: ValueKey<int>(i),
-            onDismissed: (direction) async {
-              logger.d("i: " + i.toString());
-              logger.d("index: " + i.toString());
+              key: ValueKey<int>(i),
+              onDismissed: (direction) async {
+                logger.d("i: " + i.toString());
+                logger.d("index: " + i.toString());
 
-              if (index == 0) {
-                await getIt<Data>().timerText.stop();
-                logger.d("timer gestoppt");
-              }
+                if (index == 0) {
+                  await getIt<Data>().timerText.stop();
+                  logger.d("timer gestoppt");
+                }
 
-              Zeitnahme _deleted = await box.getAt(i);
-              getIt<HiveDB>().deleteAT(i, index);
+                Zeitnahme _deleted = await box.getAt(i);
+                getIt<HiveDB>().deleteAT(i, index);
 
-              ScaffoldMessenger.of(context).removeCurrentSnackBar();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  margin: EdgeInsets.all(20),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  behavior: SnackBarBehavior.floating,
-                  duration: Duration(milliseconds: 5000),
-                  content: Text("Tag gelöscht"),
-                  action: SnackBarAction(
-                    label: "Rückgängig",
-                    onPressed: () {
-                      getIt<HiveDB>().putAT(i, _deleted, index);
-                    },
+                ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    margin: EdgeInsets.all(20),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    behavior: SnackBarBehavior.floating,
+                    duration: Duration(milliseconds: 5000),
+                    content: Text("Tag gelöscht"),
+                    action: SnackBarAction(
+                      label: "Rückgängig",
+                      onPressed: () {
+                        getIt<HiveDB>().putAT(i, _deleted, index);
+                      },
+                    ),
                   ),
-                ),
-              );
-            },
-            background: Container(
-              color: Colors.redAccent,
-            ),
-            child: SizeTransition(
-                sizeFactor:
-                    CurvedAnimation(parent: animation, curve: Curves.ease),
+                );
+              },
+              background: Container(
+                color: Colors.redAccent,
+              ),
+              child: SizeScaleFadeTransition(
+                animation: animation,
                 child: OpenContainer(
                   closedElevation: 0.0,
                   openElevation: 20.0,
@@ -271,8 +271,8 @@ class ListContent extends StatelessWidget {
                     await getIt<HiveDB>().calculateTodayElapsedTime();
                     widget.updateTimer();
                   },
-                )),
-          );
+                ),
+              ));
         });
   }
 }

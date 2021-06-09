@@ -36,155 +36,175 @@ class _CorrectionTileState extends State<CorrectionTile> {
           Container(
             width: 260,
             height: 65,
-            decoration: BoxDecoration(
-              border: Border.all(width: 2.0, color: grayTranslucent),
-              borderRadius: BorderRadius.circular(1000),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Ab",
-                      style:
-                          TextStyle(fontSize: 12, color: gray.withAlpha(170)),
-                    ),
-                    Row(
-                      children: [
-                        InkWell(
-                          splashColor: Colors.transparent,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      color: neonTranslucent, width: 3)),
-                              //color: neonTranslucent,
-                              //borderRadius: BorderRadius.circular(5)
-                            ),
-                            padding: const EdgeInsets.only(top: 1),
-                            child: Text(
-                              widget.correction.ab %
-                                          Duration.millisecondsPerHour ==
-                                      0
-                                  ? (widget.correction.ab ~/
-                                          Duration.millisecondsPerHour)
-                                      .toString()
-                                  : (widget.correction.ab /
-                                          Duration.millisecondsPerHour)
-                                      .toString(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline4!
-                                  .copyWith(fontSize: 20, color: neon),
-                            ),
+            child: Card(
+              margin: const EdgeInsets.all(0),
+              elevation: 0,
+              color: Colors.transparent,
+              clipBehavior: Clip.antiAlias,
+              shape: StadiumBorder(
+                  side: BorderSide(color: grayTranslucent, width: 2)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Flexible(
+                    child: InkWell(
+                        highlightColor: Colors.transparent,
+                        splashColor: neonTranslucent,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Ab",
+                                style: TextStyle(
+                                    fontSize: 12, color: gray.withAlpha(170)),
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: neonTranslucent,
+                                              width: 3)),
+                                      //color: neonTranslucent,
+                                      //borderRadius: BorderRadius.circular(5)
+                                    ),
+                                    padding: const EdgeInsets.only(top: 1),
+                                    child: Text(
+                                      widget.correction.ab %
+                                                  Duration
+                                                      .millisecondsPerHour ==
+                                              0
+                                          ? (widget.correction.ab ~/
+                                                  Duration.millisecondsPerHour)
+                                              .toString()
+                                          : (widget.correction.ab /
+                                                  Duration.millisecondsPerHour)
+                                              .toString(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline4!
+                                          .copyWith(fontSize: 20, color: neon),
+                                    ),
+                                  ),
+                                  SizedBox(width: 3),
+                                  Text(
+                                    "Stunden",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline4!
+                                        .copyWith(
+                                            fontSize: 18, color: grayAccent),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          onTap: () async {
-                            int initHour = widget.correction.ab ~/
-                                Duration.millisecondsPerHour;
-                            int initMinute = (widget.correction.ab -
-                                    initHour * Duration.millisecondsPerHour) ~/
-                                Duration.millisecondsPerMinute;
-                            final TimeOfDay? newTime = await showTimePicker(
-                              context: context,
-                              initialTime:
-                                  TimeOfDay(hour: initHour, minute: initMinute),
-                            );
-                            if (newTime != null) {
-                              setState(() {
-                                getIt<CorrectionDB>().changeAB(
-                                    widget.index,
-                                    newTime.hour *
-                                            Duration.millisecondsPerHour +
-                                        newTime.minute *
-                                            Duration.millisecondsPerMinute,
-                                    widget.correction);
-                              });
-                            }
-                          },
                         ),
-                        SizedBox(width: 3),
-                        Text(
-                          "Stunden",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline4!
-                              .copyWith(fontSize: 18, color: grayAccent),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Mindestens",
-                      style:
-                          TextStyle(fontSize: 12, color: gray.withAlpha(170)),
-                    ),
-                    Row(
-                      children: [
-                        InkWell(
-                          splashColor: Colors.transparent,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      color: neonTranslucent, width: 3)),
-                              //color: neonTranslucent,
-                              //borderRadius: BorderRadius.circular(5)
-                            ),
-                            padding: const EdgeInsets.only(top: 1),
-                            child: Text(
-                              (widget.correction.um ~/
-                                      Duration.millisecondsPerMinute)
-                                  .toString(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline4!
-                                  .copyWith(fontSize: 20, color: neon),
-                            ),
+                        onTap: () async {
+                          int initHour = widget.correction.ab ~/
+                              Duration.millisecondsPerHour;
+                          int initMinute = (widget.correction.ab -
+                                  initHour * Duration.millisecondsPerHour) ~/
+                              Duration.millisecondsPerMinute;
+                          final TimeOfDay? newTime = await showTimePicker(
+                            context: context,
+                            initialTime:
+                                TimeOfDay(hour: initHour, minute: initMinute),
+                          );
+                          if (newTime != null) {
+                            setState(() {
+                              getIt<CorrectionDB>().changeAB(
+                                  widget.index,
+                                  newTime.hour * Duration.millisecondsPerHour +
+                                      newTime.minute *
+                                          Duration.millisecondsPerMinute,
+                                  widget.correction);
+                            });
+                          }
+                        }),
+                  ),
+                  Flexible(
+                    child: InkWell(
+                        highlightColor: Colors.transparent,
+                        splashColor: neonTranslucent,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Mindestens",
+                                style: TextStyle(
+                                    fontSize: 12, color: gray.withAlpha(170)),
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: neonTranslucent,
+                                              width: 3)),
+                                      //color: neonTranslucent,
+                                      //borderRadius: BorderRadius.circular(5)
+                                    ),
+                                    padding: const EdgeInsets.only(top: 1),
+                                    child: Text(
+                                      (widget.correction.um ~/
+                                              Duration.millisecondsPerMinute)
+                                          .toString(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline4!
+                                          .copyWith(fontSize: 20, color: neon),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 3,
+                                  ),
+                                  Text(
+                                    "Minuten",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline4!
+                                        .copyWith(
+                                            fontSize: 18, color: grayAccent),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          onTap: () async {
-                            int initHour = widget.correction.um ~/
-                                Duration.millisecondsPerHour;
-                            int initMinute = (widget.correction.um -
-                                    initHour * Duration.millisecondsPerHour) ~/
-                                Duration.millisecondsPerMinute;
-                            final TimeOfDay? newTime = await showTimePicker(
-                              context: context,
-                              initialTime:
-                                  TimeOfDay(hour: initHour, minute: initMinute),
-                            );
-                            if (newTime != null) {
-                              setState(() {
-                                getIt<CorrectionDB>().changeAB(
-                                    widget.index,
-                                    newTime.hour *
-                                            Duration.millisecondsPerHour +
-                                        newTime.minute *
-                                            Duration.millisecondsPerMinute,
-                                    widget.correction);
-                              });
-                            }
-                          },
                         ),
-                        Text(
-                          "Minuten",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline4!
-                              .copyWith(fontSize: 20),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+                        onTap: () async {
+                          int initHour = widget.correction.um ~/
+                              Duration.millisecondsPerHour;
+                          int initMinute = (widget.correction.um -
+                                  initHour * Duration.millisecondsPerHour) ~/
+                              Duration.millisecondsPerMinute;
+                          final TimeOfDay? newTime = await showTimePicker(
+                            context: context,
+                            initialTime:
+                                TimeOfDay(hour: initHour, minute: initMinute),
+                          );
+                          if (newTime != null) {
+                            setState(() {
+                              getIt<CorrectionDB>().changeAB(
+                                  widget.index,
+                                  newTime.hour * Duration.millisecondsPerHour +
+                                      newTime.minute *
+                                          Duration.millisecondsPerMinute,
+                                  widget.correction);
+                            });
+                          }
+                        }),
+                  ),
+                ],
+              ),
             ),
           ),
           IconButton(
@@ -199,6 +219,7 @@ class _CorrectionTileState extends State<CorrectionTile> {
   }
 }
 
+/*
 class TimePicker extends StatefulWidget {
   const TimePicker({Key? key, required this.correction, required this.index})
       : super(key: key);
@@ -273,3 +294,5 @@ class _TimePickerState extends State<TimePicker> {
     );
   }
 }
+
+*/

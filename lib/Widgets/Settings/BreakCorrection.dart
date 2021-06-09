@@ -1,5 +1,6 @@
 import 'package:Timo/Services/CorrectionDB.dart';
 import 'package:Timo/Services/Theme.dart';
+import 'package:Timo/Transitions/SizeScaleFadeTransition.dart';
 import 'package:Timo/hiveClasses/Correction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -129,31 +130,15 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                             key: impicitListKey,
                             itemBuilder: (context, animation,
                                 Correction correction, index) {
-                              return SizeTransition(
-                                axisAlignment: -1.0,
-                                sizeFactor: CurvedAnimation(
-                                    parent: animation,
-                                    curve: Curves.easeInOutQuart),
-                                child: ScaleTransition(
-                                  alignment: Alignment.topCenter,
-                                  scale: CurvedAnimation(
-                                      parent: animation,
-                                      curve: Curves.easeOutQuart),
-                                  child: FadeTransition(
-                                    opacity: CurvedAnimation(
-                                        parent: CurvedAnimation(
-                                            curve: Curves.ease,
-                                            parent: animation),
-                                        curve: Interval(0.8, 1)),
-                                    child: CorrectionTile(
-                                      index: index,
-                                      correction: correction,
-                                      closeCallback: () {
-                                        getIt<CorrectionDB>()
-                                            .deleteCorrection(index);
-                                      },
-                                    ),
-                                  ),
+                              return SizeScaleFadeTransition(
+                                animation: animation,
+                                child: CorrectionTile(
+                                  index: index,
+                                  correction: correction,
+                                  closeCallback: () {
+                                    getIt<CorrectionDB>()
+                                        .deleteCorrection(index);
+                                  },
                                 ),
                               );
                             },
