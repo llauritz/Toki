@@ -120,9 +120,10 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                         stream: correctionBox.watch(),
                         builder: (context, snapshot) {
                           return ImplicitlyAnimatedList(
-                            insertDuration: Duration(milliseconds: 400),
-                            removeDuration: Duration(milliseconds: 300),
-                            updateDuration: Duration(milliseconds: 500),
+                            padding: const EdgeInsets.only(top: 25),
+                            insertDuration: Duration(milliseconds: 350),
+                            removeDuration: Duration(milliseconds: 400),
+                            updateDuration: Duration(milliseconds: 400),
                             physics: BouncingScrollPhysics(),
                             shrinkWrap: true,
                             key: impicitListKey,
@@ -131,22 +132,45 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                               return SizeTransition(
                                 axisAlignment: -1.0,
                                 sizeFactor: CurvedAnimation(
-                                    parent: animation, curve: Curves.ease),
-                                child: FadeTransition(
-                                  opacity: CurvedAnimation(
-                                      parent: animation, curve: Curves.ease),
-                                  child: CorrectionTile(
-                                    index: index,
-                                    correction: correction,
-                                    closeCallback: () {
-                                      getIt<CorrectionDB>()
-                                          .deleteCorrection(index);
-                                    },
+                                    parent: animation,
+                                    curve: Curves.easeInOutQuart),
+                                child: ScaleTransition(
+                                  alignment: Alignment.topCenter,
+                                  scale: CurvedAnimation(
+                                      parent: animation,
+                                      curve: Curves.easeOutQuart),
+                                  child: FadeTransition(
+                                    opacity: CurvedAnimation(
+                                        parent: CurvedAnimation(
+                                            curve: Curves.ease,
+                                            parent: animation),
+                                        curve: Interval(0.8, 1)),
+                                    child: CorrectionTile(
+                                      index: index,
+                                      correction: correction,
+                                      closeCallback: () {
+                                        getIt<CorrectionDB>()
+                                            .deleteCorrection(index);
+                                      },
+                                    ),
                                   ),
                                 ),
                               );
                             },
                             removeItemBuilder:
+                                (context, animation, Correction correction) {
+                              return SizeFadeTransition(
+                                sizeFraction: 0.75,
+                                curve: Curves.easeInOutCubic,
+                                animation: animation,
+                                child: CorrectionTile(
+                                  index: 0,
+                                  correction: correction,
+                                  closeCallback: () {},
+                                ),
+                              );
+                            },
+                            updateItemBuilder:
                                 (context, animation, Correction correction) {
                               return SizeFadeTransition(
                                 sizeFraction: 0.75,
@@ -192,9 +216,7 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                             icon: Icon(Icons.help)),
                         IconButton(
                             onPressed: () async {
-                              setState(() async {
-                                //_listKey.currentState!.insertItem(0);
-                              });
+                              getIt<CorrectionDB>().switch12();
                             },
                             icon: Icon(Icons.ac_unit)),
                       ],

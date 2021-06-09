@@ -49,6 +49,15 @@ class CorrectionDB {
     print(correctionBox.length);
   }
 
+  Future<void> switch12() async {
+    Box correctionBox = Hive.box<Correction>("corrections");
+    Correction one = correctionBox.getAt(0);
+    Correction two = correctionBox.getAt(1);
+
+    correctionBox.putAt(0, two);
+    correctionBox.putAt(1, one);
+  }
+
   Future<void> deleteCorrection(int index) async {
     Box correctionBox = Hive.box<Correction>("corrections");
 
