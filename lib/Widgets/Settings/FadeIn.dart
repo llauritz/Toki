@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';
 
-enum _AniProps {opacity, offset}
+enum _AniProps { opacity, offset }
 
 class FadeIn extends StatelessWidget {
   final int delay;
@@ -11,24 +11,17 @@ class FadeIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    var _tween = MultiTween<_AniProps>()
-      ..add(_AniProps.opacity, Tween(begin: 0.0,end: 1.0))
-      ..add(_AniProps.offset, Tween(begin: 50.0,end: 0.0));
+    var _tween = MultiTween<_AniProps>()..add(_AniProps.opacity, Tween(begin: 0.0, end: 1.0))..add(_AniProps.offset, Tween(begin: 70.0, end: 0.0));
 
     return PlayAnimation<MultiTweenValues<_AniProps>>(
       delay: Duration(milliseconds: delay),
       tween: _tween,
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 450),
       curve: Curves.ease,
-      builder: (context, child, value){
+      builder: (context, child, value) {
         return Opacity(
-            opacity: value.get(_AniProps.opacity),
-            child: Transform.translate(
-                offset: Offset(0, value.get(_AniProps.offset)),
-                child: fadeChild));
+            opacity: value.get(_AniProps.opacity), child: Transform.translate(offset: Offset(0, value.get(_AniProps.offset)), child: fadeChild));
       },
     );
   }
 }
-

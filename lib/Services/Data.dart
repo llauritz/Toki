@@ -12,27 +12,27 @@ class Data {
   //SharedPreferences nullPrefs;
   final isRunningStream = StreamController<bool>.broadcast();
   bool isRunning = false;
+
   String username = "";
+
   @deprecated
   double tagesstunden = 8.0;
-  @deprecated
-  List<bool> wochentage = [true, true, true, true, true, false, false];
-  Color primaryColor = Colors.blueAccent;
-  AssetImage currentImage = AssetImage("assets/background/clouds/clouds4.jpg");
-  final primaryColorStream = StreamController<Color>.broadcast();
-  final currentImageStream = StreamController<AssetImage>.broadcast();
+
   @deprecated
   List<int> korrekturAB = [6, 9];
   @deprecated
   List<int> korrekturUM = [30, 45];
+
   bool pausenKorrektur = true;
-  final backgroundHashStream = StreamController<String>.broadcast();
-  String backgroundHash = "cCBYFk?a9K9Ht7of06Rm?Wa%M~WC~ks,9J";
-  int backgroundNumber = 1;
+
   TimerText timerText = TimerText();
   bool finishedOnboarding = false;
-  bool automatischAusstempeln = true;
 
+  bool automatischAusstempeln = true;
+  int automatischAusstempelnTimeMilli = 0;
+
+  bool individualTimes = true;
+  List<bool> wochentage = [true, true, true, true, true, false, false];
   //working time in milliseconds, 0 = free day
   List<int> workingTime = [
     8 * Duration.millisecondsPerHour, // 0: Monday
@@ -59,17 +59,14 @@ class Data {
 
     final SharedPreferences prefs = await _prefs;
 
-    prefs.containsKey("finishedOnboarding")
-        ? finishedOnboarding = prefs.getBool("finishedOnboarding")!
-        : setFinishedOnboarding(false);
+    prefs.containsKey("finishedOnboarding") ? finishedOnboarding = prefs.getBool("finishedOnboarding")! : setFinishedOnboarding(false);
 
-    prefs.containsKey("name")
-        ? username = prefs.getString("name")!
-        : updateName("Name");
+    prefs.containsKey("name") ? username = prefs.getString("name")! : updateName("Name");
 
-    prefs.containsKey("tagesstunden")
-        ? tagesstunden = prefs.getDouble("tagesstunden")!
-        : updateTagesstunden(tagesstunden);
+    if (prefs.containsKey("tagesstunden")) {
+      tagesstunden = prefs.getDouble("tagesstunden")!;
+      migrateWorkingTime();
+    }
 
     prefs.containsKey("MO")
         ? wochentage = [
@@ -93,11 +90,11 @@ class Data {
             prefs.getInt("SAmilli")!,
             prefs.getInt("SUmilli")!,
           ]
-        : migrateWorkingTime();
+        : updateWorkingTime(workingTime);
 
-    prefs.containsKey("pausenKorrektur")
-        ? pausenKorrektur = prefs.getBool("pausenKorrektur")!
-        : updatePausenKorrektur(pausenKorrektur);
+    prefs.containsKey("individualTimes") ? individualTimes = prefs.getBool("individualTimes")! : toggleIndividualTimes();
+
+    prefs.containsKey("pausenKorrektur") ? pausenKorrektur = prefs.getBool("pausenKorrektur")! : updatePausenKorrektur(pausenKorrektur);
 
     // prefs.containsKey("korrekturAB")
     //     //converts List of Strings to List of Integers and stores them in local List
@@ -143,19 +140,18 @@ class Data {
   //   primaryColorStream.sink.add(primaryColor);
   // }
 
-  void updateSettingsBackground(String hash) async {
-    backgroundHashStream.sink.add(hash);
-    backgroundHash = hash;
-    print("Data - hash updated");
-  }
+  // void updateSettingsBackground(String hash) async {
+  //   backgroundHashStream.sink.add(hash);
+  //   backgroundHash = hash;
+  //   print("Data - hash updated");
+  // }
 
   @deprecated
   void updateTagesstunden(double newTagesstunden) async {
     final SharedPreferences prefs = await _prefs;
     prefs.setDouble("tagesstunden", newTagesstunden);
     tagesstunden = newTagesstunden;
-    print("Data - updated Tagesstunden: " +
-        prefs.getDouble("tagesstunden").toString());
+    print("Data - updated Tagesstunden: " + prefs.getDouble("tagesstunden").toString());
   }
 
   void updateName(String newName) async {
@@ -169,13 +165,18 @@ class Data {
     final SharedPreferences prefs = await _prefs;
     prefs.setBool("finishedOnboarding", b);
     finishedOnboarding = b;
-    print("Data - updated finishedOnboarding: " +
-        prefs.getBool("finishedOnboarding").toString());
+    print("Data - updated finishedOnboarding: " + prefs.getBool("finishedOnboarding").toString());
   }
 
-  @deprecated
-  Future<void> updateWochentage(List<bool> list) async {
+  void toggleIndividualTimes() async {
     final SharedPreferences prefs = await _prefs;
+    individualTimes = !individualTimes;
+    prefs.setBool("individualTimes", individualTimes);
+  }
+
+  void updateWochentage(List<bool> list) async {
+    final SharedPreferences prefs = await _prefs;
+    wochentage = list;
     prefs.setBool("MO", list[0]);
     prefs.setBool("DI", list[1]);
     prefs.setBool("MI", list[2]);
@@ -184,6 +185,18 @@ class Data {
     prefs.setBool("SA", list[5]);
     prefs.setBool("SO", list[6]);
     print("Dayrow in Shared Preferences gespeichert");
+  }
+
+  void updateWorkingTime(List<int> list) async {
+    final SharedPreferences prefs = await _prefs;
+    workingTime = list;
+    prefs.setInt("MOmilli", list[0]);
+    prefs.setInt("TUmilli", list[1]);
+    prefs.setInt("WEmilli", list[2]);
+    prefs.setInt("THmilli", list[3]);
+    prefs.setInt("FRmilli", list[4]);
+    prefs.setInt("SAmilli", list[5]);
+    prefs.setInt("SUmilli", list[6]);
   }
 
   Future<void> migrateWorkingTime() async {
@@ -201,9 +214,7 @@ class Data {
           prefs.getBool("SO")!,
         ];
         for (int i = 0; i < wochentageTMP.length; i++) {
-          if (wochentageTMP[i])
-            workingTime[i] =
-                (tagesstunden * Duration.millisecondsPerHour).toInt();
+          if (wochentageTMP[i]) workingTime[i] = (tagesstunden * Duration.millisecondsPerHour).toInt();
         }
       }
     }
@@ -213,95 +224,18 @@ class Data {
     print("MIGRATED LIST: " + workingTime.toString());
   }
 
-  Future<void> updateWorkingTime(List<int> list) async {
-    final SharedPreferences prefs = await _prefs;
-
-    prefs.setInt("MOmilli", list[0]);
-    prefs.setInt("TUmilli", list[1]);
-    prefs.setInt("WEmilli", list[2]);
-    prefs.setInt("THmilli", list[3]);
-    prefs.setInt("FRmilli", list[4]);
-    prefs.setInt("SAmilli", list[5]);
-    prefs.setInt("SUmilli", list[6]);
-    print("Dayrow in Shared Preferences gespeichert");
-  }
-
-  // Future<void> updateKorrekturenAB(int index, int value) async {
-  //   final SharedPreferences prefs = await _prefs;
-  //   korrekturAB[index] = value;
-  //   //converts List of Integers to List of Strings and stores them in SharedPrefs
-  //   prefs.setStringList(
-  //       "korrekturAB", korrekturAB.map((e) => e.toString()).toList());
-  //   print("Data - kAB in SharedPrefs" +
-  //       prefs.getStringList("korrekturAB").toString());
-  // }
-
-  // Future<void> updateKorrekturenUM(int index, int value) async {
-  //   final SharedPreferences prefs = await _prefs;
-  //   korrekturAB[index] = value;
-  //   //converts List of Integers to List of Strings and stores them in SharedPrefs
-  //   prefs.setStringList(
-  //       "korrekturUM", korrekturUM.map((e) => e.toString()).toList());
-  //   print("Data - kUM in SharedPrefs" +
-  //       prefs.getStringList("korrekturUM").toString());
-  // }
-
-  // Future<void> deleteKorrekturenAB(int index) async {
-  //   final SharedPreferences prefs = await _prefs;
-  //   korrekturAB.removeAt(index);
-  //   //converts List of Integers to List of Strings and stores them in SharedPrefs
-  //   prefs.setStringList(
-  //       "korrekturAB", korrekturAB.map((e) => e.toString()).toList());
-  //   print("Data - kAB in SharedPrefs" +
-  //       prefs.getStringList("korrekturAB").toString());
-  // }
-
-  // Future<void> deleteKorrekturenUM(int index) async {
-  //   final SharedPreferences prefs = await _prefs;
-  //   korrekturUM.removeAt(index);
-  //   //converts List of Integers to List of Strings and stores them in SharedPrefs
-  //   prefs.setStringList(
-  //       "korrekturUM", korrekturUM.map((e) => e.toString()).toList());
-  //   print("Data - kUM in SharedPrefs" +
-  //       prefs.getStringList("korrekturUM").toString());
-  // }
-
-  // Future<void> addKorrekturenAB(int value) async {
-  //   final SharedPreferences prefs = await _prefs;
-  //   korrekturAB.add(value);
-  //   //converts List of Integers to List of Strings and stores them in SharedPrefs
-  //   prefs.setStringList(
-  //       "korrekturAB", korrekturAB.map((e) => e.toString()).toList());
-  //   print("Data - kAB in SharedPrefs" +
-  //       prefs.getStringList("korrekturAB").toString());
-  // }
-
-  // Future<void> addKorrekturenUM(int value) async {
-  //   final SharedPreferences prefs = await _prefs;
-  //   korrekturUM.add(value);
-  //   //converts List of Integers to List of Strings and stores them in SharedPrefs
-  //   prefs.setStringList(
-  //       "korrekturUM", korrekturUM.map((e) => e.toString()).toList());
-  //   print("Data - kUM in SharedPrefs" +
-  //       prefs.getStringList("korrekturUM").toString());
-  // }
-
   Future<void> updatePausenKorrektur(bool b) async {
     final SharedPreferences prefs = await _prefs;
     prefs.setBool("pausenKorrektur", b);
-    print("Data - pausenKorrekturBool " +
-        prefs.getBool("pausenKorrektur").toString());
+    print("Data - pausenKorrekturBool " + prefs.getBool("pausenKorrektur").toString());
   }
 
   Future<void> addOffset(int milliseconds) async {
     final SharedPreferences prefs = await _prefs;
-    int newValue = prefs.containsKey("OvertimeOffset")
-        ? prefs.getInt("OvertimeOffset")! + milliseconds
-        : milliseconds;
+    int newValue = prefs.containsKey("OvertimeOffset") ? prefs.getInt("OvertimeOffset")! + milliseconds : milliseconds;
     prefs.setInt("OvertimeOffset", newValue);
 
-    print("Data - addOffset - OvertimeOffset " +
-        prefs.getInt("OvertimeOffset").toString());
+    print("Data - addOffset - OvertimeOffset " + prefs.getInt("OvertimeOffset").toString());
     getIt<HiveDB>().updateGesamtUeberstunden();
   }
 
@@ -325,9 +259,6 @@ class Data {
   }
 
   void dispose() {
-    primaryColorStream.close();
     isRunningStream.close();
-    currentImageStream.close();
-    backgroundHashStream.close();
   }
 }

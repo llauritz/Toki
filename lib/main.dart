@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:logger/logger.dart';
 
 import 'Pages/home.dart';
@@ -16,6 +15,7 @@ import 'Services/HiveDB.dart';
 import 'Services/Theme.dart';
 import 'hiveClasses/Zeitnahme.dart';
 import 'Pages/Onboarding/Onboarding.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 GetIt getIt = GetIt.instance;
 
@@ -36,7 +36,7 @@ void main() async {
   await getIt<CorrectionDB>().initCorrectionDB();
   await getIt<Data>().initData();
   await getIt<HiveDB>().initHiveDB();
-  await initializeDateFormatting("de_DE", null);
+  //await initializeDateFormatting("de_DE", null);
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -82,7 +82,7 @@ void main() async {
     },
     initialRoute: getIt<Data>().finishedOnboarding ? "/" : "/onboarding",
     title: "Timo ",
-    themeMode: ThemeMode.system,
+    themeMode: ThemeMode.light,
     darkTheme: ThemeData(
         backgroundColor: Colors.black,
         scaffoldBackgroundColor: Colors.black,
@@ -95,5 +95,7 @@ void main() async {
         backgroundColor: Colors.indigoAccent[700],
         fontFamily: "BandeinsSans",
         textTheme: textTheme),
+    localizationsDelegates: [GlobalMaterialLocalizations.delegate],
+    supportedLocales: [const Locale("de")],
   ));
 }

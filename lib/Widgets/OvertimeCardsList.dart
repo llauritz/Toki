@@ -41,66 +41,44 @@ class ZeitenPanel extends StatefulWidget {
 
 class _ZeitenPanelState extends State<ZeitenPanel> {
   //Tween<Size> _size = Tween(begin: Offset(0,-1), end: Offset(0,0));
+  Box<Zeitnahme> box = Hive.box("zeitenBox");
 
   @override
   Widget build(BuildContext context) {
-    logger.d("OvertimeCardsList build - 1");
+    //logger.d("OvertimeCardsList build - 1");
 
     return Card(
       margin: EdgeInsets.fromLTRB(8, 0, 8, 8),
       clipBehavior: Clip.antiAlias,
       elevation: 10.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      child: StreamBuilder<Color>(
-          stream: getIt<Data>().primaryColorStream.stream,
-          initialData: getIt<Data>().primaryColor,
-          builder: (context, snapshot) {
-            logger.d("OvertimeCardsList build - 2");
-
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                FirstWidget(panelController: widget.panelController),
-                Flexible(
-                  child: Theme(
-                    data: Theme.of(context)
-                        .copyWith(accentColor: Colors.tealAccent[100]),
-                    child: ValueListenableBuilder(
-                      valueListenable:
-                          Hive.box<Zeitnahme>("zeitenBox").listenable(),
-                      builder: (BuildContext context, Box box, _) {
-                        return StreamBuilder(
-                            stream: getIt<HiveDB>().listChangesStream.stream,
-                            builder: (context, snapshot) {
-                              print("Zeiten Card - snapshot Data is " +
-                                  snapshot.data.toString());
-                              print("Zeiten Card - box length is " +
-                                  box.length.toString());
-
-                              return Container(
-                                child: ShaderMask(
-                                  shaderCallback: (Rect bounds) {
-                                    return LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment(0, -0.9),
-                                      colors: <Color>[
-                                        Colors.white.withAlpha(0),
-                                        Colors.white,
-                                      ],
-                                    ).createShader(bounds);
-                                  },
-                                  blendMode: BlendMode.dstATop,
-                                  child: ListContent(widget: widget, box: box),
-                                ),
-                              );
-                            });
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          FirstWidget(panelController: widget.panelController),
+          Flexible(
+            child: StreamBuilder(
+              stream: box.watch(),
+              builder: (context, snapshot) {
+                return ShaderMask(
+                  shaderCallback: (Rect bounds) {
+                    return LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment(0, -0.9),
+                      colors: <Color>[
+                        Colors.white.withAlpha(0),
+                        Colors.white,
+                      ],
+                    ).createShader(bounds);
+                  },
+                  blendMode: BlendMode.dstATop,
+                  child: ListContent(widget: widget, box: box),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -119,11 +97,11 @@ class ListContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedList(
         physics: BouncingScrollPhysics(),
-        initialItemCount: Hive.box<Zeitnahme>("zeitenBox").length,
+        initialItemCount: box.length,
         key: getIt<HiveDB>().animatedListkey,
         padding: EdgeInsets.only(top: 20.0),
         itemBuilder: (context, index, animation) {
-          logger.d("OvertimeCardsList build - 3");
+          //logger.d("OvertimeCardsList build - 3");
 
           //Liste wird umgekehrt
           int i = box.length - index - 1;
@@ -150,8 +128,7 @@ class ListContent extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     margin: EdgeInsets.all(20),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     behavior: SnackBarBehavior.floating,
                     duration: Duration(milliseconds: 5000),
                     content: Text("Tag gelöscht"),
@@ -165,22 +142,19 @@ class ListContent extends StatelessWidget {
                 );
               },
               background: Container(
-                color: Colors.redAccent,
+                color: Colors.red[400],
               ),
               child: SizeScaleFadeTransition(
                 animation: animation,
                 child: OpenContainer(
                   closedElevation: 0.0,
                   openElevation: 20.0,
-                  closedShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)),
-                  openShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
+                  closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                  openShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                   transitionDuration: Duration(milliseconds: 500),
                   transitionType: ContainerTransitionType.fade,
                   openColor: Colors.white,
-                  closedBuilder:
-                      (BuildContext context, void Function() action) {
+                  closedBuilder: (BuildContext context, void Function() action) {
                     logger.d("OvertimeCardsList build - 4");
 
                     Widget _widget;
@@ -192,42 +166,32 @@ class ListContent extends StatelessWidget {
                             stream: getIt<Data>().isRunningStream.stream,
                             initialData: getIt<Data>().isRunning,
                             builder: (context, snapshot) {
-                              return FirstCardClosed(
-                                  i: i,
-                                  index: index,
-                                  zeitnahme: _zeitnahme,
-                                  isRunning: snapshot.data!);
+                              return FirstCardClosed(i: i, index: index, zeitnahme: _zeitnahme, isRunning: snapshot.data!);
                             }),
                       );
                     } else {
                       switch (_state) {
                         case "default":
                           {
-                            _widget = KeyedSubtree(
-                                key: ValueKey<int>(1),
-                                child: DefaultCardClosed(
-                                    i: i, index: index, zeitnahme: _zeitnahme));
+                            _widget = KeyedSubtree(key: ValueKey<int>(1), child: DefaultCardClosed(i: i, index: index, zeitnahme: _zeitnahme));
                             break;
                           }
 
                         case "free":
                           {
-                            _widget = FreeCardClosed(
-                                i: i, index: index, zeitnahme: _zeitnahme);
+                            _widget = FreeCardClosed(i: i, index: index, zeitnahme: _zeitnahme);
                             break;
                           }
 
                         case "empty":
                           {
-                            _widget = EmptyCardClosed(
-                                i: i, index: index, zeitnahme: _zeitnahme);
+                            _widget = EmptyCardClosed(i: i, index: index, zeitnahme: _zeitnahme);
                             break;
                           }
 
                         case "edited":
                           {
-                            _widget = EditedCardClosedStl(
-                                i: i, index: index, zeitnahme: _zeitnahme);
+                            _widget = EditedCardClosedStl(i: i, index: index, zeitnahme: _zeitnahme);
                             break;
                           }
 

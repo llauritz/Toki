@@ -68,7 +68,7 @@ class _CorrectionTileState extends State<CorrectionTile> {
                                       child: Text(
                                         widget.correction.ab % Duration.millisecondsPerHour == 0
                                             ? (widget.correction.ab ~/ Duration.millisecondsPerHour).toString()
-                                            : (widget.correction.ab / Duration.millisecondsPerHour).toString().replaceAll(".", ","),
+                                            : (widget.correction.ab / Duration.millisecondsPerHour).toStringAsFixed(2).replaceAll(".", ","),
                                         style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 20, color: neon),
                                       ),
                                     ),

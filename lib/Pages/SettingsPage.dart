@@ -1,4 +1,5 @@
 import 'package:Timo/Services/Theme.dart';
+import 'package:Timo/Widgets/Settings/WorkTimePicker.dart';
 import 'package:auto_animated/auto_animated.dart';
 import '../Widgets/Settings/BreakCorrection.dart';
 import 'package:flutter/cupertino.dart';
@@ -41,25 +42,54 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: ListView(physics: BouncingScrollPhysics(), children: [
+      body: AnimateIfVisibleWrapper(
+        child: ListView(physics: BouncingScrollPhysics(), children: [
           FadeIn(delay: 300 - 100, fadeChild: const SettingsTitle()),
+          //AutoFadeIn(child: NamePicker()),
           FadeIn(delay: 350 - 100, fadeChild: NamePicker()),
-          FadeIn(delay: 350 - 100, fadeChild: BreakCorrection()),
+          FadeIn(delay: 400 - 100, fadeChild: WorkTimePicker()),
+          FadeIn(delay: 400 - 100, fadeChild: BreakCorrection()),
           FadeIn(
-              delay: 400 - 100,
+              delay: 450 - 100,
               fadeChild: TagesstundenPicker(
                 isDay: isDay,
               )),
           FadeIn(delay: 450 - 100, fadeChild: WochentagePicker(isDay: isDay)),
-          FadeIn(
-              delay: 500 - 100, fadeChild: PausenkorrekturPicker(isDay: isDay)),
           SizedBox(
             height: 80,
           )
         ]),
-      floatingActionButton:
-          FadeIn(delay: 350, fadeChild: FertigButton()),
+      ),
+      floatingActionButton: FadeIn(delay: 350, fadeChild: FertigButton()),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+}
+
+class AutoFadeIn extends StatelessWidget {
+  const AutoFadeIn({Key? key, required this.child}) : super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimateIfVisible(
+        key: UniqueKey(),
+        builder: (context, animation) {
+          return FadeTransition(
+              opacity: Tween<double>(
+                begin: 0,
+                end: 1,
+              ).animate(CurvedAnimation(parent: animation, curve: Curves.ease)),
+              // And slide transition
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: Offset(0, 0.1),
+                  end: Offset.zero,
+                ).animate(CurvedAnimation(parent: animation, curve: Curves.ease)),
+                // Paste you Widget
+                child: child,
+              ));
+        });
   }
 }
