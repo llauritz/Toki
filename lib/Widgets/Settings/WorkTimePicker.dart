@@ -1,4 +1,5 @@
 import 'package:Timo/Services/Theme.dart';
+import 'package:day_night_time_picker/lib/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -35,11 +36,11 @@ class _WorkTimePickerState extends State<WorkTimePicker> {
                 style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
+                padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: WorkdayButtonRow(selections: _selections),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
                 child: SliderTheme(
                   data: SliderTheme.of(context).copyWith(
                     overlayShape: SliderComponentShape.noOverlay,
@@ -75,6 +76,28 @@ class _WorkTimePickerState extends State<WorkTimePicker> {
                     //label: "$tagesstunden Stunden",
                   ),
                 ),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  FlatButton(
+                      onPressed: () async {},
+                      shape: const StadiumBorder(),
+                      color: grayTranslucent,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(width: 3),
+                            Text(
+                              "Jeden Tag individuell einstellen",
+                              style: openButtonText.copyWith(color: grayAccent),
+                            ),
+                          ],
+                        ),
+                      )),
+                ],
               )
             ],
           ),
@@ -125,6 +148,9 @@ class WorkTimeSliderThumbRect extends SliderComponentShape {
   }) {
     final Canvas canvas = context.canvas;
 
+    final Tween<double> factor = Tween<double>(begin: 0, end: 1);
+    final double evaluatedFactor = factor.evaluate(activationAnimation);
+
     final Tween<double> sizeTween = Tween<double>(
       begin: thumbWidth,
       end: thumbHeight,
@@ -137,17 +163,26 @@ class WorkTimeSliderThumbRect extends SliderComponentShape {
     );
     final double evaluatedTranslationY = translationTweenY.evaluate(activationAnimation);
 
+    // Value = 0 -> +width/2
+    // Value = 1 -> -width/2
+    final double evaluatedTranslationX = mapRange(value, 0, 1, thumbWidth / 2, -thumbWidth / 2);
+
     final topRRect = RRect.fromRectAndRadius(
-      Rect.fromCenter(center: center.translate(0, evaluatedTranslationY), width: thumbWidth, height: thumbHeight),
-      Radius.circular(100),
+      Rect.fromCenter(center: center.translate(0, evaluatedTranslationY / 2), width: thumbWidth, height: thumbHeight * (1 + evaluatedFactor)),
+      Radius.circular(thumbHeight / 2),
     );
 
     final botRRect = RRect.fromRectAndCorners(
-      Rect.fromCenter(center: center.translate(0, 0), width: thumbHeight * 0.2, height: thumbHeight * 0.8),
-      topLeft: Radius.circular(0),
+      Rect.fromCenter(center: center.translate(0, 0), width: thumbHeight * 0.3, height: thumbHeight * 0.3),
+      topLeft: Radius.circular(100),
       bottomRight: Radius.circular(100),
-      topRight: Radius.circular(0),
+      topRight: Radius.circular(100),
       bottomLeft: Radius.circular(100),
+    );
+
+    final handleRect = RRect.fromRectAndRadius(
+      Rect.fromCenter(center: center.translate(0, 0), width: (thumbWidth - thumbHeight) * evaluatedFactor, height: 5),
+      Radius.circular(100),
     );
 
     final paint = Paint()
@@ -155,16 +190,24 @@ class WorkTimeSliderThumbRect extends SliderComponentShape {
       ..style = PaintingStyle.fill;
 
     final Tween<double> opacityTween = Tween<double>(
-      begin: 255,
-      end: 0,
+      begin: 0,
+      end: 255,
     );
     final double evaluatedOpacity = opacityTween.evaluate(activationAnimation);
+
+    final botPaint = Paint()
+      ..color = color.withAlpha(evaluatedOpacity.toInt())
+      ..style = PaintingStyle.fill;
+
+    final handlePaint = Paint()
+      ..color = Colors.white.withAlpha((evaluatedOpacity * 0.3).toInt())
+      ..style = PaintingStyle.fill;
 
     TextSpan span = new TextSpan(
         style: new TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: textcolor, height: 1), text: '${getValue(value)} Stunden');
     TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.left, textDirection: TextDirection.ltr);
     tp.layout();
-    Offset textCenter = Offset(center.dx - (tp.width / 2), center.dy - (tp.height / 2) + 1.5 + evaluatedTranslationY);
+    Offset textCenter = Offset(center.dx - (tp.width / 2), center.dy - (tp.height / 2) + 1.5 + evaluatedTranslationY - (5 * evaluatedFactor));
 
     final Tween<double> elevationTween = Tween<double>(
       begin: 5,
@@ -177,7 +220,8 @@ class WorkTimeSliderThumbRect extends SliderComponentShape {
     rRpath.addRRect(topRRect);
     canvas.drawShadow(rRpath, neon.withAlpha(50), evaluatedElevation, false);
     canvas.drawRRect(topRRect, paint);
-    canvas.drawRRect(botRRect, paint);
+    canvas.drawRRect(botRRect, botPaint);
+    canvas.drawRRect(handleRect, handlePaint);
     tp.paint(canvas, textCenter);
   }
 
