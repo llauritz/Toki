@@ -84,15 +84,20 @@ void main() async {
     title: "Timo ",
     themeMode: ThemeMode.light,
     darkTheme: ThemeData(
-        backgroundColor: Colors.black,
-        scaffoldBackgroundColor: Colors.black,
-        primaryColor: Colors.tealAccent,
-        brightness: Brightness.dark,
-        textTheme: textTheme),
+        backgroundColor: Colors.black, scaffoldBackgroundColor: Colors.black, primaryColor: neon, brightness: Brightness.dark, textTheme: textTheme),
     theme: ThemeData(
-        primaryColor: Color(0xFF90A4AE),
+        primarySwatch: Colors.teal,
+        //textButtonTheme: TextButtonThemeData(style: ButtonStyle(textStyle: MaterialStateProperty.resolveWith((states) => TextStyle(color: neon)))),
+        primaryColor: neon,
         brightness: Brightness.light,
-        backgroundColor: Colors.indigoAccent[700],
+        buttonColor: neon,
+        accentColor: neonAccent,
+        timePickerTheme: TimePickerThemeData(
+          
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            hourMinuteTextColor: neonAccent,
+            hourMinuteColor: neonTranslucent,
+            dialHandColor: neon),
         fontFamily: "BandeinsSans",
         textTheme: textTheme),
     localizationsDelegates: [GlobalMaterialLocalizations.delegate],

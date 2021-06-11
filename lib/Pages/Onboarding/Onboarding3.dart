@@ -30,11 +30,7 @@ class _Onboarding3State extends State<Onboarding3> {
           child: Text(
             """Wie viele Stunden arbeitest du am Tag?""",
             textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold,
-                fontFamily: "BandeinsSans"),
+            style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold, fontFamily: "BandeinsSans"),
           ),
         ),
         /*SizedBox(
@@ -149,22 +145,15 @@ class OnboardingSliderThumbRect extends SliderComponentShape {
       begin: 0,
       end: -thumbHeight + 5,
     );
-    final double evaluatedTranslationY =
-        translationTweenY.evaluate(activationAnimation);
+    final double evaluatedTranslationY = translationTweenY.evaluate(activationAnimation);
 
     final topRRect = RRect.fromRectAndRadius(
-      Rect.fromCenter(
-          center: center.translate(0, evaluatedTranslationY),
-          width: thumbWidth,
-          height: thumbHeight),
+      Rect.fromCenter(center: center.translate(0, evaluatedTranslationY), width: thumbWidth, height: thumbHeight),
       Radius.circular(100),
     );
 
     final botRRect = RRect.fromRectAndCorners(
-      Rect.fromCenter(
-          center: center.translate(0, 0),
-          width: thumbHeight * 0.2,
-          height: thumbHeight * 0.8),
+      Rect.fromCenter(center: center.translate(0, 0), width: thumbHeight * 0.2, height: thumbHeight * 0.8),
       topLeft: Radius.circular(0),
       bottomRight: Radius.circular(100),
       topRight: Radius.circular(0),
@@ -182,26 +171,16 @@ class OnboardingSliderThumbRect extends SliderComponentShape {
     final double evaluatedOpacity = opacityTween.evaluate(activationAnimation);
 
     TextSpan span = new TextSpan(
-        style: new TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-            color: textcolor,
-            height: 1),
-        text: '${getValue(value)} Stunden');
-    TextPainter tp = new TextPainter(
-        text: span,
-        textAlign: TextAlign.left,
-        textDirection: TextDirection.ltr);
+        style: new TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: textcolor, height: 1), text: '${getValue(value)} Stunden');
+    TextPainter tp = new TextPainter(text: span, textAlign: TextAlign.left, textDirection: TextDirection.ltr);
     tp.layout();
-    Offset textCenter = Offset(center.dx - (tp.width / 2),
-        center.dy - (tp.height / 2) + 1.5 + evaluatedTranslationY);
+    Offset textCenter = Offset(center.dx - (tp.width / 2), center.dy - (tp.height / 2) + 1.5 + evaluatedTranslationY);
 
     final Tween<double> elevationTween = Tween<double>(
       begin: 3,
       end: 5,
     );
-    final double evaluatedElevation =
-        elevationTween.evaluate(activationAnimation);
+    final double evaluatedElevation = elevationTween.evaluate(activationAnimation);
 
     Path rRpath = Path();
     rRpath.addRRect(botRRect);

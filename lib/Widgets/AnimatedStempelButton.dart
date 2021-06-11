@@ -7,8 +7,7 @@ import '../Services/Data.dart';
 final getIt = GetIt.instance;
 
 class AnimatedStempelButton extends StatefulWidget {
-  AnimatedStempelButton(
-      {required this.callbackTurnOff, required this.callbackTurnOn});
+  AnimatedStempelButton({required this.callbackTurnOff, required this.callbackTurnOn});
   Function callbackTurnOff;
   Function callbackTurnOn;
 
@@ -104,11 +103,7 @@ class StempelButtonSTART extends StatelessWidget {
           child: Center(
             child: Text(
               "START",
-              style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                  letterSpacing: 0.5,
-                  fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20.0, color: Colors.white, letterSpacing: 0.5, fontWeight: FontWeight.bold),
             ),
           ),
         ),

@@ -49,12 +49,7 @@ class _SettingsPageState extends State<SettingsPage> {
           FadeIn(delay: 350 - 100, fadeChild: NamePicker()),
           FadeIn(delay: 400 - 100, fadeChild: WorkTimePicker()),
           FadeIn(delay: 400 - 100, fadeChild: BreakCorrection()),
-          FadeIn(
-              delay: 450 - 100,
-              fadeChild: TagesstundenPicker(
-                isDay: isDay,
-              )),
-          FadeIn(delay: 450 - 100, fadeChild: WochentagePicker(isDay: isDay)),
+
           SizedBox(
             height: 80,
           )
