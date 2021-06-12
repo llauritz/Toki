@@ -90,44 +90,6 @@ class _WorkTimePickerState extends State<WorkTimePicker> with SingleTickerProvid
   }
 }
 
-class CustomSliderTrack extends SliderTrackShape {
-  const CustomSliderTrack({required this.thumbWidth});
-
-  final double thumbWidth;
-
-  @override
-  Rect getPreferredRect({RenderBox? parentBox, Offset offset = Offset.zero, SliderThemeData? sliderTheme, bool? isEnabled, bool? isDiscrete}) {
-    final double trackLeft;
-    final double trackWidth;
-
-    // TODO: implement getPreferredRect
-    return Rect.fromLTWH(0, 0, 200, 5);
-  }
-
-  @override
-  void paint(PaintingContext context, Offset offset,
-      {RenderBox? parentBox,
-      SliderThemeData? sliderTheme,
-      required Animation<double> enableAnimation,
-      Offset? thumbCenter,
-      bool? isEnabled,
-      bool? isDiscrete,
-      TextDirection? textDirection}) {
-    final Rect trackRect = getPreferredRect(
-      parentBox: parentBox,
-      offset: offset,
-      sliderTheme: sliderTheme,
-      isEnabled: isEnabled,
-      isDiscrete: isDiscrete,
-    );
-    final Paint defaultPathPaint = Paint()
-      ..color = sliderTheme!.activeTrackColor!
-      ..style = PaintingStyle.fill;
-
-    context.canvas.drawRRect(RRect.fromRectAndRadius(trackRect, Radius.circular(10)), defaultPathPaint);
-  }
-}
-
 class CollapsedWorkTimePicker extends StatefulWidget {
   const CollapsedWorkTimePicker({Key? key}) : super(key: key);
 
@@ -138,6 +100,13 @@ class CollapsedWorkTimePicker extends StatefulWidget {
 class _CollapsedWorkTimePickerState extends State<CollapsedWorkTimePicker> {
   List<bool> _selections = getIt<Data>().wochentage;
   List<int> workingTime = getIt<Data>().workingTime;
+  bool divisions = true;
+
+  @override
+  void initState() {
+    divisions = workingTime[0] / Duration.millisecondsPerHour % 0.5 == 0;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,23 +117,24 @@ class _CollapsedWorkTimePickerState extends State<CollapsedWorkTimePicker> {
           child: WorkdayButtonRow(selections: _selections),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
           child: Row(
             children: [
               Expanded(
                 child: SliderTheme(
                   data: SliderTheme.of(context).copyWith(
                     overlayShape: SliderComponentShape.noOverlay,
-                    //trackShape: CustomSliderTrack(thumbWidth: 100),
+                    trackHeight: 7,
+                    trackShape: WorktimeSliderTrackShape(),
                     thumbShape: WorkTimeSliderThumbRect(
-                      min: 0,
-                      max: workingTime[0] < (12.0 * Duration.millisecondsPerHour) ? 12 : workingTime[0] ~/ Duration.millisecondsPerHour,
-                      thumbHeight: 40.0,
-                      thumbWidth: 100.0,
-                      thumbRadius: 0,
-                      color: neon,
-                      textcolor: Colors.white,
-                    ),
+                        min: 0,
+                        max: workingTime[0] < (12.0 * Duration.millisecondsPerHour) ? 12 : workingTime[0] / Duration.millisecondsPerHour,
+                        thumbHeight: 40.0,
+                        thumbWidth: 100.0,
+                        thumbRadius: 0,
+                        color: neon,
+                        textcolor: Colors.white,
+                        enabled: workingTime[0] != 0),
                     activeTickMarkColor: Colors.transparent,
                     inactiveTickMarkColor: Colors.transparent,
                     inactiveTrackColor: neon.withAlpha(50),
@@ -172,19 +142,26 @@ class _CollapsedWorkTimePickerState extends State<CollapsedWorkTimePicker> {
                   ),
                   child: Slider(
                     value: workingTime[0] * 1.0,
+                    onChangeStart: (_) {
+                      divisions = true;
+                    },
                     onChanged: (newTagesstunden) {
                       setState(() {
                         workingTime[0] = newTagesstunden.toInt();
                       });
                     },
                     onChangeEnd: (newTagesstunden) {
+                      if (newTagesstunden / Duration.millisecondsPerHour % 0.5 != 0) {
+                        newTagesstunden = ((newTagesstunden / Duration.millisecondsPerHour * 2).round() / 2) * Duration.millisecondsPerHour;
+                      }
+                      workingTime[0] = newTagesstunden.toInt();
                       setState(() {
                         getIt<Data>().updateWorkingTime(workingTime);
                       });
                     },
                     min: 0,
                     max: workingTime[0] < (12.0 * Duration.millisecondsPerHour) ? 12.0 * Duration.millisecondsPerHour : workingTime[0] * 1.0,
-                    divisions: 24,
+                    divisions: divisions ? 24 : null,
                     //label: "$tagesstunden Stunden",
                   ),
                 ),
@@ -195,10 +172,12 @@ class _CollapsedWorkTimePickerState extends State<CollapsedWorkTimePicker> {
                 onPressed: () async {
                   int hours = workingTime[0] ~/ Duration.millisecondsPerHour;
                   int minutes = (workingTime[0] - hours * Duration.millisecondsPerHour) ~/ Duration.millisecondsPerMinute;
-                  TimeOfDay? newTime = await showTimePicker(context: context, initialTime: TimeOfDay(hour: hours, minute: minutes));
+                  TimeOfDay? newTime = await showTimePicker(
+                      context: context, initialTime: TimeOfDay(hour: hours, minute: minutes), helpText: "Arbeitszeit auswählen".toUpperCase());
                   if (newTime != null) {
                     workingTime[0] = newTime.hour * Duration.millisecondsPerHour + newTime.minute * Duration.millisecondsPerMinute;
                     getIt<Data>().updateWorkingTime(workingTime);
+                    divisions = workingTime[0] / Duration.millisecondsPerHour % 0.5 == 0;
                     setState(() {});
                   }
                 },
@@ -225,6 +204,13 @@ class _ExpandedWorkTImePickerState extends State<ExpandedWorkTImePicker> {
   List<int> workingTime = getIt<Data>().workingTime;
   List<int> cachedWorkingTime = getIt<Data>().workingTime;
   List<String> days = ["MO", "DI", "MI", "DO", "FR", "SA", "SO"];
+  List<bool> divisions = List.filled(7, true);
+
+  @override
+  void initState() {
+    divisions = List.generate(workingTime.length, (index) => workingTime[index] / Duration.millisecondsPerHour % 0.5 == 0);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -235,8 +221,11 @@ class _ExpandedWorkTImePickerState extends State<ExpandedWorkTImePicker> {
           shrinkWrap: true,
           itemCount: 7,
           itemBuilder: (context, index) {
-            TextStyle style =
-                TextStyle(fontWeight: FontWeight.bold, fontSize: 19.0, height: 1, color: _selections[index] ? neon : neon.withAlpha(100));
+            TextStyle style = TextStyle(
+                fontWeight: _selections[index] ? FontWeight.bold : FontWeight.normal,
+                fontSize: 19.0,
+                height: 1,
+                color: _selections[index] ? neon : neon.withAlpha(100));
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 0.0),
               child: Row(
@@ -256,9 +245,15 @@ class _ExpandedWorkTImePickerState extends State<ExpandedWorkTImePicker> {
                         child: SizedBox(
                           height: 30,
                           width: 40,
-                          child: Text(
-                            days[index],
-                            style: style,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: AnimatedDefaultTextStyle(
+                              duration: Duration(milliseconds: 300),
+                              style: style,
+                              child: Text(
+                                days[index],
+                              ),
+                            ),
                           ),
                         ),
                       )),
@@ -266,15 +261,16 @@ class _ExpandedWorkTImePickerState extends State<ExpandedWorkTImePicker> {
                     child: SliderTheme(
                       data: SliderTheme.of(context).copyWith(
                         overlayShape: SliderComponentShape.noOverlay,
+                        trackShape: WorktimeSliderTrackShape(),
                         thumbShape: WorkTimeSliderThumbRect(
-                          min: 0,
-                          max: 12,
-                          thumbHeight: 35.0,
-                          thumbWidth: 100.0,
-                          thumbRadius: 0,
-                          color: neon,
-                          textcolor: Colors.white,
-                        ),
+                            min: 0,
+                            max: workingTime[index] < (12.0 * Duration.millisecondsPerHour) ? 12 : workingTime[index] / Duration.millisecondsPerHour,
+                            thumbHeight: 35.0,
+                            thumbWidth: 100.0,
+                            thumbRadius: 0,
+                            color: neon,
+                            textcolor: Colors.white,
+                            enabled: _selections[index]),
                         activeTickMarkColor: Colors.transparent,
                         inactiveTickMarkColor: Colors.transparent,
                         inactiveTrackColor: neon.withAlpha(50),
@@ -282,15 +278,26 @@ class _ExpandedWorkTImePickerState extends State<ExpandedWorkTImePicker> {
                       ),
                       child: Slider(
                         value: _selections[index] ? workingTime[index] * 1.0 : 0,
+                        onChangeStart: (_) {
+                          divisions[index] = true;
+                        },
                         onChanged: (newTagesstunden) {
                           _selections[index] = true;
                           getIt<Data>().updateWochentage(_selections);
+                          if (newTagesstunden == 0) {
+                            _selections[index] = false;
+                            getIt<Data>().updateWochentage(_selections);
+                          }
                           setState(() {
                             workingTime[index] = newTagesstunden.toInt();
                           });
                         },
                         onChangeEnd: (newTagesstunden) {
                           setState(() {
+                            if (newTagesstunden / Duration.millisecondsPerHour % 0.5 != 0) {
+                              newTagesstunden = ((newTagesstunden / Duration.millisecondsPerHour * 2).round() / 2) * Duration.millisecondsPerHour;
+                            }
+                            workingTime[index] = newTagesstunden.toInt();
                             if (newTagesstunden == 0) {
                               workingTime[index] = cachedWorkingTime[index];
                               _selections[index] = false;
@@ -302,12 +309,38 @@ class _ExpandedWorkTImePickerState extends State<ExpandedWorkTImePicker> {
                           });
                         },
                         min: 0,
-                        max: 12.0 * Duration.millisecondsPerHour,
-                        divisions: 24,
+                        max: workingTime[index] < (12.0 * Duration.millisecondsPerHour)
+                            ? 12.0 * Duration.millisecondsPerHour
+                            : workingTime[index] * 1.0,
+                        divisions: divisions[index] ? 24 : null,
                         //label: "$tagesstunden Stunden",
                       ),
                     ),
                   ),
+                  IconButton(
+                    icon: Icon(Icons.keyboard_alt_rounded),
+                    color: neon,
+                    onPressed: () async {
+                      int hours = workingTime[index] ~/ Duration.millisecondsPerHour;
+                      int minutes = (workingTime[index] - hours * Duration.millisecondsPerHour) ~/ Duration.millisecondsPerMinute;
+                      TimeOfDay? newTime = await showTimePicker(
+                          context: context, initialTime: TimeOfDay(hour: hours, minute: minutes), helpText: "Arbeitszeit auswählen".toUpperCase());
+
+                      if (newTime != null) {
+                        if (newTime.hour + newTime.minute != 0) {
+                          _selections[index] = true;
+                          getIt<Data>().updateWochentage(_selections);
+                        } else {
+                          _selections[index] = false;
+                          getIt<Data>().updateWochentage(_selections);
+                        }
+                        workingTime[index] = newTime.hour * Duration.millisecondsPerHour + newTime.minute * Duration.millisecondsPerMinute;
+                        getIt<Data>().updateWorkingTime(workingTime);
+                        divisions[index] = workingTime[index] / Duration.millisecondsPerHour % 0.5 == 0;
+                        setState(() {});
+                      }
+                    },
+                  )
                 ],
               ),
             );
@@ -320,10 +353,11 @@ class WorkTimeSliderThumbRect extends SliderComponentShape {
   final double thumbRadius;
   final thumbHeight;
   final thumbWidth;
-  final int min;
-  final int max;
+  final double min;
+  final double max;
   final Color color;
   final Color textcolor;
+  final bool enabled;
 
   const WorkTimeSliderThumbRect({
     required this.thumbRadius,
@@ -333,11 +367,12 @@ class WorkTimeSliderThumbRect extends SliderComponentShape {
     required this.thumbWidth,
     required this.color,
     required this.textcolor,
+    required this.enabled,
   });
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
-    return Size(60, thumbHeight);
+    return Size(thumbWidth, thumbHeight);
   }
 
   @override
@@ -394,16 +429,21 @@ class WorkTimeSliderThumbRect extends SliderComponentShape {
       Radius.circular(100),
     );
 
-    final paint = Paint()
-      ..color = color //Thumb Background Color
-      ..style = PaintingStyle.fill;
-
     final Tween<double> opacityTween = Tween<double>(
       begin: 0,
       end: 255,
     );
     final double evaluatedOpacity = opacityTween.evaluate(activationAnimation);
 
+    final colorTween = Tween<double>(end: 255, begin: enabled ? 255 : 100);
+    final int evaluatedColorAlpha = colorTween.evaluate(activationAnimation).toInt();
+
+    final paint = Paint()
+      ..color = color.withAlpha(evaluatedColorAlpha) //Thumb Background Color
+      ..style = PaintingStyle.fill;
+    final whitePaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.fill;
     final botPaint = Paint()
       ..color = color.withAlpha(evaluatedOpacity.toInt())
       ..style = PaintingStyle.fill;
@@ -427,7 +467,8 @@ class WorkTimeSliderThumbRect extends SliderComponentShape {
     Path rRpath = Path();
     rRpath.addRRect(botRRect);
     rRpath.addRRect(topRRect);
-    canvas.drawShadow(rRpath, neon.withAlpha(50), evaluatedElevation, false);
+    canvas.drawShadow(rRpath, neon.withAlpha(50 - (mapRange(evaluatedFactor, 0, 1, 1, 0) * (enabled ? 0 : 30)).toInt()), evaluatedElevation, false);
+    canvas.drawRRect(topRRect, whitePaint);
     canvas.drawRRect(topRRect, paint);
     canvas.drawRRect(botRRect, botPaint);
     canvas.drawRRect(handleRect, handlePaint);
@@ -435,23 +476,101 @@ class WorkTimeSliderThumbRect extends SliderComponentShape {
   }
 
   String getValue(double value) {
+    print(value);
     return (min + (max - min) * value).toStringAsFixed(1).replaceAll(".", ",");
   }
 }
 
-// class WorktimeSliderTrackShape extends SliderTrackShape{
-//   @override
-//   Rect getPreferredRect({required RenderBox parentBox, Offset offset = Offset.zero, required SliderThemeData sliderTheme, bool isEnabled, bool isDiscrete}) {
-//     // TODO: implement getPreferredRect
-//     throw UnimplementedError();
-//   }
+class WorktimeSliderTrackShape extends SliderTrackShape {
+  double trackWidth = 0;
+  double thumbWidth = 0;
 
-//   @override
-//   void paint(PaintingContext context, Offset offset, {required RenderBox parentBox, required SliderThemeData sliderTheme, required Animation<double> enableAnimation, required Offset thumbCenter, bool isEnabled, bool isDiscrete, required TextDirection textDirection}) {
-//     // TODO: implement paint
-//   }
+  @override
+  Rect getPreferredRect(
+      {required RenderBox parentBox, Offset offset = Offset.zero, required SliderThemeData sliderTheme, bool? isEnabled, bool? isDiscrete}) {
+    thumbWidth = sliderTheme.thumbShape!
+        .getPreferredSize(
+          true,
+          true,
+        )
+        .width;
+    double trackHeight = sliderTheme.trackHeight!;
+    assert(thumbWidth >= 0);
+    assert(trackHeight >= 0);
+    assert(parentBox.size.width >= thumbWidth);
+    assert(parentBox.size.height >= trackHeight);
 
-// }
+    final double trackTop = offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final double trackLeft = offset.dx + thumbWidth / 2;
+    trackWidth = parentBox.size.width - thumbWidth;
+
+    return Rect.fromLTWH(
+      trackLeft,
+      trackTop,
+      trackWidth,
+      trackHeight,
+    );
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset,
+      {required RenderBox parentBox,
+      required SliderThemeData sliderTheme,
+      required Animation<double> enableAnimation,
+      required Offset thumbCenter,
+      bool? isEnabled,
+      bool? isDiscrete,
+      required TextDirection textDirection}) {
+    // Check for slider track height
+    if (sliderTheme.trackHeight == 0) return;
+    // Get the rect that we just calculated
+    final Rect trackRect = getPreferredRect(
+      parentBox: parentBox,
+      offset: offset,
+      sliderTheme: sliderTheme,
+      isEnabled: isEnabled,
+      isDiscrete: isDiscrete,
+    );
+
+    final Paint activePathPaint = Paint()
+      ..color = sliderTheme.activeTrackColor!
+      ..style = PaintingStyle.fill;
+
+    final activePathSegment = Path()
+      ..addRect(
+        Rect.fromPoints(
+          Offset(trackRect.left, trackRect.top),
+          Offset(trackRect.left + thumbCenter.dx, trackRect.bottom),
+        ),
+      )
+      ..addRRect(
+        RRect.fromRectAndCorners(
+            Rect.fromPoints(
+              Offset(trackRect.left, trackRect.top),
+              Offset(trackRect.left - thumbWidth / 2, trackRect.bottom),
+            ),
+            topLeft: Radius.circular(10),
+            bottomLeft: Radius.circular(10)),
+      );
+
+    final Paint inactivePathPaint = Paint()
+      ..color = sliderTheme.inactiveTrackColor!
+      ..style = PaintingStyle.fill;
+
+    final inactivePathSegment = Path()
+      ..addRRect(RRect.fromRectAndCorners(
+          Rect.fromPoints(
+            Offset(trackRect.left + thumbCenter.dx, trackRect.top + 1),
+            Offset(trackRect.right + thumbWidth / 2, trackRect.bottom - 1),
+          ),
+          topRight: Radius.circular(10),
+          bottomRight: Radius.circular(10)));
+
+    //context.canvas.drawRect(trackRect, defaultPathPaint);
+    context.canvas.drawPath(activePathSegment, activePathPaint);
+    context.canvas.drawPath(inactivePathSegment, inactivePathPaint);
+  }
+}
 
 class WorkdayButtonRow extends StatefulWidget {
   const WorkdayButtonRow({
