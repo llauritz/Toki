@@ -46,25 +46,20 @@ class Zeitnahme {
   }
 
   int getUeberstunden() {
-    if (state == "default") {
-      int tagesHours = getIt<Data>().tagesstunden.truncate();
-      int tagesMinutes = ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
+    int weekday = getIt<Data>().individualTimes? day.weekday - 1:0;
+    int milliseconds = getIt<Data>().workingTime[weekday];
 
-      int uebermilliseconds = getElapsedTime() - Duration(hours: tagesHours, minutes: tagesMinutes).inMilliseconds - getKorrektur();
+    if (state == "default") {
+      int uebermilliseconds = getElapsedTime() - milliseconds - getKorrektur();
       print("Zeitnahme - day" + day.toString());
       return uebermilliseconds;
+
     } else if (state == "edited") {
-      int tagesHours = getIt<Data>().tagesstunden.truncate();
-      int tagesMinutes = ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
-      print("Zeitnahme - tageshrs: $tagesHours");
-      print("Zeitnahme - tagesmin: $tagesMinutes");
-      int uebermilliseconds = editMilli - Duration(hours: tagesHours, minutes: tagesMinutes).inMilliseconds;
-      print("Zeitnahme - uebermilliEDITED: ${Duration(milliseconds: uebermilliseconds)}");
+      int uebermilliseconds = editMilli - milliseconds;
       return uebermilliseconds;
+
     } else if (state == "empty") {
-      int tagesHours = getIt<Data>().tagesstunden.truncate();
-      int tagesMinutes = ((getIt<Data>().tagesstunden - tagesHours) * 60).toInt();
-      return -Duration(hours: tagesHours, minutes: tagesMinutes).inMilliseconds;
+      return -milliseconds;
     } else {
       return 0;
     }

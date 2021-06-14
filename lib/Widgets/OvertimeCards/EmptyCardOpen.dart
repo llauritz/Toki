@@ -12,8 +12,7 @@ import 'TagEditWidget.dart';
 final getIt = GetIt.instance;
 
 class EmptyCardOpen extends StatefulWidget {
-
-  EmptyCardOpen ({
+  EmptyCardOpen({
     required this.i,
     required this.index,
     required this.zeitnahme,
@@ -41,15 +40,11 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
 
   DateFormat tag = DateFormat(DateFormat.WEEKDAY, "de_DE");
 
-
   @override
   Widget build(BuildContext context) {
     //Tagesstunden in Millisekunden
-    final int tagesMillisekunden = (getIt<Data>().tagesstunden * 3600000).truncate();
-    final int tagesHours =
-        Duration(milliseconds: tagesMillisekunden.abs()).inHours;
-    final int tagesMinutes =
-        Duration(milliseconds: tagesMillisekunden.abs()).inMinutes;
+    int weekday = getIt<Data>().individualTimes? widget.zeitnahme.day.weekday - 1:0;
+    int workMilliseconds = getIt<Data>().workingTime[weekday];
 
     return Container(
       color: Colors.white,
@@ -60,17 +55,14 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Container(
-                decoration: BoxDecoration(
+                decoration: BoxDecoration(color: grayTranslucent, borderRadius: BorderRadius.circular(20), boxShadow: [
+                  BoxShadow(
+                    offset: const Offset(0, 5),
                     color: grayTranslucent,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        offset: const Offset(0, 5),
-                        color: grayTranslucent,
-                        blurRadius: 10,
-                        spreadRadius: 0,
-                      )
-                    ]),
+                    blurRadius: 10,
+                    spreadRadius: 0,
+                  )
+                ]),
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,19 +73,17 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                         IconButton(
                             tooltip: "Speichern und schliessen",
                             splashColor: grayAccent.withAlpha(80),
-                            highlightColor:
-                            grayAccent.withAlpha(50),
+                            highlightColor: grayAccent.withAlpha(50),
                             padding: const EdgeInsets.all(0),
                             visualDensity: const VisualDensity(),
-                            icon: Icon(Icons.done_rounded,
-                                color: grayAccent, size: 30),
+                            icon: Icon(Icons.done_rounded, color: grayAccent, size: 30),
                             onPressed: () {
                               Navigator.pop(context);
                             })
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical:100.0),
+                      padding: const EdgeInsets.symmetric(vertical: 100.0),
                       child: Column(
                         children: [
                           Text(
@@ -104,10 +94,11 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                             height: 30,
                           ),
                           TagEditWidget(
-                            i:widget.i,
+                            i: widget.i,
                             zeitnahme: widget.zeitnahme,
                             color: gray,
-                            colorAccent: grayAccent,)
+                            colorAccent: grayAccent,
+                          )
                         ],
                       ),
                     ),
@@ -119,17 +110,16 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                             Text(
                               "-",
                               style: openCardsNumbers,
-                            ),Text(
-                              tagesHours.toString(),
+                            ),
+                            Text(
+                              (workMilliseconds ~/ Duration.millisecondsPerHour).toString(),
                               style: openCardsNumbers,
                             ),
                             Text(
                               ":",
                               style: openCardsNumbers,
                             ),
-                            DoubleDigit(
-                                i: tagesMinutes % 60,
-                                style: openCardsNumbers)
+                            DoubleDigit(i: (workMilliseconds ~/ Duration.millisecondsPerMinute) % 60, style: openCardsNumbers)
                           ],
                         ),
                         Text(
@@ -146,8 +136,8 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 FlatButton(
-                    onPressed: (){
-                      if(widget.zeitnahme.tag == "Stundenabbau"){
+                    onPressed: () {
+                      if (widget.zeitnahme.tag == "Stundenabbau") {
                         getIt<HiveDB>().updateTag("Urlaub", widget.i);
                       }
                       getIt<HiveDB>().changeState("free", widget.i);
@@ -158,23 +148,27 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                     shape: const StadiumBorder(),
                     color: freeTranslucent,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical:10.0, horizontal: 0),
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.beach_access, color: freeAccent, size: 20,),
+                          const Icon(
+                            Icons.beach_access,
+                            color: freeAccent,
+                            size: 20,
+                          ),
                           const SizedBox(width: 5),
-                          Text("Urlaubstag", style: openButtonText.copyWith(
-                              color: freeAccent
-                          ),),
+                          Text(
+                            "Urlaubstag",
+                            style: openButtonText.copyWith(color: freeAccent),
+                          ),
                         ],
                       ),
-                    )
-                ),
+                    )),
                 const SizedBox(width: 12),
                 FlatButton(
-                    onPressed: (){
-                      if(widget.zeitnahme.tag == "Stundenabbau"){
+                    onPressed: () {
+                      if (widget.zeitnahme.tag == "Stundenabbau") {
                         getIt<HiveDB>().updateTag("Bearbeitet", widget.i);
                       }
                       getIt<HiveDB>().changeState("edited", widget.i);
@@ -185,19 +179,23 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                     shape: const StadiumBorder(),
                     color: editColorTranslucent,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical:10.0, horizontal: 0),
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.edit, color: editColor, size: 20,),
+                          Icon(
+                            Icons.edit,
+                            color: editColor,
+                            size: 20,
+                          ),
                           const SizedBox(width: 5),
-                          Text("Zeit nachtragen", style: openButtonText.copyWith(
-                              color: editColor
-                          ),),
+                          Text(
+                            "Zeit nachtragen",
+                            style: openButtonText.copyWith(color: editColor),
+                          ),
                         ],
                       ),
-                    )
-                ),
+                    )),
               ],
             )
           ],
@@ -206,4 +204,3 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
     );
   }
 }
-

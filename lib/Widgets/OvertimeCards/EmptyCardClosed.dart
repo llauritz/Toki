@@ -33,10 +33,12 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
   DateFormat datum = DateFormat("dd.MM", "de_DE");
 
   //Tagesstunden in Millisekunden
-  final int _tagesMillisekunden = (getIt<Data>().tagesstunden * 3600000).truncate();
 
   @override
   Widget build(BuildContext context) {
+    int weekday = getIt<Data>().individualTimes ? widget.zeitnahme.day.weekday - 1 : 0;
+    int workMilliseconds = getIt<Data>().workingTime[weekday];
+
     if (widget.i >= 0) {
       final Zeitnahme _zeitnahme = widget.zeitnahme;
       final DateTime _day = _zeitnahme.day;
@@ -93,10 +95,9 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                           splashColor: freeAccent.withAlpha(80),
                           highlightColor: freeAccent.withAlpha(50),
                           color: freeTranslucent,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(1000)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1000)),
                           onPressed: () {
-                            if(widget.zeitnahme.tag == "Stundenabbau"){
+                            if (widget.zeitnahme.tag == "Stundenabbau") {
                               getIt<HiveDB>().updateTag("Urlaub", widget.i);
                             }
                             getIt<HiveDB>().changeState("free", widget.i);
@@ -112,9 +113,7 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                               ),
                               const Text(
                                 "Urlaub",
-                                style: TextStyle(
-                                    fontFamily: "BandeinsSansRegular",
-                                    color: freeAccent, fontSize: 11.0),
+                                style: TextStyle(fontFamily: "BandeinsSansRegular", color: freeAccent, fontSize: 11.0),
                               )
                             ],
                           )),
@@ -122,12 +121,9 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(3, 3, 0, 3),
                       child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(1000),
-                          color: editColorTranslucent
-                        ),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(1000), color: editColorTranslucent),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal:15.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -139,9 +135,7 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                               ),
                               Text(
                                 "Bearbeiten",
-                                style: TextStyle(
-                                    fontFamily: "BandeinsSansRegular",
-                                    color: editColor, fontSize: 11.0),
+                                style: TextStyle(fontFamily: "BandeinsSansRegular", color: editColor, fontSize: 11.0),
                               )
                             ],
                           ),
@@ -154,32 +148,14 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                       children: [
                         Text(
                           "-",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline4!
-                              .copyWith(color: gray),
+                          style: Theme.of(context).textTheme.headline4!.copyWith(color: gray),
                         ),
-                        Text(
-                            Duration(milliseconds: _tagesMillisekunden.abs())
-                                .inHours
-                                .toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline4!
-                                .copyWith(color: gray)),
-                        Text(":",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline4!
-                                .copyWith(color: gray)),
+                        Text(Duration(milliseconds: workMilliseconds.abs()).inHours.toString(),
+                            style: Theme.of(context).textTheme.headline4!.copyWith(color: gray)),
+                        Text(":", style: Theme.of(context).textTheme.headline4!.copyWith(color: gray)),
                         DoubleDigit(
-                            i: Duration(milliseconds: _tagesMillisekunden.abs())
-                                    .inMinutes %
-                                60,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline4!
-                                .copyWith(color: gray))
+                            i: Duration(milliseconds: workMilliseconds.abs()).inMinutes % 60,
+                            style: Theme.of(context).textTheme.headline4!.copyWith(color: gray))
                       ],
                     ),
                   ],

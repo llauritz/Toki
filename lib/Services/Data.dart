@@ -15,14 +15,6 @@ class Data {
 
   String username = "";
 
-  @deprecated
-  double tagesstunden = 8.0;
-
-  @deprecated
-  List<int> korrekturAB = [6, 9];
-  @deprecated
-  List<int> korrekturUM = [30, 45];
-
   bool pausenKorrektur = true;
 
   TimerText timerText = TimerText();
@@ -64,8 +56,7 @@ class Data {
     prefs.containsKey("name") ? username = prefs.getString("name")! : updateName("Name");
 
     if (prefs.containsKey("tagesstunden")) {
-      tagesstunden = prefs.getDouble("tagesstunden")!;
-      migrateWorkingTime();
+      migrateWorkingTime(prefs.getDouble("tagesstunden")!);
     }
 
     prefs.containsKey("MO")
@@ -96,24 +87,6 @@ class Data {
 
     prefs.containsKey("pausenKorrektur") ? pausenKorrektur = prefs.getBool("pausenKorrektur")! : updatePausenKorrektur(pausenKorrektur);
 
-    // prefs.containsKey("korrekturAB")
-    //     //converts List of Strings to List of Integers and stores them in local List
-    //     ? korrekturAB =
-    //         prefs.getStringList("korrekturAB")!.map(int.parse).toList()
-    //     //and the other way round
-    //     : prefs.setStringList(
-    //         "korrekturAB", korrekturAB.map((e) => e.toString()).toList());
-    // print("Data - kAB in local List" + korrekturAB.toString());
-
-    // prefs.containsKey("korrekturUM")
-    //     //converts List of Strings to List of Integers and stores them in local List
-    //     ? korrekturAB =
-    //         prefs.getStringList("korrekturUM")!.map(int.parse).toList()
-    //     //and the other way round
-    //     : prefs.setStringList(
-    //         "korrekturUM", korrekturAB.map((e) => e.toString()).toList());
-    // print("Data - kUM in local List" + korrekturUM.toString());
-
     if (!prefs.containsKey("OvertimeOffset")) setOffset(0);
   }
 
@@ -128,30 +101,6 @@ class Data {
     final SharedPreferences prefs = await _prefs;
     print(prefs.getString("Data - username is:" + prefs.getString("name")!));
     return prefs.getString("name")!;
-  }
-
-  // Future<void> updatePrimaryColor(AssetImage image) async {
-  //   currentImageStream.sink.add(image);
-  //   currentImage = image;
-  //   PaletteGenerator paletteGenerator =
-  //       await PaletteGenerator.fromImageProvider(image);
-  //   primaryColor = paletteGenerator.dominantColor.color;
-  //   print(primaryColor.toString());
-  //   primaryColorStream.sink.add(primaryColor);
-  // }
-
-  // void updateSettingsBackground(String hash) async {
-  //   backgroundHashStream.sink.add(hash);
-  //   backgroundHash = hash;
-  //   print("Data - hash updated");
-  // }
-
-  @deprecated
-  void updateTagesstunden(double newTagesstunden) async {
-    final SharedPreferences prefs = await _prefs;
-    prefs.setDouble("tagesstunden", newTagesstunden);
-    tagesstunden = newTagesstunden;
-    print("Data - updated Tagesstunden: " + prefs.getDouble("tagesstunden").toString());
   }
 
   void updateName(String newName) async {
@@ -199,11 +148,10 @@ class Data {
     prefs.setInt("SUmilli", list[6]);
   }
 
-  Future<void> migrateWorkingTime() async {
+  Future<void> migrateWorkingTime(double tagesstunden) async {
     final SharedPreferences prefs = await _prefs;
     if (!prefs.containsKey("MOmilli")) {
       if (prefs.containsKey("tagesstunden") && prefs.containsKey("MO")) {
-        tagesstunden = prefs.getDouble("tagesstunden")!;
         List<bool> wochentageTMP = [
           prefs.getBool("MO")!,
           prefs.getBool("DI")!,

@@ -9,10 +9,7 @@ import 'package:get_it/get_it.dart';
 import '../Widgets/Settings/FadeIn.dart';
 import '../Widgets/Settings/FertigButton.dart';
 import '../Widgets/Settings/NamePicker.dart';
-import '../Widgets/Settings/PausenkorrekturPicker.dart';
 import '../Widgets/Settings/SettingsTitle.dart';
-import '../Widgets/Settings/TagesstundenPicker.dart';
-import '../Widgets/Settings/WochentagePicker.dart';
 import '../Widgets/background.dart';
 
 final getIt = GetIt.instance;

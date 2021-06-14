@@ -16,7 +16,7 @@ class _Onboarding3State extends State<Onboarding3> {
 
   @override
   void initState() {
-    tagesstunden = getIt<Data>().tagesstunden;
+    //tagesstunden = getIt<Data>().tagesstunden;
     super.initState();
   }
 
@@ -78,7 +78,7 @@ class _Onboarding3State extends State<Onboarding3> {
               },
               onChangeEnd: (newTagesstunden) {
                 setState(() {
-                  getIt<Data>().updateTagesstunden(newTagesstunden);
+                  // getIt<Data>().updateTagesstunden(newTagesstunden);
                 });
               },
               min: 0,

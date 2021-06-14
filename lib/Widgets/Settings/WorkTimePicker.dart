@@ -2,6 +2,7 @@ import 'package:Timo/Services/Theme.dart';
 import 'package:animations/animations.dart';
 import 'package:day_night_time_picker/lib/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../Services/Data.dart';
@@ -15,10 +16,21 @@ class WorkTimePicker extends StatefulWidget {
   _WorkTimePickerState createState() => _WorkTimePickerState();
 }
 
-class _WorkTimePickerState extends State<WorkTimePicker> with SingleTickerProviderStateMixin {
+class _WorkTimePickerState extends State<WorkTimePicker> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    Widget _widget = getIt<Data>().individualTimes ? CollapsedWorkTimePicker() : ExpandedWorkTImePicker();
+    Widget _widget = getIt<Data>().individualTimes ? ExpandedWorkTImePicker() : CollapsedWorkTimePicker();
+    Widget _buttonText = getIt<Data>().individualTimes
+        ? Text(
+            "Alle Tage gemeinsam einstellen",
+            key: ValueKey(0),
+            style: openButtonText.copyWith(color: grayAccent),
+          )
+        : Text(
+            "Jeden Tag individuell einstellen",
+            key: ValueKey(1),
+            style: openButtonText.copyWith(color: grayAccent),
+          );
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
@@ -72,10 +84,28 @@ class _WorkTimePickerState extends State<WorkTimePicker> with SingleTickerProvid
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const SizedBox(width: 3),
-                            Text(
-                              "Jeden Tag individuell einstellen",
-                              style: openButtonText.copyWith(color: grayAccent),
+                            AnimatedSize(
+                              vsync: this,
+                              curve: Curves.ease,
+                              duration: Duration(milliseconds: 500),
+                              child: PageTransitionSwitcher(
+                                reverse: getIt<Data>().individualTimes,
+                                transitionBuilder: (
+                                  Widget child,
+                                  Animation<double> primaryAnimation,
+                                  Animation<double> secondaryAnimation,
+                                ) {
+                                  return SharedAxisTransition(
+                                    child: child,
+                                    animation: primaryAnimation,
+                                    secondaryAnimation: secondaryAnimation,
+                                    transitionType: SharedAxisTransitionType.scaled,
+                                    fillColor: Colors.transparent,
+                                  );
+                                },
+                                child: _buttonText,
+                                duration: const Duration(milliseconds: 500),
+                              ),
                             ),
                           ],
                         ),
@@ -262,6 +292,7 @@ class _ExpandedWorkTImePickerState extends State<ExpandedWorkTImePicker> {
                       data: SliderTheme.of(context).copyWith(
                         overlayShape: SliderComponentShape.noOverlay,
                         trackShape: WorktimeSliderTrackShape(),
+                        trackHeight: 7,
                         thumbShape: WorkTimeSliderThumbRect(
                             min: 0,
                             max: workingTime[index] < (12.0 * Duration.millisecondsPerHour) ? 12 : workingTime[index] / Duration.millisecondsPerHour,
@@ -476,7 +507,7 @@ class WorkTimeSliderThumbRect extends SliderComponentShape {
   }
 
   String getValue(double value) {
-    print(value);
+    //print(value);
     return (min + (max - min) * value).toStringAsFixed(1).replaceAll(".", ",");
   }
 }
@@ -537,16 +568,10 @@ class WorktimeSliderTrackShape extends SliderTrackShape {
       ..style = PaintingStyle.fill;
 
     final activePathSegment = Path()
-      ..addRect(
-        Rect.fromPoints(
-          Offset(trackRect.left, trackRect.top),
-          Offset(trackRect.left + thumbCenter.dx, trackRect.bottom),
-        ),
-      )
       ..addRRect(
         RRect.fromRectAndCorners(
             Rect.fromPoints(
-              Offset(trackRect.left, trackRect.top),
+              Offset(trackRect.left + thumbCenter.dx, trackRect.top),
               Offset(trackRect.left - thumbWidth / 2, trackRect.bottom),
             ),
             topLeft: Radius.circular(10),
@@ -616,7 +641,6 @@ class _WorkdayButtonRowState extends State<WorkdayButtonRow> {
             setState(() {
               widget._selections[index] = !widget._selections[index];
             });
-            print("dayrow speichern -- Welcome_Screen_4");
             getIt<Data>().updateWochentage(widget._selections);
           },
         ),
@@ -670,7 +694,6 @@ class _WorkdayButtonColumnState extends State<WorkdayButtonColumn> {
             setState(() {
               widget._selections[index] = !widget._selections[index];
             });
-            print("dayrow speichern -- Welcome_Screen_4");
             getIt<Data>().updateWochentage(widget._selections);
           },
         ),
