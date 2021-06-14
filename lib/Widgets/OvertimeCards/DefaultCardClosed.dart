@@ -48,9 +48,7 @@ class _DefaultCardClosedState extends State<DefaultCardClosed> {
     }
 
     if (widget.i >= 0) {
-
-      print("DefaultCardClosed - isRunning " +
-          getIt<Data>().isRunning.toString());
+      print("DefaultCardClosed - isRunning " + getIt<Data>().isRunning.toString());
       print("DefaultCardClosed - index " + widget.index.toString());
 
       return Padding(
@@ -97,8 +95,7 @@ class _DefaultCardClosedState extends State<DefaultCardClosed> {
                 child: Row(
                   children: [
                     Text(
-                      uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(
-                          widget.zeitnahme.startTimes[0])),
+                      uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(widget.zeitnahme.startTimes[0])),
                       style: const TextStyle(fontSize: 14, color: Colors.blueGrey),
                     ),
                     const Padding(
@@ -109,9 +106,7 @@ class _DefaultCardClosedState extends State<DefaultCardClosed> {
                         color: Colors.blueGrey,
                       ),
                     ),
-                    Text(
-                        uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(
-                            widget.zeitnahme.endTimes.last)),
+                    Text(uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(widget.zeitnahme.endTimes.last)),
                         style: const TextStyle(fontSize: 14, color: Colors.blueGrey)),
                     const Expanded(child: Text("")),
                     _Ueberstunden(ueberMilliseconds: ueberMilliseconds)
@@ -142,38 +137,11 @@ class _Ueberstunden extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle greenStyle =
-        Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white);
-    final TextStyle blueGreyStyle =
-        Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white);
+    final TextStyle greenStyle = Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white);
+    final TextStyle blueGreyStyle = Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white);
 
     //TODO: Test what happens if Zeit == Tagesstunden
-    if ((_ueberMilliseconds / 60000).truncate() == 0) {
-      return Container(
-        alignment: Alignment.center,
-        height: 30.0,
-        width: 65.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-                Duration(milliseconds: _ueberMilliseconds.abs())
-                    .inHours
-                    .toString(),
-                style: blueGreyStyle),
-            Text(":", style: blueGreyStyle),
-            DoubleDigit(
-                i: Duration(milliseconds: _ueberMilliseconds.abs()).inMinutes %
-                    60,
-                style: blueGreyStyle)
-          ],
-        ),
-        decoration: BoxDecoration(
-          color: Colors.blueGrey[300],
-          borderRadius: BorderRadius.circular(1000),
-        ),
-      );
-    }
+
     if (_ueberMilliseconds.isNegative) {
       return Container(
         alignment: Alignment.center,
@@ -182,20 +150,14 @@ class _Ueberstunden extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "-",
-              style: blueGreyStyle,
-            ),
-            Text(
-                Duration(milliseconds: _ueberMilliseconds.abs())
-                    .inHours
-                    .toString(),
-                style: blueGreyStyle),
+            if ((_ueberMilliseconds / 60000).truncate() != 0)
+              Text(
+                "-",
+                style: blueGreyStyle,
+              ),
+            Text(Duration(milliseconds: _ueberMilliseconds.abs()).inHours.toString(), style: blueGreyStyle),
             Text(":", style: blueGreyStyle),
-            DoubleDigit(
-                i: Duration(milliseconds: _ueberMilliseconds.abs()).inMinutes %
-                    60,
-                style: blueGreyStyle)
+            DoubleDigit(i: (_ueberMilliseconds.abs() / Duration.millisecondsPerMinute).truncate() % 60, style: blueGreyStyle)
           ],
         ),
         decoration: BoxDecoration(
@@ -217,19 +179,14 @@ class _Ueberstunden extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "+",
-                style: greenStyle,
-              ),
-              Text(
-                  Duration(milliseconds: _ueberMilliseconds).inHours.toString(),
-                  style: greenStyle),
+              if ((_ueberMilliseconds / 60000).truncate() != 0)
+                Text(
+                  "+",
+                  style: greenStyle,
+                ),
+              Text(Duration(milliseconds: _ueberMilliseconds).inHours.toString(), style: greenStyle),
               Text(":", style: greenStyle),
-              DoubleDigit(
-                  i: Duration(milliseconds: _ueberMilliseconds.abs())
-                          .inMinutes %
-                      60,
-                  style: greenStyle)
+              DoubleDigit(i: (_ueberMilliseconds.abs() / Duration.millisecondsPerMinute).truncate() % 60, style: greenStyle)
             ],
           ),
         ),

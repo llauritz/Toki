@@ -15,8 +15,7 @@ class TimerTextWidget extends StatefulWidget {
   _TimerTextWidgetState createState() => _TimerTextWidgetState();
 }
 
-class _TimerTextWidgetState extends State<TimerTextWidget>
-    with TickerProviderStateMixin {
+class _TimerTextWidgetState extends State<TimerTextWidget> with TickerProviderStateMixin {
   Duration duration = const Duration(milliseconds: 600);
   Curve curve = Curves.ease;
   GlobalKey zeitRowKey = GlobalKey();
@@ -42,18 +41,13 @@ class _TimerTextWidgetState extends State<TimerTextWidget>
 
   @override
   Widget build(BuildContext context) {
-    if(containerWidth == -1)
-    containerWidth = widget.constrainedWidth / 3;
+    if (containerWidth == -1) containerWidth = widget.constrainedWidth / 3;
 
-    !skipCallback
-        ? WidgetsBinding.instance!.addPostFrameCallback((_) => updateWidth())
-        : skipCallback = false;
+    !skipCallback ? WidgetsBinding.instance!.addPostFrameCallback((_) => updateWidth()) : skipCallback = false;
 
     final int elapsedSeconds = ((widget.elapsedTime / (1000)) % 60).truncate();
-    final int elapsedMinutes =
-        ((widget.elapsedTime / (60 * 1000)) % 60).truncate();
-    final int elapsedHours =
-        ((widget.elapsedTime / (60 * 60 * 1000)) % 60).truncate();
+    final int elapsedMinutes = ((widget.elapsedTime / (60 * 1000)) % 60).truncate();
+    final int elapsedHours = ((widget.elapsedTime / (60 * 60 * 1000)) % 60).truncate();
 /*    print("timer - elapsed Hours" + elapsedHours.toString());
     print("timer - elapsed Minutes" + elapsedMinutes.toString());
     print("timer - elapsed Seconds" + elapsedSeconds.toString());*/
@@ -150,9 +144,7 @@ class _TimerTextWidgetState extends State<TimerTextWidget>
                 const Text(":", style: timerTextNumbers),
                 DoubleDigit(i: elapsedMinutes, style: timerTextNumbers),
                 const SizedBox(width: 5),
-                DoubleDigit(
-                    i: elapsedSeconds,
-                    style: timerTextNumbers.copyWith(fontSize: 34)),
+                DoubleDigit(i: elapsedSeconds, style: timerTextNumbers.copyWith(fontSize: 34)),
               ],
             ),
           ],
@@ -163,17 +155,14 @@ class _TimerTextWidgetState extends State<TimerTextWidget>
     return Column(
       children: [
         Text(elapsedMinutes.toString()),
-        Text(DateTime.fromMicrosecondsSinceEpoch(widget.elapsedTime)
-            .second
-            .toString()),
+        Text(DateTime.fromMicrosecondsSinceEpoch(widget.elapsedTime).second.toString()),
       ],
     );
   }
 }
 
 class DoubleDigit extends StatelessWidget {
-  const DoubleDigit({Key? key, required this.i, required this.style})
-      : super(key: key);
+  const DoubleDigit({Key? key, required this.i, required this.style}) : super(key: key);
 
   final int i;
   final TextStyle style;

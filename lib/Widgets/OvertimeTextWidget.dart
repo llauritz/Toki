@@ -11,14 +11,11 @@ class UeberstundenTextWidget extends StatelessWidget {
 
   final int ueberMilliseconds;
 
-
   @override
   Widget build(BuildContext context) {
     bool isNegative = ueberMilliseconds.isNegative;
-    int elapsedMinutes =
-    ((ueberMilliseconds.abs() / (60 * 1000)) % 60).truncate();
-    int elapsedHours =
-    ((ueberMilliseconds.abs() / (60 * 60 * 1000)) % 60).truncate();
+    int elapsedMinutes = ((ueberMilliseconds.abs() / (60 * 1000)) % 60).truncate();
+    int elapsedHours = ((ueberMilliseconds.abs() / (60 * 60 * 1000)) % 60).truncate();
 /*    print("timer - elapsed Hours" + elapsedHours.toString());
     print("timer - elapsed Minutes" + elapsedMinutes.toString());
     print("timer - elapsed Seconds" + elapsedSeconds.toString());*/

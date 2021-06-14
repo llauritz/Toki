@@ -106,8 +106,7 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
           ),
           AnimatedContainer(
             width: _width,
-            curve:
-                getIt<Data>().isRunning ? Curves.easeInOutCubic : Curves.ease,
+            curve: getIt<Data>().isRunning ? Curves.easeInOutCubic : Curves.ease,
             duration: const Duration(milliseconds: 700),
             height: 60,
             decoration: BoxDecoration(
@@ -119,8 +118,7 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
               child: Row(
                 children: [
                   Text(
-                    Uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(
-                        _zeitnahme.startTimes[0])),
+                    Uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(_zeitnahme.startTimes[0])),
                     style: TextStyle(fontSize: 14, color: Colors.blueGrey),
                   ),
                   const Padding(
@@ -137,10 +135,7 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
                     index: widget.index,
                   ),
                   const Expanded(child: Text("")),
-                  Ueberstunden(
-                      ueberMilliseconds: ueberMilliseconds,
-                      index: widget.index,
-                      isRunning: widget.isRunning)
+                  Ueberstunden(ueberMilliseconds: ueberMilliseconds, index: widget.index, isRunning: widget.isRunning)
                 ],
               ),
             ),
@@ -168,16 +163,14 @@ class Ueberstunden extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle greenStyle =
-        Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white);
-    TextStyle blueGreyStyle =
-        Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white);
+    TextStyle greenStyle = Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white);
+    TextStyle blueGreyStyle = Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white);
 
     Widget _widget;
 
     if (_isRunning == false || _index > 0) {
       //TODO: Test what happens if Zeit = Tagesstunden
-      if ((_ueberMilliseconds / 60000).truncate() == 0) {
+      if ((_ueberMilliseconds / 60000).round() == 0) {
         _widget = KeyedSubtree(
           key: const ValueKey<int>(0),
           child: Container(
@@ -187,17 +180,9 @@ class Ueberstunden extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                    Duration(milliseconds: _ueberMilliseconds.abs())
-                        .inHours
-                        .toString(),
-                    style: blueGreyStyle),
+                Text(Duration(milliseconds: _ueberMilliseconds.abs()).inHours.toString(), style: blueGreyStyle),
                 Text(":", style: blueGreyStyle),
-                DoubleDigit(
-                    i: Duration(milliseconds: _ueberMilliseconds.abs())
-                            .inMinutes %
-                        60,
-                    style: blueGreyStyle)
+                DoubleDigit(i: Duration(milliseconds: _ueberMilliseconds.abs()).inMinutes % 60, style: blueGreyStyle)
               ],
             ),
             decoration: BoxDecoration(
@@ -221,17 +206,9 @@ class Ueberstunden extends StatelessWidget {
                   "-",
                   style: blueGreyStyle,
                 ),
-                Text(
-                    Duration(milliseconds: _ueberMilliseconds.abs())
-                        .inHours
-                        .toString(),
-                    style: blueGreyStyle),
+                Text(Duration(milliseconds: _ueberMilliseconds.abs()).inHours.toString(), style: blueGreyStyle),
                 Text(":", style: blueGreyStyle),
-                DoubleDigit(
-                    i: Duration(milliseconds: _ueberMilliseconds.abs())
-                            .inMinutes %
-                        60,
-                    style: blueGreyStyle)
+                DoubleDigit(i: Duration(milliseconds: _ueberMilliseconds.abs()).inMinutes % 60, style: blueGreyStyle)
               ],
             ),
             decoration: BoxDecoration(
@@ -254,17 +231,9 @@ class Ueberstunden extends StatelessWidget {
                   "+",
                   style: greenStyle,
                 ),
-                Text(
-                    Duration(milliseconds: _ueberMilliseconds)
-                        .inHours
-                        .toString(),
-                    style: greenStyle),
+                Text(Duration(milliseconds: _ueberMilliseconds).inHours.toString(), style: greenStyle),
                 Text(":", style: greenStyle),
-                DoubleDigit(
-                    i: Duration(milliseconds: _ueberMilliseconds.abs())
-                            .inMinutes %
-                        60,
-                    style: greenStyle)
+                DoubleDigit(i: Duration(milliseconds: _ueberMilliseconds.abs()).inMinutes % 60, style: greenStyle)
               ],
             ),
             decoration: BoxDecoration(
@@ -299,11 +268,7 @@ class Ueberstunden extends StatelessWidget {
 }
 
 class EndTimeWidget extends StatefulWidget {
-  const EndTimeWidget(
-      {Key? key,
-      required this.Uhrzeit,
-      required Zeitnahme zeitnahme,
-      required int index})
+  const EndTimeWidget({Key? key, required this.Uhrzeit, required Zeitnahme zeitnahme, required int index})
       : _zeitnahme = zeitnahme,
         _index = index,
         super(key: key);
@@ -324,12 +289,10 @@ class _EndTimeWidgetState extends State<EndTimeWidget> {
   Widget build(BuildContext context) {
     Widget _widget;
 
-    if (widget._zeitnahme.endTimes.length ==
-        widget._zeitnahme.startTimes.length) {
+    if (widget._zeitnahme.endTimes.length == widget._zeitnahme.startTimes.length) {
       endTracker.cancel();
       _widget = Text(
-        widget.Uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(
-            widget._zeitnahme.endTimes.last)),
+        widget.Uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(widget._zeitnahme.endTimes.last)),
         style: const TextStyle(fontSize: 14, color: Colors.blueGrey),
         key: ValueKey<int>(widget._zeitnahme.endTimes.last),
       );

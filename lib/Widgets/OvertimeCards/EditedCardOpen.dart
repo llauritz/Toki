@@ -1,3 +1,4 @@
+import 'package:Timo/Widgets/Settings/WorkTimePicker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -42,9 +43,11 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
 
   int changeMilli = 0;
   int editMilli = 0;
+  bool divisions = true;
 
   @override
   void initState() {
+    divisions = widget.zeitnahme.editMilli / Duration.millisecondsPerHour % 0.5 == 0;
     changeMilli = widget.zeitnahme.editMilli;
     editMilli = widget.zeitnahme.editMilli;
     super.initState();
@@ -53,14 +56,11 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
   @override
   Widget build(BuildContext context) {
     final int editHours = (editMilli / Duration.millisecondsPerHour).truncate();
-    final int editMinutes =
-        (editMilli / Duration.millisecondsPerMinute).truncate();
+    final int editMinutes = (editMilli / Duration.millisecondsPerMinute).truncate();
 
     final int ueberMilli = widget.zeitnahme.getUeberstunden();
-    final int ueberHours =
-        (ueberMilli / Duration.millisecondsPerHour).truncate();
-    final int ueberMinutes =
-        (ueberMilli / Duration.millisecondsPerMinute).truncate();
+    final int ueberHours = (ueberMilli / Duration.millisecondsPerHour).truncate();
+    final int ueberMinutes = (ueberMilli / Duration.millisecondsPerMinute).truncate();
 
     return Container(
       color: Colors.white,
@@ -71,17 +71,14 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Container(
-                decoration: BoxDecoration(
-                    color: editColorTranslucent,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        offset: const Offset(0, 5),
-                        color: editColorTranslucent.withAlpha(150),
-                        blurRadius: 10,
-                        spreadRadius: 0,
-                      )
-                    ]),
+                decoration: BoxDecoration(color: editColorTranslucent, borderRadius: BorderRadius.circular(20), boxShadow: [
+                  BoxShadow(
+                    offset: const Offset(0, 5),
+                    color: editColorTranslucent.withAlpha(150),
+                    blurRadius: 10,
+                    spreadRadius: 0,
+                  )
+                ]),
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -95,8 +92,7 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                             highlightColor: editColor.withAlpha(50),
                             padding: const EdgeInsets.all(0),
                             visualDensity: const VisualDensity(),
-                            icon: Icon(Icons.done_rounded,
-                                color: editColor, size: 30),
+                            icon: Icon(Icons.done_rounded, color: editColor, size: 30),
                             onPressed: () {
                               Navigator.pop(context);
                             })
@@ -107,9 +103,7 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                       child: Column(
                         children: [
                           Text(
-                            tag.format(widget.zeitnahme.day) +
-                                ", " +
-                                datum.format(widget.zeitnahme.day),
+                            tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
                             style: openCardDate.copyWith(color: editColor),
                           ),
                           const SizedBox(
@@ -122,24 +116,84 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                             colorAccent: editColor,
                           ),
                           const SizedBox(height: 30),
-                          Slider.adaptive(
-                            value: changeMilli * 1.0,
-                            min: 0,
-                            max: Duration.millisecondsPerHour * 12.0,
-                            divisions: 24,
-                            onChanged: (double value) {
-                              setState(() {
-                                changeMilli = value.truncate();
-                                editMilli = value.truncate();
-                              });
-                            },
-                            onChangeEnd: (double value) {
-                              setState(() {
-                                getIt<HiveDB>().updateEditMilli(
-                                    value.truncate(), widget.i);
-                              });
-                            },
-                          )
+                          Padding(
+                            padding: const EdgeInsets.only(left: 12.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: SliderTheme(
+                                    data: SliderTheme.of(context).copyWith(
+                                      overlayShape: SliderComponentShape.noOverlay,
+                                      trackHeight: 7,
+                                      trackShape: WorktimeSliderTrackShape(),
+                                      thumbShape: WorkTimeSliderThumbRect(
+                                          min: 0,
+                                          max: widget.zeitnahme.editMilli < (12.0 * Duration.millisecondsPerHour)
+                                              ? 12
+                                              : widget.zeitnahme.editMilli / Duration.millisecondsPerHour,
+                                          thumbHeight: 40.0,
+                                          thumbWidth: 100.0,
+                                          thumbRadius: 0,
+                                          color: editColor,
+                                          textcolor: Colors.white,
+                                          enabled: true),
+                                      activeTickMarkColor: Colors.transparent,
+                                      inactiveTickMarkColor: Colors.transparent,
+                                      inactiveTrackColor: editColor.withAlpha(50),
+                                      activeTrackColor: editColor.withAlpha(200),
+                                    ),
+                                    child: Slider(
+                                      value: widget.zeitnahme.editMilli * 1.0,
+                                      onChangeStart: (_) {
+                                        divisions = true;
+                                      },
+                                      onChanged: (newTagesstunden) {
+                                        setState(() {
+                                          getIt<HiveDB>().updateEditMilli(newTagesstunden.round(), widget.i);
+                                        });
+                                      },
+                                      onChangeEnd: (newTagesstunden) {
+                                        if (newTagesstunden / Duration.millisecondsPerHour % 0.5 != 0) {
+                                          newTagesstunden =
+                                              ((newTagesstunden / Duration.millisecondsPerHour * 2).round() / 2) * Duration.millisecondsPerHour;
+                                        }
+                                        widget.zeitnahme.editMilli = newTagesstunden.toInt();
+                                        setState(() {
+                                          getIt<HiveDB>().updateEditMilli(newTagesstunden.toInt(), widget.i);
+                                        });
+                                      },
+                                      min: 0,
+                                      max: widget.zeitnahme.editMilli < (12.0 * Duration.millisecondsPerHour)
+                                          ? 12.0 * Duration.millisecondsPerHour
+                                          : widget.zeitnahme.editMilli * 1.0,
+                                      divisions: divisions ? 24 : null,
+                                      //label: "$tagesstunden Stunden",
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.keyboard_alt_rounded),
+                                  color: editColor,
+                                  onPressed: () async {
+                                    int hours = widget.zeitnahme.editMilli ~/ Duration.millisecondsPerHour;
+                                    int minutes =
+                                        (widget.zeitnahme.editMilli - hours * Duration.millisecondsPerHour) ~/ Duration.millisecondsPerMinute;
+                                    TimeOfDay? newTime = await showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay(hour: hours, minute: minutes),
+                                        helpText: "Arbeitszeit auswählen".toUpperCase());
+                                    if (newTime != null) {
+                                      widget.zeitnahme.editMilli =
+                                          newTime.hour * Duration.millisecondsPerHour + newTime.minute * Duration.millisecondsPerMinute;
+                                      getIt<HiveDB>().updateEditMilli(widget.zeitnahme.editMilli, widget.i);
+                                      divisions = widget.zeitnahme.editMilli / Duration.millisecondsPerHour % 0.5 == 0;
+                                      setState(() {});
+                                    }
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -151,17 +205,13 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                             Row(
                               children: [
                                 Text(
-                                  editHours.toString(),
-                                  style: openCardsNumbers.copyWith(
-                                      color: editColor),
+                                  Duration(milliseconds: widget.zeitnahme.editMilli).inHours.toString(),
+                                  style: openCardsNumbers.copyWith(color: editColor),
                                 ),
-                                Text(":",
-                                    style: openCardsNumbers.copyWith(
-                                        color: editColor)),
+                                Text(":", style: openCardsNumbers.copyWith(color: editColor)),
                                 DoubleDigit(
-                                    i: editMinutes % 60,
-                                    style: openCardsNumbers.copyWith(
-                                        color: editColor))
+                                    i: Duration(milliseconds: widget.zeitnahme.editMilli).inMinutes % 60,
+                                    style: openCardsNumbers.copyWith(color: editColor))
                               ],
                             ),
                             Text(
@@ -175,18 +225,15 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                           children: [
                             Row(
                               children: [
+                                if (widget.zeitnahme.getUeberstunden().isNegative) Text("-", style: openCardsNumbers.copyWith(color: editColor)),
                                 Text(
-                                  ueberHours.toString(),
-                                  style: openCardsNumbers.copyWith(
-                                      color: editColor),
+                                  (widget.zeitnahme.getUeberstunden().abs() ~/ Duration.millisecondsPerHour).toString(),
+                                  style: openCardsNumbers.copyWith(color: editColor),
                                 ),
-                                Text(":",
-                                    style: openCardsNumbers.copyWith(
-                                        color: editColor)),
+                                Text(":", style: openCardsNumbers.copyWith(color: editColor)),
                                 DoubleDigit(
-                                    i: ueberMinutes % 60,
-                                    style: openCardsNumbers.copyWith(
-                                        color: editColor))
+                                    i: ((widget.zeitnahme.getUeberstunden().abs() ~/ Duration.millisecondsPerMinute) % 60),
+                                    style: openCardsNumbers.copyWith(color: editColor))
                               ],
                             ),
                             Text(
@@ -222,8 +269,7 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                     shape: const StadiumBorder(),
                     color: grayTranslucent,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 0),
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -254,8 +300,7 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                     shape: const StadiumBorder(),
                     color: freeTranslucent,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 0),
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

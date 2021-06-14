@@ -1,4 +1,3 @@
-
 import 'package:Timo/Services/Theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -11,13 +10,7 @@ import '../../hiveClasses/Zeitnahme.dart';
 final getIt = GetIt.instance;
 
 class EditedCardClosedStl extends StatelessWidget {
-
-  const EditedCardClosedStl({
-    Key? key,
-    required this.i,
-    required this.index,
-    required this.zeitnahme}
-    ) : super(key: key);
+  const EditedCardClosedStl({Key? key, required this.i, required this.index, required this.zeitnahme}) : super(key: key);
 
   final int i;
   final int index;
@@ -25,7 +18,6 @@ class EditedCardClosedStl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final DateFormat fullDate = DateFormat('dd.MM.yyyy');
     final DateFormat uhrzeit = DateFormat("H:mm");
     final DateFormat wochentag = DateFormat("EE", "de_DE");
@@ -33,10 +25,9 @@ class EditedCardClosedStl extends StatelessWidget {
     //getIt<HiveDB>().updateTag("Urlaub", widget.i);
 
     if (i >= 0) {
-
       final int ueberMilli = zeitnahme.getUeberstunden();
-      final int ueberHours = (ueberMilli/Duration.millisecondsPerHour).truncate();
-      final int overMinutes = (ueberMilli/Duration.millisecondsPerMinute).truncate();
+      final int ueberHours = (ueberMilli / Duration.millisecondsPerHour).truncate();
+      final int overMinutes = (ueberMilli / Duration.millisecondsPerMinute).truncate();
 
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -89,7 +80,8 @@ class EditedCardClosedStl extends StatelessWidget {
                           Flexible(
                             child: Container(
                               child: Text(
-                                zeitnahme.tag.toString(),overflow: TextOverflow.ellipsis,
+                                zeitnahme.tag.toString(),
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(fontSize: 14, color: editColor),
                               ),
                             ),
@@ -98,12 +90,12 @@ class EditedCardClosedStl extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 3.0),
                             child: FlatButton(
                               onPressed: () {
-                                if(zeitnahme.startTimes.isNotEmpty){
+                                if (zeitnahme.startTimes.isNotEmpty) {
                                   getIt<HiveDB>().changeState("default", i);
-                                }else{
+                                } else {
                                   getIt<HiveDB>().changeState("empty", i);
                                 }
-                                if(zeitnahme.tag == "Bearbeitet"){
+                                if (zeitnahme.tag == "Bearbeitet") {
                                   getIt<HiveDB>().updateTag("Stundenabbau", i);
                                 }
                               },
@@ -115,8 +107,7 @@ class EditedCardClosedStl extends StatelessWidget {
                               splashColor: editColor.withAlpha(80),
                               highlightColor: editColor.withAlpha(50),
                               color: editColorTranslucent,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(1000)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1000)),
                               padding: const EdgeInsets.all(5),
                               minWidth: 40,
                               height: 40,
@@ -132,7 +123,7 @@ class EditedCardClosedStl extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          if(!ueberMilli.isNegative)
+                          if (!ueberMilli.isNegative)
                             const Text(
                               "+",
                               style: closedCardsNumbers,
@@ -141,13 +132,8 @@ class EditedCardClosedStl extends StatelessWidget {
                             ueberHours.toString(),
                             style: closedCardsNumbers,
                           ),
-                          const Text(
-                              ":",
-                              style: closedCardsNumbers
-                          ),
-                          DoubleDigit(
-                              i: overMinutes % 60,
-                              style: closedCardsNumbers)
+                          const Text(":", style: closedCardsNumbers),
+                          DoubleDigit(i: overMinutes.abs() % 60, style: closedCardsNumbers)
                         ],
                       ),
                       decoration: BoxDecoration(
@@ -203,8 +189,8 @@ class _EditedCardClosedState extends State<EditedCardClosed> {
     if (widget.i >= 0) {
 
       final int ueberMilli = widget.zeitnahme.getUeberstunden();
-      final int ueberHours = (ueberMilli/Duration.millisecondsPerHour).truncate();
-      final int overMinutes = (ueberMilli/Duration.millisecondsPerMinute).truncate();
+      final int ueberHours = (ueberMilli/Duration.millisecondsPerHour).round();
+      final int overMinutes = (ueberMilli/Duration.millisecondsPerMinute).round();
 
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
