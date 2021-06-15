@@ -10,7 +10,10 @@ import '../../Services/Data.dart';
 final getIt = GetIt.instance;
 
 class WorkTimePicker extends StatefulWidget {
-  const WorkTimePicker({Key? key}) : super(key: key);
+  const WorkTimePicker({Key? key, required this.color, required this.onboarding}) : super(key: key);
+
+  final Color color;
+  final bool onboarding;
 
   @override
   _WorkTimePickerState createState() => _WorkTimePickerState();
@@ -19,7 +22,9 @@ class WorkTimePicker extends StatefulWidget {
 class _WorkTimePickerState extends State<WorkTimePicker> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    Widget _widget = getIt<Data>().individualTimes ? ExpandedWorkTImePicker() : CollapsedWorkTimePicker();
+    Widget _widget = getIt<Data>().individualTimes
+        ? ExpandedWorkTImePicker(color: widget.color, onboarding: widget.onboarding)
+        : CollapsedWorkTimePicker(color: widget.color, onboarding: widget.onboarding);
     Widget _buttonText = getIt<Data>().individualTimes
         ? Text(
             "Alle Tage gemeinsam einstellen",
@@ -42,33 +47,43 @@ class _WorkTimePickerState extends State<WorkTimePicker> with TickerProviderStat
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              Text(
-                "Arbeitszeiten",
-                style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18),
-              ),
-              AnimatedSize(
-                vsync: this,
-                curve: Curves.ease,
-                duration: Duration(milliseconds: 500),
-                child: PageTransitionSwitcher(
-                  reverse: getIt<Data>().individualTimes,
-                  transitionBuilder: (
-                    Widget child,
-                    Animation<double> primaryAnimation,
-                    Animation<double> secondaryAnimation,
-                  ) {
-                    return SharedAxisTransition(
-                      child: child,
-                      animation: primaryAnimation,
-                      secondaryAnimation: secondaryAnimation,
-                      transitionType: SharedAxisTransitionType.scaled,
-                      fillColor: Colors.transparent,
-                    );
-                  },
-                  child: _widget,
-                  duration: const Duration(milliseconds: 500),
+              if (!widget.onboarding)
+                Text(
+                  "Arbeitszeiten",
+                  style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18),
                 ),
-              ),
+              widget.onboarding
+                  ? AnimatedCrossFade(
+                      sizeCurve: Curves.ease,
+                      firstCurve: Curves.easeOutCubic,
+                      secondCurve: Curves.easeInCubic,
+                      firstChild: CollapsedWorkTimePicker(color: widget.color, onboarding: widget.onboarding),
+                      secondChild: ExpandedWorkTImePicker(color: widget.color, onboarding: widget.onboarding),
+                      crossFadeState: getIt<Data>().individualTimes ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                      duration: Duration(milliseconds: 500))
+                  : AnimatedSize(
+                      vsync: this,
+                      curve: Curves.ease,
+                      duration: Duration(milliseconds: 500),
+                      child: PageTransitionSwitcher(
+                        reverse: !getIt<Data>().individualTimes,
+                        transitionBuilder: (
+                          Widget child,
+                          Animation<double> primaryAnimation,
+                          Animation<double> secondaryAnimation,
+                        ) {
+                          return SharedAxisTransition(
+                            child: child,
+                            animation: primaryAnimation,
+                            secondaryAnimation: secondaryAnimation,
+                            transitionType: SharedAxisTransitionType.scaled,
+                            fillColor: Colors.transparent,
+                          );
+                        },
+                        child: _widget,
+                        duration: const Duration(milliseconds: 500),
+                      ),
+                    ),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -121,7 +136,10 @@ class _WorkTimePickerState extends State<WorkTimePicker> with TickerProviderStat
 }
 
 class CollapsedWorkTimePicker extends StatefulWidget {
-  const CollapsedWorkTimePicker({Key? key}) : super(key: key);
+  const CollapsedWorkTimePicker({Key? key, required this.color, required this.onboarding}) : super(key: key);
+
+  final Color color;
+  final bool onboarding;
 
   @override
   _CollapsedWorkTimePickerState createState() => _CollapsedWorkTimePickerState();
@@ -142,10 +160,11 @@ class _CollapsedWorkTimePickerState extends State<CollapsedWorkTimePicker> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-          child: WorkdayButtonRow(selections: _selections),
-        ),
+        if (!widget.onboarding)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+            child: WorkdayButtonRow(selections: _selections, color: widget.color),
+          ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
           child: Row(
@@ -162,13 +181,13 @@ class _CollapsedWorkTimePickerState extends State<CollapsedWorkTimePicker> {
                         thumbHeight: 40.0,
                         thumbWidth: 100.0,
                         thumbRadius: 0,
-                        color: neon,
+                        color: widget.color,
                         textcolor: Colors.white,
                         enabled: workingTime[0] != 0),
                     activeTickMarkColor: Colors.transparent,
                     inactiveTickMarkColor: Colors.transparent,
-                    inactiveTrackColor: neon.withAlpha(50),
-                    activeTrackColor: neon.withAlpha(200),
+                    inactiveTrackColor: widget.color.withAlpha(50),
+                    activeTrackColor: widget.color.withAlpha(200),
                   ),
                   child: Slider(
                     value: workingTime[0] * 1.0,
@@ -198,7 +217,7 @@ class _CollapsedWorkTimePickerState extends State<CollapsedWorkTimePicker> {
               ),
               IconButton(
                 icon: Icon(Icons.keyboard_alt_rounded),
-                color: neon,
+                color: widget.color,
                 onPressed: () async {
                   int hours = workingTime[0] ~/ Duration.millisecondsPerHour;
                   int minutes = (workingTime[0] - hours * Duration.millisecondsPerHour) ~/ Duration.millisecondsPerMinute;
@@ -221,9 +240,10 @@ class _CollapsedWorkTimePickerState extends State<CollapsedWorkTimePicker> {
 }
 
 class ExpandedWorkTImePicker extends StatefulWidget {
-  const ExpandedWorkTImePicker({
-    Key? key,
-  }) : super(key: key);
+  const ExpandedWorkTImePicker({required this.color, Key? key, required this.onboarding}) : super(key: key);
+
+  final Color color;
+  final bool onboarding;
 
   @override
   _ExpandedWorkTImePickerState createState() => _ExpandedWorkTImePickerState();
@@ -246,136 +266,153 @@ class _ExpandedWorkTImePickerState extends State<ExpandedWorkTImePicker> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-      child: ListView.builder(
-          physics: BouncingScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: 7,
-          itemBuilder: (context, index) {
-            TextStyle style = TextStyle(
-                fontWeight: _selections[index] ? FontWeight.bold : FontWeight.normal,
-                fontSize: 19.0,
-                height: 1,
-                color: _selections[index] ? neon : neon.withAlpha(100));
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 0.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InkWell(
-                      splashColor: Colors.transparent,
-                      splashFactory: InkRipple.splashFactory,
-                      onTap: () {
-                        setState(() {
-                          _selections[index] = !_selections[index];
-                        });
-                        getIt<Data>().updateWochentage(_selections);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          height: 30,
-                          width: 40,
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: AnimatedDefaultTextStyle(
-                              duration: Duration(milliseconds: 300),
-                              style: style,
-                              child: Text(
-                                days[index],
+      child: Column(
+        children: [
+          if (widget.onboarding)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+              child: Text(
+                """Wie viele Stunden arbeitest du am Tag?""",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: grayAccent, fontSize: 30.0, fontWeight: FontWeight.bold, fontFamily: "BandeinsSans"),
+              ),
+            ),
+          ListView.builder(
+              physics: BouncingScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: 7,
+              itemBuilder: (context, index) {
+                TextStyle style = TextStyle(
+                    fontWeight: _selections[index] ? FontWeight.bold : FontWeight.normal,
+                    fontSize: 19.0,
+                    height: 1,
+                    color: _selections[index] ? widget.color : widget.color.withAlpha(100));
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 0.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                          splashColor: Colors.transparent,
+                          splashFactory: InkRipple.splashFactory,
+                          onTap: () {
+                            setState(() {
+                              _selections[index] = !_selections[index];
+                            });
+                            getIt<Data>().updateWochentage(_selections);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              height: 30,
+                              width: 40,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: AnimatedDefaultTextStyle(
+                                  duration: Duration(milliseconds: 300),
+                                  style: style,
+                                  child: Text(
+                                    days[index],
+                                  ),
+                                ),
                               ),
                             ),
+                          )),
+                      Expanded(
+                        child: SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            overlayShape: SliderComponentShape.noOverlay,
+                            trackShape: WorktimeSliderTrackShape(),
+                            trackHeight: 7,
+                            thumbShape: WorkTimeSliderThumbRect(
+                                min: 0,
+                                max: workingTime[index] < (12.0 * Duration.millisecondsPerHour)
+                                    ? 12
+                                    : workingTime[index] / Duration.millisecondsPerHour,
+                                thumbHeight: 35.0,
+                                thumbWidth: 100.0,
+                                thumbRadius: 0,
+                                color: widget.color,
+                                textcolor: Colors.white,
+                                enabled: _selections[index]),
+                            activeTickMarkColor: Colors.transparent,
+                            inactiveTickMarkColor: Colors.transparent,
+                            inactiveTrackColor: widget.color.withAlpha(50),
+                            activeTrackColor: widget.color.withAlpha(200),
+                          ),
+                          child: Slider(
+                            value: _selections[index] ? workingTime[index] * 1.0 : 0,
+                            onChangeStart: (_) {
+                              divisions[index] = true;
+                            },
+                            onChanged: (newTagesstunden) {
+                              _selections[index] = true;
+                              getIt<Data>().updateWochentage(_selections);
+                              if (newTagesstunden == 0) {
+                                _selections[index] = false;
+                                getIt<Data>().updateWochentage(_selections);
+                              }
+                              setState(() {
+                                workingTime[index] = newTagesstunden.toInt();
+                              });
+                            },
+                            onChangeEnd: (newTagesstunden) {
+                              setState(() {
+                                if (newTagesstunden / Duration.millisecondsPerHour % 0.5 != 0) {
+                                  newTagesstunden = ((newTagesstunden / Duration.millisecondsPerHour * 2).round() / 2) * Duration.millisecondsPerHour;
+                                }
+                                workingTime[index] = newTagesstunden.toInt();
+                                if (newTagesstunden == 0) {
+                                  workingTime[index] = cachedWorkingTime[index];
+                                  _selections[index] = false;
+                                  getIt<Data>().updateWochentage(_selections);
+                                } else {
+                                  cachedWorkingTime[index] = newTagesstunden.toInt();
+                                  getIt<Data>().updateWorkingTime(workingTime);
+                                }
+                              });
+                            },
+                            min: 0,
+                            max: workingTime[index] < (12.0 * Duration.millisecondsPerHour)
+                                ? 12.0 * Duration.millisecondsPerHour
+                                : workingTime[index] * 1.0,
+                            divisions: divisions[index] ? 24 : null,
+                            //label: "$tagesstunden Stunden",
                           ),
                         ),
-                      )),
-                  Expanded(
-                    child: SliderTheme(
-                      data: SliderTheme.of(context).copyWith(
-                        overlayShape: SliderComponentShape.noOverlay,
-                        trackShape: WorktimeSliderTrackShape(),
-                        trackHeight: 7,
-                        thumbShape: WorkTimeSliderThumbRect(
-                            min: 0,
-                            max: workingTime[index] < (12.0 * Duration.millisecondsPerHour) ? 12 : workingTime[index] / Duration.millisecondsPerHour,
-                            thumbHeight: 35.0,
-                            thumbWidth: 100.0,
-                            thumbRadius: 0,
-                            color: neon,
-                            textcolor: Colors.white,
-                            enabled: _selections[index]),
-                        activeTickMarkColor: Colors.transparent,
-                        inactiveTickMarkColor: Colors.transparent,
-                        inactiveTrackColor: neon.withAlpha(50),
-                        activeTrackColor: neon.withAlpha(200),
                       ),
-                      child: Slider(
-                        value: _selections[index] ? workingTime[index] * 1.0 : 0,
-                        onChangeStart: (_) {
-                          divisions[index] = true;
-                        },
-                        onChanged: (newTagesstunden) {
-                          _selections[index] = true;
-                          getIt<Data>().updateWochentage(_selections);
-                          if (newTagesstunden == 0) {
-                            _selections[index] = false;
-                            getIt<Data>().updateWochentage(_selections);
-                          }
-                          setState(() {
-                            workingTime[index] = newTagesstunden.toInt();
-                          });
-                        },
-                        onChangeEnd: (newTagesstunden) {
-                          setState(() {
-                            if (newTagesstunden / Duration.millisecondsPerHour % 0.5 != 0) {
-                              newTagesstunden = ((newTagesstunden / Duration.millisecondsPerHour * 2).round() / 2) * Duration.millisecondsPerHour;
-                            }
-                            workingTime[index] = newTagesstunden.toInt();
-                            if (newTagesstunden == 0) {
-                              workingTime[index] = cachedWorkingTime[index];
-                              _selections[index] = false;
+                      IconButton(
+                        icon: Icon(Icons.keyboard_alt_rounded),
+                        color: widget.color,
+                        onPressed: () async {
+                          int hours = workingTime[index] ~/ Duration.millisecondsPerHour;
+                          int minutes = (workingTime[index] - hours * Duration.millisecondsPerHour) ~/ Duration.millisecondsPerMinute;
+                          TimeOfDay? newTime = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay(hour: hours, minute: minutes),
+                              helpText: "Arbeitszeit auswählen".toUpperCase());
+
+                          if (newTime != null) {
+                            if (newTime.hour + newTime.minute != 0) {
+                              _selections[index] = true;
                               getIt<Data>().updateWochentage(_selections);
                             } else {
-                              cachedWorkingTime[index] = newTagesstunden.toInt();
-                              getIt<Data>().updateWorkingTime(workingTime);
+                              _selections[index] = false;
+                              getIt<Data>().updateWochentage(_selections);
                             }
-                          });
+                            workingTime[index] = newTime.hour * Duration.millisecondsPerHour + newTime.minute * Duration.millisecondsPerMinute;
+                            getIt<Data>().updateWorkingTime(workingTime);
+                            divisions[index] = workingTime[index] / Duration.millisecondsPerHour % 0.5 == 0;
+                            setState(() {});
+                          }
                         },
-                        min: 0,
-                        max: workingTime[index] < (12.0 * Duration.millisecondsPerHour)
-                            ? 12.0 * Duration.millisecondsPerHour
-                            : workingTime[index] * 1.0,
-                        divisions: divisions[index] ? 24 : null,
-                        //label: "$tagesstunden Stunden",
-                      ),
-                    ),
+                      )
+                    ],
                   ),
-                  IconButton(
-                    icon: Icon(Icons.keyboard_alt_rounded),
-                    color: neon,
-                    onPressed: () async {
-                      int hours = workingTime[index] ~/ Duration.millisecondsPerHour;
-                      int minutes = (workingTime[index] - hours * Duration.millisecondsPerHour) ~/ Duration.millisecondsPerMinute;
-                      TimeOfDay? newTime = await showTimePicker(
-                          context: context, initialTime: TimeOfDay(hour: hours, minute: minutes), helpText: "Arbeitszeit auswählen".toUpperCase());
-
-                      if (newTime != null) {
-                        if (newTime.hour + newTime.minute != 0) {
-                          _selections[index] = true;
-                          getIt<Data>().updateWochentage(_selections);
-                        } else {
-                          _selections[index] = false;
-                          getIt<Data>().updateWochentage(_selections);
-                        }
-                        workingTime[index] = newTime.hour * Duration.millisecondsPerHour + newTime.minute * Duration.millisecondsPerMinute;
-                        getIt<Data>().updateWorkingTime(workingTime);
-                        divisions[index] = workingTime[index] / Duration.millisecondsPerHour % 0.5 == 0;
-                        setState(() {});
-                      }
-                    },
-                  )
-                ],
-              ),
-            );
-          }),
+                );
+              }),
+        ],
+      ),
     );
   }
 }
@@ -598,13 +635,12 @@ class WorktimeSliderTrackShape extends SliderTrackShape {
 }
 
 class WorkdayButtonRow extends StatefulWidget {
-  const WorkdayButtonRow({
-    Key? key,
-    required List<bool> selections,
-  })  : _selections = selections,
+  const WorkdayButtonRow({Key? key, required List<bool> selections, required this.color})
+      : _selections = selections,
         super(key: key);
 
   final List<bool> _selections;
+  final Color color;
 
   @override
   _WorkdayButtonRowState createState() => _WorkdayButtonRowState();
@@ -619,8 +655,8 @@ class _WorkdayButtonRowState extends State<WorkdayButtonRow> {
         child: ToggleButtons(
           constraints: BoxConstraints(maxHeight: double.infinity, maxWidth: double.infinity, minWidth: constraints.maxWidth / 7),
           borderColor: Colors.white.withAlpha(100),
-          color: neon.withAlpha(100),
-          selectedColor: neon,
+          color: widget.color.withAlpha(100),
+          selectedColor: widget.color,
           fillColor: Colors.transparent,
           selectedBorderColor: Colors.white,
           splashColor: Colors.transparent,

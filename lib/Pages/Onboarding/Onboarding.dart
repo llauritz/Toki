@@ -34,36 +34,25 @@ class _OnboardingState extends State<Onboarding> {
 
   @override
   void didChangeDependencies() {
-    precacheImage(
-        const AssetImage("assets/background/clouds/clouds0.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds0.jpg"), context);
     prechacheImages();
     super.didChangeDependencies();
   }
 
   void prechacheImages() {
-    precacheImage(
-        const AssetImage("assets/background/clouds/clouds1.jpg"), context);
-    precacheImage(
-        const AssetImage("assets/background/clouds/clouds2.jpg"), context);
-    precacheImage(
-        const AssetImage("assets/background/clouds/clouds3.jpg"), context);
-    precacheImage(
-        const AssetImage("assets/background/clouds/clouds4.jpg"), context);
-    precacheImage(
-        const AssetImage("assets/background/clouds/clouds5.jpg"), context);
-    precacheImage(
-        const AssetImage("assets/background/clouds/clouds6.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds1.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds2.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds3.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds4.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds5.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds6.jpg"), context);
   }
 
   Widget _button1 = Row(
     key: ValueKey<int>(1),
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      Text("Los geht's",
-          style: TextStyle(
-              fontSize: 16.0,
-              color: Colors.white,
-              fontWeight: FontWeight.bold)),
+      Text("Los geht's", style: TextStyle(fontSize: 16.0, color: Colors.white, fontWeight: FontWeight.bold)),
       SizedBox(width: 3),
       Icon(
         Icons.arrow_forward_rounded,
@@ -81,11 +70,7 @@ class _OnboardingState extends State<Onboarding> {
     key: ValueKey<int>(3),
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      Text("Fertig",
-          style: TextStyle(
-              fontSize: 16.0,
-              color: Colors.white,
-              fontWeight: FontWeight.bold)),
+      Text("Fertig", style: TextStyle(fontSize: 16.0, color: Colors.white, fontWeight: FontWeight.bold)),
       SizedBox(width: 3),
       Icon(
         Icons.arrow_forward_rounded,
@@ -119,12 +104,12 @@ class _OnboardingState extends State<Onboarding> {
         }
       case 3:
         {
-          _widget = Onboarding3();
+          _widget = Onboarding4();
           break;
         }
       case 4:
         {
-          _widget = Onboarding4();
+          _widget = Onboarding3();
           break;
         }
       case 5:
@@ -177,11 +162,7 @@ class _OnboardingState extends State<Onboarding> {
           alignment: Alignment.bottomCenter,
           children: [
             Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: const AssetImage(
-                          "assets/background/clouds/clouds0.jpg"),
-                      fit: BoxFit.cover)),
+              decoration: BoxDecoration(image: DecorationImage(image: const AssetImage("assets/background/clouds/clouds0.jpg"), fit: BoxFit.cover)),
             ),
             SafeArea(
               child: AnimatedPadding(
@@ -218,8 +199,7 @@ class _OnboardingState extends State<Onboarding> {
                     splashColor: neonTranslucent.withAlpha(180),
                     highlightColor: neonTranslucent.withAlpha(60),
                     highlightElevation: 10,
-                    visualDensity:
-                        VisualDensity(vertical: 0.0, horizontal: 0.0),
+                    visualDensity: VisualDensity(vertical: 0.0, horizontal: 0.0),
                     elevation: 5,
                     padding: EdgeInsets.all(0),
                     shape: StadiumBorder(),

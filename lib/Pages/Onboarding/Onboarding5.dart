@@ -13,7 +13,6 @@ class Onboarding5 extends StatefulWidget {
 }
 
 class _Onboarding5State extends State<Onboarding5> {
-
   List<bool> _selections = getIt<Data>().wochentage;
 
   @override
@@ -24,20 +23,16 @@ class _Onboarding5State extends State<Onboarding5> {
         Text(
           """Hast du bereits""",
           textAlign: TextAlign.center,
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: 30.0,
-              fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
         Text(
           """Überstunden?""",
           textAlign: TextAlign.center,
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: 30.0,
-              fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 30,),
+        SizedBox(
+          height: 30,
+        ),
         Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           elevation: 5,
@@ -47,10 +42,16 @@ class _Onboarding5State extends State<Onboarding5> {
             child: const OvertimeChangeWidgetOnboarding(),
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(40, 30, 40, 0),
+          child: Text(
+            """Du kannst sie auch später noch nachtragen.""",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white, fontSize: 13.0, fontWeight: FontWeight.normal),
+          ),
+        ),
         AnimatedContainer(
-          height: MediaQuery.of(context).viewInsets.bottom > 180
-              ? MediaQuery.of(context).viewInsets.bottom - 200 + 50
-              : 40,
+          height: MediaQuery.of(context).viewInsets.bottom > 180 ? MediaQuery.of(context).viewInsets.bottom - 200 + 50 : 40,
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOutQuart,
         ),

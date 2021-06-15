@@ -72,7 +72,7 @@ class StempelButtonSTOP extends StatelessWidget {
           child: Center(
             child: Text(
               "STOP",
-              style: Theme.of(context).textTheme.button,
+              style: TextStyle(fontSize: 20.0, color: Colors.white, letterSpacing: 0.5, fontWeight: FontWeight.bold),
             ),
           ),
         ),

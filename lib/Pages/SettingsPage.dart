@@ -44,7 +44,12 @@ class _SettingsPageState extends State<SettingsPage> {
           FadeIn(delay: 300 - 100, fadeChild: const SettingsTitle()),
           //AutoFadeIn(child: NamePicker()),
           FadeIn(delay: 350 - 100, fadeChild: NamePicker()),
-          FadeIn(delay: 400 - 100, fadeChild: WorkTimePicker()),
+          FadeIn(
+              delay: 400 - 100,
+              fadeChild: WorkTimePicker(
+                color: neon,
+                onboarding: false,
+              )),
           FadeIn(delay: 400 - 100, fadeChild: BreakCorrection()),
 
           SizedBox(

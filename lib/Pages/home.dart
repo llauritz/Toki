@@ -31,18 +31,12 @@ class _HomePageState extends State<HomePage> {
   double bottomInset = -1;
 
   void prechacheImages() {
-    precacheImage(
-        const AssetImage("assets/background/clouds/clouds1.jpg"), context);
-    precacheImage(
-        const AssetImage("assets/background/clouds/clouds2.jpg"), context);
-    precacheImage(
-        const AssetImage("assets/background/clouds/clouds3.jpg"), context);
-    precacheImage(
-        const AssetImage("assets/background/clouds/clouds4.jpg"), context);
-    precacheImage(
-        const AssetImage("assets/background/clouds/clouds5.jpg"), context);
-    precacheImage(
-        const AssetImage("assets/background/clouds/clouds6.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds1.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds2.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds3.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds4.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds5.jpg"), context);
+    precacheImage(const AssetImage("assets/background/clouds/clouds6.jpg"), context);
   }
 
   @override
@@ -58,19 +52,14 @@ class _HomePageState extends State<HomePage> {
 
     logger.d('home - build start');
 
-    logger.i("viewPadding + " +
-        MediaQuery.of(context).viewPadding.bottom.toString());
-    logger.i(
-        "viewInsets + " + MediaQuery.of(context).viewInsets.bottom.toString());
-    logger.i(
-        "windowPadding + " + MediaQuery.of(context).padding.bottom.toString());
-    logger.i("systemGestureInsets + " +
-        MediaQuery.of(context).systemGestureInsets.bottom.toString());
+    logger.i("viewPadding + " + MediaQuery.of(context).viewPadding.bottom.toString());
+    logger.i("viewInsets + " + MediaQuery.of(context).viewInsets.bottom.toString());
+    logger.i("windowPadding + " + MediaQuery.of(context).padding.bottom.toString());
+    logger.i("systemGestureInsets + " + MediaQuery.of(context).systemGestureInsets.bottom.toString());
 
     // is set only once
     if (bottomInset == -1) {
-      bottomInset = MediaQuery.of(context).viewInsets.bottom >
-              MediaQuery.of(context).viewPadding.bottom
+      bottomInset = MediaQuery.of(context).viewInsets.bottom > MediaQuery.of(context).viewPadding.bottom
           ? MediaQuery.of(context).viewInsets.bottom
           : MediaQuery.of(context).viewPadding.bottom;
     }
@@ -84,8 +73,7 @@ class _HomePageState extends State<HomePage> {
           //Höhe des Stempelbuttons + Padding + Wie viel von der Karte rausschauen darf
           minHeight: 130 + 20 + 58.0 + bottomInset,
           //Höhe des Stempelbuttons + Padding +Höhe der Karte
-          maxHeight:
-              130 + 20 + MediaQuery.of(context).size.height * 0.6 + bottomInset,
+          maxHeight: 130 + 20 + MediaQuery.of(context).size.height * 0.6 + bottomInset,
           backdropTapClosesPanel: true,
           controller: pc,
           backdropEnabled: true,
@@ -115,8 +103,7 @@ class _HomePageState extends State<HomePage> {
               child: StreamBuilder<Color>(
                   stream: containerColorStream.stream,
                   initialData: Colors.white,
-                  builder:
-                      (BuildContext context, AsyncSnapshot<Color> snapshot) {
+                  builder: (BuildContext context, AsyncSnapshot<Color> snapshot) {
                     return AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       color: snapshot.data,
@@ -159,16 +146,14 @@ class _HomePageState extends State<HomePage> {
                 builder: (context, snapshot) {
                   logger.v(snapshot.data);
                   return ImageFiltered(
-                    imageFilter: ImageFilter.blur(
-                        sigmaX: snapshot.data!, sigmaY: snapshot.data!),
+                    imageFilter: ImageFilter.blur(sigmaX: snapshot.data!, sigmaY: snapshot.data!),
                     child: const HomeContent(),
                   );
                 },
               ),
             ],
           ),
-        )
-        );
+        ));
   }
 
   @override
@@ -196,6 +181,13 @@ class HomeContent extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed("/onboarding");
+                  },
+                  icon: Icon(Icons.bug_report),
+                  color: Colors.red,
+                ),
                 const SettingsButton()
               ],
             ),
