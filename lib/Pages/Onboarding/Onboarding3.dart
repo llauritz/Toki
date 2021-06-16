@@ -23,6 +23,7 @@ class _Onboarding3State extends State<Onboarding3> {
             setState(() {});
           },
           child: AnimatedCrossFade(
+            
               duration: Duration(milliseconds: 500),
               sizeCurve: Curves.ease,
               crossFadeState: getIt<Data>().individualTimes ? CrossFadeState.showSecond : CrossFadeState.showFirst,
