@@ -25,7 +25,7 @@ class HiveDB {
     Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
     if (zeitenBox.length > 0) {
       urlaubsTageCheck();
-      checkForForgottenEnds();
+      checkForForgottenStop();
       calculateTodayElapsedTime();
       updateGesamtUeberstunden();
     }
@@ -243,7 +243,7 @@ class HiveDB {
   }
 
   //checks if the user forgot to end the time counting and does that for them to avoid bugs
-  void checkForForgottenEnds() async {
+  void checkForForgottenStop() async {
     print("HiveDB - checkForForgottenEnds - starting");
     Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
     // [-1] every day except the latest so that you can work until early the next day.

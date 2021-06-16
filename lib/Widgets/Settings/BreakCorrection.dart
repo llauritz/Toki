@@ -45,7 +45,7 @@ class _BreakCorrectionState extends State<BreakCorrection> {
           elevation: 5,
           shadowColor: Colors.black26,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
             child: Column(
               children: [
                 Stack(
@@ -75,7 +75,9 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                             });
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 25.0),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 25.0,
+                        ),
                         child: Align(
                           alignment: Alignment.center,
                           child: Stack(
@@ -102,7 +104,7 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                       right: 0,
                       top: -13,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 25.0),
+                        padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 10),
                         child: Switch(
                             materialTapTargetSize: MaterialTapTargetSize.padded,
                             activeColor: neon,

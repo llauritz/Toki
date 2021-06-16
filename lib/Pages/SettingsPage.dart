@@ -1,4 +1,5 @@
 import 'package:Timo/Services/Theme.dart';
+import 'package:Timo/Widgets/Settings/AutomaticStop.dart';
 import 'package:Timo/Widgets/Settings/WorkTimePicker.dart';
 import 'package:auto_animated/auto_animated.dart';
 import '../Widgets/Settings/BreakCorrection.dart';
@@ -41,23 +42,24 @@ class _SettingsPageState extends State<SettingsPage> {
       resizeToAvoidBottomInset: false,
       body: AnimateIfVisibleWrapper(
         child: ListView(physics: BouncingScrollPhysics(), children: [
-          FadeIn(delay: 300 - 100, fadeChild: const SettingsTitle()),
+          FadeIn(delay: 200, fadeChild: const SettingsTitle()),
           //AutoFadeIn(child: NamePicker()),
-          FadeIn(delay: 350 - 100, fadeChild: NamePicker()),
+          FadeIn(delay: 250, fadeChild: NamePicker()),
           FadeIn(
-              delay: 400 - 100,
+              delay: 300,
               fadeChild: WorkTimePicker(
                 color: neon,
                 onboarding: false,
               )),
-          FadeIn(delay: 400 - 100, fadeChild: BreakCorrection()),
+          FadeIn(delay: 350, fadeChild: BreakCorrection()),
+          FadeIn(delay: 400, fadeChild: AutomaticStop()),
 
           SizedBox(
             height: 80,
           )
         ]),
       ),
-      floatingActionButton: FadeIn(delay: 350, fadeChild: FertigButton()),
+      floatingActionButton: FadeIn(delay: 450, fadeChild: FertigButton()),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

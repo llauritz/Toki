@@ -86,7 +86,7 @@ class _WorkTimePickerState extends State<WorkTimePicker> with TickerProviderStat
                     ),
                   ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 30.0),
+              padding: const EdgeInsets.only(bottom: 20.0),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -162,12 +162,12 @@ class _CollapsedWorkTimePickerState extends State<CollapsedWorkTimePicker> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(30.0),
+      padding: const EdgeInsets.fromLTRB(20, 25, 20, 10),
       child: Column(
         children: [
           if (!widget.onboarding)
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: WorkdayButtonRow(selections: _selections, color: widget.color),
             ),
           Padding(
@@ -271,7 +271,7 @@ class _ExpandedWorkTImePickerState extends State<ExpandedWorkTImePicker> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
         children: [
           if (widget.onboarding)
@@ -280,7 +280,7 @@ class _ExpandedWorkTImePickerState extends State<ExpandedWorkTImePicker> {
               child: Text(
                 """Wie viele Stunden arbeitest du am Tag?""",
                 textAlign: TextAlign.center,
-                style: TextStyle(color: grayAccent, fontSize: 30.0, fontWeight: FontWeight.bold, fontFamily: "BandeinsSans"),
+                style: TextStyle(color: grayAccent, fontSize: 24.0, fontWeight: FontWeight.bold, fontFamily: "BandeinsSans"),
               ),
             ),
           ListView.builder(
@@ -289,10 +289,7 @@ class _ExpandedWorkTImePickerState extends State<ExpandedWorkTImePicker> {
               itemCount: 7,
               itemBuilder: (context, index) {
                 TextStyle style = TextStyle(
-                    fontWeight: _selections[index] ? FontWeight.bold : FontWeight.normal,
-                    fontSize: 19.0,
-                    height: 1,
-                    color: _selections[index] ? widget.color : widget.color.withAlpha(100));
+                    fontWeight: FontWeight.bold, fontSize: 19.0, height: 1, color: _selections[index] ? widget.color : widget.color.withAlpha(50));
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 0.0),
                   child: Row(
@@ -315,7 +312,7 @@ class _ExpandedWorkTImePickerState extends State<ExpandedWorkTImePicker> {
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: AnimatedDefaultTextStyle(
-                                  duration: Duration(milliseconds: 300),
+                                  duration: Duration(milliseconds: 200),
                                   style: style,
                                   child: Text(
                                     days[index],
@@ -661,7 +658,7 @@ class _WorkdayButtonRowState extends State<WorkdayButtonRow> {
         child: ToggleButtons(
           constraints: BoxConstraints(maxHeight: double.infinity, maxWidth: double.infinity, minWidth: constraints.maxWidth / 7),
           borderColor: Colors.white.withAlpha(100),
-          color: widget.color.withAlpha(100),
+          color: widget.color.withAlpha(50),
           selectedColor: widget.color,
           fillColor: Colors.transparent,
           selectedBorderColor: Colors.white,

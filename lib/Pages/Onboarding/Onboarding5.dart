@@ -45,7 +45,7 @@ class _Onboarding5State extends State<Onboarding5> {
         Padding(
           padding: const EdgeInsets.fromLTRB(40, 30, 40, 0),
           child: Text(
-            """Du kannst sie auch später noch nachtragen.""",
+            """Du kannst dies auch später noch tun.""",
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white, fontSize: 13.0, fontWeight: FontWeight.normal),
           ),

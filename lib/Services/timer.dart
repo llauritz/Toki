@@ -162,7 +162,7 @@ class _TimerTextState extends State<TimerText> with WidgetsBindingObserver {
       updateTime(_timer);
       getIt<HiveDB>().calculateTodayElapsedTime();
       getIt<HiveDB>().urlaubsTageCheck();
-      getIt<HiveDB>().checkForForgottenEnds();
+      getIt<HiveDB>().checkForForgottenStop();
     }
   }
 
