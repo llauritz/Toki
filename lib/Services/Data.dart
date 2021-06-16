@@ -83,6 +83,15 @@ class Data {
           ]
         : updateWorkingTime(workingTime);
 
+    prefs.containsKey("automatischAusstempeln")
+        ? automatischAusstempeln = prefs.getBool("automatischAusstempeln")!
+        : setAutomatischAusstempeln(automatischAusstempeln);
+    ;
+
+    prefs.containsKey("automatischAusstempelnTimeMilli")
+        ? automatischAusstempelnTimeMilli = prefs.getInt("automatischAusstempelnTimeMilli")!
+        : setAutomatischAusstempelnTimeMilli(automatischAusstempelnTimeMilli);
+
     prefs.containsKey("individualTimes") ? individualTimes = prefs.getBool("individualTimes")! : toggleIndividualTimes();
 
     prefs.containsKey("pausenKorrektur") ? pausenKorrektur = prefs.getBool("pausenKorrektur")! : updatePausenKorrektur(pausenKorrektur);
@@ -134,6 +143,18 @@ class Data {
     prefs.setBool("SA", list[5]);
     prefs.setBool("SO", list[6]);
     print("Dayrow in Shared Preferences gespeichert");
+  }
+
+  void setAutomatischAusstempeln(bool b) async {
+    final SharedPreferences prefs = await _prefs;
+    automatischAusstempeln = b;
+    prefs.setBool("automatischAusstempeln", automatischAusstempeln);
+  }
+
+  void setAutomatischAusstempelnTimeMilli(int m) async {
+    final SharedPreferences prefs = await _prefs;
+    automatischAusstempelnTimeMilli = m;
+    prefs.setInt("automatischAusstempelnTimeMilli", automatischAusstempelnTimeMilli);
   }
 
   void updateWorkingTime(List<int> list) async {

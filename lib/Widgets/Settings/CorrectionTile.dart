@@ -25,7 +25,7 @@ class _CorrectionTileState extends State<CorrectionTile> {
   Widget build(BuildContext context) {
     return Center(
       child: FittedBox(
-        fit: BoxFit.contain,
+        fit: BoxFit.scaleDown,
         child: Padding(
           padding: const EdgeInsets.only(bottom: 12.0),
           child: Row(

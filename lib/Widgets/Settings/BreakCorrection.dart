@@ -190,6 +190,7 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         FlatButton(
+                          
                             onPressed: () async {
                               Box box = Hive.box<Correction>("corrections");
                               box.isNotEmpty
