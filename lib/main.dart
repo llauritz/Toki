@@ -69,7 +69,7 @@ void main() async {
       button: TextStyle(color: Colors.white, letterSpacing: 0.5, fontWeight: FontWeight.bold),
 
       // Wochentag in ZeitCard
-      headline4: TextStyle(fontSize: 16.0, height: 1.05, color: Colors.black.withAlpha(150)),
+      headline4: TextStyle(fontSize: 16.0, height: 1.05, color: grayAccent),
 
       // Datum in ZeitCard
       headline5: TextStyle(fontSize: 12.0, height: 1.1, color: Colors.black.withAlpha(150)));

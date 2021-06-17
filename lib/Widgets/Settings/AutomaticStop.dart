@@ -23,58 +23,68 @@ class _AutomaticStopState extends State<AutomaticStop> {
     Duration uhrzeit = Duration(milliseconds: getIt<Data>().automatischAusstempelnTimeMilli);
     TextStyle style = Theme.of(context).textTheme.headline4!;
 
-    return Card(
-        clipBehavior: Clip.antiAlias,
-        margin: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        elevation: 5,
-        shadowColor: Colors.black26,
-        child: InkResponse(
-          splashFactory: InkRipple.splashFactory,
-          splashColor: neon.withAlpha(50),
-          highlightColor: Colors.transparent,
-          containedInkWell: true,
-          onTap: () async {
-            TimeOfDay? newTime = await showTimePicker(
-              context: context,
-              initialTime: TimeOfDay(hour: uhrzeit.inHours, minute: uhrzeit.inMinutes),
-            );
-            if (newTime != null) {
-              getIt<Data>()
-                  .setAutomatischAusstempelnTimeMilli(newTime.hour * Duration.millisecondsPerHour + newTime.minute * Duration.millisecondsPerMinute);
-              setState(() {});
-            }
-          },
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+      child: Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [BoxShadow(offset: Offset(0, 8), blurRadius: 8, color: grayTranslucent)],
+              borderRadius: BorderRadius.circular(20)),
+          child: Material(
+            child: InkWell(
+              splashFactory: InkRipple.splashFactory,
+              splashColor: neon.withAlpha(50),
+              highlightColor: Colors.transparent,
+              onTap: () async {
+                TimeOfDay? newTime = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay(hour: uhrzeit.inHours, minute: uhrzeit.inMinutes % 60),
+                );
+                if (newTime != null) {
+                  getIt<Data>().setAutomatischAusstempelnTimeMilli(
+                      newTime.hour * Duration.millisecondsPerHour + newTime.minute * Duration.millisecondsPerMinute);
+                  setState(() {});
+                }
+              },
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text("Automatisch um ", style: style),
-                        Text(
-                          uhrzeit.inHours.toString() + ":" + (uhrzeit.inMinutes % 60).toString().padLeft(2, "0"),
-                          style: style.copyWith(color: neon),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Automatisch um ", style: style),
+                            Container(
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(color: neonTranslucent, width: 3), top: BorderSide(color: Colors.transparent, width: 3))),
+                              child: Text(
+                                uhrzeit.inHours.toString() + ":" + (uhrzeit.inMinutes % 60).toString().padLeft(2, "0"),
+                                style: style.copyWith(
+                                  color: neon,
+                                ),
+                              ),
+                            ),
+                            Text(" ausstempeln.", style: style),
+                          ],
                         ),
-                        Text(" ausstempeln.", style: style),
+                        Switch(
+                            value: getIt<Data>().automatischAusstempeln,
+                            onChanged: (newbool) {
+                              getIt<Data>().setAutomatischAusstempeln(newbool);
+                              setState(() {});
+                            })
                       ],
                     ),
-                    Switch(
-                        value: getIt<Data>().automatischAusstempeln,
-                        onChanged: (newbool) {
-                          getIt<Data>().setAutomatischAusstempeln(newbool);
-                          setState(() {});
-                        })
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }

@@ -43,9 +43,11 @@ class _Onboarding3State extends State<Onboarding3> {
           onPointerUp: (_) {
             setState(() {});
           },
-          child: WorkTimePicker(
-            color: editColor,
-            onboarding: true,
+          child: SingleChildScrollView(
+            child: WorkTimePicker(
+              color: editColor,
+              onboarding: true,
+            ),
           ),
         ),
         /* Padding(

@@ -181,13 +181,13 @@ class HomeContent extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed("/onboarding");
-                  },
-                  icon: Icon(Icons.bug_report),
-                  color: Colors.red,
-                ),
+                // IconButton(
+                //   onPressed: () {
+                //     Navigator.of(context).pushNamed("/onboarding");
+                //   },
+                //   icon: Icon(Icons.bug_report),
+                //   color: Colors.red,
+                // ),
                 const SettingsButton()
               ],
             ),

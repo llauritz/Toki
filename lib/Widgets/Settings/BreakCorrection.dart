@@ -7,6 +7,7 @@ import 'package:Timo/hiveClasses/Correction.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
@@ -39,11 +40,12 @@ class _BreakCorrectionState extends State<BreakCorrection> {
     //logger.w(boxToList(correctionBox).length);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-      child: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          elevation: 5,
-          shadowColor: Colors.black26,
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+      child: Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [BoxShadow(offset: Offset(0, 8), blurRadius: 8, color: grayTranslucent)],
+              borderRadius: BorderRadius.circular(20)),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
             child: Column(
@@ -55,21 +57,48 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                       onTap: () {
                         showModal(
                             configuration: FadeScaleTransitionConfiguration(
-                                transitionDuration: Duration(milliseconds: 300), reverseTransitionDuration: Duration(milliseconds: 100)),
+                                transitionDuration: Duration(milliseconds: 300), reverseTransitionDuration: Duration(milliseconds: 200)),
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text("Automatische Pausenkorrektur"),
-                                titleTextStyle: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 22),
-                                content: Text(
-                                    """Sobald deine Arbeitszeit die Stundenzahl "Ab" überschreitet, wird deine Pausenzeit automatisch auf den Wert "Mindestens" erhöht. Wenn du mehr Pause gemacht hast, passiert nichts."""),
+                                clipBehavior: Clip.antiAlias,
+                                titlePadding: EdgeInsets.zero,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                title: Container(
+                                  padding: EdgeInsets.all(20),
+                                  color: neonTranslucent,
+                                  height: 200,
+                                  child: SvgPicture.asset(
+                                    "assets/svg/pausenkorrektur_klein.svg",
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "Automatische Pausenkorrektur",
+                                      style: TextStyle(color: grayAccent, fontWeight: FontWeight.bold, fontSize: 22),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                        """Falls dir ab einer gewissen Arbeitszeit automatisch eine Mindestpausenzeit abgezogen wird, kannst du dies hier einstellen."""),
+                                  ],
+                                ),
+                                actionsPadding: EdgeInsets.zero,
+                                contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 0),
                                 contentTextStyle: TextStyle(fontWeight: FontWeight.bold, color: grayAccent),
                                 actions: [
                                   TextButton(
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
-                                      child: Text("Okay"))
+                                      child: Text(
+                                        "Okay",
+                                        style: TextStyle(color: neonAccent),
+                                      ))
                                 ],
                               );
                             });
@@ -190,7 +219,6 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         FlatButton(
-                          
                             onPressed: () async {
                               Box box = Hive.box<Correction>("corrections");
                               box.isNotEmpty

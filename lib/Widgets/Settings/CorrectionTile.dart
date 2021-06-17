@@ -48,8 +48,9 @@ class _CorrectionTileState extends State<CorrectionTile> {
                     children: [
                       Flexible(
                         child: InkWell(
-                            splashColor: neon.withAlpha(100),
-                            highlightColor: neon.withAlpha(30),
+                            splashFactory: InkRipple.splashFactory,
+                            splashColor: neon.withAlpha(50),
+                            highlightColor: neon.withAlpha(20),
                             child: Padding(
                               padding: const EdgeInsets.only(left: 14.0),
                               child: Center(
@@ -96,7 +97,7 @@ class _CorrectionTileState extends State<CorrectionTile> {
                                 initialEntryMode: TimePickerEntryMode.input,
                                 cancelText: "Abbrechen",
                                 confirmText: "Speichern",
-                                helpText: "Stunden auswählen",
+                                helpText: "Arbeitszeit auswählen".toUpperCase(),
                                 context: context,
                                 initialTime: TimeOfDay(hour: initHour, minute: initMinute),
                               );
@@ -108,8 +109,9 @@ class _CorrectionTileState extends State<CorrectionTile> {
                       ),
                       Flexible(
                         child: InkWell(
-                            splashColor: neon.withAlpha(100),
-                            highlightColor: neon.withAlpha(30),
+                            splashFactory: InkRipple.splashFactory,
+                            splashColor: neon.withAlpha(50),
+                            highlightColor: neon.withAlpha(20),
                             child: Padding(
                               padding: const EdgeInsets.only(right: 14.0),
                               child: Center(
@@ -153,9 +155,10 @@ class _CorrectionTileState extends State<CorrectionTile> {
                               int initHour = widget.correction.um ~/ Duration.millisecondsPerHour;
                               int initMinute = (widget.correction.um - initHour * Duration.millisecondsPerHour) ~/ Duration.millisecondsPerMinute;
                               final TimeOfDay? newTime = await showTimePicker(
+                                initialEntryMode: TimePickerEntryMode.input,
                                 cancelText: "Abbrechen",
                                 confirmText: "Speichern",
-                                helpText: "Minuten auswählen",
+                                helpText: "Pause auswählen".toUpperCase(),
                                 context: context,
                                 initialTime: TimeOfDay(hour: initHour, minute: initMinute),
                               );

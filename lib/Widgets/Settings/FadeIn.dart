@@ -19,8 +19,10 @@ class FadeIn extends StatelessWidget {
       duration: const Duration(milliseconds: 450),
       curve: Curves.ease,
       builder: (context, child, value) {
-        return Opacity(
-            opacity: value.get(_AniProps.opacity), child: Transform.translate(offset: Offset(0, value.get(_AniProps.offset)), child: fadeChild));
+        return AnimatedOpacity(
+            duration: Duration.zero,
+            opacity: value.get(_AniProps.opacity),
+            child: Transform.translate(offset: Offset(0, value.get(_AniProps.offset)), child: fadeChild));
       },
     );
   }

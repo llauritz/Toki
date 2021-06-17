@@ -38,11 +38,12 @@ class _WorkTimePickerState extends State<WorkTimePicker> with TickerProviderStat
           );
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        elevation: 5,
-        shadowColor: Colors.black26,
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [BoxShadow(offset: Offset(0, 8), blurRadius: 8, color: grayTranslucent)],
+            borderRadius: BorderRadius.circular(20)),
         child: Column(
           children: [
             if (!widget.onboarding)

@@ -168,7 +168,7 @@ class _OnboardingState extends State<Onboarding> {
               child: AnimatedPadding(
                 duration: duration,
                 curve: curve,
-                padding: EdgeInsets.only(bottom: 120 + _buttonHeight),
+                padding: EdgeInsets.only(bottom: 100 + _buttonHeight),
                 child: PageTransitionSwitcher(
                   reverse: _reverse,
                   transitionBuilder: (
@@ -191,7 +191,7 @@ class _OnboardingState extends State<Onboarding> {
             ),
             SafeArea(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 100.0),
+                padding: const EdgeInsets.only(bottom: 80.0),
                 child: ButtonTheme(
                   minWidth: 0,
                   height: 0,

@@ -28,11 +28,12 @@ class _NamePickerState extends State<NamePicker> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        elevation: 5,
-        shadowColor: Colors.black26,
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [BoxShadow(offset: Offset(0, 8), blurRadius: 8, color: grayTranslucent)],
+            borderRadius: BorderRadius.circular(20)),
         child: Padding(
           padding: const EdgeInsets.all(18.0),
           child: Column(
@@ -41,10 +42,7 @@ class _NamePickerState extends State<NamePicker> {
               Center(
                   child: Text(
                 "Dein Name",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline4!
-                    .copyWith(fontSize: 18),
+                style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18),
               )),
               FittedBox(
                 fit: BoxFit.fitWidth,
@@ -70,8 +68,7 @@ class _NamePickerState extends State<NamePicker> {
                           enableSuggestions: false,
                           focusNode: _focusNode,
                           controller: _controller,
-                          style:
-                              TextStyle(color: neon, fontSize: 28, height: 1),
+                          style: TextStyle(color: neon, fontSize: 28, height: 1),
                           decoration: InputDecoration(
                             isDense: true,
                             contentPadding: EdgeInsets.fromLTRB(0, 3, -3, 3),
@@ -80,14 +77,9 @@ class _NamePickerState extends State<NamePicker> {
                             counterText: "",
                             disabledBorder: InputBorder.none,
                             focusedBorder: UnderlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                    color: neon.withAlpha(30), width: 100)),
+                                borderRadius: BorderRadius.circular(5), borderSide: BorderSide(color: neon.withAlpha(30), width: 100)),
                             enabledBorder: UnderlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(1)),
-                                borderSide: BorderSide(
-                                    color: neon.withAlpha(80), width: 5)),
+                                borderRadius: BorderRadius.all(Radius.circular(1)), borderSide: BorderSide(color: neon.withAlpha(80), width: 5)),
                             errorBorder: InputBorder.none,
                           ),
                           onEditingComplete: () {

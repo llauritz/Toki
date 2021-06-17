@@ -27,6 +27,8 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   bool isDay = true;
 
+  bool test = false;
+
   @override
   void initState() {
     /*print("SettingsPage - init");
@@ -39,6 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       body: AnimateIfVisibleWrapper(
         child: ListView(physics: BouncingScrollPhysics(), children: [
