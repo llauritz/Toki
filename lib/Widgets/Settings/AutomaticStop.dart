@@ -27,10 +27,11 @@ class _AutomaticStopState extends State<AutomaticStop> {
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: Container(
           decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [BoxShadow(offset: Offset(0, 8), blurRadius: 8, color: grayTranslucent)],
-              borderRadius: BorderRadius.circular(20)),
+              boxShadow: [BoxShadow(offset: Offset(0, 8), blurRadius: 8, color: grayTranslucent)], borderRadius: BorderRadius.circular(20)),
           child: Material(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            elevation: 0,
+            color: Colors.white,
             child: InkWell(
               splashFactory: InkRipple.splashFactory,
               splashColor: neon.withAlpha(50),
