@@ -1,4 +1,6 @@
+import 'package:Timo/Services/Theme.dart';
 import 'package:animations/animations.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -32,20 +34,40 @@ class _SettingsButtonState extends State<SettingsButton> {
         closedElevation: 0.0,
         openElevation: 0.0,
         closedShape: const CircleBorder(),
-        openShape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(0.0))),
+        openShape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0.0))),
         onClosed: (dynamic context) {
           getIt<HiveDB>().updateGesamtUeberstunden();
         },
-        openBuilder: (BuildContext context,
-            void Function({Object? returnValue}) action) {
+        openBuilder: (BuildContext context, void Function({Object? returnValue}) action) {
+          getIt<Data>().setUpdatedID(0);
           return const SettingsPage();
         },
         closedBuilder: (BuildContext context, void Function() action) {
           return Container(
-            child: const Padding(
+            child: Padding(
               padding: EdgeInsets.all(15.0),
-              child: Icon(Icons.settings, color: Colors.white),
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.topRight,
+                children: [
+                  Icon(Icons.settings, color: Colors.white),
+                  if (getIt<Data>().updatedID < 1)
+                    Positioned(
+                      right: -10,
+                      top: -10,
+                      child: AvatarGlow(
+                        showTwoGlows: false,
+                        duration: Duration(milliseconds: 1500),
+                        endRadius: 15,
+                        child: Container(
+                          decoration: BoxDecoration(color: neonAccent, shape: BoxShape.circle),
+                          width: 10,
+                          height: 10,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
           );
         },

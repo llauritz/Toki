@@ -37,6 +37,8 @@ class Data {
     0 // 6: Sunday
   ];
 
+  int updatedID = 0;
+
   Future<void> initSharedPreferences() async {
     final SharedPreferences prefs = await _prefs;
     //nullPrefs = await SharedPreferences.getInstance();
@@ -103,6 +105,8 @@ class Data {
       getIt<CorrectionDB>().initCorrectionDB();
       prefs.setBool("correctionDB", true);
     }
+
+    prefs.containsKey("updatedID") ? updatedID = await getUpdatedID() : setUpdatedID(updatedID);
   }
 
   void setUserName(String newName) async {
@@ -130,6 +134,17 @@ class Data {
     prefs.setBool("finishedOnboarding", b);
     finishedOnboarding = b;
     print("Data - updated finishedOnboarding: " + prefs.getBool("finishedOnboarding").toString());
+  }
+
+  Future<int> getUpdatedID() async {
+    final SharedPreferences prefs = await _prefs;
+    return prefs.getInt("updatedID")!;
+  }
+
+  Future<void> setUpdatedID(int i) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setInt("updatedID", i);
+    updatedID = i;
   }
 
   void toggleIndividualTimes() async {
