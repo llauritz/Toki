@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Timo/Services/CorrectionDB.dart';
 import 'package:Timo/Services/timer.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,7 +22,7 @@ class Data {
   bool finishedOnboarding = false;
 
   bool automatischAusstempeln = true;
-  int automatischAusstempelnTimeMilli = 0;
+  int automatischAusstempelnTimeMilli = 2 * Duration.millisecondsPerHour;
 
   bool individualTimes = true;
   List<bool> wochentage = [true, true, true, true, true, false, false];
@@ -97,6 +98,11 @@ class Data {
     prefs.containsKey("pausenKorrektur") ? pausenKorrektur = prefs.getBool("pausenKorrektur")! : updatePausenKorrektur(pausenKorrektur);
 
     if (!prefs.containsKey("OvertimeOffset")) setOffset(0);
+
+    if (!prefs.containsKey("correctionDB")) {
+      getIt<CorrectionDB>().initCorrectionDB();
+      prefs.setBool("correctionDB", true);
+    }
   }
 
   void setUserName(String newName) async {

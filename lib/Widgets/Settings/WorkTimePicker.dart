@@ -42,7 +42,7 @@ class _WorkTimePickerState extends State<WorkTimePicker> with TickerProviderStat
       child: Container(
         decoration: BoxDecoration(
             color: Colors.white,
-            boxShadow: [BoxShadow(offset: Offset(0, 8), blurRadius: 8, color: grayTranslucent)],
+            boxShadow: [BoxShadow(offset: Offset(0, 8), blurRadius: 8, color: Colors.black.withAlpha(15))],
             borderRadius: BorderRadius.circular(20)),
         child: Column(
           children: [

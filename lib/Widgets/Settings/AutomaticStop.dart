@@ -26,8 +26,10 @@ class _AutomaticStopState extends State<AutomaticStop> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: Container(
+          clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-              boxShadow: [BoxShadow(offset: Offset(0, 8), blurRadius: 8, color: grayTranslucent)], borderRadius: BorderRadius.circular(20)),
+              boxShadow: [BoxShadow(offset: Offset(0, 8), blurRadius: 8, color: Colors.black.withAlpha(15))],
+              borderRadius: BorderRadius.circular(20)),
           child: Material(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             elevation: 0,

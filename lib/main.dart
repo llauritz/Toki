@@ -33,7 +33,7 @@ void main() async {
   getIt.registerSingleton<HiveDB>(HiveDB());
   getIt.registerSingleton<CorrectionDB>(CorrectionDB());
 
-  await getIt<CorrectionDB>().initCorrectionDB();
+  //await getIt<CorrectionDB>().initCorrectionDB();
   await getIt<Data>().initData();
   await getIt<HiveDB>().initHiveDB();
   //await initializeDateFormatting("de_DE", null);
@@ -92,8 +92,8 @@ void main() async {
         brightness: Brightness.light,
         buttonColor: neon,
         accentColor: neonAccent,
+        shadowColor: Colors.black38,
         timePickerTheme: TimePickerThemeData(
-          
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             hourMinuteTextColor: neonAccent,
             hourMinuteColor: neonTranslucent,

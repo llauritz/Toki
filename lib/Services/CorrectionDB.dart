@@ -18,6 +18,7 @@ class CorrectionDB {
     if (prefs.containsKey("korrekturUM") || prefs.containsKey("korrekturAB")) {
       await migrateData(prefs);
     }
+    await resetBox();
   }
 
   Future<void> resetBox() async {
@@ -25,12 +26,10 @@ class CorrectionDB {
     await correctionBox.clear();
     await correctionBox.add(Correction(ab: 6 * Duration.millisecondsPerHour, um: 30 * Duration.millisecondsPerMinute));
     await correctionBox.add(Correction(ab: 9 * Duration.millisecondsPerHour, um: 45 * Duration.millisecondsPerMinute));
-    logger.w(correctionBox.length);
   }
 
   Future<void> migrateData(SharedPreferences prefs) async {
     Box correctionBox = Hive.box<Correction>("corrections");
-    resetBox();
     prefs.remove("korrekturUM");
     prefs.remove("korrekturAB");
     logger.w("CORRECTION DB MIGRATED");
