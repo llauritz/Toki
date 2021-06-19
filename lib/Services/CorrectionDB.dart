@@ -18,7 +18,6 @@ class CorrectionDB {
     if (prefs.containsKey("korrekturUM") || prefs.containsKey("korrekturAB")) {
       await migrateData(prefs);
     }
-    resetBox();
   }
 
   Future<void> resetBox() async {
@@ -34,54 +33,12 @@ class CorrectionDB {
     resetBox();
     prefs.remove("korrekturUM");
     prefs.remove("korrekturAB");
-    // correctionBox.add(Correction(
-    //     ab: 6 * Duration.millisecondsPerHour,
-    //     um: 30 * Duration.millisecondsPerMinute));
-    // correctionBox.add(Correction(
-    //     ab: 9 * Duration.millisecondsPerHour,
-    //     um: 45 * Duration.millisecondsPerMinute));
     logger.w("CORRECTION DB MIGRATED");
     print(correctionBox.length);
   }
 
-  Future<void> switch12() async {
-    Box correctionBox = Hive.box<Correction>("corrections");
-    Correction one = correctionBox.getAt(0);
-    Correction two = correctionBox.getAt(1);
-
-    correctionBox.putAt(0, two);
-    correctionBox.putAt(1, one);
-  }
-
   Future<void> deleteCorrection(int index) async {
     Box correctionBox = Hive.box<Correction>("corrections");
-
-    // listKey.currentState!.removeItem(
-    //     index,
-    //     (context, animation) => SizeTransition(
-    //           sizeFactor: CurvedAnimation(
-    //               parent: animation, curve: Curves.ease.flipped),
-    //           child: AbsorbPointer(
-    //             absorbing: true,
-    //             child: CorrectionTile(
-    //               correction: removedItem,
-    //               listKey: listKey,
-    //               index: index,
-    //             ),
-    //           ),
-    //         ),
-    //     duration: Duration(milliseconds: 300));
-    // ScaffoldMessenger.of(listKey.currentContext!).showSnackBar(SnackBar(
-    //   content: Card(
-    //     child: Padding(
-    //       padding: const EdgeInsets.all(8.0),
-    //       child: Text("hi"),
-    //     ),
-    //   ),
-    //   padding: EdgeInsets.all(0),
-    //   backgroundColor: Colors.transparent,
-    //   elevation: 0,
-    // ));
     correctionBox.deleteAt(index);
   }
 
@@ -107,11 +64,6 @@ class CorrectionDB {
     Correction temp;
 
     List<Correction> correctionList = List<Correction>.generate(correctionBox.length, (index) => correctionBox.getAt(index));
-    // logger.w("start");
-    //print(correctionList);
-    // for (int x = 0; x < correctionList.length; x++) {
-    //   logger.i(correctionList[x].ab);
-    // }
 
     for (i = 1; i < n; i++) {
       temp = correctionList[i];
@@ -123,29 +75,8 @@ class CorrectionDB {
       correctionList[j + 1] = temp;
     }
 
-    //print(correctionList);
-    // for (int x = 0; x < correctionList.length; x++) {
-    //   logger.i(correctionList[x].ab);
-    // }
-
     for (int x = 0; x < correctionList.length; x++) {
       correctionBox.putAt(x, correctionList[x]);
     }
   }
 }
-
-// void insertionSort(Box<Correction> box) {
-//   if (box.length == 0) return;
-//   int n = box.length;
-//   int temp, i, j;
-
-//   for (i = 1; i < n; i++) {
-//     temp = list[i];
-//     j = i - 1;
-//     while (j >= 0 && temp < list[j]) {
-//       list[j + 1] = list[j];
-//       --j;
-//     }
-//     list[j + 1] = temp;
-//   }
-// }
