@@ -39,7 +39,7 @@ class _SettingsButtonState extends State<SettingsButton> {
           getIt<HiveDB>().updateGesamtUeberstunden();
         },
         openBuilder: (BuildContext context, void Function({Object? returnValue}) action) {
-          getIt<Data>().setUpdatedID(0);
+          getIt<Data>().setUpdatedID(1);
           return const SettingsPage();
         },
         closedBuilder: (BuildContext context, void Function() action) {
