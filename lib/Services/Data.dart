@@ -204,7 +204,8 @@ class Data {
           prefs.getBool("SO")!,
         ];
         for (int i = 0; i < wochentageTMP.length; i++) {
-          if (wochentageTMP[i]) workingTime[i] = (tagesstunden * Duration.millisecondsPerHour).toInt();
+          //if (wochentageTMP[i]) 
+          workingTime[i] = (tagesstunden * Duration.millisecondsPerHour).toInt();
         }
       }
     }

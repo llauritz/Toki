@@ -154,7 +154,7 @@ class _OnboardingState extends State<Onboarding> {
             _index--;
           });
         }
-        return true;
+        return false;
       }, //as Future<bool> Function()?,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
