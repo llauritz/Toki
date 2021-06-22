@@ -30,8 +30,8 @@ class CorrectionDB {
 
   Future<void> migrateData(SharedPreferences prefs) async {
     Box correctionBox = Hive.box<Correction>("corrections");
-    prefs.remove("korrekturUM");
-    prefs.remove("korrekturAB");
+    await prefs.remove("korrekturUM");
+    await prefs.remove("korrekturAB");
     logger.w("CORRECTION DB MIGRATED");
     print(correctionBox.length);
   }

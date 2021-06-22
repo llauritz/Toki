@@ -102,7 +102,7 @@ class Data {
     if (!prefs.containsKey("OvertimeOffset")) setOffset(0);
 
     if (!prefs.containsKey("correctionDB")) {
-      getIt<CorrectionDB>().initCorrectionDB();
+      await getIt<CorrectionDB>().initCorrectionDB();
       prefs.setBool("correctionDB", true);
     }
 
@@ -204,7 +204,7 @@ class Data {
           prefs.getBool("SO")!,
         ];
         for (int i = 0; i < wochentageTMP.length; i++) {
-          //if (wochentageTMP[i]) 
+          //if (wochentageTMP[i])
           workingTime[i] = (tagesstunden * Duration.millisecondsPerHour).toInt();
         }
       }
