@@ -38,9 +38,7 @@ class _FirstWidgetState extends State<FirstWidget> {
                 width: 50,
                 child: Center(
                     child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.blueGrey[100],
-                      borderRadius: BorderRadius.circular(100)),
+                  decoration: BoxDecoration(color: Colors.blueGrey[100], borderRadius: BorderRadius.circular(100)),
                 ))),
           ),
           const OvertimeChangeWidget(),

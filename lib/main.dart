@@ -84,9 +84,10 @@ void main() async {
     title: "Timo ",
     themeMode: ThemeMode.system,
     darkTheme: ThemeData(
+      cardColor: Colors.blueGrey[900],
       primarySwatch: Colors.teal,
       backgroundColor: Colors.blueGrey[900],
-      //scaffoldBackgroundColor: Colors.black,
+      scaffoldBackgroundColor: Colors.black,
       primaryColor: neon,
       buttonColor: neon,
       accentColor: neonAccent,

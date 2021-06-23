@@ -33,7 +33,7 @@ class _AutomaticStopState extends State<AutomaticStop> {
           child: Material(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             elevation: 0,
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             child: InkWell(
               splashFactory: InkRipple.splashFactory,
               splashColor: neon.withAlpha(50),

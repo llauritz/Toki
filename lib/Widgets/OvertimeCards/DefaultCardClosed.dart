@@ -52,7 +52,7 @@ class _DefaultCardClosedState extends State<DefaultCardClosed> {
       print("DefaultCardClosed - index " + widget.index.toString());
 
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

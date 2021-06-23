@@ -43,7 +43,7 @@ class _BreakCorrectionState extends State<BreakCorrection> {
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: Container(
           decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               boxShadow: [BoxShadow(offset: Offset(0, 8), blurRadius: 8, color: Colors.black.withAlpha(15))],
               borderRadius: BorderRadius.circular(20)),
           child: Padding(

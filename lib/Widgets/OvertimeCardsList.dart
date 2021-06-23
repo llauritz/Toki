@@ -96,7 +96,6 @@ class ListContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedList(
-      
         physics: BouncingScrollPhysics(),
         initialItemCount: box.length,
         key: getIt<HiveDB>().animatedListkey,
@@ -206,23 +205,26 @@ class ListContent extends StatelessWidget {
                         }
                       }
 
-                      return PageTransitionSwitcher(
-                        reverse: _state == "free" || _state == "edited",
-                        transitionBuilder: (
-                          Widget child,
-                          Animation<double> primaryAnimation,
-                          Animation<double> secondaryAnimation,
-                        ) {
-                          return SharedAxisTransition(
-                            child: child,
-                            animation: primaryAnimation,
-                            secondaryAnimation: secondaryAnimation,
-                            transitionType: SharedAxisTransitionType.horizontal,
-                            fillColor: Colors.transparent,
-                          );
-                        },
-                        child: _widget,
-                        duration: const Duration(milliseconds: 600),
+                      return SizedBox(
+                        height: 80,
+                        child: PageTransitionSwitcher(
+                          reverse: _state == "free" || _state == "edited",
+                          transitionBuilder: (
+                            Widget child,
+                            Animation<double> primaryAnimation,
+                            Animation<double> secondaryAnimation,
+                          ) {
+                            return SharedAxisTransition(
+                              child: child,
+                              animation: primaryAnimation,
+                              secondaryAnimation: secondaryAnimation,
+                              transitionType: SharedAxisTransitionType.horizontal,
+                              fillColor: Colors.transparent,
+                            );
+                          },
+                          child: _widget,
+                          duration: const Duration(milliseconds: 600),
+                        ),
                       );
                     },
                     openBuilder: (context, openContainer) {
