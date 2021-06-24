@@ -97,7 +97,7 @@ class _WorkTimePickerState extends State<WorkTimePicker> with TickerProviderStat
                         setState(() {});
                       },
                       shape: const StadiumBorder(),
-                      color: grayTranslucent,
+                      color: Theme.of(context).buttonColor,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
                         child: Row(

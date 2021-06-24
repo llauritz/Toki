@@ -13,7 +13,7 @@ class SettingsTitle extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 100.0),
       child: Text(
         "Einstellungen",
-        style: settingsHeadline.copyWith(color: grayAccent),
+        style: Theme.of(context).textTheme.headline2,
       ),
     ));
   }

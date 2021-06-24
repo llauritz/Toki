@@ -43,7 +43,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  TextTheme textTheme = TextTheme(
+  TextTheme textThemeLight = TextTheme(
 
       //Large Numbers (Hours, Minutes)
       headline1: TextStyle(
@@ -57,7 +57,7 @@ void main() async {
       headline2: TextStyle(
         fontSize: 30.0,
         fontWeight: FontWeight.bold,
-        color: Colors.white,
+        color: neon,
       ),
 
       //Widgets.Settings Cards Titles
@@ -74,6 +74,37 @@ void main() async {
       // Datum in ZeitCard
       headline5: TextStyle(fontSize: 12.0, height: 1.1, color: Colors.black.withAlpha(150)));
 
+  TextTheme textThemeDark = TextTheme(
+
+      //Large Numbers (Hours, Minutes)
+      headline1: TextStyle(
+        fontSize: 80.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+        fontFamily: "Roboto-Mono",
+      ),
+
+      //Smaller Numbers (Seconds), Mantra Text
+      headline2: TextStyle(
+        fontSize: 30.0,
+        fontWeight: FontWeight.bold,
+        color: neonTranslucent,
+      ),
+
+      //Widgets.Settings Cards Titles
+      headline3: TextStyle(
+        fontSize: 16.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.black.withOpacity(0.8),
+      ),
+      button: TextStyle(color: Colors.white, letterSpacing: 0.5, fontWeight: FontWeight.bold),
+
+      // Wochentag in ZeitCard
+      headline4: TextStyle(fontSize: 16.0, height: 1.05, color: Colors.white),
+
+      // Datum in ZeitCard
+      headline5: TextStyle(fontSize: 12.0, height: 1.1, color: Colors.black.withAlpha(150)));
+
   runApp(GetMaterialApp(
     routes: {
       "/": (context) => const HomePage(),
@@ -84,15 +115,17 @@ void main() async {
     title: "Timo ",
     themeMode: ThemeMode.system,
     darkTheme: ThemeData(
+      brightness: Brightness.dark,
+      colorScheme: ColorScheme.dark(),
       cardColor: Colors.blueGrey[900],
       primarySwatch: Colors.teal,
       backgroundColor: Colors.blueGrey[900],
-      scaffoldBackgroundColor: Colors.black,
+      scaffoldBackgroundColor: Color(0xff061212),
       primaryColor: neon,
-      buttonColor: neon,
+      buttonColor: Colors.blueGrey[700],
       accentColor: neonAccent,
-      brightness: Brightness.dark,
-      textTheme: textTheme,
+      shadowColor: Colors.black,
+      textTheme: textThemeDark,
       timePickerTheme: TimePickerThemeData(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           hourMinuteTextColor: neonAccent,
@@ -101,12 +134,12 @@ void main() async {
       fontFamily: "BandeinsSans",
     ),
     theme: ThemeData(
+        brightness: Brightness.light,
         primarySwatch: Colors.teal,
         backgroundColor: Colors.white,
         //textButtonTheme: TextButtonThemeData(style: ButtonStyle(textStyle: MaterialStateProperty.resolveWith((states) => TextStyle(color: neon)))),
         primaryColor: neon,
-        brightness: Brightness.light,
-        buttonColor: neon,
+        buttonColor: grayTranslucent,
         accentColor: neonAccent,
         shadowColor: Colors.black38,
         timePickerTheme: TimePickerThemeData(
@@ -115,7 +148,7 @@ void main() async {
             hourMinuteColor: neonTranslucent,
             dialHandColor: neon),
         fontFamily: "BandeinsSans",
-        textTheme: textTheme),
+        textTheme: textThemeLight),
     localizationsDelegates: [GlobalMaterialLocalizations.delegate],
     supportedLocales: [const Locale("de")],
   ));

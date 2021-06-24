@@ -122,7 +122,7 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                                   child: Icon(
                                     Icons.help_rounded,
                                     size: 17,
-                                    color: Colors.black.withAlpha(150),
+                                    color: Theme.of(context).textTheme.headline4!.color!.withAlpha(150),
                                   ))
                             ],
                           ),
@@ -232,7 +232,7 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                               });
                             },
                             shape: const StadiumBorder(),
-                            color: grayTranslucent,
+                            color: Theme.of(context).buttonColor,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
                               child: Row(
