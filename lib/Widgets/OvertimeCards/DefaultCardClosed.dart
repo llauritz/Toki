@@ -96,18 +96,18 @@ class _DefaultCardClosedState extends State<DefaultCardClosed> {
                   children: [
                     Text(
                       uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(widget.zeitnahme.startTimes[0])),
-                      style: const TextStyle(fontSize: 14, color: Colors.blueGrey),
+                      style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onSurface),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.fromLTRB(8.0, 2.0, 8.0, 0.0),
                       child: Icon(
                         Icons.east_rounded,
                         size: 20.0,
-                        color: Colors.blueGrey,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     Text(uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(widget.zeitnahme.endTimes.last)),
-                        style: const TextStyle(fontSize: 14, color: Colors.blueGrey)),
+                        style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onSurface)),
                     const Expanded(child: Text("")),
                     _Ueberstunden(ueberMilliseconds: ueberMilliseconds)
                   ],
@@ -137,8 +137,8 @@ class _Ueberstunden extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle greenStyle = Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white);
-    final TextStyle blueGreyStyle = Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white);
+    final TextStyle greenStyle = Theme.of(context).textTheme.headline4!.copyWith(color: Theme.of(context).colorScheme.onPrimary);
+    final TextStyle blueGreyStyle = Theme.of(context).textTheme.headline4!.copyWith(color: Theme.of(context).colorScheme.onPrimary);
 
     //TODO: Test what happens if Zeit == Tagesstunden
 

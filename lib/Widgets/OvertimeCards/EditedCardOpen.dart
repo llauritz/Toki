@@ -1,3 +1,4 @@
+import 'package:Timo/Widgets/OvertimeCards/DefaultCardOpen/DefaultCardOpen.dart';
 import 'package:Timo/Widgets/Settings/WorkTimePicker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,7 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
     final int ueberMinutes = (ueberMilli / Duration.millisecondsPerMinute).truncate();
 
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).cardColor,
       child: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -72,12 +73,7 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
               padding: const EdgeInsets.all(20.0),
               child: Container(
                 decoration: BoxDecoration(color: editColorTranslucent, borderRadius: BorderRadius.circular(20), boxShadow: [
-                  BoxShadow(
-                    offset: const Offset(0, 5),
-                    color: editColorTranslucent.withAlpha(150),
-                    blurRadius: 10,
-                    spreadRadius: 0,
-                  )
+                  CustomBoxShadow(offset: const Offset(0, 0), color: editColorTranslucent, blurRadius: 10, blurStyle: BlurStyle.outer)
                 ]),
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
@@ -135,7 +131,7 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                                           thumbWidth: 100.0,
                                           thumbRadius: 0,
                                           color: editColor,
-                                          textcolor: Colors.white,
+                                          textcolor: Theme.of(context).colorScheme.onPrimary,
                                           enabled: true),
                                       activeTickMarkColor: Colors.transparent,
                                       inactiveTickMarkColor: Colors.transparent,
@@ -275,13 +271,13 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                         children: [
                           Icon(
                             Icons.replay_rounded,
-                            color: grayAccent,
+                            color: Theme.of(context).colorScheme.onSurface,
                             size: 20,
                           ),
                           const SizedBox(width: 5),
                           Text(
                             "Zurücksetzen",
-                            style: openButtonText.copyWith(color: grayAccent),
+                            style: openButtonText.copyWith(color: Theme.of(context).colorScheme.onSurface),
                           ),
                         ],
                       ),

@@ -72,7 +72,7 @@ class StempelButtonSTOP extends StatelessWidget {
           child: Center(
             child: Text(
               "STOP",
-              style: TextStyle(fontSize: 20.0, color: Colors.white, letterSpacing: 0.5, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20.0, color: Theme.of(context).colorScheme.onPrimary, letterSpacing: 0.5, fontWeight: FontWeight.bold),
             ),
           ),
         ),
@@ -97,13 +97,13 @@ class StempelButtonSTART extends StatelessWidget {
         color: Colors.greenAccent,
         highlightColor: Colors.green.withAlpha(80),
         splashColor: Colors.green.withAlpha(80),
-        child: const SizedBox(
+        child: SizedBox(
           height: 130.0,
           width: 130.0,
           child: Center(
             child: Text(
               "START",
-              style: TextStyle(fontSize: 20.0, color: Colors.white, letterSpacing: 0.5, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20.0, color: Theme.of(context).colorScheme.onPrimary, letterSpacing: 0.5, fontWeight: FontWeight.bold),
             ),
           ),
         ),

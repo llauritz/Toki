@@ -46,32 +46,23 @@ class _EinstempelnState extends State<Einstempeln> {
         if (widget.uhrzeitenIndex != 0) {
           previousMilli = widget._zeitnahme.endTimes[widget.uhrzeitenIndex - 1];
         } else {
-          previousMilli = DateTime(widget._zeitnahme.day.year,
-                  widget._zeitnahme.day.month, widget._zeitnahme.day.day)
-              .millisecondsSinceEpoch;
+          previousMilli = DateTime(widget._zeitnahme.day.year, widget._zeitnahme.day.month, widget._zeitnahme.day.day).millisecondsSinceEpoch;
         }
 
         int followingMilli = 0;
         if (widget._zeitnahme.endTimes.length > widget.uhrzeitenIndex) {
           followingMilli = widget._zeitnahme.endTimes[widget.uhrzeitenIndex];
-        } else if (widget.closedCardIndex == 0 &&
-            getIt<Data>().isRunning &&
-            widget.uhrzeitenIndex == widget._zeitnahme.startTimes.length - 1) {
+        } else if (widget.closedCardIndex == 0 && getIt<Data>().isRunning && widget.uhrzeitenIndex == widget._zeitnahme.startTimes.length - 1) {
           followingMilli = DateTime.now().millisecondsSinceEpoch;
         } else {
-          followingMilli = DateTime(
-                      widget._zeitnahme.day.year,
-                      widget._zeitnahme.day.month,
-                      widget._zeitnahme.day.day + 1)
-                  .millisecondsSinceEpoch -
-              1;
+          followingMilli =
+              DateTime(widget._zeitnahme.day.year, widget._zeitnahme.day.month, widget._zeitnahme.day.day + 1).millisecondsSinceEpoch - 1;
         }
 
         showModal(
             context: context,
             configuration: const FadeScaleTransitionConfiguration(
-                transitionDuration: Duration(milliseconds: 300),
-                reverseTransitionDuration: Duration(milliseconds: 200)),
+                transitionDuration: Duration(milliseconds: 300), reverseTransitionDuration: Duration(milliseconds: 200)),
             builder: (context) {
               return DayNightDialogEdited(
                 selectedMilli: selectedMilli,
@@ -97,19 +88,15 @@ class _EinstempelnState extends State<Einstempeln> {
           Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: Container(
-                  decoration: const BoxDecoration(
-                      color: neonTranslucent, shape: BoxShape.circle),
+                  decoration: BoxDecoration(color: neonTranslucent, shape: BoxShape.circle),
                   child: Padding(
                     padding: const EdgeInsets.all(22.0),
                     child: Center(
                       child: Text(
-                        widget.uhrzeit.format(
-                            DateTime.fromMillisecondsSinceEpoch(widget
-                                ._zeitnahme.startTimes[widget.uhrzeitenIndex])),
-                        style:
-                            const TextStyle(fontSize: 18, color: Color(0xff00FFDC)),
+                        widget.uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(widget._zeitnahme.startTimes[widget.uhrzeitenIndex])),
+                        style: const TextStyle(fontSize: 18, color: Color(0xff00FFDC)),
                       ),
                     ),
                   ),

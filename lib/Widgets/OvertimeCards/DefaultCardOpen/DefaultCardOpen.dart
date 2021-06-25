@@ -64,9 +64,9 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
 
           final int ueberMilliseconds = widget.zeitnahme.getUeberstunden();
           if (!ueberMilliseconds.isNegative) {
-            _color = neon;
-            _colorAccent = neonAccent;
-            _colorTranslucent = neonTranslucent;
+            _color = Theme.of(context).primaryColor;
+            _colorAccent = Theme.of(context).accentColor;
+            _colorTranslucent = Theme.of(context).primaryColor.withOpacity(0.2);
           } else {
             _color = gray;
             _colorAccent = grayAccent;
@@ -74,22 +74,15 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
           }
 
           final int elapsedMilliseconds = _zeitnahme.getElapsedTime();
-          final int elapsedHours =
-              Duration(milliseconds: elapsedMilliseconds).inHours;
-          final int elapsedMinutes =
-              Duration(milliseconds: elapsedMilliseconds).inMinutes;
+          final int elapsedHours = Duration(milliseconds: elapsedMilliseconds).inHours;
+          final int elapsedMinutes = Duration(milliseconds: elapsedMilliseconds).inMinutes;
 
-          final int pauseMilliseconds =
-              _zeitnahme.getPause() + _zeitnahme.getKorrektur();
-          final int pauseHours =
-              Duration(milliseconds: pauseMilliseconds).inHours;
-          final int pauseMinutes =
-              Duration(milliseconds: pauseMilliseconds).inMinutes;
+          final int pauseMilliseconds = _zeitnahme.getPause() + _zeitnahme.getKorrektur();
+          final int pauseHours = Duration(milliseconds: pauseMilliseconds).inHours;
+          final int pauseMinutes = Duration(milliseconds: pauseMilliseconds).inMinutes;
 
-          final int ueberHours =
-              Duration(milliseconds: ueberMilliseconds.abs()).inHours;
-          final int ueberMinutes =
-              Duration(milliseconds: ueberMilliseconds.abs()).inMinutes;
+          final int ueberHours = Duration(milliseconds: ueberMilliseconds.abs()).inHours;
+          final int ueberMinutes = Duration(milliseconds: ueberMilliseconds.abs()).inMinutes;
 
           print("ueberHoras $ueberHours");
           print("ueberMinutes $ueberMinutes");
@@ -97,7 +90,7 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
           TextStyle numbers = openCardsNumbers.copyWith(color: _colorAccent);
 
           return Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).cardColor,
             body: SafeArea(
               child: Stack(
                 children: [
@@ -115,24 +108,20 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 65.0),
                                 child: Theme(
-                                  data: Theme.of(context)
-                                      .copyWith(accentColor: Colors.white),
+                                  data: Theme.of(context).copyWith(accentColor: Colors.white),
                                   child: ShaderMask(
                                       shaderCallback: (Rect bounds) {
                                         return LinearGradient(
                                           begin: Alignment.bottomCenter,
                                           end: const Alignment(0, 0.8),
                                           colors: <Color>[
-                                            Colors.white.withAlpha(0),
-                                            Colors.white,
+                                            Theme.of(context).cardColor.withAlpha(0),
+                                            Theme.of(context).cardColor,
                                           ],
                                         ).createShader(bounds);
                                       },
                                       blendMode: BlendMode.dstATop,
-                                      child: TimesList(
-                                          zeitnahme: _zeitnahme,
-                                          uhrzeit: uhrzeit,
-                                          widget: widget)),
+                                      child: TimesList(zeitnahme: _zeitnahme, uhrzeit: uhrzeit, widget: widget)),
                                 ),
                               ),
                               Padding(
@@ -142,17 +131,11 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                     children: [
                                       FlatButton(
                                           onPressed: () {
-                                            if (widget.i ==
-                                                Hive.box<Zeitnahme>("zeitenBox").length -
-                                                    1)
-                                              getIt<Data>().timerText.stop();
-                                            if (widget.zeitnahme.tag ==
-                                                "Stundenabbau") {
-                                              getIt<HiveDB>().updateTag(
-                                                  "Urlaub", widget.i);
+                                            if (widget.i == Hive.box<Zeitnahme>("zeitenBox").length - 1) getIt<Data>().timerText.stop();
+                                            if (widget.zeitnahme.tag == "Stundenabbau") {
+                                              getIt<HiveDB>().updateTag("Urlaub", widget.i);
                                             }
-                                            getIt<HiveDB>()
-                                                .changeState("free", widget.i);
+                                            getIt<HiveDB>().changeState("free", widget.i);
                                             widget.callback();
                                           },
                                           splashColor: free.withAlpha(150),
@@ -160,11 +143,9 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                           shape: const StadiumBorder(),
                                           color: freeTranslucent,
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10.0, horizontal: 0),
+                                            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
                                             child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                              mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
                                                 const Icon(
                                                   Icons.beach_access,
@@ -174,9 +155,7 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                                 const SizedBox(width: 5),
                                                 Text(
                                                   "Urlaubstag",
-                                                  style:
-                                                      openButtonText.copyWith(
-                                                          color: freeAccent),
+                                                  style: openButtonText.copyWith(color: freeAccent),
                                                 ),
                                               ],
                                             ),
@@ -184,31 +163,21 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                       const SizedBox(width: 12),
                                       FlatButton(
                                           onPressed: () {
-                                            if (widget.i ==
-                                                Hive.box<Zeitnahme>("zeitenBox")
-                                                        .length -
-                                                    1)
-                                              getIt<Data>().timerText.stop();
-                                            if (widget.zeitnahme.tag ==
-                                                "Stundenabbau") {
-                                              getIt<HiveDB>().updateTag(
-                                                  "Bearbeitet", widget.i);
+                                            if (widget.i == Hive.box<Zeitnahme>("zeitenBox").length - 1) getIt<Data>().timerText.stop();
+                                            if (widget.zeitnahme.tag == "Stundenabbau") {
+                                              getIt<HiveDB>().updateTag("Bearbeitet", widget.i);
                                             }
-                                            getIt<HiveDB>().changeState(
-                                                "edited", widget.i);
+                                            getIt<HiveDB>().changeState("edited", widget.i);
                                             widget.callback();
                                           },
                                           splashColor: editColor.withAlpha(150),
-                                          highlightColor:
-                                              editColor.withAlpha(80),
+                                          highlightColor: editColor.withAlpha(80),
                                           shape: const StadiumBorder(),
                                           color: editColorTranslucent,
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10.0, horizontal: 0),
+                                            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
                                             child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                              mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
                                                 Icon(
                                                   Icons.edit,
@@ -218,9 +187,7 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                                 const SizedBox(width: 5),
                                                 Text(
                                                   "Zeit nachtragen",
-                                                  style:
-                                                      openButtonText.copyWith(
-                                                          color: editColor),
+                                                  style: openButtonText.copyWith(color: editColor),
                                                 ),
                                               ],
                                             ),
@@ -238,50 +205,33 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
                             child: Container(
-                              padding:
-                                  const EdgeInsets.fromLTRB(12.0, 12, 12, 20),
-                              decoration: BoxDecoration(
-                                  color: _colorTranslucent,
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      offset: const Offset(0, 5),
-                                      color: _colorTranslucent.withAlpha(150),
-                                      blurRadius: 10,
-                                      spreadRadius: 0,
-                                    )
-                                  ]),
+                              padding: const EdgeInsets.fromLTRB(12.0, 12, 12, 20),
+                              decoration: BoxDecoration(color: _colorTranslucent, borderRadius: BorderRadius.circular(20), boxShadow: [
+                                CustomBoxShadow(offset: const Offset(0, 0), color: _colorTranslucent, blurRadius: 10, blurStyle: BlurStyle.outer),
+                              ]),
                               child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       IconButton(
                                           tooltip: "Speichern und schliessen",
-                                          splashColor:
-                                              _colorAccent.withAlpha(80),
-                                          highlightColor:
-                                              _colorAccent.withAlpha(50),
+                                          splashColor: _colorAccent.withAlpha(80),
+                                          highlightColor: _colorAccent.withAlpha(50),
                                           padding: const EdgeInsets.all(0),
                                           visualDensity: const VisualDensity(),
-                                          icon: Icon(Icons.done_rounded,
-                                              color: _colorAccent, size: 30),
+                                          icon: Icon(Icons.done_rounded, color: _colorAccent, size: 30),
                                           onPressed: () {
                                             Navigator.pop(context);
                                           })
                                     ],
                                   ),
                                   Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 12.0),
+                                    padding: const EdgeInsets.only(bottom: 12.0),
                                     child: Text(
-                                      tag.format(_day) +
-                                          ', ' +
-                                          datum.format(_day),
-                                      style: openCardDate.copyWith(
-                                          color: _colorAccent),
+                                      tag.format(_day) + ', ' + datum.format(_day),
+                                      style: openCardDate.copyWith(color: _colorAccent),
                                     ),
                                   ),
                                   Row(
@@ -299,30 +249,24 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                                 ":",
                                                 style: numbers,
                                               ),
-                                              DoubleDigit(
-                                                  i: elapsedMinutes % 60,
-                                                  style: numbers)
+                                              DoubleDigit(i: elapsedMinutes % 60, style: numbers)
                                             ],
                                           ),
                                           Text(
                                             "Arbeitszeit",
-                                            style: openCardsLabel.copyWith(
-                                                color: _colorAccent),
+                                            style: openCardsLabel.copyWith(color: _colorAccent),
                                           ),
                                         ],
                                       ),
                                       Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 30.0),
+                                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
                                           child: Column(
                                             children: [
                                               //TODO: Nur anzeigen, wenn nicht erstes Element + isRunning true
 
                                               Row(
                                                 children: [
-                                                  if (ueberMilliseconds
-                                                      .isNegative)
-                                                    Text("-", style: numbers),
+                                                  if (ueberMilliseconds.isNegative) Text("-", style: numbers),
                                                   Text(
                                                     ueberHours.toString(),
                                                     style: numbers,
@@ -331,15 +275,12 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                                     ":",
                                                     style: numbers,
                                                   ),
-                                                  DoubleDigit(
-                                                      i: ueberMinutes % 60,
-                                                      style: numbers)
+                                                  DoubleDigit(i: ueberMinutes % 60, style: numbers)
                                                 ],
                                               ),
                                               Text(
                                                 "Überstunden",
-                                                style: openCardsLabel.copyWith(
-                                                    color: _colorAccent),
+                                                style: openCardsLabel.copyWith(color: _colorAccent),
                                               ),
                                             ],
                                           )),
@@ -347,28 +288,17 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                         children: [
                                           GestureDetector(
                                             onTap: () {
-                                              if (_zeitnahme.getKorrektur() >
-                                                  0) {
-                                                final dynamic tooltip =
-                                                    _toolTipKey.currentState;
+                                              if (_zeitnahme.getKorrektur() > 0) {
+                                                final dynamic tooltip = _toolTipKey.currentState;
                                                 tooltip.ensureTooltipVisible();
                                               }
                                             },
                                             child: Tooltip(
-                                              textStyle: TextStyle(
-                                                  color: Colors.blueGrey[700]),
+                                              textStyle: TextStyle(color: Colors.blueGrey[700]),
                                               decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100),
+                                                  borderRadius: BorderRadius.circular(100),
                                                   color: Colors.white,
-                                                  boxShadow: [
-                                                    const BoxShadow(
-                                                        offset:
-                                                            const Offset(0, 5),
-                                                        color: Colors.black12,
-                                                        blurRadius: 10)
-                                                  ]),
+                                                  boxShadow: [const BoxShadow(offset: const Offset(0, 5), color: Colors.black12, blurRadius: 10)]),
                                               key: _toolTipKey,
                                               verticalOffset: 40,
                                               message: "Pause korrigiert",
@@ -376,42 +306,22 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                                 children: [
                                                   Text(
                                                     pauseHours.toString(),
-                                                    style: numbers.copyWith(
-                                                        color: _zeitnahme
-                                                                    .getKorrektur() >
-                                                                0
-                                                            ? editColor
-                                                            : _colorAccent),
+                                                    style: numbers.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent),
                                                   ),
                                                   Text(
                                                     ":",
-                                                    style: numbers.copyWith(
-                                                        color: _zeitnahme
-                                                                    .getKorrektur() >
-                                                                0
-                                                            ? editColor
-                                                            : _colorAccent),
+                                                    style: numbers.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent),
                                                   ),
                                                   DoubleDigit(
                                                       i: pauseMinutes % 60,
-                                                      style: numbers.copyWith(
-                                                          color: _zeitnahme
-                                                                      .getKorrektur() >
-                                                                  0
-                                                              ? editColor
-                                                              : _colorAccent))
+                                                      style: numbers.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent))
                                                 ],
                                               ),
                                             ),
                                           ),
                                           Text(
                                             "Pause",
-                                            style: openCardsLabel.copyWith(
-                                                color:
-                                                    _zeitnahme.getKorrektur() >
-                                                            0
-                                                        ? editColor
-                                                        : _colorAccent),
+                                            style: openCardsLabel.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent),
                                           ),
                                         ],
                                       ),
@@ -429,5 +339,28 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
             ),
           );
         });
+  }
+}
+
+class CustomBoxShadow extends BoxShadow {
+  final BlurStyle blurStyle;
+
+  const CustomBoxShadow({
+    Color color = const Color(0xFF000000),
+    Offset offset = Offset.zero,
+    double blurRadius = 0.0,
+    this.blurStyle = BlurStyle.normal,
+  }) : super(color: color, offset: offset, blurRadius: blurRadius);
+
+  @override
+  Paint toPaint() {
+    final Paint result = Paint()
+      ..color = color
+      ..maskFilter = MaskFilter.blur(this.blurStyle, blurSigma);
+    assert(() {
+      if (debugDisableShadows) result.maskFilter = null;
+      return true;
+    }());
+    return result;
   }
 }

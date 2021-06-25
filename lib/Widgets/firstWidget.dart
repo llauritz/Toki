@@ -1,3 +1,4 @@
+import 'package:Timo/Services/Theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -38,7 +39,7 @@ class _FirstWidgetState extends State<FirstWidget> {
                 width: 50,
                 child: Center(
                     child: Container(
-                  decoration: BoxDecoration(color: Colors.blueGrey[100], borderRadius: BorderRadius.circular(100)),
+                  decoration: BoxDecoration(color: gray.withOpacity(0.4), borderRadius: BorderRadius.circular(100)),
                 ))),
           ),
           const OvertimeChangeWidget(),

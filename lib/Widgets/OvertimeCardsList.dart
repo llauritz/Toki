@@ -50,6 +50,7 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
     return Card(
       margin: EdgeInsets.fromLTRB(8, 0, 8, 8),
       clipBehavior: Clip.antiAlias,
+      color: Theme.of(context).backgroundColor,
       elevation: 10.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       child: Column(
@@ -66,8 +67,8 @@ class _ZeitenPanelState extends State<ZeitenPanel> {
                       begin: Alignment.topCenter,
                       end: Alignment(0, -0.9),
                       colors: <Color>[
-                        Colors.white.withAlpha(0),
-                        Colors.white,
+                        Theme.of(context).backgroundColor.withAlpha(0),
+                        Theme.of(context).backgroundColor,
                       ],
                     ).createShader(bounds);
                   },
@@ -155,7 +156,7 @@ class ListContent extends StatelessWidget {
                     openShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                     transitionDuration: Duration(milliseconds: 500),
                     transitionType: ContainerTransitionType.fade,
-                    openColor: Theme.of(context).backgroundColor,
+                    openColor: Theme.of(context).cardColor,
                     closedColor: Theme.of(context).backgroundColor,
                     closedBuilder: (BuildContext context, void Function() action) {
                       logger.d("OvertimeCardsList build - 4");

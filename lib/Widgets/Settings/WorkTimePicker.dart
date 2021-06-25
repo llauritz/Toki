@@ -29,12 +29,12 @@ class _WorkTimePickerState extends State<WorkTimePicker> with TickerProviderStat
         ? Text(
             "Alle Tage gemeinsam einstellen",
             key: ValueKey(0),
-            style: openButtonText.copyWith(color: grayAccent),
+            style: openButtonText.copyWith(color: Theme.of(context).colorScheme.onSurface),
           )
         : Text(
             "Jeden Tag individuell einstellen",
             key: ValueKey(1),
-            style: openButtonText.copyWith(color: grayAccent),
+            style: openButtonText.copyWith(color: Theme.of(context).colorScheme.onSurface),
           );
 
     return Padding(

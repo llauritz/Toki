@@ -241,12 +241,12 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                                   const SizedBox(width: 3),
                                   Text(
                                     "Regel hinzufügen",
-                                    style: openButtonText.copyWith(color: grayAccent),
+                                    style: openButtonText.copyWith(color: Theme.of(context).colorScheme.onSurface),
                                   ),
                                   const SizedBox(width: 1),
                                   Icon(
                                     Icons.add_rounded,
-                                    color: grayAccent,
+                                    color: Theme.of(context).colorScheme.onSurface,
                                     size: 20,
                                   ),
                                 ],

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Timo/Services/Theme.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -47,14 +48,14 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
 
     final int ueberMilliseconds = widget.zeitnahme.getUeberstunden();
     if (!ueberMilliseconds.isNegative && !widget.isRunning) {
-      _color = Colors.tealAccent;
-      _colorAccent = Colors.tealAccent[400]!;
-      _colorTranslucent = Colors.tealAccent.withAlpha(50);
+      _color = neon;
+      _colorAccent = neonAccent;
+      _colorTranslucent = neonTranslucent;
       keyInt = 0;
     } else {
-      _color = Colors.blueGrey[300]!;
-      _colorAccent = Colors.blueGrey;
-      _colorTranslucent = Colors.blueGrey.withAlpha(25);
+      _color = gray;
+      _colorAccent = Theme.of(context).colorScheme.onSurface;
+      _colorTranslucent = grayTranslucent;
       keyInt = 1;
     }
 
@@ -119,14 +120,14 @@ class _FirstCardClosedState extends State<FirstCardClosed> {
                 children: [
                   Text(
                     Uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(_zeitnahme.startTimes[0])),
-                    style: TextStyle(fontSize: 14, color: Colors.blueGrey),
+                    style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onSurface),
                   ),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.fromLTRB(8.0, 2.0, 8.0, 0.0),
                     child: Icon(
                       Icons.east_rounded,
                       size: 20.0,
-                      color: Colors.blueGrey,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   EndTimeWidget(
@@ -163,8 +164,8 @@ class Ueberstunden extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle greenStyle = Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white);
-    TextStyle blueGreyStyle = Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white);
+    TextStyle greenStyle = Theme.of(context).textTheme.headline4!.copyWith(color: Theme.of(context).colorScheme.onPrimary);
+    TextStyle blueGreyStyle = Theme.of(context).textTheme.headline4!.copyWith(color: Theme.of(context).colorScheme.onPrimary);
 
     Widget _widget;
 
@@ -293,7 +294,7 @@ class _EndTimeWidgetState extends State<EndTimeWidget> {
       endTracker.cancel();
       _widget = Text(
         widget.Uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(widget._zeitnahme.endTimes.last)),
-        style: const TextStyle(fontSize: 14, color: Colors.blueGrey),
+        style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onSurface),
         key: ValueKey<int>(widget._zeitnahme.endTimes.last),
       );
     } else {
@@ -309,7 +310,7 @@ class _EndTimeWidgetState extends State<EndTimeWidget> {
       });
       _widget = Text(
         widget.Uhrzeit.format(_now),
-        style: TextStyle(fontSize: 14, color: Colors.black.withAlpha(50)),
+        style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onSurface.withAlpha(100)),
         key: ValueKey<int>(DateTime.now().millisecondsSinceEpoch),
       );
     }

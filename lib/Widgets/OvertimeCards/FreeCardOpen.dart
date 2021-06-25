@@ -1,3 +1,4 @@
+import 'package:Timo/Widgets/OvertimeCards/DefaultCardOpen/DefaultCardOpen.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
@@ -10,8 +11,7 @@ import 'TagEditWidget.dart';
 final getIt = GetIt.instance;
 
 class FreeCardOpen extends StatefulWidget {
-
-  const FreeCardOpen ({
+  const FreeCardOpen({
     required this.i,
     required this.index,
     required this.zeitnahme,
@@ -41,9 +41,8 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).backgroundColor,
       child: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -54,14 +53,7 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                 decoration: BoxDecoration(
                     color: freeTranslucent,
                     borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        offset: const Offset(0, 5),
-                        color: free.withAlpha(80),
-                        blurRadius: 10,
-                        spreadRadius: 0,
-                      )
-                    ]),
+                    boxShadow: [CustomBoxShadow(offset: const Offset(0, 0), color: freeTranslucent, blurRadius: 10, blurStyle: BlurStyle.outer)]),
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -72,19 +64,17 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                         IconButton(
                             tooltip: "Speichern und schliessen",
                             splashColor: freeAccent.withAlpha(80),
-                            highlightColor:
-                            freeAccent.withAlpha(50),
+                            highlightColor: freeAccent.withAlpha(50),
                             padding: const EdgeInsets.all(0),
                             visualDensity: const VisualDensity(),
-                            icon: const Icon(Icons.done_rounded,
-                                color: freeAccent, size: 30),
+                            icon: const Icon(Icons.done_rounded, color: freeAccent, size: 30),
                             onPressed: () {
                               Navigator.pop(context);
                             })
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical:100.0),
+                      padding: const EdgeInsets.symmetric(vertical: 100.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -95,13 +85,12 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                           const SizedBox(
                             height: 30,
                           ),
-
                           TagEditWidget(
-                            i:widget.i,
+                            i: widget.i,
                             zeitnahme: widget.zeitnahme,
                             color: free,
-                            colorAccent: freeAccent,)
-
+                            colorAccent: freeAccent,
+                          )
                         ],
                       ),
                     ),
@@ -125,14 +114,14 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 FlatButton(
-                    onPressed: (){
-                      if(widget.zeitnahme.startTimes.isNotEmpty){
-                        if(widget.zeitnahme.tag == "Urlaub"){
+                    onPressed: () {
+                      if (widget.zeitnahme.startTimes.isNotEmpty) {
+                        if (widget.zeitnahme.tag == "Urlaub") {
                           getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
                         }
                         getIt<HiveDB>().changeState("default", widget.i);
-                      }else{
-                        if(widget.zeitnahme.tag == "Urlaub"){
+                      } else {
+                        if (widget.zeitnahme.tag == "Urlaub") {
                           getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
                         }
                         getIt<HiveDB>().changeState("empty", widget.i);
@@ -142,26 +131,30 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                     shape: const StadiumBorder(),
                     color: grayTranslucent,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical:10.0, horizontal: 0),
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.replay_rounded, color: grayAccent, size: 20,),
+                          Icon(
+                            Icons.replay_rounded,
+                            color: Theme.of(context).colorScheme.onSurface,
+                            size: 20,
+                          ),
                           const SizedBox(width: 5),
-                          Text("Zurücksetzen", style: openButtonText.copyWith(
-                            color: grayAccent
-                          ),),
+                          Text(
+                            "Zurücksetzen",
+                            style: openButtonText.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                          ),
                         ],
                       ),
-                    )
-                ),
+                    )),
                 const SizedBox(width: 12),
                 FlatButton(
-                    onPressed: (){
-                      if(widget.zeitnahme.tag == "Urlaub"){
+                    onPressed: () {
+                      if (widget.zeitnahme.tag == "Urlaub") {
                         getIt<HiveDB>().updateTag("Bearbeitet", widget.i);
                       }
-                        getIt<HiveDB>().changeState("edited", widget.i);
+                      getIt<HiveDB>().changeState("edited", widget.i);
 
                       widget.callback();
                     },
@@ -170,19 +163,23 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                     shape: const StadiumBorder(),
                     color: editColorTranslucent,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical:10.0, horizontal: 0),
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.edit, color: editColor, size: 20,),
+                          Icon(
+                            Icons.edit,
+                            color: editColor,
+                            size: 20,
+                          ),
                           const SizedBox(width: 5),
-                          Text("Zeit nachtragen", style: openButtonText.copyWith(
-                              color: editColor
-                          ),),
+                          Text(
+                            "Zeit nachtragen",
+                            style: openButtonText.copyWith(color: editColor),
+                          ),
                         ],
                       ),
-                    )
-                ),
+                    )),
               ],
             )
           ],
@@ -190,6 +187,4 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
       ),
     );
   }
-
 }
-

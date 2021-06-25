@@ -1,4 +1,3 @@
-
 import 'package:Timo/Services/Theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -33,7 +32,6 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
 
   @override
   Widget build(BuildContext context) {
-
     //getIt<HiveDB>().updateTag("Urlaub", widget.i);
 
     if (widget.i >= 0) {
@@ -93,7 +91,8 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
                           Flexible(
                             child: Container(
                               child: Text(
-                                _zeitnahme.tag.toString(),overflow: TextOverflow.ellipsis,
+                                _zeitnahme.tag.toString(),
+                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(fontSize: 14, color: free),
                               ),
                             ),
@@ -102,12 +101,12 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
                             padding: const EdgeInsets.only(left: 3.0),
                             child: FlatButton(
                               onPressed: () {
-                                if(widget.zeitnahme.startTimes.isNotEmpty){
+                                if (widget.zeitnahme.startTimes.isNotEmpty) {
                                   getIt<HiveDB>().changeState("default", widget.i);
-                                }else{
+                                } else {
                                   getIt<HiveDB>().changeState("empty", widget.i);
                                 }
-                                if(widget.zeitnahme.tag == "Urlaub"){
+                                if (widget.zeitnahme.tag == "Urlaub") {
                                   getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
                                 }
                               },
@@ -119,8 +118,7 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
                               splashColor: freeAccent.withAlpha(80),
                               highlightColor: freeAccent.withAlpha(50),
                               color: freeTranslucent,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(1000)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1000)),
                               padding: const EdgeInsets.all(5),
                               minWidth: 40,
                               height: 40,
@@ -133,11 +131,7 @@ class _FreeCardClosedState extends State<FreeCardClosed> {
                       alignment: Alignment.center,
                       height: 30.0,
                       width: 65.0,
-                      child: Text("0:00",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline4!
-                              .copyWith(color: Colors.white)),
+                      child: Text("0:00", style: Theme.of(context).textTheme.headline4!.copyWith(color: Theme.of(context).colorScheme.onPrimary)),
                       decoration: BoxDecoration(
                         color: free,
                         borderRadius: BorderRadius.circular(1000),

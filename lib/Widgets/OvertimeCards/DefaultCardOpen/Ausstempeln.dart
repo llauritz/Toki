@@ -38,29 +38,21 @@ class _AusstempelnState extends State<Ausstempeln> {
       highlightColor: Colors.transparent,
       splashColor: neonTranslucent,
       onPressed: () {
-        final int selectedMilli =
-            widget._zeitnahme.endTimes[widget.uhrzeitenIndex];
+        final int selectedMilli = widget._zeitnahme.endTimes[widget.uhrzeitenIndex];
 
-        final int previousMilli =
-            widget._zeitnahme.startTimes[widget.uhrzeitenIndex];
+        final int previousMilli = widget._zeitnahme.startTimes[widget.uhrzeitenIndex];
 
         int followingMilli = 0;
         if (widget._zeitnahme.startTimes.length - 1 > widget.uhrzeitenIndex) {
-          followingMilli =
-              widget._zeitnahme.startTimes[widget.uhrzeitenIndex + 1];
+          followingMilli = widget._zeitnahme.startTimes[widget.uhrzeitenIndex + 1];
         } else {
-          followingMilli = DateTime(
-                      widget._zeitnahme.day.year,
-                      widget._zeitnahme.day.month,
-                      widget._zeitnahme.day.day + 1)
-                  .millisecondsSinceEpoch -
-              1;
+          followingMilli =
+              DateTime(widget._zeitnahme.day.year, widget._zeitnahme.day.month, widget._zeitnahme.day.day + 1).millisecondsSinceEpoch - 1;
         }
         showModal(
             context: context,
             configuration: const FadeScaleTransitionConfiguration(
-                transitionDuration: Duration(milliseconds: 300),
-                reverseTransitionDuration: Duration(milliseconds: 200)),
+                transitionDuration: Duration(milliseconds: 300), reverseTransitionDuration: Duration(milliseconds: 200)),
             builder: (context) {
               return DayNightDialogEdited(
                 selectedMilli: selectedMilli,
@@ -84,14 +76,12 @@ class _AusstempelnState extends State<Ausstempeln> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.blueGrey[50], shape: BoxShape.circle),
+                  decoration: BoxDecoration(color: grayTranslucent, shape: BoxShape.circle),
                   child: Padding(
                     padding: const EdgeInsets.all(22.0),
                     child: Text(
-                      widget.uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(
-                          widget._zeitnahme.endTimes[widget.uhrzeitenIndex])),
-                      style: TextStyle(fontSize: 18, color: gray),
+                      widget.uhrzeit.format(DateTime.fromMillisecondsSinceEpoch(widget._zeitnahme.endTimes[widget.uhrzeitenIndex])),
+                      style: TextStyle(fontSize: 18, color: Theme.of(context).colorScheme.onSurface),
                     ),
                   ),
                 ),
@@ -106,23 +96,23 @@ class _AusstempelnState extends State<Ausstempeln> {
             ],
           ),
           if (widget._zeitnahme.autoStoppedTime != null)
-          if (widget._zeitnahme.autoStoppedTime! && widget.uhrzeitenIndex + 1 == widget._zeitnahme.endTimes.length)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.info,
-                    color: Colors.amber[600],
-                  ),
-                  Text(
-                    " Automatisch ausgestempelt.",
-                    style: TextStyle(color: Colors.amber[600], fontSize: 14),
-                  ),
-                ],
-              ),
-            )
+            if (widget._zeitnahme.autoStoppedTime! && widget.uhrzeitenIndex + 1 == widget._zeitnahme.endTimes.length)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.info,
+                      color: Colors.amber[600],
+                    ),
+                    Text(
+                      " Automatisch ausgestempelt.",
+                      style: TextStyle(color: Colors.amber[600], fontSize: 14),
+                    ),
+                  ],
+                ),
+              )
         ],
       ),
     );
