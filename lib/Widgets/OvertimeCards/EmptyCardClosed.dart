@@ -54,7 +54,7 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
               height: 60,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(1000),
-                color: grayTranslucent.withAlpha(100),
+                color: grayTranslucent.withOpacity(0.1),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -62,12 +62,12 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                 children: [
                   Text(
                     wochentag.format(_day).substring(0, 2),
-                    style: TextStyle(color: gray, fontSize: 16.0),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.75), fontSize: 16.0),
                     textAlign: TextAlign.start,
                   ),
                   Text(
                     datum.format(_day),
-                    style: TextStyle(color: gray, fontSize: 11.0),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.75), fontSize: 11.0),
                     textAlign: TextAlign.start,
                   )
                 ],
@@ -148,14 +148,15 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                       children: [
                         Text(
                           "-",
-                          style: Theme.of(context).textTheme.headline4!.copyWith(color: gray),
+                          style: Theme.of(context).textTheme.headline4!.copyWith(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.75)),
                         ),
                         Text(Duration(milliseconds: workMilliseconds.abs()).inHours.toString(),
-                            style: Theme.of(context).textTheme.headline4!.copyWith(color: gray)),
-                        Text(":", style: Theme.of(context).textTheme.headline4!.copyWith(color: gray)),
+                            style: Theme.of(context).textTheme.headline4!.copyWith(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.75))),
+                        Text(":",
+                            style: Theme.of(context).textTheme.headline4!.copyWith(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.75))),
                         DoubleDigit(
                             i: Duration(milliseconds: workMilliseconds.abs()).inMinutes % 60,
-                            style: Theme.of(context).textTheme.headline4!.copyWith(color: gray))
+                            style: Theme.of(context).textTheme.headline4!.copyWith(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.75)))
                       ],
                     ),
                   ],

@@ -1,5 +1,6 @@
 import 'package:Timo/Services/Theme.dart';
 import 'package:Timo/Widgets/Settings/AutomaticStop.dart';
+import 'package:Timo/Widgets/Settings/PdfExport/ExportPage.dart';
 import 'package:Timo/Widgets/Settings/WorkTimePicker.dart';
 import 'package:auto_animated/auto_animated.dart';
 import '../Widgets/Settings/BreakCorrection.dart';
@@ -46,6 +47,7 @@ class _SettingsPageState extends State<SettingsPage> {
       body: AnimateIfVisibleWrapper(
         child: ListView(physics: BouncingScrollPhysics(), children: [
           FadeIn(delay: 200, fadeChild: const SettingsTitle()),
+          FadeIn(delay: 225, fadeChild: ExportPage()),
           //AutoFadeIn(child: NamePicker()),
           FadeIn(delay: 250, fadeChild: NamePicker()),
           FadeIn(

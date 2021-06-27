@@ -151,15 +151,15 @@ class ListContent extends StatelessWidget {
                   animation: animation,
                   child: OpenContainer(
                     closedElevation: 0.0,
-                    openElevation: 20.0,
-                    closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                    openElevation: 10.0,
+                    closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70.0)),
                     openShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                     transitionDuration: Duration(milliseconds: 500),
                     transitionType: ContainerTransitionType.fade,
                     openColor: Theme.of(context).cardColor,
                     closedColor: Theme.of(context).backgroundColor,
                     closedBuilder: (BuildContext context, void Function() action) {
-                      logger.d("OvertimeCardsList build - 4");
+                      //logger.d("OvertimeCardsList build - 4");
 
                       Widget _widget;
 

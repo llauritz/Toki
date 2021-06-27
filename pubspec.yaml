@@ -43,6 +43,9 @@ dependencies:
   auto_animated: ^3.0.0
   flutter_localizations: 
     sdk: flutter
+  pdf: ^3.4.2
+  path_provider: ^2.0.2
+  native_pdf_view: ^4.1.0
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +86,7 @@ flutter:
     - assets/icon/
     - assets/timo/
     - assets/svg/
+    - assets/fonts/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
@@ -98,26 +102,26 @@ flutter:
   fonts:
     - family: BandeinsStrange
       fonts:
-        - asset: fonts/BandeinsStrangeBoldExtendedHalf.ttf
+        - asset: assets/fonts/BandeinsStrangeBoldExtendedHalf.ttf
     - family: BandeinsSans
       fonts:
-        - asset: fonts/BandeinsSansBold.otf
+        - asset: assets/fonts/BandeinsSansBold.otf
 
     - family: BandeinsSansRegular
       fonts:
-        - asset: fonts/BandeinsSansRegular.otf
+        - asset: assets/fonts/BandeinsSansRegular.otf
 
     - family: BandeinsSansSemi
       fonts:
-          - asset: fonts/BandeinsSansSemiBold.otf
+          - asset: assets/fonts/BandeinsSansSemiBold.otf
 
     - family: Roboto-Mono
       fonts:
-        - asset: fonts/RobotoMono-Regular.ttf
+        - asset: assets/fonts/RobotoMono-Regular.ttf
 
     - family: Roboto-Mono_bold
       fonts:
-        - asset: fonts/RobotoMono-SemiBold.ttf
+        - asset: assets/fonts/RobotoMono-SemiBold.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

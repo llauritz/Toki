@@ -332,6 +332,29 @@ class HiveDB {
     listChangesStream.sink.add(changeNumber++);
     print("HiveDB - changeEditMilli - 3 ${Duration(milliseconds: _updated.editMilli)}");
   }
+
+  Future<List<List<Zeitnahme>>> getMonthLists() async {
+    Box zeitenBox = Hive.box<Zeitnahme>("zeitenBox");
+
+    logger.i("getMonthLists");
+
+    Zeitnahme first = zeitenBox.getAt(0);
+    int month = first.day.month;
+    List<List<Zeitnahme>> zlist = [[]];
+
+    for (Zeitnahme zeit in zeitenBox.values) {
+      if (zeit.day.month == month)
+        zlist.last.add(zeit);
+      else {
+        zlist.add([zeit]);
+        month = zeit.day.month;
+      }
+    }
+
+    logger.i(zlist.length);
+    logger.i(zlist.first.length);
+    return zlist;
+  }
 }
 
 extension DateOnlyCompare on DateTime {

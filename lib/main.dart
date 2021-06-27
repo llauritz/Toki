@@ -46,12 +46,7 @@ void main() async {
   TextTheme textThemeLight = TextTheme(
 
       //Large Numbers (Hours, Minutes)
-      headline1: TextStyle(
-        fontSize: 80.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-        fontFamily: "Roboto-Mono",
-      ),
+      headline1: TextStyle(fontSize: 70.0, height: 0.79, fontWeight: FontWeight.bold, color: Colors.white),
 
       //Smaller Numbers (Seconds), Mantra Text
       headline2: TextStyle(
@@ -72,17 +67,13 @@ void main() async {
       headline4: TextStyle(fontSize: 16.0, height: 1.05, color: grayAccent),
 
       // Datum in ZeitCard
-      headline5: TextStyle(fontSize: 12.0, height: 1.1, color: Colors.black.withAlpha(150)));
+      headline5: TextStyle(fontSize: 12.0, height: 1.1, color: Colors.black.withAlpha(150)),
+      bodyText2: TextStyle(color: neon));
 
   TextTheme textThemeDark = TextTheme(
 
       //Large Numbers (Hours, Minutes)
-      headline1: TextStyle(
-        fontSize: 80.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-        fontFamily: "Roboto-Mono",
-      ),
+      headline1: TextStyle(fontSize: 70.0, height: 0.79, fontWeight: FontWeight.bold, color: Colors.white),
 
       //Smaller Numbers (Seconds), Mantra Text
       headline2: TextStyle(
@@ -103,7 +94,8 @@ void main() async {
       headline4: TextStyle(fontSize: 16.0, height: 1.05, color: Colors.white),
 
       // Datum in ZeitCard
-      headline5: TextStyle(fontSize: 12.0, height: 1.1, color: Colors.black.withAlpha(150)));
+      headline5: TextStyle(fontSize: 12.0, height: 1.1, color: Colors.black.withAlpha(150)),
+      bodyText2: TextStyle(color: neon));
 
   runApp(GetMaterialApp(
     routes: {
@@ -117,6 +109,7 @@ void main() async {
     darkTheme: ThemeData(
       brightness: Brightness.dark,
       colorScheme: ColorScheme.dark(onSurface: Colors.blueGrey[100]!),
+      primaryColorLight: Color(0xff25453D),
       primarySwatch: Colors.teal,
       cardColor: Color(0xff1C2124),
       backgroundColor: Color(0xff141718),
@@ -140,6 +133,7 @@ void main() async {
         backgroundColor: Colors.white,
         //textButtonTheme: TextButtonThemeData(style: ButtonStyle(textStyle: MaterialStateProperty.resolveWith((states) => TextStyle(color: neon)))),
         primaryColor: neon,
+        primaryColorLight: Color(0xffE4FFFB),
         buttonColor: grayTranslucent,
         accentColor: neonAccent,
         shadowColor: Colors.black38,
