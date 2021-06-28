@@ -216,7 +216,7 @@ class ListContent extends StatelessWidget {
                       return SizedBox(
                         height: 80,
                         child: PageTransitionSwitcher(
-                          reverse: _state == "free" || _state == "edited",
+                          reverse: _state == "free" || _state == "edited" || _state == "sickDay",
                           transitionBuilder: (
                             Widget child,
                             Animation<double> primaryAnimation,
