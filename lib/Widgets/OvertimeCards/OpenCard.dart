@@ -1,3 +1,4 @@
+import 'package:Timo/Widgets/OvertimeCards/SickCardOpen.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -12,13 +13,7 @@ import 'FreeCardOpen.dart';
 final getIt = GetIt.instance;
 
 class OpenCard extends StatefulWidget {
-
-  const OpenCard({
-    required this.state,
-    required this.i,
-    required this.index,
-    required this.zeitnahme
-  });
+  const OpenCard({required this.state, required this.i, required this.index, required this.zeitnahme});
 
   final String state;
 
@@ -41,54 +36,58 @@ class _OpenCardState extends State<OpenCard> {
           _widget = DefaultCardOpen(
               i: widget.i,
               index: widget.index,
-              zeitnahme:widget.zeitnahme,
-              callback: (){
-                setState(() {
-                });
-              }
-          );
+              zeitnahme: widget.zeitnahme,
+              callback: () {
+                setState(() {});
+              });
           break;
         }
 
       case "free":
         {
           _widget = FreeCardOpen(
-              i:widget.i,
-              index:widget.index,
+              i: widget.i,
+              index: widget.index,
               zeitnahme: widget.zeitnahme,
-              callback: (){
-                setState(() {
-                });
-              }
-          );
+              callback: () {
+                setState(() {});
+              });
+          break;
+        }
+
+      case "sickDay":
+        {
+          _widget = SickCardOpen(
+              i: widget.i,
+              index: widget.index,
+              zeitnahme: widget.zeitnahme,
+              callback: () {
+                setState(() {});
+              });
           break;
         }
 
       case "edited":
         {
           _widget = EditedCardOpen(
-              i:widget.i,
-              index:widget.index,
+              i: widget.i,
+              index: widget.index,
               zeitnahme: widget.zeitnahme,
-              callback: (){
-                setState(() {
-                });
-              }
-          );
+              callback: () {
+                setState(() {});
+              });
           break;
         }
 
       case "empty":
         {
           _widget = EmptyCardOpen(
-              i:widget.i,
-              index:widget.index,
+              i: widget.i,
+              index: widget.index,
               zeitnahme: widget.zeitnahme,
-              callback: (){
-                setState(() {
-                });
-              }
-          );
+              callback: () {
+                setState(() {});
+              });
           break;
         }
 
@@ -99,36 +98,26 @@ class _OpenCardState extends State<OpenCard> {
     }
 
     return StreamBuilder<int>(
-      stream: getIt<HiveDB>().listChangesStream.stream,
-      builder: (context, snapshot) {
-        return PageTransitionSwitcher(
-          reverse: widget.zeitnahme.state == "empty"
-              || widget.zeitnahme.state == "default",
-          transitionBuilder: (
+        stream: getIt<HiveDB>().listChangesStream.stream,
+        builder: (context, snapshot) {
+          return PageTransitionSwitcher(
+            reverse: widget.zeitnahme.state == "empty" || widget.zeitnahme.state == "default",
+            transitionBuilder: (
               Widget child,
-              Animation<double>
-              primaryAnimation,
-              Animation<double>
-              secondaryAnimation,
-              ) {
-            return SharedAxisTransition(
-              child: child,
-              animation:
-              primaryAnimation,
-              secondaryAnimation:
-              secondaryAnimation,
-              transitionType:
-              SharedAxisTransitionType
-                  .scaled,
-              fillColor: Colors
-                  .transparent,
-            );
-          },
-          child: _widget,
-          duration: const Duration(
-              milliseconds: 600),
-        );
-      }
-    );
+              Animation<double> primaryAnimation,
+              Animation<double> secondaryAnimation,
+            ) {
+              return SharedAxisTransition(
+                child: child,
+                animation: primaryAnimation,
+                secondaryAnimation: secondaryAnimation,
+                transitionType: SharedAxisTransitionType.scaled,
+                fillColor: Colors.transparent,
+              );
+            },
+            child: _widget,
+            duration: const Duration(milliseconds: 600),
+          );
+        });
   }
 }

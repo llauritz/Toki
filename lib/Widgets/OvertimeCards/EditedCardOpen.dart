@@ -244,76 +244,114 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FlatButton(
-                    onPressed: () {
-                      if (widget.zeitnahme.startTimes.isNotEmpty) {
-                        if (widget.zeitnahme.tag == "Bearbeitet") {
-                          getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
-                        }
-                        getIt<HiveDB>().changeState("default", widget.i);
-                      } else {
-                        if (widget.zeitnahme.tag == "Bearbeitet") {
-                          getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
-                        }
-                        getIt<HiveDB>().changeState("empty", widget.i);
-                      }
-                      widget.callback();
-                    },
-                    shape: const StadiumBorder(),
-                    color: grayTranslucent,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.replay_rounded,
-                            color: Theme.of(context).colorScheme.onSurface,
-                            size: 20,
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: BouncingScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FlatButton(
+                        onPressed: () {
+                          if (widget.zeitnahme.startTimes.isNotEmpty) {
+                            if (widget.zeitnahme.tag == "Bearbeitet") {
+                              getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
+                            }
+                            getIt<HiveDB>().changeState("default", widget.i);
+                          } else {
+                            if (widget.zeitnahme.tag == "Bearbeitet") {
+                              getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
+                            }
+                            getIt<HiveDB>().changeState("empty", widget.i);
+                          }
+                          widget.callback();
+                        },
+                        shape: const StadiumBorder(),
+                        color: grayTranslucent,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.replay_rounded,
+                                color: Theme.of(context).colorScheme.onSurface,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                "Zurücksetzen",
+                                style: openButtonText.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 5),
-                          Text(
-                            "Zurücksetzen",
-                            style: openButtonText.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                        )),
+                    const SizedBox(width: 12),
+                    FlatButton(
+                        onPressed: () {
+                          if (widget.zeitnahme.tag == "Bearbeitet") {
+                            getIt<HiveDB>().updateTag("Urlaub", widget.i);
+                          }
+                          getIt<HiveDB>().changeState("free", widget.i);
+                          widget.callback();
+                        },
+                        splashColor: free.withAlpha(150),
+                        highlightColor: free.withAlpha(80),
+                        shape: const StadiumBorder(),
+                        color: freeTranslucent,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.beach_access,
+                                color: freeAccent,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                "Urlaubstag",
+                                style: openButtonText.copyWith(color: freeAccent),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    )),
-                const SizedBox(width: 12),
-                FlatButton(
-                    onPressed: () {
-                      if (widget.zeitnahme.tag == "Bearbeitet") {
-                        getIt<HiveDB>().updateTag("Urlaub", widget.i);
-                      }
-                      getIt<HiveDB>().changeState("free", widget.i);
-                      widget.callback();
-                    },
-                    splashColor: free.withAlpha(150),
-                    highlightColor: free.withAlpha(80),
-                    shape: const StadiumBorder(),
-                    color: freeTranslucent,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.beach_access,
-                            color: freeAccent,
-                            size: 20,
+                        )),
+                    const SizedBox(width: 12),
+                    FlatButton(
+                        onPressed: () {
+                          if (widget.zeitnahme.tag == "Bearbeitet") {
+                            getIt<HiveDB>().updateTag("Krankheitstag", widget.i);
+                          }
+                          getIt<HiveDB>().changeState("sickDay", widget.i);
+                          widget.callback();
+                        },
+                        splashColor: Colors.red.withAlpha(150),
+                        highlightColor: Colors.red.withAlpha(80),
+                        shape: const StadiumBorder(),
+                        color: Colors.red.withOpacity(0.2),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.local_hospital_rounded,
+                                color: Colors.redAccent,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                "Krankheitstag",
+                                style: openButtonText.copyWith(color: Colors.redAccent),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 5),
-                          Text(
-                            "Urlaubstag",
-                            style: openButtonText.copyWith(color: freeAccent),
-                          ),
-                        ],
-                      ),
-                    )),
-              ],
+                        )),
+                  ],
+                ),
+              ),
             )
           ],
         ),

@@ -91,7 +91,7 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(3, 3, 0, 3),
                       child: FlatButton(
-                          minWidth: 0,
+                          minWidth: 50,
                           splashColor: freeAccent.withAlpha(80),
                           highlightColor: freeAccent.withAlpha(50),
                           color: freeTranslucent,
@@ -111,16 +111,13 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                                 size: 18,
                                 color: freeAccent,
                               ),
-                              const Text(
-                                "Urlaub",
-                                style: TextStyle(fontFamily: "BandeinsSansRegular", color: freeAccent, fontSize: 11.0),
-                              )
                             ],
                           )),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(3, 3, 0, 3),
                       child: Container(
+                        width: 50,
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(1000), color: editColorTranslucent),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -133,14 +130,36 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                                 size: 18,
                                 color: editColor,
                               ),
-                              Text(
-                                "Bearbeiten",
-                                style: TextStyle(fontFamily: "BandeinsSansRegular", color: editColor, fontSize: 11.0),
-                              )
                             ],
                           ),
                         ),
                       ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(3, 3, 0, 3),
+                      child: FlatButton(
+                          minWidth: 50,
+                          splashColor: sickAccent.withAlpha(80),
+                          highlightColor: sickAccent.withAlpha(50),
+                          color: sickTranslucent,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1000)),
+                          onPressed: () {
+                            if (widget.zeitnahme.tag == "Stundenabbau") {
+                              getIt<HiveDB>().updateTag("Krankheitstag", widget.i);
+                            }
+                            getIt<HiveDB>().changeState("sickDay", widget.i);
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.local_hospital_rounded,
+                                size: 18,
+                                color: sickAccent,
+                              ),
+                            ],
+                          )),
                     ),
                     const Expanded(child: Text("")),
                     Row(

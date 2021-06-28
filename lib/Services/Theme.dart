@@ -43,6 +43,10 @@ Color freeTranslucent = free.withOpacity(0.18);
 const Color editColor = Color(0xFF42A5F5); //blue 400
 Color editColorTranslucent = editColor.withOpacity(0.2); //lightblue 50
 
+//const Color sick = Colors.red;
+const Color sickAccent = Colors.redAccent;
+Color sickTranslucent = Colors.red.withOpacity(0.2);
+
 const Color darkBackground = Color(0xFF110744);
 
 const TextStyle timerTextNumbers = TextStyle(

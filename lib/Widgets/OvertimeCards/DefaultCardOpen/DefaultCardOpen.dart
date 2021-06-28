@@ -36,7 +36,6 @@ class DefaultCardOpen extends StatefulWidget {
 }
 
 class _DefaultCardOpenState extends State<DefaultCardOpen> {
-  Color _color = Colors.black;
   Color _colorAccent = Colors.black;
   Color _colorTranslucent = Colors.black;
   DateFormat uhrzeit = DateFormat("H:mm");
@@ -64,12 +63,10 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
 
           final int ueberMilliseconds = widget.zeitnahme.getUeberstunden();
           if (!ueberMilliseconds.isNegative) {
-            _color = Theme.of(context).primaryColor;
             _colorAccent = Theme.of(context).accentColor;
             _colorTranslucent = Theme.of(context).primaryColor.withOpacity(0.2);
           } else {
-            _color = gray;
-            _colorAccent = grayAccent;
+            _colorAccent = Theme.of(context).colorScheme.onSurface;
             _colorTranslucent = grayTranslucent;
           }
 
@@ -124,76 +121,112 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                       child: TimesList(zeitnahme: _zeitnahme, uhrzeit: uhrzeit, widget: widget)),
                                 ),
                               ),
-                              Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      FlatButton(
-                                          onPressed: () {
-                                            if (widget.i == Hive.box<Zeitnahme>("zeitenBox").length - 1) getIt<Data>().timerText.stop();
-                                            if (widget.zeitnahme.tag == "Stundenabbau") {
-                                              getIt<HiveDB>().updateTag("Urlaub", widget.i);
-                                            }
-                                            getIt<HiveDB>().changeState("free", widget.i);
-                                            widget.callback();
-                                          },
-                                          splashColor: free.withAlpha(150),
-                                          highlightColor: free.withAlpha(80),
-                                          shape: const StadiumBorder(),
-                                          color: freeTranslucent,
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                const Icon(
-                                                  Icons.beach_access,
-                                                  color: freeAccent,
-                                                  size: 20,
-                                                ),
-                                                const SizedBox(width: 5),
-                                                Text(
-                                                  "Urlaubstag",
-                                                  style: openButtonText.copyWith(color: freeAccent),
-                                                ),
-                                              ],
-                                            ),
-                                          )),
-                                      const SizedBox(width: 12),
-                                      FlatButton(
-                                          onPressed: () {
-                                            if (widget.i == Hive.box<Zeitnahme>("zeitenBox").length - 1) getIt<Data>().timerText.stop();
-                                            if (widget.zeitnahme.tag == "Stundenabbau") {
-                                              getIt<HiveDB>().updateTag("Bearbeitet", widget.i);
-                                            }
-                                            getIt<HiveDB>().changeState("edited", widget.i);
-                                            widget.callback();
-                                          },
-                                          splashColor: editColor.withAlpha(150),
-                                          highlightColor: editColor.withAlpha(80),
-                                          shape: const StadiumBorder(),
-                                          color: editColorTranslucent,
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.edit,
-                                                  color: editColor,
-                                                  size: 20,
-                                                ),
-                                                const SizedBox(width: 5),
-                                                Text(
-                                                  "Zeit nachtragen",
-                                                  style: openButtonText.copyWith(color: editColor),
-                                                ),
-                                              ],
-                                            ),
-                                          )),
-                                    ],
-                                  )),
+                              SingleChildScrollView(
+                                physics: BouncingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                child: Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        FlatButton(
+                                            onPressed: () {
+                                              if (widget.i == Hive.box<Zeitnahme>("zeitenBox").length - 1) getIt<Data>().timerText.stop();
+                                              if (widget.zeitnahme.tag == "Stundenabbau") {
+                                                getIt<HiveDB>().updateTag("Urlaub", widget.i);
+                                              }
+                                              getIt<HiveDB>().changeState("free", widget.i);
+                                              widget.callback();
+                                            },
+                                            splashColor: free.withAlpha(150),
+                                            highlightColor: free.withAlpha(80),
+                                            shape: const StadiumBorder(),
+                                            color: freeTranslucent,
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.beach_access,
+                                                    color: freeAccent,
+                                                    size: 20,
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  Text(
+                                                    "Urlaubstag",
+                                                    style: openButtonText.copyWith(color: freeAccent),
+                                                  ),
+                                                ],
+                                              ),
+                                            )),
+                                        const SizedBox(width: 12),
+                                        FlatButton(
+                                            onPressed: () {
+                                              if (widget.i == Hive.box<Zeitnahme>("zeitenBox").length - 1) getIt<Data>().timerText.stop();
+                                              if (widget.zeitnahme.tag == "Stundenabbau") {
+                                                getIt<HiveDB>().updateTag("Krankheitstag", widget.i);
+                                              }
+                                              getIt<HiveDB>().changeState("sickDay", widget.i);
+                                              widget.callback();
+                                            },
+                                            splashColor: editColor.withAlpha(150),
+                                            highlightColor: editColor.withAlpha(80),
+                                            shape: const StadiumBorder(),
+                                            color: Colors.red.withOpacity(0.2),
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.local_hospital_rounded,
+                                                    color: Colors.redAccent,
+                                                    size: 20,
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  Text(
+                                                    "Krankheitstag",
+                                                    style: openButtonText.copyWith(color: Colors.redAccent),
+                                                  ),
+                                                ],
+                                              ),
+                                            )),
+                                        const SizedBox(width: 12),
+                                        FlatButton(
+                                            onPressed: () {
+                                              if (widget.i == Hive.box<Zeitnahme>("zeitenBox").length - 1) getIt<Data>().timerText.stop();
+                                              if (widget.zeitnahme.tag == "Stundenabbau") {
+                                                getIt<HiveDB>().updateTag("Bearbeitet", widget.i);
+                                              }
+                                              getIt<HiveDB>().changeState("edited", widget.i);
+                                              widget.callback();
+                                            },
+                                            splashColor: editColor.withAlpha(150),
+                                            highlightColor: editColor.withAlpha(80),
+                                            shape: const StadiumBorder(),
+                                            color: editColorTranslucent,
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.edit,
+                                                    color: editColor,
+                                                    size: 20,
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  Text(
+                                                    "Zeit nachtragen",
+                                                    style: openButtonText.copyWith(color: editColor),
+                                                  ),
+                                                ],
+                                              ),
+                                            )),
+                                      ],
+                                    )),
+                              ),
                             ],
                           )),
                     ],

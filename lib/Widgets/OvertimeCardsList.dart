@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:Timo/Services/Theme.dart';
 import 'package:Timo/Transitions/SizeScaleFadeTransition.dart';
+import 'package:Timo/Widgets/OvertimeCards/SickCardClosed.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -184,6 +185,12 @@ class ListContent extends StatelessWidget {
                           case "free":
                             {
                               _widget = FreeCardClosed(i: i, index: index, zeitnahme: _zeitnahme);
+                              break;
+                            }
+
+                          case "sickDay":
+                            {
+                              _widget = SickCardClosed(i: i, index: index, zeitnahme: _zeitnahme);
                               break;
                             }
 
