@@ -1,3 +1,4 @@
+import 'package:Timo/Services/Theme.dart';
 import 'package:flutter/material.dart';
 
 class DottedLine extends StatelessWidget {
@@ -15,9 +16,7 @@ class DottedLine extends StatelessWidget {
             width: 3,
             height: 8,
             child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.blueGrey[50],
-                  borderRadius: BorderRadius.circular(100)),
+              decoration: BoxDecoration(color: grayTranslucent, borderRadius: BorderRadius.circular(100)),
             ),
           ),
         ),
@@ -27,9 +26,7 @@ class DottedLine extends StatelessWidget {
             width: 3,
             height: 8,
             child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.blueGrey[50],
-                  borderRadius: BorderRadius.circular(100)),
+              decoration: BoxDecoration(color: grayTranslucent, borderRadius: BorderRadius.circular(100)),
             ),
           ),
         ),
@@ -39,9 +36,7 @@ class DottedLine extends StatelessWidget {
             width: 3,
             height: 8,
             child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.blueGrey[50],
-                  borderRadius: BorderRadius.circular(100)),
+              decoration: BoxDecoration(color: grayTranslucent, borderRadius: BorderRadius.circular(100)),
             ),
           ),
         ),
@@ -51,9 +46,7 @@ class DottedLine extends StatelessWidget {
             width: 3,
             height: 8,
             child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.blueGrey[50],
-                  borderRadius: BorderRadius.circular(100)),
+              decoration: BoxDecoration(color: grayTranslucent, borderRadius: BorderRadius.circular(100)),
             ),
           ),
         ),
