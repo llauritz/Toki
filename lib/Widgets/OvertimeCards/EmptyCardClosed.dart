@@ -15,12 +15,14 @@ class EmptyCardClosed extends StatefulWidget {
     required this.i,
     required this.index,
     required this.zeitnahme,
+    required this.openCard,
     Key? key,
   }) : super(key: key);
 
   final int i;
   final int index;
   final Zeitnahme zeitnahme;
+  final Function openCard;
 
   @override
   _EmptyCardClosedState createState() => _EmptyCardClosedState();
@@ -36,6 +38,11 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
 
   @override
   Widget build(BuildContext context) {
+    BoxDecoration tooltipDecoration = BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: Theme.of(context).cardColor,
+        boxShadow: [const BoxShadow(offset: const Offset(0, 5), color: Colors.black12, blurRadius: 10)]);
+
     int weekday = getIt<Data>().individualTimes ? widget.zeitnahme.day.weekday - 1 : 0;
     int workMilliseconds = getIt<Data>().workingTime[weekday];
 
@@ -88,78 +95,109 @@ class _EmptyCardClosedState extends State<EmptyCardClosed> {
                 padding: const EdgeInsets.only(right: 18.0),
                 child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(3, 3, 0, 3),
-                      child: FlatButton(
-                          minWidth: 50,
-                          splashColor: freeAccent.withAlpha(80),
-                          highlightColor: freeAccent.withAlpha(50),
-                          color: freeTranslucent,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1000)),
-                          onPressed: () {
-                            if (widget.zeitnahme.tag == "Stundenabbau") {
-                              getIt<HiveDB>().updateTag("Urlaub", widget.i);
-                            }
-                            getIt<HiveDB>().changeState("free", widget.i);
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.beach_access,
-                                size: 18,
-                                color: freeAccent,
-                              ),
-                            ],
-                          )),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(3, 3, 0, 3),
-                      child: Container(
-                        width: 50,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(1000), color: editColorTranslucent),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.edit,
-                                size: 18,
-                                color: editColor,
-                              ),
-                            ],
-                          ),
-                        ),
+                    Tooltip(
+                      verticalOffset: 20,
+                      preferBelow: false,
+                      decoration: tooltipDecoration,
+                      textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                      message: "Urlaubstag",
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(5, 5, 0, 5),
+                        child: FlatButton(
+                            minWidth: 46,
+                            padding: EdgeInsets.zero,
+                            splashColor: freeAccent.withAlpha(80),
+                            highlightColor: freeAccent.withAlpha(50),
+                            color: freeTranslucent,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1000)),
+                            onPressed: () {
+                              if (widget.zeitnahme.tag == "Stundenabbau") {
+                                getIt<HiveDB>().updateTag("Urlaub", widget.i);
+                              }
+                              getIt<HiveDB>().changeState("free", widget.i);
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.beach_access,
+                                  size: 18,
+                                  color: freeAccent,
+                                ),
+                              ],
+                            )),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(3, 3, 0, 3),
-                      child: FlatButton(
-                          minWidth: 50,
-                          splashColor: sickAccent.withAlpha(80),
-                          highlightColor: sickAccent.withAlpha(50),
-                          color: sickTranslucent,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1000)),
-                          onPressed: () {
-                            if (widget.zeitnahme.tag == "Stundenabbau") {
-                              getIt<HiveDB>().updateTag("Krankheitstag", widget.i);
-                            }
-                            getIt<HiveDB>().changeState("sickDay", widget.i);
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.local_hospital_rounded,
-                                size: 18,
-                                color: sickAccent,
-                              ),
-                            ],
-                          )),
+                    Tooltip(
+                      verticalOffset: 20,
+                      preferBelow: false,
+                      decoration: tooltipDecoration,
+                      textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                      message: "Krankheitstag",
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(5, 5, 0, 5),
+                        child: FlatButton(
+                            minWidth: 46,
+                            padding: EdgeInsets.zero,
+                            splashColor: sickAccent.withAlpha(80),
+                            highlightColor: sickAccent.withAlpha(50),
+                            color: sickTranslucent,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1000)),
+                            onPressed: () {
+                              if (widget.zeitnahme.tag == "Stundenabbau") {
+                                getIt<HiveDB>().updateTag("Krankheitstag", widget.i);
+                              }
+                              getIt<HiveDB>().changeState("sickDay", widget.i);
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.local_hospital_rounded,
+                                  size: 18,
+                                  color: sickAccent,
+                                ),
+                              ],
+                            )),
+                      ),
+                    ),
+                    Tooltip(
+                      verticalOffset: 20,
+                      preferBelow: false,
+                      decoration: tooltipDecoration,
+                      textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                      message: "Zeit nachtragen",
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(5, 5, 0, 5),
+                        child: FlatButton(
+                            minWidth: 46,
+                            padding: EdgeInsets.zero,
+                            splashColor: editColor.withAlpha(80),
+                            highlightColor: editColor.withAlpha(50),
+                            color: editColorTranslucent,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1000)),
+                            onPressed: () async {
+                              if (widget.zeitnahme.tag == "Stundenabbau") {
+                                getIt<HiveDB>().updateTag("Bearbeitet", widget.i);
+                              }
+                              getIt<HiveDB>().changeState("edited", widget.i);
+                              await Future.delayed(Duration(milliseconds: 300));
+                              widget.openCard();
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.edit_rounded,
+                                  size: 18,
+                                  color: editColor,
+                                ),
+                              ],
+                            )),
+                      ),
                     ),
                     const Expanded(child: Text("")),
                     Row(

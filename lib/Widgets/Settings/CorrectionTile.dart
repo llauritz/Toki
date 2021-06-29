@@ -60,7 +60,7 @@ class _CorrectionTileState extends State<CorrectionTile> {
                                   children: [
                                     Text(
                                       "Ab",
-                                      style: TextStyle(fontSize: 12, color: gray.withAlpha(170)),
+                                      style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurface.withAlpha(170)),
                                     ),
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
@@ -82,7 +82,10 @@ class _CorrectionTileState extends State<CorrectionTile> {
                                         SizedBox(width: 3),
                                         Text(
                                           "Stunden",
-                                          style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18, color: grayAccent),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline4!
+                                              .copyWith(fontSize: 18, color: Theme.of(context).colorScheme.onSurface),
                                         ),
                                       ],
                                     ),
@@ -121,7 +124,7 @@ class _CorrectionTileState extends State<CorrectionTile> {
                                   children: [
                                     Text(
                                       "Mindestens",
-                                      style: TextStyle(fontSize: 12, color: gray.withAlpha(170)),
+                                      style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurface.withAlpha(170)),
                                     ),
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
@@ -143,7 +146,10 @@ class _CorrectionTileState extends State<CorrectionTile> {
                                         ),
                                         Text(
                                           "Minuten",
-                                          style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18, color: grayAccent),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline4!
+                                              .copyWith(fontSize: 18, color: Theme.of(context).colorScheme.onSurface),
                                         ),
                                       ],
                                     ),

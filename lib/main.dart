@@ -108,7 +108,7 @@ void main() async {
     themeMode: ThemeMode.system,
     darkTheme: ThemeData(
       brightness: Brightness.dark,
-      colorScheme: ColorScheme.dark(onSurface: Colors.blueGrey[100]!),
+      colorScheme: ColorScheme.dark(onSurface: Colors.blueGrey[100]!, primary: neon, onSecondary: Colors.blueGrey[100]!),
       primaryColorLight: Color(0xff25453D),
       primarySwatch: Colors.teal,
       cardColor: Color(0xff1C2124),
@@ -120,15 +120,17 @@ void main() async {
       shadowColor: Colors.black,
       textTheme: textThemeDark,
       timePickerTheme: TimePickerThemeData(
+          backgroundColor: Color(0xff1C2124),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           hourMinuteTextColor: neonAccent,
           hourMinuteColor: neonTranslucent,
+          //dialTextColor: Colors.white,
           dialHandColor: neon),
       fontFamily: "BandeinsSans",
     ),
     theme: ThemeData(
         brightness: Brightness.light,
-        colorScheme: ColorScheme.light(onSurface: grayAccent),
+        colorScheme: ColorScheme.light(onSurface: grayAccent, onSecondary: gray, primary: neon),
         primarySwatch: Colors.teal,
         backgroundColor: Colors.white,
         //textButtonTheme: TextButtonThemeData(style: ButtonStyle(textStyle: MaterialStateProperty.resolveWith((states) => TextStyle(color: neon)))),

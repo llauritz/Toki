@@ -61,6 +61,7 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
+                                backgroundColor: Theme.of(context).cardColor,
                                 clipBehavior: Clip.antiAlias,
                                 titlePadding: EdgeInsets.zero,
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -78,7 +79,7 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                                   children: [
                                     Text(
                                       "Automatische Pausenkorrektur",
-                                      style: TextStyle(color: grayAccent, fontWeight: FontWeight.bold, fontSize: 22),
+                                      style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.bold, fontSize: 22),
                                     ),
                                     SizedBox(
                                       height: 10,
@@ -89,7 +90,7 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                                 ),
                                 actionsPadding: EdgeInsets.zero,
                                 contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                                contentTextStyle: TextStyle(fontWeight: FontWeight.bold, color: grayAccent),
+                                contentTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                                 actions: [
                                   TextButton(
                                       onPressed: () {
@@ -232,7 +233,7 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                               });
                             },
                             shape: const StadiumBorder(),
-                            color: Theme.of(context).buttonColor,
+                            color: grayTranslucent,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
                               child: Row(
@@ -245,6 +246,7 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                                   ),
                                   const SizedBox(width: 1),
                                   Icon(
+                                    
                                     Icons.add_rounded,
                                     color: Theme.of(context).colorScheme.onSurface,
                                     size: 20,

@@ -326,29 +326,39 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                                 tooltip.ensureTooltipVisible();
                                               }
                                             },
-                                            child: Tooltip(
-                                              textStyle: TextStyle(color: Colors.blueGrey[700]),
-                                              decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(100),
-                                                  color: Colors.white,
-                                                  boxShadow: [const BoxShadow(offset: const Offset(0, 5), color: Colors.black12, blurRadius: 10)]),
-                                              key: _toolTipKey,
-                                              verticalOffset: 40,
-                                              message: "Pause korrigiert",
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    pauseHours.toString(),
-                                                    style: numbers.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent),
-                                                  ),
-                                                  Text(
-                                                    ":",
-                                                    style: numbers.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent),
-                                                  ),
-                                                  DoubleDigit(
-                                                      i: pauseMinutes % 60,
-                                                      style: numbers.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent))
-                                                ],
+                                            onLongPress: () {
+                                              if (_zeitnahme.getKorrektur() > 0) {
+                                                final dynamic tooltip = _toolTipKey.currentState;
+                                                tooltip.ensureTooltipVisible();
+                                              }
+                                            },
+                                            child: AbsorbPointer(
+                                              absorbing: true,
+                                              child: Tooltip(
+                                                textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                                                margin: EdgeInsets.only(left: 10),
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(1000),
+                                                    color: Theme.of(context).cardColor,
+                                                    boxShadow: [BoxShadow(blurRadius: 6, color: Colors.black12, offset: Offset(0, 3))]),
+                                                key: _toolTipKey,
+                                                verticalOffset: 40,
+                                                message: "Pause korrigiert",
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      pauseHours.toString(),
+                                                      style: numbers.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent),
+                                                    ),
+                                                    Text(
+                                                      ":",
+                                                      style: numbers.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent),
+                                                    ),
+                                                    DoubleDigit(
+                                                        i: pauseMinutes % 60,
+                                                        style: numbers.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent))
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),

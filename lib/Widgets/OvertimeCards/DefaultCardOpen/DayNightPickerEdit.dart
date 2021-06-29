@@ -39,14 +39,14 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
 
   @override
   Widget build(BuildContext context) {
-    print("DayNightDialog - edited: " +
-        DateTime.fromMillisecondsSinceEpoch(editedMilli).toString());
+    print("DayNightDialog - edited: " + DateTime.fromMillisecondsSinceEpoch(editedMilli).toString());
     DateTime editedTime = DateTime.fromMillisecondsSinceEpoch(editedMilli);
 
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
+      backgroundColor: Theme.of(context).cardColor,
       elevation: 10,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
@@ -56,12 +56,10 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
           children: <Widget>[
             DayNightBanner(
               hour: editedTime.hour,
-              displace: mapRange(editedMilli * 1.0, widget.previousMilli * 1.0,
-                  widget.followingMilli * 1.0),
+              displace: mapRange(editedMilli * 1.0, widget.previousMilli * 1.0, widget.followingMilli * 1.0),
             ),
             Container(
-              padding:
-                  const EdgeInsets.only(left: 12.0, top: 12.0, right: 12.0),
+              padding: const EdgeInsets.only(left: 12.0, top: 12.0, right: 12.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -75,14 +73,14 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
                           padding: const EdgeInsets.only(top: 8.0),
                           child: IconButton(
                               icon: const Icon(Icons.remove_circle_rounded),
-                              color: grayDark,
+                              color: Theme.of(context).colorScheme.onSurface,
                               onPressed: () {
                                 // only if it doesnt go futher than the minimal value
-                                if(editedMilli - widget.previousMilli > Duration.millisecondsPerMinute){
+                                if (editedMilli - widget.previousMilli > Duration.millisecondsPerMinute) {
                                   setState(() {
                                     editedMilli = editedMilli - 60000;
                                   });
-                                }else{
+                                } else {
                                   setState(() {
                                     editedMilli = widget.previousMilli + 1;
                                   });
@@ -91,27 +89,24 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),
-                          child:
-                              Text("${editedTime.hour}:", style: dayNightNumbers),
+                          child: Text("${editedTime.hour}:", style: dayNightNumbers.copyWith(color: Theme.of(context).colorScheme.onSurface)),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(right: 10.0),
-                          child: DoubleDigit(
-                              i: editedTime.minute,
-                              style: dayNightNumbers),
+                          child: DoubleDigit(i: editedTime.minute, style: dayNightNumbers.copyWith(color: Theme.of(context).colorScheme.onSurface)),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: IconButton(
                               icon: const Icon(Icons.add_circle_rounded),
-                              color: grayDark,
+                              color: Theme.of(context).colorScheme.onSurface,
                               onPressed: () {
                                 // only if it doesnt go futher than the maximum value
-                                if(widget.followingMilli - editedMilli > Duration.millisecondsPerMinute){
+                                if (widget.followingMilli - editedMilli > Duration.millisecondsPerMinute) {
                                   setState(() {
                                     editedMilli = editedMilli + 60000;
                                   });
-                                }else{
+                                } else {
                                   setState(() {
                                     editedMilli = widget.followingMilli - 1;
                                   });
@@ -141,28 +136,21 @@ class _DayNightDialogEditedState extends State<DayNightDialogEdited> {
                         FlatButton(
                             onPressed: () {
                               Navigator.pop(context);
-                              getIt<HiveDB>()
-                                  .listChangesStream
-                                  .sink
-                                  .add(getIt<HiveDB>().changeNumber++);
+                              getIt<HiveDB>().listChangesStream.sink.add(getIt<HiveDB>().changeNumber++);
                             },
                             child: Text(
                               "Abbrechen",
-                              style: openButtonText.copyWith(color: grayDark),
+                              style: openButtonText.copyWith(color: Theme.of(context).colorScheme.onBackground),
                             )),
                         FlatButton(
                           onPressed: () {
-                            getIt<HiveDB>().updateStartEndZeit(widget.listindex,
-                                widget.index, widget.isStartTime, editedMilli);
+                            getIt<HiveDB>().updateStartEndZeit(widget.listindex, widget.index, widget.isStartTime, editedMilli);
                             Navigator.pop(context);
-                            getIt<HiveDB>()
-                                .listChangesStream
-                                .sink
-                                .add(getIt<HiveDB>().changeNumber++);
+                            getIt<HiveDB>().listChangesStream.sink.add(getIt<HiveDB>().changeNumber++);
                           },
                           child: Text(
                             "Speichern",
-                            style: openButtonText.copyWith(color: grayDark),
+                            style: openButtonText.copyWith(color: Theme.of(context).colorScheme.onBackground),
                           ),
                         ),
                       ],

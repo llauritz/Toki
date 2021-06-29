@@ -28,7 +28,6 @@ class OvertimeChangeWidget extends StatefulWidget {
 class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with TickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> animationFade;
-  final Color offsetButtonColor = Colors.blueGrey[300]!;
 
   GlobalKey hoursTextEdit = GlobalKey();
   TextEditingController hoursTextController = TextEditingController();
@@ -55,6 +54,8 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
 
   @override
   Widget build(BuildContext context) {
+    final Color offsetButtonColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.5);
+
     return AnimatedPadding(
       padding: isOpen ? const EdgeInsets.only(top: 10) : EdgeInsets.zero,
       duration: widget.durationShort,
@@ -84,13 +85,13 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                       height: 75,
                     )
                   : Tooltip(
-                      message: "Zeit bearbeiten",
+                      textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                       verticalOffset: 30,
-                      textStyle: TextStyle(color: gray),
+                      message: "Zeit bearbeiten",
                       margin: EdgeInsets.only(left: 10),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(1000),
-                          color: Colors.white,
+                          color: Theme.of(context).cardColor,
                           boxShadow: [BoxShadow(blurRadius: 6, color: Colors.black12, offset: Offset(0, 3))]),
                       child: Padding(
                         padding: const EdgeInsets.only(right: 20.0),
@@ -173,7 +174,7 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                               tmpHour = snapshot.data!;
                             }
 
-                            Color _color = tmpHour.isNegative ? gray : neon;
+                            Color _color = tmpHour.isNegative ? Theme.of(context).colorScheme.onSecondary : neon;
                             int stunden = (tmpHour / Duration.millisecondsPerHour).truncate();
                             int realStunden = (snapshot.data! / Duration.millisecondsPerHour).truncate();
 
@@ -288,7 +289,7 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                               initialData: getIt<HiveDB>().ueberMillisekundenGesamt,
                               stream: getIt<HiveDB>().ueberMillisekundenGesamtStream.stream,
                               builder: (context, snapshot) {
-                                Color _color = snapshot.data!.isNegative ? gray : neon;
+                                Color _color = snapshot.data!.isNegative ? Theme.of(context).colorScheme.onSecondary : neon;
 
                                 Widget _widget = KeyedSubtree(
                                     key: ValueKey<Color>(_color),
@@ -354,7 +355,7 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                               tmpMinutes = snapshot.data!;
                             }
 
-                            Color _color = tmpMinutes.isNegative ? gray : neon;
+                            Color _color = tmpMinutes.isNegative ? Theme.of(context).colorScheme.onSecondary : neon;
                             int minutes = ((tmpMinutes.abs() / Duration.millisecondsPerMinute) % 60).truncate();
                             int realMinutes = ((snapshot.data! / Duration.millisecondsPerMinute) % 60).truncate();
 
@@ -596,7 +597,7 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                                           key: ValueKey<String>(text),
                                           child: Text(
                                             text,
-                                            style: TextStyle(fontSize: 20, color: Colors.blueGrey[300]),
+                                            style: TextStyle(fontSize: 20, color: Theme.of(context).colorScheme.onSecondary),
                                           ));
 
                                       return PageTransitionSwitcher(

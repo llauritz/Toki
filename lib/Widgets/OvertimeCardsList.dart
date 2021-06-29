@@ -196,7 +196,7 @@ class ListContent extends StatelessWidget {
 
                           case "empty":
                             {
-                              _widget = EmptyCardClosed(i: i, index: index, zeitnahme: _zeitnahme);
+                              _widget = EmptyCardClosed(i: i, index: index, zeitnahme: _zeitnahme, openCard: action);
                               break;
                             }
 

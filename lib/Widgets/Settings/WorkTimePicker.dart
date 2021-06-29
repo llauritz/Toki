@@ -97,7 +97,7 @@ class _WorkTimePickerState extends State<WorkTimePicker> with TickerProviderStat
                         setState(() {});
                       },
                       shape: const StadiumBorder(),
-                      color: Theme.of(context).buttonColor,
+                      color: grayTranslucent,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0),
                         child: Row(
@@ -188,7 +188,7 @@ class _CollapsedWorkTimePickerState extends State<CollapsedWorkTimePicker> {
                           thumbWidth: 100.0,
                           thumbRadius: 0,
                           color: widget.color,
-                          textcolor: Colors.white,
+                          textcolor: Theme.of(context).colorScheme.onPrimary,
                           enabled: workingTime[0] != 0),
                       activeTickMarkColor: Colors.transparent,
                       inactiveTickMarkColor: Colors.transparent,
@@ -337,7 +337,7 @@ class _ExpandedWorkTImePickerState extends State<ExpandedWorkTImePicker> {
                                 thumbWidth: 100.0,
                                 thumbRadius: 0,
                                 color: widget.color,
-                                textcolor: Colors.white,
+                                textcolor: Theme.of(context).colorScheme.onPrimary,
                                 enabled: _selections[index]),
                             activeTickMarkColor: Colors.transparent,
                             inactiveTickMarkColor: Colors.transparent,

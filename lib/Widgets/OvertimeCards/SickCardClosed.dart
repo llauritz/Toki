@@ -106,7 +106,7 @@ class _SickCardClosedState extends State<SickCardClosed> {
                                 } else {
                                   getIt<HiveDB>().changeState("empty", widget.i);
                                 }
-                                if (widget.zeitnahme.tag == "Urlaub") {
+                                if (widget.zeitnahme.tag == "Krankheitstag") {
                                   getIt<HiveDB>().updateTag("Stundenabbau", widget.i);
                                 }
                               },

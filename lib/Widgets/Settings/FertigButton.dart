@@ -12,8 +12,7 @@ class FertigButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
               onPrimary: neonTranslucent.withAlpha(150),
               //elevation: 5,
-              padding:
-                  const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+              padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
               primary: neon,
               shape: const StadiumBorder(),
               shadowColor: Colors.black54)
@@ -38,9 +37,7 @@ class FertigButton extends StatelessWidget {
       onPressed: () {
         Navigator.pop(context);
       },
-      child: Text("Fertig",
-          style: openButtonText.copyWith(
-              color: Colors.white)),
+      child: Text("Fertig", style: openButtonText.copyWith(color: Theme.of(context).colorScheme.onPrimary)),
     );
   }
 }

@@ -49,63 +49,70 @@ class _SickCardOpenState extends State<SickCardOpen> {
           children: [
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Container(
-                decoration: BoxDecoration(color: Colors.red.withOpacity(0.2), borderRadius: BorderRadius.circular(20), boxShadow: [
-                  CustomBoxShadow(offset: const Offset(0, 0), color: Colors.red.withOpacity(0.2), blurRadius: 10, blurStyle: BlurStyle.outer)
-                ]),
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                            tooltip: "Speichern und schliessen",
-                            splashColor: freeAccent.withAlpha(80),
-                            highlightColor: freeAccent.withAlpha(50),
-                            padding: const EdgeInsets.all(0),
-                            visualDensity: const VisualDensity(),
-                            icon: const Icon(Icons.done_rounded, color: Colors.redAccent, size: 30),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            })
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 100.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+              child: PhysicalModel(
+                color: Theme.of(context).cardColor,
+                elevation: 5,
+                borderRadius: BorderRadius.circular(20),
+                shadowColor: sickAccent.withOpacity(0.15),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.red.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(
-                            tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
-                            style: openCardDate.copyWith(color: Colors.redAccent),
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          TagEditWidget(
-                            i: widget.i,
-                            zeitnahme: widget.zeitnahme,
-                            color: Colors.redAccent,
-                            colorAccent: freeAccent,
-                          )
+                          IconButton(
+                              tooltip: "Speichern und schliessen",
+                              splashColor: freeAccent.withAlpha(80),
+                              highlightColor: freeAccent.withAlpha(50),
+                              padding: const EdgeInsets.all(0),
+                              visualDensity: const VisualDensity(),
+                              icon: const Icon(Icons.done_rounded, color: Colors.redAccent, size: 30),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              })
                         ],
                       ),
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          "0:00",
-                          style: openCardsNumbers.copyWith(color: Colors.redAccent),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 100.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
+                              style: openCardDate.copyWith(color: Colors.redAccent),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            TagEditWidget(
+                              i: widget.i,
+                              zeitnahme: widget.zeitnahme,
+                              color: Colors.redAccent,
+                              colorAccent: freeAccent,
+                            )
+                          ],
                         ),
-                        const Text(
-                          "Überstunden",
-                          style: TextStyle(color: Colors.redAccent),
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            "0:00",
+                            style: openCardsNumbers.copyWith(color: Colors.redAccent),
+                          ),
+                          const Text(
+                            "Überstunden",
+                            style: TextStyle(color: Colors.redAccent),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
