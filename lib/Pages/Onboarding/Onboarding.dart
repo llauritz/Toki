@@ -1,3 +1,4 @@
+import 'package:Timo/Pages/home.dart';
 import 'package:Timo/Services/Data.dart';
 import 'package:Timo/Services/Theme.dart';
 import 'package:animations/animations.dart';
@@ -207,7 +208,9 @@ class _OnboardingState extends State<Onboarding> {
                     onPressed: () {
                       if (_index == 5) {
                         getIt<Data>().setFinishedOnboarding(true);
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
+                          return const HomePage();
+                        }));
                       }
                       setState(() {
                         _index++;

@@ -1,4 +1,5 @@
 import 'package:Timo/Services/CorrectionDB.dart';
+import 'package:Timo/Services/ThemeBuilder.dart';
 import 'package:Timo/hiveClasses/Correction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -97,56 +98,58 @@ void main() async {
       headline5: TextStyle(fontSize: 12.0, height: 1.1, color: Colors.black.withAlpha(150)),
       bodyText2: TextStyle(color: neon));
 
-  runApp(GetMaterialApp(
-    routes: {
-      "/": (context) => const HomePage(),
-      "/home": (context) => const HomePage(),
-      "/onboarding": (context) => const Onboarding(),
-    },
-    initialRoute: getIt<Data>().finishedOnboarding ? "/" : "/onboarding",
-    title: "Timo",
-    themeMode: ThemeMode.system,
-    darkTheme: ThemeData(
-      brightness: Brightness.dark,
-      colorScheme: ColorScheme.dark(onSurface: Colors.blueGrey[100]!, primary: neon, onSecondary: Colors.blueGrey[100]!),
-      primaryColorLight: Color(0xff25453D),
+  ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    colorScheme: ColorScheme.dark(onSurface: Colors.blueGrey[100]!, primary: neon, onSecondary: Colors.blueGrey[100]!),
+    primaryColorLight: Color(0xff25453D),
+    primarySwatch: Colors.teal,
+    cardColor: Color(0xff1C2124),
+    backgroundColor: Color(0xff141718),
+    scaffoldBackgroundColor: Color(0xff061212),
+    primaryColor: neon,
+    buttonColor: Colors.blueGrey[700],
+    accentColor: neonAccent,
+    shadowColor: Colors.black,
+    textTheme: textThemeDark,
+    timePickerTheme: TimePickerThemeData(
+        backgroundColor: Color(0xff1C2124),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        hourMinuteTextColor: neonAccent,
+        hourMinuteColor: neonTranslucent,
+        //dialTextColor: Colors.white,
+        dialHandColor: neon),
+    fontFamily: "BandeinsSans",
+  );
+
+  ThemeData lightTheme = ThemeData(
+      brightness: Brightness.light,
+      colorScheme: ColorScheme.light(onSurface: grayAccent, onSecondary: gray, primary: neon),
       primarySwatch: Colors.teal,
-      cardColor: Color(0xff1C2124),
-      backgroundColor: Color(0xff141718),
-      scaffoldBackgroundColor: Color(0xff061212),
+      backgroundColor: Colors.white,
+      //textButtonTheme: TextButtonThemeData(style: ButtonStyle(textStyle: MaterialStateProperty.resolveWith((states) => TextStyle(color: neon)))),
       primaryColor: neon,
-      buttonColor: Colors.blueGrey[700],
+      primaryColorLight: Color(0xffE4FFFB),
+      buttonColor: grayTranslucent,
       accentColor: neonAccent,
-      shadowColor: Colors.black,
-      textTheme: textThemeDark,
+      shadowColor: Colors.black38,
       timePickerTheme: TimePickerThemeData(
-          backgroundColor: Color(0xff1C2124),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           hourMinuteTextColor: neonAccent,
           hourMinuteColor: neonTranslucent,
-          //dialTextColor: Colors.white,
           dialHandColor: neon),
       fontFamily: "BandeinsSans",
-    ),
-    theme: ThemeData(
-        brightness: Brightness.light,
-        colorScheme: ColorScheme.light(onSurface: grayAccent, onSecondary: gray, primary: neon),
-        primarySwatch: Colors.teal,
-        backgroundColor: Colors.white,
-        //textButtonTheme: TextButtonThemeData(style: ButtonStyle(textStyle: MaterialStateProperty.resolveWith((states) => TextStyle(color: neon)))),
-        primaryColor: neon,
-        primaryColorLight: Color(0xffE4FFFB),
-        buttonColor: grayTranslucent,
-        accentColor: neonAccent,
-        shadowColor: Colors.black38,
-        timePickerTheme: TimePickerThemeData(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            hourMinuteTextColor: neonAccent,
-            hourMinuteColor: neonTranslucent,
-            dialHandColor: neon),
-        fontFamily: "BandeinsSans",
-        textTheme: textThemeLight),
-    localizationsDelegates: [GlobalMaterialLocalizations.delegate],
-    supportedLocales: [const Locale("de")],
-  ));
+      textTheme: textThemeLight);
+
+  runApp(ThemeBuilder(builder: (context, thememode) {
+    return MaterialApp(
+      title: "Timo",
+      themeMode: thememode,
+      darkTheme: darkTheme,
+      theme: lightTheme,
+      localizationsDelegates: [GlobalMaterialLocalizations.delegate],
+      supportedLocales: [const Locale("de")],
+      //
+      home: getIt<Data>().finishedOnboarding ? const HomePage() : const Onboarding(),
+    );
+  }));
 }

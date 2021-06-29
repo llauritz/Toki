@@ -1,4 +1,5 @@
 import 'package:Timo/Services/Theme.dart';
+import 'package:Timo/Services/ThemeBuilder.dart';
 import 'package:flutter/material.dart';
 
 class SettingsTitle extends StatelessWidget {
@@ -11,9 +12,14 @@ class SettingsTitle extends StatelessWidget {
     return Center(
         child: Padding(
       padding: const EdgeInsets.symmetric(vertical: 100.0),
-      child: Text(
-        "Einstellungen",
-        style: Theme.of(context).textTheme.headline2!.copyWith(color: Theme.of(context).colorScheme.onSurface),
+      child: Column(
+        children: [
+          Text(
+            "Einstellungen",
+            style: Theme.of(context).textTheme.headline2!.copyWith(color: Theme.of(context).colorScheme.onSurface),
+          ),
+          
+        ],
       ),
     ));
   }
