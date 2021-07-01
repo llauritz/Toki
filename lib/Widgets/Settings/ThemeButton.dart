@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:Timo/Services/Theme.dart';
 import 'package:Timo/Services/ThemeBuilder.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+
+import '../../Pages/SettingsPage.dart';
 
 class ThemeButton extends StatefulWidget {
   const ThemeButton({Key? key}) : super(key: key);
@@ -12,50 +16,95 @@ class ThemeButton extends StatefulWidget {
 
 class _ThemeButtonState extends State<ThemeButton> {
   Widget _infoText = Container();
+  Widget _themeIcon = Container();
   TextStyle style = TextStyle();
+  Timer _timer = Timer(Duration(milliseconds: 2000), () {});
 
-  void onPress() async {
+  void timer() async {
+    _infoText = Container();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    _timer = Timer(Duration(milliseconds: 2000), timer);
+
+    super.initState();
+  }
+
+  void onPress(BuildContext c) async {
     if (ThemeBuilder.of(context).themeMode == ThemeMode.system) {
       ThemeBuilder.of(context).changeTheme(ThemeMode.light);
-      _infoText = KeyedSubtree(
-          key: ValueKey("light"),
+      setState(() {});
+      _infoText = Container(
+        key: ValueKey("light"),
+        width: 150,
+        child: Align(
+          alignment: Alignment.centerRight,
           child: Text(
             "Helles Thema",
             style: style.copyWith(color: grayAccent),
-          ));
-      setState(() {});
-      await Future.delayed(Duration(milliseconds: 2000));
-      _infoText = Container();
-      setState(() {});
+          ),
+        ),
+      );
+      SettingsPage.of(context).setState(() {});
+      _timer.cancel();
+      _timer = Timer(Duration(milliseconds: 2000), timer);
     } else if (ThemeBuilder.of(context).themeMode == ThemeMode.light) {
       ThemeBuilder.of(context).changeTheme(ThemeMode.dark);
-      _infoText = KeyedSubtree(
-          key: ValueKey("dark"),
+      _infoText = Container(
+        key: ValueKey("dark"),
+        width: 150,
+        child: Align(
+          alignment: Alignment.centerRight,
           child: Text(
             "Dunkles Thema",
-            style: style.copyWith(color: gray),
-          ));
-      setState(() {});
-      await Future.delayed(Duration(milliseconds: 2000));
-      _infoText = Container();
-      setState(() {});
+            style: style.copyWith(color: Colors.blueGrey[100]!),
+          ),
+        ),
+      );
+      SettingsPage.of(context).setState(() {});
+      _timer.cancel();
+      _timer = Timer(Duration(milliseconds: 2000), timer);
     } else if (ThemeBuilder.of(context).themeMode == ThemeMode.dark) {
       ThemeBuilder.of(context).changeTheme(ThemeMode.system);
-      _infoText = KeyedSubtree(
-          key: ValueKey("auto"),
+
+      _infoText = Container(
+        key: ValueKey("auto"),
+        width: 150,
+        child: Align(
+          alignment: Alignment.centerRight,
           child: Text(
             "Automatisches Thema",
-            style: style.copyWith(color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : grayAccent),
-          ));
+            style: style.copyWith(color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.blueGrey[100]! : grayAccent),
+          ),
+        ),
+      );
       setState(() {});
-      await Future.delayed(Duration(milliseconds: 2000));
-      _infoText = Container();
-      setState(() {});
+      SettingsPage.of(context).setState(() {});
+      _timer.cancel();
+      _timer = Timer(Duration(milliseconds: 2000), timer);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (ThemeBuilder.of(context).themeMode == ThemeMode.system) {
+      _themeIcon = Icon(Icons.brightness_auto_rounded, key: ValueKey("_auto"), color: Theme.of(context).colorScheme.onSurface);
+    } else if (ThemeBuilder.of(context).themeMode == ThemeMode.light) {
+      _themeIcon = Icon(
+        Icons.light_mode_rounded,
+        key: ValueKey("light"),
+        color: Theme.of(context).colorScheme.onSurface,
+      );
+    } else if (ThemeBuilder.of(context).themeMode == ThemeMode.dark) {
+      _themeIcon = Icon(
+        Icons.dark_mode,
+        key: ValueKey("_dark"),
+        color: Theme.of(context).colorScheme.onSurface,
+      );
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,14 +130,24 @@ class _ThemeButtonState extends State<ThemeButton> {
           ),
         ),
         IconButton(
-          icon: Icon(
-            Icons.brightness_auto_rounded,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-          onPressed: () {
-            onPress();
-          },
-        ),
+            icon: PageTransitionSwitcher(
+              transitionBuilder: (
+                Widget child,
+                Animation<double> primaryAnimation,
+                Animation<double> secondaryAnimation,
+              ) {
+                return SharedAxisTransition(
+                  child: child,
+                  animation: primaryAnimation,
+                  secondaryAnimation: secondaryAnimation,
+                  transitionType: SharedAxisTransitionType.scaled,
+                  fillColor: Colors.transparent,
+                );
+              },
+              child: _themeIcon,
+              duration: const Duration(milliseconds: 600),
+            ),
+            onPressed: () => onPress(context)),
       ],
     );
   }

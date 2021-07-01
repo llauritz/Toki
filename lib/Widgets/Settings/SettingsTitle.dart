@@ -1,26 +1,36 @@
 import 'package:Timo/Services/Theme.dart';
 import 'package:Timo/Services/ThemeBuilder.dart';
+import 'package:Timo/Widgets/Settings/ThemeButton.dart';
 import 'package:flutter/material.dart';
 
-class SettingsTitle extends StatelessWidget {
+class  SettingsTitle extends StatelessWidget {
   const SettingsTitle({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 100.0),
-      child: Column(
-        children: [
-          Text(
-            "Einstellungen",
-            style: Theme.of(context).textTheme.headline2!.copyWith(color: Theme.of(context).colorScheme.onSurface),
+    return Stack(
+      children: [
+        Center(
+            child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 100.0),
+          child: Column(
+            children: [
+              Text(
+                "Einstellungen",
+                style: Theme.of(context).textTheme.headline2!.copyWith(color: Theme.of(context).colorScheme.onSurface),
+              ),
+            ],
           ),
-          
-        ],
-      ),
-    ));
+        )),
+        Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ThemeButton(),
+            ))
+      ],
+    );
   }
 }
