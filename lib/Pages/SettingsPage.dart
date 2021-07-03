@@ -1,14 +1,14 @@
+import 'dart:ui';
+
 import 'package:Timo/Services/Theme.dart';
 import 'package:Timo/Services/ThemeBuilder.dart';
 import 'package:Timo/Widgets/Settings/AutomaticStop.dart';
 import 'package:Timo/Widgets/Settings/PdfExport/ExportPage.dart';
-import 'package:Timo/Widgets/Settings/ThemeAnimation/animatedSprite.dart';
 import 'package:Timo/Widgets/Settings/ThemeAnimation/syncScrollController.dart';
 import 'package:Timo/Widgets/Settings/ThemeAnimation/widgetMask.dart';
 import 'package:Timo/Widgets/Settings/ThemeButton.dart';
 import 'package:Timo/Widgets/Settings/WorkTimePicker.dart';
-import 'package:auto_animated/auto_animated.dart';
-import 'package:intl/intl.dart';
+import 'package:screenshot/screenshot.dart';
 import '../Widgets/Settings/BreakCorrection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,6 @@ import '../Widgets/Settings/FadeIn.dart';
 import '../Widgets/Settings/FertigButton.dart';
 import '../Widgets/Settings/NamePicker.dart';
 import '../Widgets/Settings/SettingsTitle.dart';
-import '../Widgets/background.dart';
 
 final getIt = GetIt.instance;
 
@@ -36,25 +35,42 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderStateMixin {
-  bool isDay = true;
-  bool test = false;
-
   late AnimationController _controller;
   late Animation<double> _animation;
   late ScrollController _scrollController;
+  late ScrollController _buttonScrollController;
+
+  ScreenshotController _screenshotController = ScreenshotController();
 
   Widget? childForeground;
   Widget childBackground = Container();
 
-  BreakCorrection _breakCorrection = BreakCorrection();
-
   late AssetImage _image;
+
+  ThemeData newTheme = ThemeData();
+  ThemeData oldTheme = ThemeData();
+
+  bool switching = false;
+  bool init = true;
 
   @override
   void initState() {
+    super.initState();
     _scrollController = SyncScrollController();
+    _buttonScrollController = ScrollController();
     _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 800));
-    _animation = Tween<double>(begin: 0.0, end: 34.0).animate(_controller);
+    _animation = TweenSequence(
+      <TweenSequenceItem<double>>[
+        TweenSequenceItem<double>(
+          tween: Tween<double>(begin: 0.0, end: 0.08),
+          weight: 4,
+        ),
+        TweenSequenceItem<double>(
+          tween: Tween<double>(begin: 0.08, end: 1.0),
+          weight: 96,
+        ),
+      ],
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.ease));
     _controller.addListener(() {
       setState(() {});
     });
@@ -62,84 +78,155 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
       if (status == AnimationStatus.completed) {
         setState(() {
           oldTheme = newTheme;
-          childBackground = childForeground!;
           childForeground = null;
+          childBackground = Screenshot(
+              controller: _screenshotController, child: ThemedSettingsNoFade(theme: oldTheme, context: context, scrollController: _scrollController));
         });
         _controller.reset();
+        switching = false;
       }
     });
-    _image = AssetImage('assets/sprites/wipe_mask.png');
-    if (ThemeBuilder.of(context).themeMode == ThemeMode.light) {
-      oldTheme = lightTheme;
-    }
-    if (ThemeBuilder.of(context).themeMode == ThemeMode.dark) {
-      oldTheme = darkTheme;
-    }
-    if (ThemeBuilder.of(context).themeMode == ThemeMode.system) {
-      MediaQuery.of(context).platformBrightness == Brightness.light ? oldTheme = lightTheme : oldTheme = darkTheme;
-    }
-    super.initState();
   }
 
-  ThemeData newTheme = ThemeData();
-  ThemeData oldTheme = ThemeData();
-
-  void update() {
-    print("update");
-
+  ThemeData getThemeMode() {
     if (ThemeBuilder.of(context).themeMode == ThemeMode.light) {
-      newTheme = lightTheme;
+      return lightTheme;
     }
     if (ThemeBuilder.of(context).themeMode == ThemeMode.dark) {
-      newTheme = darkTheme;
+      return darkTheme;
+    } else {
+      return MediaQuery.of(context).platformBrightness == Brightness.light ? newTheme = lightTheme : newTheme = darkTheme;
     }
-    if (ThemeBuilder.of(context).themeMode == ThemeMode.system) {
-      MediaQuery.of(context).platformBrightness == Brightness.light ? newTheme = lightTheme : newTheme = darkTheme;
-    }
+  }
 
-    if (oldTheme != newTheme) {
-      setState(() {
-        childForeground = Theme(
-          data: newTheme,
-          child: Scaffold(
-            //backgroundColor: Colors.white,
-            resizeToAvoidBottomInset: false,
-            body: ListView(
-                padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-                physics: BouncingScrollPhysics(),
-                controller: _scrollController,
-                children: [
-                  const SettingsTitle(),
-                  ExportPage(),
-                  NamePicker(),
-                  WorkTimePicker(
-                    color: neon,
-                    onboarding: false,
-                  ),
-                  _breakCorrection,
-                  AutomaticStop(),
-                  SizedBox(
-                    height: 80,
-                  ),
-                ]),
-            floatingActionButton: FertigButton(),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-          ),
+  void update() async {
+    print("update");
+
+    newTheme = getThemeMode();
+
+    // print(oldTheme.brightness);
+    // print(newTheme.brightness);
+
+    if (oldTheme.brightness != newTheme.brightness) {
+      switching = true;
+      await _screenshotController.capture().then((capturedImage) async {
+        print("here");
+        ImageProvider mImage = MemoryImage(capturedImage!);
+        await precacheImage(mImage, context);
+        childBackground = Image(
+          image: mImage,
+          gaplessPlayback: true,
         );
-        ;
+        childForeground = ThemedSettingsNoFade(theme: newTheme, context: context, scrollController: _scrollController);
+        setState(() {
+          print("2");
+        });
+        _controller.forward();
+      }).catchError((error) {
+        print("$error");
       });
-      _controller.forward();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (init) {
+      oldTheme = getThemeMode();
+      childBackground = Screenshot(
+          controller: _screenshotController, child: ThemedSettings(theme: oldTheme, context: context, scrollController: _scrollController));
+      init = false;
+    }
+
     final appSize = MediaQuery.of(context).size;
     final width = appSize.width;
     final height = appSize.height;
 
-    Widget childBackground = Theme(
-      data: oldTheme,
+    // print(childBackground.toStringDeep());
+    // print(childForeground?.toStringDeep());
+
+    List<Widget> children = <Widget>[
+      Container(
+        width: width,
+        height: height,
+        child: childBackground,
+      ),
+    ];
+
+    if (!switching) update();
+
+    if (childForeground != null) {
+      children.add(
+        // Draw the foreground masked over the background
+        WidgetMask(
+          maskChild: Positioned(
+            top: MediaQuery.of(context).padding.top + 33 - ((height + width) * 0.8) * _animation.value,
+            right: 33 - ((height + width) * 0.8) * _animation.value,
+            child: Container(
+              width: ((height + width) * 0.8) * _animation.value * 2,
+              height: ((height + width) * 0.8) * _animation.value * 2,
+              decoration:
+                  BoxDecoration(shape: BoxShape.circle, color: Colors.transparent, boxShadow: [BoxShadow(color: Colors.black, blurRadius: 100)]),
+            ),
+          ),
+          child: Container(
+            width: width,
+            height: height,
+            child: childForeground,
+          ),
+        ),
+      );
+    }
+
+    children.add(Column(
+      children: [
+        IgnorePointer(
+          child: SizedBox(
+            height: MediaQuery.of(context).padding.top,
+          ),
+        ),
+        Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ThemeButton(),
+            )),
+      ],
+    ));
+
+    // print("----------------" + children.first.toString());
+    // print("----------------" + children.last.toString());
+
+    // print("----------------" + children.length.toString());
+
+    return Stack(
+      children: children,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+}
+
+class ThemedSettings extends StatelessWidget {
+  const ThemedSettings({
+    Key? key,
+    required this.theme,
+    required this.context,
+    required ScrollController scrollController,
+  })  : _scrollController = scrollController,
+        super(key: key);
+
+  final ThemeData theme;
+  final BuildContext context;
+  final ScrollController _scrollController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      data: theme,
       child: Scaffold(
         //backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
@@ -158,7 +245,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                     color: neon,
                     onboarding: false,
                   )),
-              FadeIn(delay: 350, fadeChild: _breakCorrection),
+              FadeIn(delay: 350, fadeChild: BreakCorrection()),
               FadeIn(delay: 400, fadeChild: AutomaticStop()),
 
               SizedBox(
@@ -169,54 +256,51 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );
-
-    List<Widget> children = <Widget>[
-      Container(
-        //width: width,
-        //height: height,
-        child: childBackground,
-      ),
-    ];
-
-    update();
-
-    if (childForeground != null) {
-      children.add(
-        // Draw the foreground masked over the background
-        WidgetMask(
-          maskChild: Container(
-            width: width,
-            height: height,
-            // Draw the transition animation as the mask
-            child: AnimatedSprite(
-              image: _image,
-              frameWidth: 360,
-              frameHeight: 720,
-              animation: _animation,
-            ),
-          ),
-          child: Container(
-            width: width,
-            height: height,
-            child: childForeground,
-          ),
-        ),
-      );
-    }
-
-    print("----------------" + children.first.toString());
-    print("----------------" + children.last.toString());
-
-    print("----------------" + children.length.toString());
-
-    return Stack(
-      children: children,
-    );
   }
+}
 
+class ThemedSettingsNoFade extends StatelessWidget {
+  const ThemedSettingsNoFade({
+    Key? key,
+    required this.theme,
+    required this.context,
+    required ScrollController scrollController,
+  })  : _scrollController = scrollController,
+        super(key: key);
+
+  final ThemeData theme;
+  final BuildContext context;
+  final ScrollController _scrollController;
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return Theme(
+      data: theme,
+      child: Scaffold(
+        //backgroundColor: Colors.white,
+        resizeToAvoidBottomInset: false,
+        body: ListView(
+            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+            controller: _scrollController,
+            physics: BouncingScrollPhysics(),
+            children: [
+              const SettingsTitle(),
+              ExportPage(),
+              //AutoFadeIn(child: NamePicker()),
+              NamePicker(),
+              WorkTimePicker(
+                color: neon,
+                onboarding: false,
+              ),
+              BreakCorrection(),
+              AutomaticStop(),
+
+              SizedBox(
+                height: 80,
+              ),
+            ]),
+        floatingActionButton: FertigButton(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      ),
+    );
   }
 }

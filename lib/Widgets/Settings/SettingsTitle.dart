@@ -24,12 +24,7 @@ class  SettingsTitle extends StatelessWidget {
             ],
           ),
         )),
-        Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ThemeButton(),
-            ))
+        
       ],
     );
   }

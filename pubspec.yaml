@@ -46,6 +46,7 @@ dependencies:
   pdf: ^3.4.2
   path_provider: ^2.0.2
   native_pdf_view: ^4.1.0
+  screenshot: ^1.2.1
 
 dev_dependencies:
   flutter_test:

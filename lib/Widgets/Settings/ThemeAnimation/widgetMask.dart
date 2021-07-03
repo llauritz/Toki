@@ -20,13 +20,11 @@ class RenderWidgetMask extends RenderStack {
     // Early exit on no children
     if (firstChild == null) return;
 
-    logger.d("1");
 
     final paintContent = (PaintingContext context, Offset offset) {
       // Paint all but the first child
       RenderBox? child = (firstChild!.parentData as StackParentData).nextSibling;
       while (child != null) {
-        logger.d("2");
         final childParentData = child.parentData as StackParentData;
         context.paintChild(lastChild!, offset + childParentData.offset);
         child = childParentData.nextSibling;
