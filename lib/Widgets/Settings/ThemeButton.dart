@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:Timo/Services/Theme.dart';
 import 'package:Timo/Services/ThemeBuilder.dart';
+import 'package:Timo/Widgets/Settings/FadeIn.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +34,7 @@ class _ThemeButtonState extends State<ThemeButton> {
   }
 
   void onPress(BuildContext c) async {
-    if (ThemeBuilder.of(context).themeMode == ThemeMode.system) {
+    if (ThemeBuilder.of(context).themeMode == ThemeMode.dark) {
       ThemeBuilder.of(context).changeTheme(ThemeMode.light);
       setState(() {});
       _infoText = Container(
@@ -43,14 +44,14 @@ class _ThemeButtonState extends State<ThemeButton> {
           alignment: Alignment.centerRight,
           child: Text(
             "Helles Thema",
-            style: style.copyWith(color: grayAccent),
+            style: style.copyWith(color: Theme.of(context).colorScheme.onSurface),
           ),
         ),
       );
       SettingsPage.of(context).setState(() {});
       _timer.cancel();
       _timer = Timer(Duration(milliseconds: 2000), timer);
-    } else if (ThemeBuilder.of(context).themeMode == ThemeMode.light) {
+    } else if (ThemeBuilder.of(context).themeMode == ThemeMode.system) {
       ThemeBuilder.of(context).changeTheme(ThemeMode.dark);
       _infoText = Container(
         key: ValueKey("dark"),
@@ -59,14 +60,14 @@ class _ThemeButtonState extends State<ThemeButton> {
           alignment: Alignment.centerRight,
           child: Text(
             "Dunkles Thema",
-            style: style.copyWith(color: Colors.blueGrey[100]!),
+            style: style.copyWith(color: Theme.of(context).colorScheme.onSurface),
           ),
         ),
       );
       SettingsPage.of(context).setState(() {});
       _timer.cancel();
       _timer = Timer(Duration(milliseconds: 2000), timer);
-    } else if (ThemeBuilder.of(context).themeMode == ThemeMode.dark) {
+    } else if (ThemeBuilder.of(context).themeMode == ThemeMode.light) {
       ThemeBuilder.of(context).changeTheme(ThemeMode.system);
 
       _infoText = Container(
@@ -76,12 +77,12 @@ class _ThemeButtonState extends State<ThemeButton> {
           alignment: Alignment.centerRight,
           child: Text(
             "Automatisches Thema",
-            style: style.copyWith(color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.blueGrey[100]! : grayAccent),
+            style: style.copyWith(color: Theme.of(context).colorScheme.onSurface),
           ),
         ),
       );
-      setState(() {});
       SettingsPage.of(context).setState(() {});
+      setState(() {});
       _timer.cancel();
       _timer = Timer(Duration(milliseconds: 2000), timer);
     }
@@ -105,32 +106,15 @@ class _ThemeButtonState extends State<ThemeButton> {
       );
     }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          height: 45,
-          child: PageTransitionSwitcher(
-            transitionBuilder: (
-              Widget child,
-              Animation<double> primaryAnimation,
-              Animation<double> secondaryAnimation,
-            ) {
-              return SharedAxisTransition(
-                child: child,
-                animation: primaryAnimation,
-                secondaryAnimation: secondaryAnimation,
-                transitionType: SharedAxisTransitionType.horizontal,
-                fillColor: Colors.transparent,
-              );
-            },
-            child: _infoText,
-            duration: const Duration(milliseconds: 600),
-          ),
-        ),
-        IconButton(
-            icon: PageTransitionSwitcher(
+    return FadeIn(
+      delay: 100,
+      fadeChild: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 45,
+            child: PageTransitionSwitcher(
               transitionBuilder: (
                 Widget child,
                 Animation<double> primaryAnimation,
@@ -140,15 +124,35 @@ class _ThemeButtonState extends State<ThemeButton> {
                   child: child,
                   animation: primaryAnimation,
                   secondaryAnimation: secondaryAnimation,
-                  transitionType: SharedAxisTransitionType.scaled,
+                  transitionType: SharedAxisTransitionType.horizontal,
                   fillColor: Colors.transparent,
                 );
               },
-              child: _themeIcon,
+              child: _infoText,
               duration: const Duration(milliseconds: 600),
             ),
-            onPressed: () => onPress(context)),
-      ],
+          ),
+          IconButton(
+              icon: PageTransitionSwitcher(
+                transitionBuilder: (
+                  Widget child,
+                  Animation<double> primaryAnimation,
+                  Animation<double> secondaryAnimation,
+                ) {
+                  return SharedAxisTransition(
+                    child: child,
+                    animation: primaryAnimation,
+                    secondaryAnimation: secondaryAnimation,
+                    transitionType: SharedAxisTransitionType.scaled,
+                    fillColor: Colors.transparent,
+                  );
+                },
+                child: _themeIcon,
+                duration: const Duration(milliseconds: 600),
+              ),
+              onPressed: () => onPress(context)),
+        ],
+      ),
     );
   }
 }

@@ -49,39 +49,39 @@ class _OnboardingState extends State<Onboarding> {
     precacheImage(const AssetImage("assets/background/clouds/clouds6.jpg"), context);
   }
 
-  Widget _button1 = Row(
-    key: ValueKey<int>(1),
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Text("Los geht's", style: TextStyle(fontSize: 16.0, color: Colors.white, fontWeight: FontWeight.bold)),
-      SizedBox(width: 3),
-      Icon(
-        Icons.arrow_forward_rounded,
-        color: Colors.white,
-      ),
-    ],
-  );
-
-  Widget _button2 = Icon(
-    Icons.arrow_forward_rounded,
-    color: Colors.white,
-  );
-
-  Widget _button3 = Row(
-    key: ValueKey<int>(3),
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Text("Fertig", style: TextStyle(fontSize: 16.0, color: Colors.white, fontWeight: FontWeight.bold)),
-      SizedBox(width: 3),
-      Icon(
-        Icons.arrow_forward_rounded,
-        color: Colors.white,
-      ),
-    ],
-  );
-
   @override
   Widget build(BuildContext context) {
+    Widget _button1 = Row(
+      key: ValueKey<int>(1),
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("Los geht's", style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.bold)),
+        SizedBox(width: 3),
+        Icon(
+          Icons.arrow_forward_rounded,
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
+      ],
+    );
+
+    Widget _button2 = Icon(
+      Icons.arrow_forward_rounded,
+      color: Theme.of(context).colorScheme.onPrimary,
+    );
+
+    Widget _button3 = Row(
+      key: ValueKey<int>(3),
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("Fertig", style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.bold)),
+        SizedBox(width: 3),
+        Icon(
+          Icons.arrow_forward_rounded,
+          color: Colors.white,
+        ),
+      ],
+    );
+
     if (_reverse) {
       WidgetsBinding.instance!.addPostFrameCallback((_) {
         _reverse = false;

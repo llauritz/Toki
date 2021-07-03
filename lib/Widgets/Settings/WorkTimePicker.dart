@@ -189,6 +189,7 @@ class _CollapsedWorkTimePickerState extends State<CollapsedWorkTimePicker> {
                           thumbRadius: 0,
                           color: widget.color,
                           textcolor: Theme.of(context).colorScheme.onPrimary,
+                          thumbBackground: Theme.of(context).cardColor,
                           enabled: workingTime[0] != 0),
                       activeTickMarkColor: Colors.transparent,
                       inactiveTickMarkColor: Colors.transparent,
@@ -288,131 +289,127 @@ class _ExpandedWorkTImePickerState extends State<ExpandedWorkTImePicker> {
               physics: BouncingScrollPhysics(),
               shrinkWrap: true,
               itemCount: 7,
+              padding: EdgeInsets.zero,
               itemBuilder: (context, index) {
                 TextStyle style = TextStyle(
                     fontWeight: FontWeight.bold, fontSize: 19.0, height: 1, color: _selections[index] ? widget.color : widget.color.withAlpha(50));
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 0.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      InkWell(
-                          splashColor: Colors.transparent,
-                          splashFactory: InkRipple.splashFactory,
-                          onTap: () {
-                            setState(() {
-                              _selections[index] = !_selections[index];
-                            });
-                            getIt<Data>().updateWochentage(_selections);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SizedBox(
-                              height: 30,
-                              width: 40,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: AnimatedDefaultTextStyle(
-                                  duration: Duration(milliseconds: 200),
-                                  style: style,
-                                  child: Text(
-                                    days[index],
-                                  ),
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    InkWell(
+                        splashColor: Colors.transparent,
+                        splashFactory: InkRipple.splashFactory,
+                        onTap: () {
+                          setState(() {
+                            _selections[index] = !_selections[index];
+                          });
+                          getIt<Data>().updateWochentage(_selections);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            height: 30,
+                            width: 40,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: AnimatedDefaultTextStyle(
+                                duration: Duration(milliseconds: 200),
+                                style: style,
+                                child: Text(
+                                  days[index],
                                 ),
                               ),
                             ),
-                          )),
-                      Expanded(
-                        child: SliderTheme(
-                          data: SliderTheme.of(context).copyWith(
-                            overlayShape: SliderComponentShape.noOverlay,
-                            trackShape: WorktimeSliderTrackShape(),
-                            trackHeight: 7,
-                            thumbShape: WorkTimeSliderThumbRect(
-                                min: 0,
-                                max: workingTime[index] < (12.0 * Duration.millisecondsPerHour)
-                                    ? 12
-                                    : workingTime[index] / Duration.millisecondsPerHour,
-                                thumbHeight: 35.0,
-                                thumbWidth: 100.0,
-                                thumbRadius: 0,
-                                color: widget.color,
-                                textcolor: Theme.of(context).colorScheme.onPrimary,
-                                enabled: _selections[index]),
-                            activeTickMarkColor: Colors.transparent,
-                            inactiveTickMarkColor: Colors.transparent,
-                            inactiveTrackColor: widget.color.withAlpha(50),
-                            activeTrackColor: widget.color.withAlpha(200),
                           ),
-                          child: Slider(
-                            value: _selections[index] ? workingTime[index] * 1.0 : 0,
-                            onChangeStart: (_) {
-                              divisions[index] = true;
-                            },
-                            onChanged: (newTagesstunden) {
-                              _selections[index] = true;
-                              getIt<Data>().updateWochentage(_selections);
-                              if (newTagesstunden == 0) {
-                                _selections[index] = false;
-                                getIt<Data>().updateWochentage(_selections);
-                              }
-                              setState(() {
-                                workingTime[index] = newTagesstunden.toInt();
-                              });
-                            },
-                            onChangeEnd: (newTagesstunden) {
-                              setState(() {
-                                if (newTagesstunden / Duration.millisecondsPerHour % 0.5 != 0) {
-                                  newTagesstunden = ((newTagesstunden / Duration.millisecondsPerHour * 2).round() / 2) * Duration.millisecondsPerHour;
-                                }
-                                workingTime[index] = newTagesstunden.toInt();
-                                if (newTagesstunden == 0) {
-                                  workingTime[index] = cachedWorkingTime[index];
-                                  _selections[index] = false;
-                                  getIt<Data>().updateWochentage(_selections);
-                                } else {
-                                  cachedWorkingTime[index] = newTagesstunden.toInt();
-                                  getIt<Data>().updateWorkingTime(workingTime);
-                                }
-                              });
-                            },
-                            min: 0,
-                            max: workingTime[index] < (12.0 * Duration.millisecondsPerHour)
-                                ? 12.0 * Duration.millisecondsPerHour
-                                : workingTime[index] * 1.0,
-                            divisions: divisions[index] ? 24 : null,
-                            //label: "$tagesstunden Stunden",
-                          ),
+                        )),
+                    Expanded(
+                      child: SliderTheme(
+                        data: SliderTheme.of(context).copyWith(
+                          overlayShape: SliderComponentShape.noOverlay,
+                          trackShape: WorktimeSliderTrackShape(),
+                          trackHeight: 7,
+                          thumbShape: WorkTimeSliderThumbRect(
+                              min: 0,
+                              max:
+                                  workingTime[index] < (12.0 * Duration.millisecondsPerHour) ? 12 : workingTime[index] / Duration.millisecondsPerHour,
+                              thumbHeight: 35.0,
+                              thumbWidth: 100.0,
+                              thumbRadius: 0,
+                              color: widget.color,
+                              textcolor: Theme.of(context).colorScheme.onPrimary,
+                              thumbBackground: Theme.of(context).cardColor,
+                              enabled: _selections[index]),
+                          activeTickMarkColor: Colors.transparent,
+                          inactiveTickMarkColor: Colors.transparent,
+                          inactiveTrackColor: widget.color.withAlpha(50),
+                          activeTrackColor: widget.color.withAlpha(200),
                         ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.keyboard_alt_rounded),
-                        color: widget.color,
-                        onPressed: () async {
-                          int hours = workingTime[index] ~/ Duration.millisecondsPerHour;
-                          int minutes = (workingTime[index] - hours * Duration.millisecondsPerHour) ~/ Duration.millisecondsPerMinute;
-                          TimeOfDay? newTime = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay(hour: hours, minute: minutes),
-                              helpText: "Arbeitszeit auswählen".toUpperCase());
-
-                          if (newTime != null) {
-                            if (newTime.hour + newTime.minute != 0) {
-                              _selections[index] = true;
-                              getIt<Data>().updateWochentage(_selections);
-                            } else {
+                        child: Slider(
+                          value: _selections[index] ? workingTime[index] * 1.0 : 0,
+                          onChangeStart: (_) {
+                            divisions[index] = true;
+                          },
+                          onChanged: (newTagesstunden) {
+                            _selections[index] = true;
+                            getIt<Data>().updateWochentage(_selections);
+                            if (newTagesstunden == 0) {
                               _selections[index] = false;
                               getIt<Data>().updateWochentage(_selections);
                             }
-                            workingTime[index] = newTime.hour * Duration.millisecondsPerHour + newTime.minute * Duration.millisecondsPerMinute;
-                            getIt<Data>().updateWorkingTime(workingTime);
-                            divisions[index] = workingTime[index] / Duration.millisecondsPerHour % 0.5 == 0;
-                            setState(() {});
+                            setState(() {
+                              workingTime[index] = newTagesstunden.toInt();
+                            });
+                          },
+                          onChangeEnd: (newTagesstunden) {
+                            setState(() {
+                              if (newTagesstunden / Duration.millisecondsPerHour % 0.5 != 0) {
+                                newTagesstunden = ((newTagesstunden / Duration.millisecondsPerHour * 2).round() / 2) * Duration.millisecondsPerHour;
+                              }
+                              workingTime[index] = newTagesstunden.toInt();
+                              if (newTagesstunden == 0) {
+                                workingTime[index] = cachedWorkingTime[index];
+                                _selections[index] = false;
+                                getIt<Data>().updateWochentage(_selections);
+                              } else {
+                                cachedWorkingTime[index] = newTagesstunden.toInt();
+                                getIt<Data>().updateWorkingTime(workingTime);
+                              }
+                            });
+                          },
+                          min: 0,
+                          max: workingTime[index] < (12.0 * Duration.millisecondsPerHour)
+                              ? 12.0 * Duration.millisecondsPerHour
+                              : workingTime[index] * 1.0,
+                          divisions: divisions[index] ? 24 : null,
+                          //label: "$tagesstunden Stunden",
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.keyboard_alt_rounded),
+                      color: widget.color,
+                      onPressed: () async {
+                        int hours = workingTime[index] ~/ Duration.millisecondsPerHour;
+                        int minutes = (workingTime[index] - hours * Duration.millisecondsPerHour) ~/ Duration.millisecondsPerMinute;
+                        TimeOfDay? newTime = await showTimePicker(
+                            context: context, initialTime: TimeOfDay(hour: hours, minute: minutes), helpText: "Arbeitszeit auswählen".toUpperCase());
+
+                        if (newTime != null) {
+                          if (newTime.hour + newTime.minute != 0) {
+                            _selections[index] = true;
+                            getIt<Data>().updateWochentage(_selections);
+                          } else {
+                            _selections[index] = false;
+                            getIt<Data>().updateWochentage(_selections);
                           }
-                        },
-                      )
-                    ],
-                  ),
+                          workingTime[index] = newTime.hour * Duration.millisecondsPerHour + newTime.minute * Duration.millisecondsPerMinute;
+                          getIt<Data>().updateWorkingTime(workingTime);
+                          divisions[index] = workingTime[index] / Duration.millisecondsPerHour % 0.5 == 0;
+                          setState(() {});
+                        }
+                      },
+                    )
+                  ],
                 );
               }),
         ],
@@ -428,19 +425,20 @@ class WorkTimeSliderThumbRect extends SliderComponentShape {
   final double min;
   final double max;
   final Color color;
+  final Color thumbBackground;
   final Color textcolor;
   final bool enabled;
 
-  const WorkTimeSliderThumbRect({
-    required this.thumbRadius,
-    required this.thumbHeight,
-    required this.min,
-    required this.max,
-    required this.thumbWidth,
-    required this.color,
-    required this.textcolor,
-    required this.enabled,
-  });
+  const WorkTimeSliderThumbRect(
+      {required this.thumbRadius,
+      required this.thumbHeight,
+      required this.min,
+      required this.max,
+      required this.thumbWidth,
+      required this.color,
+      required this.textcolor,
+      required this.enabled,
+      required this.thumbBackground});
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
@@ -514,14 +512,14 @@ class WorkTimeSliderThumbRect extends SliderComponentShape {
       ..color = color.withAlpha(evaluatedColorAlpha) //Thumb Background Color
       ..style = PaintingStyle.fill;
     final whitePaint = Paint()
-      ..color = Colors.white
+      ..color = thumbBackground
       ..style = PaintingStyle.fill;
     final botPaint = Paint()
       ..color = color.withAlpha(evaluatedOpacity.toInt())
       ..style = PaintingStyle.fill;
 
     final handlePaint = Paint()
-      ..color = Colors.white.withAlpha((evaluatedOpacity * 0.3).toInt())
+      ..color = thumbBackground.withAlpha((evaluatedOpacity * 0.3).toInt())
       ..style = PaintingStyle.fill;
 
     TextSpan span = new TextSpan(

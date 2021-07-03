@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:Timo/Pages/Onboarding/Onboarding.dart';
 import 'package:Timo/Services/CorrectionDB.dart';
 import 'package:Timo/Services/Data.dart';
 import 'package:Timo/Services/Theme.dart';
@@ -182,13 +183,15 @@ class HomeContent extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                // IconButton(
-                //   onPressed: () {
-                //     Navigator.of(context).pushNamed("/onboarding");
-                //   },
-                //   icon: Icon(Icons.bug_report),
-                //   color: Colors.red,
-                // ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
+                      return const Onboarding();
+                    }));
+                  },
+                  icon: Icon(Icons.bug_report),
+                  color: Colors.red,
+                ),
                 // IconButton(
                 //   onPressed: () {
                 //     getIt<CorrectionDB>().resetBox();

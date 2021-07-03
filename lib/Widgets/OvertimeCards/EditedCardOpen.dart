@@ -137,6 +137,7 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                                             thumbWidth: 100.0,
                                             thumbRadius: 0,
                                             color: editColor,
+                                            thumbBackground: editColor,
                                             textcolor: Theme.of(context).colorScheme.onPrimary,
                                             enabled: true),
                                         activeTickMarkColor: Colors.transparent,

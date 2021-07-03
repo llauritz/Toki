@@ -18,15 +18,12 @@ class Onboarding1 extends StatelessWidget {
                 children: <Widget>[
                   /*SvgPicture.asset("assets/timo/timo_happy_1_white.svg"),*/
                   SizedBox(height: 70),
-                  Text("Willkommen",
-                      style:onboardingTitle.copyWith(color: Colors.white)),
+                  Text("Willkommen", style: onboardingTitle.copyWith(color: Theme.of(context).colorScheme.onPrimary)),
                   SizedBox(
                     height: 15,
                   ),
-                  Text(
-                      """Timo hilft dir dabei, den Überblick über deine Überstunden zu behalten.""",
-                      textAlign: TextAlign.center,
-                      style: onboardingBody.copyWith(color: Colors.white)),
+                  Text("""Timo hilft dir dabei, den Überblick über deine Überstunden zu behalten.""",
+                      textAlign: TextAlign.center, style: onboardingBody.copyWith(color: Theme.of(context).colorScheme.onPrimary)),
                   SizedBox(
                     height: 20,
                   )
@@ -38,7 +35,6 @@ class Onboarding1 extends StatelessWidget {
                 left: 20,
                 child: SvgPicture.asset("assets/timo/timo_happy_1.svg")),*/
           ],
-          overflow: Overflow.visible,
         ),
       ],
     );

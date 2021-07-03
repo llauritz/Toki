@@ -5,8 +5,8 @@ import 'package:Timo/Services/timer.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../main.dart';
 import 'HiveDB.dart';
+import 'Theme.dart';
 
 class Data {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -18,7 +18,7 @@ class Data {
 
   bool pausenKorrektur = true;
 
-  TimerText timerText = TimerText();
+  final TimerText timerText = TimerText();
   bool finishedOnboarding = false;
 
   bool automatischAusstempeln = true;
@@ -38,6 +38,8 @@ class Data {
   ];
 
   int updatedID = 0;
+
+  String theme = "system";
 
   Future<void> initSharedPreferences() async {
     final SharedPreferences prefs = await _prefs;
@@ -99,6 +101,8 @@ class Data {
 
     prefs.containsKey("pausenKorrektur") ? pausenKorrektur = prefs.getBool("pausenKorrektur")! : updatePausenKorrektur(pausenKorrektur);
 
+    prefs.containsKey("theme") ? theme = prefs.getString("theme")! : prefs.setString("theme", theme);
+
     if (!prefs.containsKey("OvertimeOffset")) setOffset(0);
 
     if (!prefs.containsKey("correctionDB")) {
@@ -107,6 +111,28 @@ class Data {
     }
 
     prefs.containsKey("updatedID") ? updatedID = await getUpdatedID() : setUpdatedID(updatedID);
+  }
+
+  Future<void> setTheme(ThemeMode tm) async {
+    final SharedPreferences prefs = await _prefs;
+    if (tm == ThemeMode.light)
+      theme = "light";
+    else if (tm == ThemeMode.dark)
+      theme = "dark";
+    else if (tm == ThemeMode.system)
+      theme = "system";
+    else
+      logger.wtf("invalid Theme Mode");
+    prefs.setString("theme", theme);
+  }
+
+  ThemeMode getThemeMode() {
+    if (theme == "light")
+      return ThemeMode.light;
+    else if (theme == "dark")
+      return ThemeMode.dark;
+    else
+      return ThemeMode.system;
   }
 
   void setUserName(String newName) async {

@@ -37,8 +37,6 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
-  late ScrollController _scrollController;
-  late ScrollController _buttonScrollController;
 
   ScreenshotController _screenshotController = ScreenshotController();
 
@@ -56,18 +54,16 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    _scrollController = SyncScrollController();
-    _buttonScrollController = ScrollController();
     _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 800));
     _animation = TweenSequence(
       <TweenSequenceItem<double>>[
         TweenSequenceItem<double>(
           tween: Tween<double>(begin: 0.0, end: 0.08),
-          weight: 4,
+          weight: 5,
         ),
         TweenSequenceItem<double>(
           tween: Tween<double>(begin: 0.08, end: 1.0),
-          weight: 96,
+          weight: 95,
         ),
       ],
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.ease));
@@ -79,8 +75,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
         setState(() {
           oldTheme = newTheme;
           childForeground = null;
-          childBackground = Screenshot(
-              controller: _screenshotController, child: ThemedSettingsNoFade(theme: oldTheme, context: context, scrollController: _scrollController));
+          childBackground = Screenshot(controller: _screenshotController, child: ThemedSettingsNoFade(theme: oldTheme, context: context));
         });
         _controller.reset();
         switching = false;
@@ -88,7 +83,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
     });
   }
 
-  ThemeData getThemeMode() {
+  ThemeData getTheme() {
     if (ThemeBuilder.of(context).themeMode == ThemeMode.light) {
       return lightTheme;
     }
@@ -102,7 +97,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
   void update() async {
     print("update");
 
-    newTheme = getThemeMode();
+    newTheme = getTheme();
 
     // print(oldTheme.brightness);
     // print(newTheme.brightness);
@@ -117,10 +112,10 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
           image: mImage,
           gaplessPlayback: true,
         );
-        childForeground = ThemedSettingsNoFade(theme: newTheme, context: context, scrollController: _scrollController);
-        setState(() {
-          print("2");
-        });
+        childForeground = ThemedSettingsNoFade(theme: newTheme, context: context);
+        // setState(() {
+        //   print("2");
+        // });
         _controller.forward();
       }).catchError((error) {
         print("$error");
@@ -131,9 +126,8 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     if (init) {
-      oldTheme = getThemeMode();
-      childBackground = Screenshot(
-          controller: _screenshotController, child: ThemedSettings(theme: oldTheme, context: context, scrollController: _scrollController));
+      oldTheme = getTheme();
+      childBackground = Screenshot(controller: _screenshotController, child: ThemedSettings(theme: oldTheme, context: context));
       init = false;
     }
 
@@ -144,6 +138,8 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
     // print(childBackground.toStringDeep());
     // print(childForeground?.toStringDeep());
 
+    if (!switching) update();
+
     List<Widget> children = <Widget>[
       Container(
         width: width,
@@ -151,8 +147,6 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
         child: childBackground,
       ),
     ];
-
-    if (!switching) update();
 
     if (childForeground != null) {
       children.add(
@@ -188,7 +182,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
             alignment: Alignment.topRight,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ThemeButton(),
+              child: const ThemeButton(),
             )),
       ],
     ));
@@ -215,13 +209,10 @@ class ThemedSettings extends StatelessWidget {
     Key? key,
     required this.theme,
     required this.context,
-    required ScrollController scrollController,
-  })  : _scrollController = scrollController,
-        super(key: key);
+  }) : super(key: key);
 
   final ThemeData theme;
   final BuildContext context;
-  final ScrollController _scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -230,28 +221,24 @@ class ThemedSettings extends StatelessWidget {
       child: Scaffold(
         //backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
-        body: ListView(
-            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-            controller: _scrollController,
-            physics: BouncingScrollPhysics(),
-            children: [
-              FadeIn(delay: 200, fadeChild: const SettingsTitle()),
-              FadeIn(delay: 225, fadeChild: ExportPage()),
-              //AutoFadeIn(child: NamePicker()),
-              FadeIn(delay: 250, fadeChild: NamePicker()),
-              FadeIn(
-                  delay: 300,
-                  fadeChild: WorkTimePicker(
-                    color: neon,
-                    onboarding: false,
-                  )),
-              FadeIn(delay: 350, fadeChild: BreakCorrection()),
-              FadeIn(delay: 400, fadeChild: AutomaticStop()),
+        body: ListView(padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top), physics: BouncingScrollPhysics(), children: [
+          FadeIn(delay: 200, fadeChild: const SettingsTitle()),
+          FadeIn(delay: 225, fadeChild: ExportPage()),
+          //AutoFadeIn(child: NamePicker()),
+          FadeIn(delay: 250, fadeChild: NamePicker()),
+          FadeIn(
+              delay: 300,
+              fadeChild: WorkTimePicker(
+                color: neon,
+                onboarding: false,
+              )),
+          FadeIn(delay: 350, fadeChild: BreakCorrection()),
+          FadeIn(delay: 400, fadeChild: AutomaticStop()),
 
-              SizedBox(
-                height: 80,
-              ),
-            ]),
+          SizedBox(
+            height: 80,
+          ),
+        ]),
         floatingActionButton: FadeIn(delay: 450, fadeChild: FertigButton()),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
@@ -264,13 +251,10 @@ class ThemedSettingsNoFade extends StatelessWidget {
     Key? key,
     required this.theme,
     required this.context,
-    required ScrollController scrollController,
-  })  : _scrollController = scrollController,
-        super(key: key);
+  }) : super(key: key);
 
   final ThemeData theme;
   final BuildContext context;
-  final ScrollController _scrollController;
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -278,26 +262,22 @@ class ThemedSettingsNoFade extends StatelessWidget {
       child: Scaffold(
         //backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
-        body: ListView(
-            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-            controller: _scrollController,
-            physics: BouncingScrollPhysics(),
-            children: [
-              const SettingsTitle(),
-              ExportPage(),
-              //AutoFadeIn(child: NamePicker()),
-              NamePicker(),
-              WorkTimePicker(
-                color: neon,
-                onboarding: false,
-              ),
-              BreakCorrection(),
-              AutomaticStop(),
+        body: ListView(padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top), physics: BouncingScrollPhysics(), children: [
+          const SettingsTitle(),
+          ExportPage(),
+          //AutoFadeIn(child: NamePicker()),
+          NamePicker(),
+          WorkTimePicker(
+            color: neon,
+            onboarding: false,
+          ),
+          BreakCorrection(),
+          AutomaticStop(),
 
-              SizedBox(
-                height: 80,
-              ),
-            ]),
+          SizedBox(
+            height: 80,
+          ),
+        ]),
         floatingActionButton: FertigButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),

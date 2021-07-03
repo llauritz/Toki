@@ -19,15 +19,10 @@ class _Onboarding2State extends State<Onboarding2> {
       children: <Widget>[
         Text(
           "Wie heißt du?",
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: 30.0,
-              fontWeight: FontWeight.bold),
+          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
         AnimatedContainer(
-          height: MediaQuery.of(context).viewInsets.bottom > 180
-              ?30
-              :30,
+          height: MediaQuery.of(context).viewInsets.bottom > 180 ? 30 : 30,
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOutQuart,
         ),
@@ -36,10 +31,9 @@ class _Onboarding2State extends State<Onboarding2> {
           child: Material(
             shape: StadiumBorder(),
             elevation: 5.0,
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 3.0, horizontal: 22.0),
+              padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 22.0),
               child: TextField(
                 style: TextStyle(fontSize: 16.0, color: editColor),
                 textCapitalization: TextCapitalization.words,
@@ -47,8 +41,8 @@ class _Onboarding2State extends State<Onboarding2> {
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: getIt<Data>().username,
-                  fillColor: Colors.white,
-                  hintStyle: TextStyle(color: Colors.blueGrey[200]),
+                  fillColor: Theme.of(context).colorScheme.onSurface.withAlpha(150),
+                  hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface.withAlpha(150)),
                 ),
                 onChanged: (String str) {
                   setState(() {
@@ -60,9 +54,7 @@ class _Onboarding2State extends State<Onboarding2> {
           ),
         ),
         AnimatedContainer(
-          height: MediaQuery.of(context).viewInsets.bottom > 180
-              ? MediaQuery.of(context).viewInsets.bottom - 200 + 30
-              : 40,
+          height: MediaQuery.of(context).viewInsets.bottom > 180 ? MediaQuery.of(context).viewInsets.bottom - 200 + 30 : 40,
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOutQuart,
         ),

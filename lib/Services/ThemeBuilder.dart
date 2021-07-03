@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'Data.dart';
+import 'Theme.dart';
 
 class ThemeBuilder extends StatefulWidget {
   final Function(BuildContext context, ThemeMode themeMode) builder;
@@ -17,12 +19,15 @@ class _ThemeBuilderState extends State<ThemeBuilder> {
 
   @override
   void initState() {
+    themeMode = getIt<Data>().getThemeMode();
     super.initState();
   }
 
-  void changeTheme(ThemeMode newMode) {
+  void changeTheme(ThemeMode newMode) async{
+    await getIt<Data>().setTheme(newMode);
     setState(() {
-      themeMode = newMode;
+      themeMode = getIt<Data>().getThemeMode();
+      
     });
   }
 

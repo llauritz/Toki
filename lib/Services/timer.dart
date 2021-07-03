@@ -10,8 +10,8 @@ import 'Theme.dart';
 
 class TimerText extends StatefulWidget {
   TimerText({Key? key});
-  final _TimerTextState ts = _TimerTextState();
 
+  final  _TimerTextState ts = _TimerTextState();
   final Timer t = Timer.periodic(const Duration(hours: 1), (Timer timer) {});
 
   void start() {
