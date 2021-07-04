@@ -9,9 +9,7 @@ import '../Services/HiveDB.dart';
 import '../Services/Theme.dart';
 
 class OvertimeChangeWidgetOnboarding extends StatefulWidget {
-  const OvertimeChangeWidgetOnboarding({
-    Key? key,
-  }) : super(key: key);
+  const OvertimeChangeWidgetOnboarding({Key? key, required this.color}) : super(key: key);
 
   final Duration duration = const Duration(milliseconds: 700);
   final Duration durationShort = const Duration(milliseconds: 400);
@@ -20,6 +18,7 @@ class OvertimeChangeWidgetOnboarding extends StatefulWidget {
   final double openContainerWidth = 100;
   final double closedDividerPadding = 0.0;
   final double opendividerPadding = 15;
+  final Color color;
 
   @override
   _OvertimeChangeWidgetOnboardingState createState() => _OvertimeChangeWidgetOnboardingState();
@@ -91,7 +90,7 @@ class _OvertimeChangeWidgetOnboardingState extends State<OvertimeChangeWidgetOnb
                         tmpHour = snapshot.data!;
                       }
 
-                      Color _color = tmpHour.isNegative ? gray : editColor;
+                      Color _color = tmpHour.isNegative ? gray : widget.color;
                       int stunden = (tmpHour / Duration.millisecondsPerHour).truncate();
                       int realStunden = (snapshot.data! / Duration.millisecondsPerHour).truncate();
 
@@ -213,7 +212,7 @@ class _OvertimeChangeWidgetOnboardingState extends State<OvertimeChangeWidgetOnb
                 initialData: getIt<HiveDB>().ueberMillisekundenGesamt,
                 stream: getIt<HiveDB>().ueberMillisekundenGesamtStream.stream,
                 builder: (context, snapshot) {
-                  Color _color = snapshot.data!.isNegative ? gray : editColor;
+                  Color _color = snapshot.data!.isNegative ? gray : widget.color;
 
                   Widget _widget = KeyedSubtree(
                       key: ValueKey<Color>(_color),
@@ -279,7 +278,7 @@ class _OvertimeChangeWidgetOnboardingState extends State<OvertimeChangeWidgetOnb
                         tmpMinutes = snapshot.data!;
                       }
 
-                      Color _color = tmpMinutes.isNegative ? gray : editColor;
+                      Color _color = tmpMinutes.isNegative ? gray : widget.color;
                       int minutes = ((tmpMinutes.abs() / Duration.millisecondsPerMinute) % 60).truncate();
                       int realMinutes = ((snapshot.data! / Duration.millisecondsPerMinute) % 60).truncate();
 

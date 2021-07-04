@@ -56,18 +56,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
-    _animation = TweenSequence(
-      <TweenSequenceItem<double>>[
-        TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 0.0, end: 0.08),
-          weight: 5,
-        ),
-        TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 0.08, end: 1.0),
-          weight: 95,
-        ),
-      ],
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.ease));
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _controller, curve: Curves.ease));
     _controller.addListener(() {
       setState(() {});
     });

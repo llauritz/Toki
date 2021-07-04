@@ -35,7 +35,7 @@ class _Onboarding2State extends State<Onboarding2> {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 22.0),
               child: TextField(
-                style: TextStyle(fontSize: 16.0, color: editColor),
+                style: TextStyle(fontSize: 16.0, color: Theme.of(context).brightness == Brightness.light ? editColor : neon),
                 textCapitalization: TextCapitalization.words,
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(

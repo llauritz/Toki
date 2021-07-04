@@ -1,3 +1,4 @@
+import 'package:Timo/Services/Theme.dart';
 import 'package:Timo/Widgets/OvertimeChangeWidgetOnboarding.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class _Onboarding5State extends State<Onboarding5> {
           margin: const EdgeInsets.symmetric(horizontal: 30),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 18),
-            child: const OvertimeChangeWidgetOnboarding(),
+            child: OvertimeChangeWidgetOnboarding(color: Theme.of(context).brightness == Brightness.light ? editColor : neon),
           ),
         ),
         Padding(

@@ -6,6 +6,7 @@ import 'package:Timo/Widgets/Settings/ThemeAnimation/syncScrollController.dart';
 import 'package:Timo/Widgets/Settings/ThemeAnimation/widgetMask.dart';
 import 'package:Timo/Widgets/Settings/ThemeButton.dart';
 import 'package:animations/animations.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -50,18 +51,7 @@ class _ThemedOnboardingState extends State<ThemedOnboarding> with SingleTickerPr
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 1200));
-    _animation = TweenSequence(
-      <TweenSequenceItem<double>>[
-        TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 0.0, end: 0.08),
-          weight: 5,
-        ),
-        TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 0.08, end: 1.0),
-          weight: 95,
-        ),
-      ],
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.ease));
+    _animation = Tween<double>(begin: 0, end: 1.0).animate(CurvedAnimation(parent: _controller, curve: Curves.ease));
     _controller.addListener(() {
       setState(() {});
     });
@@ -168,12 +158,34 @@ class _ThemedOnboardingState extends State<ThemedOnboarding> with SingleTickerPr
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: ThemeButton(
-            lightColor: Colors.white,
-            darkColor: Colors.white,
-            callback: () {
-              setState(() {});
-            },
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.topRight,
+            children: [
+              ThemeButton(
+                lightColor: Colors.white,
+                darkColor: Colors.white,
+                callback: () {
+                  getIt<Data>().setUpdatedID(2);
+                  setState(() {});
+                },
+              ),
+              if (getIt<Data>().updatedID < 2)
+                Positioned(
+                  right: 1.5,
+                  top: 1.5,
+                  child: AvatarGlow(
+                    showTwoGlows: false,
+                    duration: Duration(milliseconds: 1500),
+                    endRadius: 15,
+                    child: Container(
+                      decoration: BoxDecoration(color: neonAccent, shape: BoxShape.circle),
+                      width: 10,
+                      height: 10,
+                    ),
+                  ),
+                ),
+            ],
           ),
         ),
       ],

@@ -39,7 +39,7 @@ class _SettingsButtonState extends State<SettingsButton> {
           getIt<HiveDB>().updateGesamtUeberstunden();
         },
         openBuilder: (BuildContext context, void Function({Object? returnValue}) action) {
-          getIt<Data>().setUpdatedID(1);
+          getIt<Data>().setUpdatedID(3);
           return const SettingsPage();
         },
         closedBuilder: (BuildContext context, void Function() action) {
@@ -51,7 +51,7 @@ class _SettingsButtonState extends State<SettingsButton> {
                 alignment: Alignment.topRight,
                 children: [
                   Icon(Icons.settings, color: Colors.white),
-                  if (getIt<Data>().updatedID < 1)
+                  if (getIt<Data>().updatedID < 3)
                     Positioned(
                       right: -10,
                       top: -10,

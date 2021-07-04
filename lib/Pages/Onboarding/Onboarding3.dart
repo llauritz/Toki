@@ -45,7 +45,7 @@ class _Onboarding3State extends State<Onboarding3> {
           },
           child: SingleChildScrollView(
             child: WorkTimePicker(
-              color: editColor,
+              color: Theme.of(context).brightness == Brightness.light ? editColor : neon,
               onboarding: true,
             ),
           ),
