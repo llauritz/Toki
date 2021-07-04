@@ -9,7 +9,11 @@ import 'package:flutter/material.dart';
 import '../../Pages/SettingsPage.dart';
 
 class ThemeButton extends StatefulWidget {
-  const ThemeButton({Key? key}) : super(key: key);
+  const ThemeButton({Key? key, required this.callback, required this.lightColor, required this.darkColor}) : super(key: key);
+
+  final Function callback;
+  final Color lightColor;
+  final Color darkColor;
 
   @override
   _ThemeButtonState createState() => _ThemeButtonState();
@@ -44,11 +48,11 @@ class _ThemeButtonState extends State<ThemeButton> {
           alignment: Alignment.centerRight,
           child: Text(
             "Helles Thema",
-            style: style.copyWith(color: Theme.of(context).colorScheme.onSurface),
+            style: style.copyWith(color: widget.lightColor),
           ),
         ),
       );
-      SettingsPage.of(context).setState(() {});
+      widget.callback();
       _timer.cancel();
       _timer = Timer(Duration(milliseconds: 2000), timer);
     } else if (ThemeBuilder.of(context).themeMode == ThemeMode.system) {
@@ -60,11 +64,11 @@ class _ThemeButtonState extends State<ThemeButton> {
           alignment: Alignment.centerRight,
           child: Text(
             "Dunkles Thema",
-            style: style.copyWith(color: Theme.of(context).colorScheme.onSurface),
+            style: style.copyWith(color: widget.darkColor),
           ),
         ),
       );
-      SettingsPage.of(context).setState(() {});
+      widget.callback();
       _timer.cancel();
       _timer = Timer(Duration(milliseconds: 2000), timer);
     } else if (ThemeBuilder.of(context).themeMode == ThemeMode.light) {
@@ -77,12 +81,11 @@ class _ThemeButtonState extends State<ThemeButton> {
           alignment: Alignment.centerRight,
           child: Text(
             "Automatisches Thema",
-            style: style.copyWith(color: Theme.of(context).colorScheme.onSurface),
+            style: style.copyWith(color: MediaQuery.of(context).platformBrightness == Brightness.light ? widget.lightColor : widget.darkColor),
           ),
         ),
       );
-      SettingsPage.of(context).setState(() {});
-      setState(() {});
+      widget.callback();
       _timer.cancel();
       _timer = Timer(Duration(milliseconds: 2000), timer);
     }
@@ -91,18 +94,19 @@ class _ThemeButtonState extends State<ThemeButton> {
   @override
   Widget build(BuildContext context) {
     if (ThemeBuilder.of(context).themeMode == ThemeMode.system) {
-      _themeIcon = Icon(Icons.brightness_auto_rounded, key: ValueKey("_auto"), color: Theme.of(context).colorScheme.onSurface);
+      _themeIcon = Icon(Icons.brightness_auto_rounded,
+          key: ValueKey("_auto"), color: MediaQuery.of(context).platformBrightness == Brightness.light ? widget.lightColor : widget.darkColor);
     } else if (ThemeBuilder.of(context).themeMode == ThemeMode.light) {
       _themeIcon = Icon(
         Icons.light_mode_rounded,
         key: ValueKey("light"),
-        color: Theme.of(context).colorScheme.onSurface,
+        color: widget.lightColor,
       );
     } else if (ThemeBuilder.of(context).themeMode == ThemeMode.dark) {
       _themeIcon = Icon(
         Icons.dark_mode,
         key: ValueKey("_dark"),
-        color: Theme.of(context).colorScheme.onSurface,
+        color: widget.darkColor,
       );
     }
 
@@ -113,6 +117,7 @@ class _ThemeButtonState extends State<ThemeButton> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
+            clipBehavior: Clip.none,
             height: 45,
             child: PageTransitionSwitcher(
               transitionBuilder: (

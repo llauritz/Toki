@@ -62,11 +62,11 @@ class _WorkTimePickerState extends State<WorkTimePicker> with TickerProviderStat
                     firstChild: CollapsedWorkTimePicker(color: widget.color, onboarding: widget.onboarding),
                     secondChild: ExpandedWorkTImePicker(color: widget.color, onboarding: widget.onboarding),
                     crossFadeState: getIt<Data>().individualTimes ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                    duration: Duration(milliseconds: 500))
+                    duration: Duration(milliseconds: 400))
                 : AnimatedSize(
                     vsync: this,
                     curve: Curves.ease,
-                    duration: Duration(milliseconds: 500),
+                    duration: Duration(milliseconds: 400),
                     child: PageTransitionSwitcher(
                       reverse: !getIt<Data>().individualTimes,
                       transitionBuilder: (
@@ -83,7 +83,7 @@ class _WorkTimePickerState extends State<WorkTimePicker> with TickerProviderStat
                         );
                       },
                       child: _widget,
-                      duration: const Duration(milliseconds: 500),
+                      duration: const Duration(milliseconds: 400),
                     ),
                   ),
             Padding(
@@ -106,7 +106,7 @@ class _WorkTimePickerState extends State<WorkTimePicker> with TickerProviderStat
                             AnimatedSize(
                               vsync: this,
                               curve: Curves.ease,
-                              duration: Duration(milliseconds: 500),
+                              duration: Duration(milliseconds: 400),
                               child: PageTransitionSwitcher(
                                 reverse: getIt<Data>().individualTimes,
                                 transitionBuilder: (
@@ -123,7 +123,7 @@ class _WorkTimePickerState extends State<WorkTimePicker> with TickerProviderStat
                                   );
                                 },
                                 child: _buttonText,
-                                duration: const Duration(milliseconds: 500),
+                                duration: const Duration(milliseconds: 400),
                               ),
                             ),
                           ],
@@ -282,7 +282,8 @@ class _ExpandedWorkTImePickerState extends State<ExpandedWorkTImePicker> {
               child: Text(
                 """Wie viele Stunden arbeitest du am Tag?""",
                 textAlign: TextAlign.center,
-                style: TextStyle(color: grayAccent, fontSize: 24.0, fontWeight: FontWeight.bold, fontFamily: "BandeinsSans"),
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface, fontSize: 24.0, fontWeight: FontWeight.bold, fontFamily: "BandeinsSans"),
               ),
             ),
           ListView.builder(

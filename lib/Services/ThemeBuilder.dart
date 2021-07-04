@@ -23,12 +23,11 @@ class _ThemeBuilderState extends State<ThemeBuilder> {
     super.initState();
   }
 
-  void changeTheme(ThemeMode newMode) async{
-    await getIt<Data>().setTheme(newMode);
+  void changeTheme(ThemeMode newMode) async {
     setState(() {
-      themeMode = getIt<Data>().getThemeMode();
-      
+      themeMode = newMode;
     });
+    getIt<Data>().setTheme(newMode);
   }
 
   @override

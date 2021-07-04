@@ -19,7 +19,7 @@ class _Onboarding2State extends State<Onboarding2> {
       children: <Widget>[
         Text(
           "Wie heißt du?",
-          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontSize: 30.0, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
         AnimatedContainer(
           height: MediaQuery.of(context).viewInsets.bottom > 180 ? 30 : 30,

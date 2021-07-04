@@ -186,7 +186,7 @@ class HomeContent extends StatelessWidget {
                 IconButton(
                   onPressed: () {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-                      return const Onboarding();
+                      return const ThemedOnboarding();
                     }));
                   },
                   icon: Icon(Icons.bug_report),

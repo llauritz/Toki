@@ -18,12 +18,12 @@ class Onboarding1 extends StatelessWidget {
                 children: <Widget>[
                   /*SvgPicture.asset("assets/timo/timo_happy_1_white.svg"),*/
                   SizedBox(height: 70),
-                  Text("Willkommen", style: onboardingTitle.copyWith(color: Theme.of(context).colorScheme.onPrimary)),
+                  Text("Willkommen", style: onboardingTitle.copyWith(color: Colors.white)),
                   SizedBox(
                     height: 15,
                   ),
                   Text("""Timo hilft dir dabei, den Überblick über deine Überstunden zu behalten.""",
-                      textAlign: TextAlign.center, style: onboardingBody.copyWith(color: Theme.of(context).colorScheme.onPrimary)),
+                      textAlign: TextAlign.center, style: onboardingBody.copyWith(color: Colors.white)),
                   SizedBox(
                     height: 20,
                   )

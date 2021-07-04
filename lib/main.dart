@@ -53,7 +53,7 @@ void main() async {
       localizationsDelegates: [GlobalMaterialLocalizations.delegate],
       supportedLocales: [const Locale("de")],
       //
-      home: getIt<Data>().finishedOnboarding ? const HomePage() : const Onboarding(),
+      home: getIt<Data>().finishedOnboarding ? const HomePage() : const ThemedOnboarding(),
     );
   }));
 }
