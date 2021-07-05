@@ -191,6 +191,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: ThemeButton(
+                fadeDelay: 100,
                 lightColor: grayAccent,
                 darkColor: Colors.blueGrey[100]!,
                 callback: () {

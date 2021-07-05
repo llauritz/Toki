@@ -9,11 +9,12 @@ import 'package:flutter/material.dart';
 import '../../Pages/SettingsPage.dart';
 
 class ThemeButton extends StatefulWidget {
-  const ThemeButton({Key? key, required this.callback, required this.lightColor, required this.darkColor}) : super(key: key);
+  const ThemeButton({Key? key, required this.callback, required this.lightColor, required this.darkColor, required this.fadeDelay}) : super(key: key);
 
   final Function callback;
   final Color lightColor;
   final Color darkColor;
+  final int fadeDelay;
 
   @override
   _ThemeButtonState createState() => _ThemeButtonState();
@@ -111,7 +112,7 @@ class _ThemeButtonState extends State<ThemeButton> {
     }
 
     return FadeIn(
-      delay: 100,
+      delay: widget.fadeDelay,
       fadeChild: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,

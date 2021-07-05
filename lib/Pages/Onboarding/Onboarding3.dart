@@ -23,11 +23,11 @@ class _Onboarding3State extends State<Onboarding3> {
             setState(() {});
           },
           child: AnimatedCrossFade(
-              duration: Duration(milliseconds: 500),
+              duration: Duration(milliseconds: 400),
               sizeCurve: Curves.ease,
               crossFadeState: getIt<Data>().individualTimes ? CrossFadeState.showSecond : CrossFadeState.showFirst,
               firstChild: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
                 child: Text(
                   """Wie viele Stunden arbeitest du am Tag?""",
                   textAlign: TextAlign.center,
@@ -35,9 +35,6 @@ class _Onboarding3State extends State<Onboarding3> {
                 ),
               ),
               secondChild: Container()),
-        ),
-        SizedBox(
-          height: 20,
         ),
         Listener(
           onPointerUp: (_) {

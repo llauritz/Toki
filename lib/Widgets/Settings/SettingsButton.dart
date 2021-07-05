@@ -53,7 +53,7 @@ class _SettingsButtonState extends State<SettingsButton> {
                   Icon(Icons.settings, color: Colors.white),
                   if (getIt<Data>().updatedID < 3)
                     Positioned(
-                      right: -10,
+                      right: -11.5,
                       top: -10,
                       child: AvatarGlow(
                         showTwoGlows: false,

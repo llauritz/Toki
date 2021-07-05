@@ -183,15 +183,15 @@ class HomeContent extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-                      return const ThemedOnboarding();
-                    }));
-                  },
-                  icon: Icon(Icons.bug_report),
-                  color: Colors.red,
-                ),
+                // IconButton(
+                //   onPressed: () {
+                //     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
+                //       return const ThemedOnboarding();
+                //     }));
+                //   },
+                //   icon: Icon(Icons.bug_report),
+                //   color: Colors.red,
+                // ),
                 // IconButton(
                 //   onPressed: () {
                 //     getIt<CorrectionDB>().resetBox();

@@ -124,16 +124,18 @@ class EditedCardClosedStl extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           if (!ueberMilli.isNegative)
-                            const Text(
+                            Text(
                               "+",
-                              style: closedCardsNumbers,
+                              style: Theme.of(context).textTheme.headline4!.copyWith(color: Theme.of(context).colorScheme.onPrimary),
                             ),
                           Text(
                             ueberHours.toString(),
-                            style: closedCardsNumbers,
+                            style: Theme.of(context).textTheme.headline4!.copyWith(color: Theme.of(context).colorScheme.onPrimary),
                           ),
-                          const Text(":", style: closedCardsNumbers),
-                          DoubleDigit(i: overMinutes.abs() % 60, style: closedCardsNumbers)
+                          Text(":", style: Theme.of(context).textTheme.headline4!.copyWith(color: Theme.of(context).colorScheme.onPrimary)),
+                          DoubleDigit(
+                              i: overMinutes.abs() % 60,
+                              style: Theme.of(context).textTheme.headline4!.copyWith(color: Theme.of(context).colorScheme.onPrimary))
                         ],
                       ),
                       decoration: BoxDecoration(

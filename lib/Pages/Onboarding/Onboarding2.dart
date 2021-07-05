@@ -31,7 +31,7 @@ class _Onboarding2State extends State<Onboarding2> {
           child: Material(
             shape: StadiumBorder(),
             elevation: 5.0,
-            color: Theme.of(context).cardColor,
+            color: Theme.of(context).backgroundColor,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 22.0),
               child: TextField(

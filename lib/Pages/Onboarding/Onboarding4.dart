@@ -35,6 +35,7 @@ class _Onboarding4State extends State<Onboarding4> {
         ),
         Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          color: Theme.of(context).backgroundColor,
           elevation: 5,
           margin: const EdgeInsets.symmetric(horizontal: 30),
           child: Padding(

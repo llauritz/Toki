@@ -163,6 +163,7 @@ class _ThemedOnboardingState extends State<ThemedOnboarding> with SingleTickerPr
             alignment: Alignment.topRight,
             children: [
               ThemeButton(
+                fadeDelay: 300,
                 lightColor: Colors.white,
                 darkColor: Colors.white,
                 callback: () {
@@ -172,16 +173,18 @@ class _ThemedOnboardingState extends State<ThemedOnboarding> with SingleTickerPr
               ),
               if (getIt<Data>().updatedID < 2)
                 Positioned(
-                  right: 1.5,
-                  top: 1.5,
-                  child: AvatarGlow(
-                    showTwoGlows: false,
-                    duration: Duration(milliseconds: 1500),
-                    endRadius: 15,
-                    child: Container(
-                      decoration: BoxDecoration(color: neonAccent, shape: BoxShape.circle),
-                      width: 10,
-                      height: 10,
+                  right: 1.9,
+                  top: 1.6,
+                  child: IgnorePointer(
+                    child: AvatarGlow(
+                      showTwoGlows: false,
+                      duration: Duration(milliseconds: 1500),
+                      endRadius: 15,
+                      child: Container(
+                        decoration: BoxDecoration(color: neonAccent, shape: BoxShape.circle),
+                        width: 10,
+                        height: 10,
+                      ),
                     ),
                   ),
                 ),
@@ -382,8 +385,8 @@ class _OnboardingState extends State<Onboarding> {
                   minWidth: 0,
                   height: 0,
                   child: RaisedButton(
-                    splashColor: neonTranslucent.withAlpha(180),
-                    highlightColor: neonTranslucent.withAlpha(60),
+                    splashColor: Theme.of(context).colorScheme.onPrimary.withAlpha(80),
+                    highlightColor: Colors.white.withAlpha(50),
                     highlightElevation: 10,
                     visualDensity: VisualDensity(vertical: 0.0, horizontal: 0.0),
                     elevation: 5,
