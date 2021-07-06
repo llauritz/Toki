@@ -49,70 +49,64 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
           children: [
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: PhysicalModel(
-                color: Theme.of(context).cardColor,
-                elevation: 5,
-                borderRadius: BorderRadius.circular(20),
-                shadowColor: freeAccent.withOpacity(0.1),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: freeTranslucent,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          IconButton(
-                              tooltip: "Speichern und schliessen",
-                              splashColor: freeAccent.withAlpha(80),
-                              highlightColor: freeAccent.withAlpha(50),
-                              padding: const EdgeInsets.all(0),
-                              visualDensity: const VisualDensity(),
-                              icon: const Icon(Icons.done_rounded, color: freeAccent, size: 30),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              })
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 100.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
-                              style: openCardDate.copyWith(color: free),
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            TagEditWidget(
-                              i: widget.i,
-                              zeitnahme: widget.zeitnahme,
-                              color: free,
-                              colorAccent: freeAccent,
-                            )
-                          ],
-                        ),
-                      ),
-                      Column(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: freeTranslucent,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                            tooltip: "Speichern und schliessen",
+                            splashColor: freeAccent.withAlpha(80),
+                            highlightColor: freeAccent.withAlpha(50),
+                            padding: const EdgeInsets.all(0),
+                            visualDensity: const VisualDensity(),
+                            icon: const Icon(Icons.done_rounded, color: freeAccent, size: 30),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            })
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 100.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "0:00",
-                            style: openCardsNumbers.copyWith(color: free),
+                            tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
+                            style: openCardDate.copyWith(color: free),
                           ),
-                          const Text(
-                            "Überstunden",
-                            style: TextStyle(color: free),
+                          const SizedBox(
+                            height: 30,
                           ),
+                          TagEditWidget(
+                            i: widget.i,
+                            zeitnahme: widget.zeitnahme,
+                            color: free,
+                            colorAccent: freeAccent,
+                          )
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          "0:00",
+                          style: openCardsNumbers.copyWith(color: free),
+                        ),
+                        const Text(
+                          "Überstunden",
+                          style: TextStyle(color: free),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),

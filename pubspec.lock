@@ -43,13 +43,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.6.1"
-  auto_animated:
-    dependency: "direct main"
-    description:
-      name: auto_animated
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.0"
   avatar_glow:
     dependency: "direct main"
     description:
@@ -190,13 +183,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
-  cupertino_icons:
-    dependency: "direct main"
-    description:
-      name: cupertino_icons
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.3"
   dart_style:
     dependency: transitive
     description:
@@ -315,13 +301,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  get:
-    dependency: "direct main"
-    description:
-      name: get
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.1.4"
   get_it:
     dependency: "direct main"
     description:
@@ -609,13 +588,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  quiver:
-    dependency: transitive
-    description:
-      name: quiver
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.1"
   screenshot:
     dependency: "direct main"
     description:
@@ -698,13 +670,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0+1"
-  sortedmap:
-    dependency: "direct main"
-    description:
-      name: sortedmap
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.0"
   source_gen:
     dependency: transitive
     description:
@@ -824,13 +789,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  visibility_detector:
-    dependency: transitive
-    description:
-      name: visibility_detector
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.0"
   watcher:
     dependency: transitive
     description:

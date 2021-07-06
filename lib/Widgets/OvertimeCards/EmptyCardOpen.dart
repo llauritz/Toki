@@ -54,85 +54,79 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
           children: [
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: PhysicalModel(
-                color: Theme.of(context).cardColor,
-                elevation: 5,
-                borderRadius: BorderRadius.circular(20),
-                shadowColor: grayTranslucent,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: grayTranslucent,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: grayTranslucent,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                            tooltip: "Speichern und schliessen",
+                            splashColor: grayAccent.withAlpha(80),
+                            highlightColor: grayAccent.withAlpha(50),
+                            padding: const EdgeInsets.all(0),
+                            visualDensity: const VisualDensity(),
+                            icon: Icon(Icons.done_rounded, color: Theme.of(context).colorScheme.onSurface, size: 30),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            })
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 100.0),
+                      child: Column(
                         children: [
-                          IconButton(
-                              tooltip: "Speichern und schliessen",
-                              splashColor: grayAccent.withAlpha(80),
-                              highlightColor: grayAccent.withAlpha(50),
-                              padding: const EdgeInsets.all(0),
-                              visualDensity: const VisualDensity(),
-                              icon: Icon(Icons.done_rounded, color: Theme.of(context).colorScheme.onSurface, size: 30),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              })
+                          Text(
+                            tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
+                            style: openCardDate.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          TagEditWidget(
+                            i: widget.i,
+                            zeitnahme: widget.zeitnahme,
+                            color: Theme.of(context).colorScheme.onSurface,
+                            colorAccent: Theme.of(context).colorScheme.onSurface,
+                          )
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 100.0),
-                        child: Column(
+                    ),
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
-                              style: openCardDate.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                              "-",
+                              style: openCardsNumbers.copyWith(color: Theme.of(context).colorScheme.onSurface),
                             ),
-                            const SizedBox(
-                              height: 30,
+                            Text(
+                              (workMilliseconds ~/ Duration.millisecondsPerHour).toString(),
+                              style: openCardsNumbers.copyWith(color: Theme.of(context).colorScheme.onSurface),
                             ),
-                            TagEditWidget(
-                              i: widget.i,
-                              zeitnahme: widget.zeitnahme,
-                              color: Theme.of(context).colorScheme.onSurface,
-                              colorAccent: Theme.of(context).colorScheme.onSurface,
-                            )
+                            Text(
+                              ":",
+                              style: openCardsNumbers.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                            ),
+                            DoubleDigit(
+                                i: (workMilliseconds ~/ Duration.millisecondsPerMinute) % 60,
+                                style: openCardsNumbers.copyWith(color: Theme.of(context).colorScheme.onSurface))
                           ],
                         ),
-                      ),
-                      Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "-",
-                                style: openCardsNumbers.copyWith(color: Theme.of(context).colorScheme.onSurface),
-                              ),
-                              Text(
-                                (workMilliseconds ~/ Duration.millisecondsPerHour).toString(),
-                                style: openCardsNumbers.copyWith(color: Theme.of(context).colorScheme.onSurface),
-                              ),
-                              Text(
-                                ":",
-                                style: openCardsNumbers.copyWith(color: Theme.of(context).colorScheme.onSurface),
-                              ),
-                              DoubleDigit(
-                                  i: (workMilliseconds ~/ Duration.millisecondsPerMinute) % 60,
-                                  style: openCardsNumbers.copyWith(color: Theme.of(context).colorScheme.onSurface))
-                            ],
-                          ),
-                          Text(
-                            "Stunden",
-                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        Text(
+                          "Stunden",
+                          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),

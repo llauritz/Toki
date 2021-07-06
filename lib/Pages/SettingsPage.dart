@@ -236,7 +236,7 @@ class ThemedSettings extends StatelessWidget {
         body:
             ListView(controller: sc, padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top), physics: BouncingScrollPhysics(), children: [
           FadeIn(delay: 200, fadeChild: const SettingsTitle()),
-          FadeIn(delay: 225, fadeChild: ExportPage()),
+          //FadeIn(delay: 225, fadeChild: ExportPage()),
           //AutoFadeIn(child: NamePicker()),
           FadeIn(delay: 250, fadeChild: NamePicker()),
           FadeIn(
@@ -275,7 +275,7 @@ class ThemedSettingsNoFade extends StatelessWidget {
         body:
             ListView(controller: sc, padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top), physics: BouncingScrollPhysics(), children: [
           const SettingsTitle(),
-          ExportPage(),
+          //ExportPage(),
           //AutoFadeIn(child: NamePicker()),
           NamePicker(),
           WorkTimePicker(

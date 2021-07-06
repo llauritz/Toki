@@ -1,8 +1,5 @@
 import 'dart:async';
 
-import 'package:Timo/Widgets/Settings/BreakCorrection.dart';
-import 'package:Timo/Widgets/Settings/CorrectionTile.dart';
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,7 +7,7 @@ import '../hiveClasses/Correction.dart';
 import 'Data.dart';
 import 'Theme.dart';
 import 'package:get_it/get_it.dart';
-import 'package:get/get.dart';
+//import 'package:get/get.dart';
 
 class CorrectionDB {
   Future<void> initCorrectionDB() async {

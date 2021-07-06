@@ -239,9 +239,7 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                             padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
                             child: Container(
                               padding: const EdgeInsets.fromLTRB(12.0, 12, 12, 20),
-                              decoration: BoxDecoration(color: _colorTranslucent, borderRadius: BorderRadius.circular(20), boxShadow: [
-                                CustomBoxShadow(offset: const Offset(0, 0), color: _colorTranslucent, blurRadius: 10, blurStyle: BlurStyle.outer),
-                              ]),
+                              decoration: BoxDecoration(color: _colorTranslucent, borderRadius: BorderRadius.circular(20),),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
