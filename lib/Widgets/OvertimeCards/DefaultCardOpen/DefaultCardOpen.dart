@@ -239,7 +239,10 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                             padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
                             child: Container(
                               padding: const EdgeInsets.fromLTRB(12.0, 12, 12, 20),
-                              decoration: BoxDecoration(color: _colorTranslucent, borderRadius: BorderRadius.circular(20),),
+                              decoration: BoxDecoration(
+                                color: _colorTranslucent,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
@@ -258,115 +261,121 @@ class _DefaultCardOpenState extends State<DefaultCardOpen> {
                                           })
                                     ],
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 12.0),
-                                    child: Text(
-                                      tag.format(_day) + ', ' + datum.format(_day),
-                                      style: openCardDate.copyWith(color: _colorAccent),
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(bottom: 12.0),
+                                      child: Text(
+                                        tag.format(_day) + ', ' + datum.format(_day),
+                                        style: openCardDate.copyWith(color: _colorAccent),
+                                      ),
                                     ),
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                elapsedHours.toString(),
-                                                style: numbers,
-                                              ),
-                                              Text(
-                                                ":",
-                                                style: numbers,
-                                              ),
-                                              DoubleDigit(i: elapsedMinutes % 60, style: numbers)
-                                            ],
-                                          ),
-                                          Text(
-                                            "Arbeitszeit",
-                                            style: openCardsLabel.copyWith(color: _colorAccent),
-                                          ),
-                                        ],
-                                      ),
-                                      Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                                          child: Column(
-                                            children: [
-                                              //TODO: Nur anzeigen, wenn nicht erstes Element + isRunning true
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  elapsedHours.toString(),
+                                                  style: numbers,
+                                                ),
+                                                Text(
+                                                  ":",
+                                                  style: numbers,
+                                                ),
+                                                DoubleDigit(i: elapsedMinutes % 60, style: numbers)
+                                              ],
+                                            ),
+                                            Text(
+                                              "Arbeitszeit",
+                                              style: openCardsLabel.copyWith(color: _colorAccent),
+                                            ),
+                                          ],
+                                        ),
+                                        Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                                            child: Column(
+                                              children: [
+                                                //TODO: Nur anzeigen, wenn nicht erstes Element + isRunning true
 
-                                              Row(
-                                                children: [
-                                                  if (ueberMilliseconds.isNegative) Text("-", style: numbers),
-                                                  Text(
-                                                    ueberHours.toString(),
-                                                    style: numbers,
-                                                  ),
-                                                  Text(
-                                                    ":",
-                                                    style: numbers,
-                                                  ),
-                                                  DoubleDigit(i: ueberMinutes % 60, style: numbers)
-                                                ],
-                                              ),
-                                              Text(
-                                                "Überstunden",
-                                                style: openCardsLabel.copyWith(color: _colorAccent),
-                                              ),
-                                            ],
-                                          )),
-                                      Column(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              if (_zeitnahme.getKorrektur() > 0) {
-                                                final dynamic tooltip = _toolTipKey.currentState;
-                                                tooltip.ensureTooltipVisible();
-                                              }
-                                            },
-                                            onLongPress: () {
-                                              if (_zeitnahme.getKorrektur() > 0) {
-                                                final dynamic tooltip = _toolTipKey.currentState;
-                                                tooltip.ensureTooltipVisible();
-                                              }
-                                            },
-                                            child: AbsorbPointer(
-                                              absorbing: true,
-                                              child: Tooltip(
-                                                textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                                                margin: EdgeInsets.only(left: 10),
-                                                decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(1000),
-                                                    color: Theme.of(context).cardColor,
-                                                    boxShadow: [BoxShadow(blurRadius: 6, color: Colors.black12, offset: Offset(0, 3))]),
-                                                key: _toolTipKey,
-                                                verticalOffset: 40,
-                                                message: "Pause korrigiert",
-                                                child: Row(
+                                                Row(
                                                   children: [
+                                                    if (ueberMilliseconds.isNegative) Text("-", style: numbers),
                                                     Text(
-                                                      pauseHours.toString(),
-                                                      style: numbers.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent),
+                                                      ueberHours.toString(),
+                                                      style: numbers,
                                                     ),
                                                     Text(
                                                       ":",
-                                                      style: numbers.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent),
+                                                      style: numbers,
                                                     ),
-                                                    DoubleDigit(
-                                                        i: pauseMinutes % 60,
-                                                        style: numbers.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent))
+                                                    DoubleDigit(i: ueberMinutes % 60, style: numbers)
                                                   ],
+                                                ),
+                                                Text(
+                                                  "Überstunden",
+                                                  style: openCardsLabel.copyWith(color: _colorAccent),
+                                                ),
+                                              ],
+                                            )),
+                                        Column(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                if (_zeitnahme.getKorrektur() > 0) {
+                                                  final dynamic tooltip = _toolTipKey.currentState;
+                                                  tooltip.ensureTooltipVisible();
+                                                }
+                                              },
+                                              onLongPress: () {
+                                                if (_zeitnahme.getKorrektur() > 0) {
+                                                  final dynamic tooltip = _toolTipKey.currentState;
+                                                  tooltip.ensureTooltipVisible();
+                                                }
+                                              },
+                                              child: AbsorbPointer(
+                                                absorbing: true,
+                                                child: Tooltip(
+                                                  textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                                                  margin: EdgeInsets.only(left: 10),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(1000),
+                                                      color: Theme.of(context).cardColor,
+                                                      boxShadow: [BoxShadow(blurRadius: 6, color: Colors.black12, offset: Offset(0, 3))]),
+                                                  key: _toolTipKey,
+                                                  verticalOffset: 40,
+                                                  message: "Pause korrigiert",
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        pauseHours.toString(),
+                                                        style: numbers.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent),
+                                                      ),
+                                                      Text(
+                                                        ":",
+                                                        style: numbers.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent),
+                                                      ),
+                                                      DoubleDigit(
+                                                          i: pauseMinutes % 60,
+                                                          style: numbers.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent))
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          Text(
-                                            "Pause",
-                                            style: openCardsLabel.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                            Text(
+                                              "Pause",
+                                              style: openCardsLabel.copyWith(color: _zeitnahme.getKorrektur() > 0 ? editColor : _colorAccent),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   )
                                 ],
                               ),

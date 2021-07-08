@@ -309,7 +309,7 @@ class _ExpandedWorkTImePickerState extends State<ExpandedWorkTImePicker> {
                           padding: const EdgeInsets.all(8.0),
                           child: SizedBox(
                             height: 30,
-                            width: 40,
+                            width: 40 * MediaQuery.textScaleFactorOf(context),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: AnimatedDefaultTextStyle(
@@ -655,7 +655,8 @@ class _WorkdayButtonRowState extends State<WorkdayButtonRow> {
       return FittedBox(
         fit: BoxFit.fitWidth,
         child: ToggleButtons(
-          constraints: BoxConstraints(maxHeight: double.infinity, maxWidth: double.infinity, minWidth: constraints.maxWidth / 7),
+          constraints: BoxConstraints(
+              maxHeight: double.infinity, maxWidth: double.infinity, minWidth: (constraints.maxWidth / 7) * MediaQuery.textScaleFactorOf(context)),
           borderColor: Colors.white.withAlpha(100),
           color: widget.color.withAlpha(50),
           selectedColor: widget.color,

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:Timo/Services/Data.dart';
 import 'package:animations/animations.dart';
 import 'package:fitted_text_field_container/fitted_text_field_container.dart';
@@ -113,6 +115,8 @@ class _OvertimeChangeWidgetOnboardingState extends State<OvertimeChangeWidgetOnb
                           child: AbsorbPointer(
                             absorbing: !isOpen,
                             child: AnimatedFittedTextFieldContainer(
+                              calculator: (m) =>
+                                  (m.fixedWidths + max(m.labelWidth, max(m.hintWidth, m.textWidth)) * MediaQuery.textScaleFactorOf(context)),
                               growDuration: widget.durationShort,
                               shrinkDuration: widget.durationShort,
                               growCurve: widget.curve,
@@ -305,6 +309,8 @@ class _OvertimeChangeWidgetOnboardingState extends State<OvertimeChangeWidgetOnb
                                 duration: Duration(milliseconds: 300),
                                 style: overTimeNumbers.copyWith(color: _color),
                                 child: AnimatedFittedTextFieldContainer(
+                                  calculator: (m) =>
+                                      (m.fixedWidths + max(m.labelWidth, max(m.hintWidth, m.textWidth)) * MediaQuery.textScaleFactorOf(context)),
                                   growDuration: widget.durationShort,
                                   shrinkDuration: widget.durationShort,
                                   growCurve: widget.curve,

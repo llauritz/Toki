@@ -99,9 +99,12 @@ class _EditedCardOpenState extends State<EditedCardOpen> {
                       padding: const EdgeInsets.symmetric(vertical: 65.0),
                       child: Column(
                         children: [
-                          Text(
-                            tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
-                            style: openCardDate.copyWith(color: editColor),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
+                              style: openCardDate.copyWith(color: editColor),
+                            ),
                           ),
                           const SizedBox(
                             height: 20,

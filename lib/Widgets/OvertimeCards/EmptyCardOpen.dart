@@ -82,9 +82,12 @@ class _EmptyCardOpenState extends State<EmptyCardOpen> {
                       padding: const EdgeInsets.symmetric(vertical: 100.0),
                       child: Column(
                         children: [
-                          Text(
-                            tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
-                            style: openCardDate.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
+                              style: openCardDate.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                            ),
                           ),
                           const SizedBox(
                             height: 30,

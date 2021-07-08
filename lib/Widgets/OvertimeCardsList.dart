@@ -148,107 +148,116 @@ class ListContent extends StatelessWidget {
                 background: Container(
                   color: Colors.red[400],
                 ),
-                child: SizeScaleFadeTransition(
-                  animation: animation,
-                  child: OpenContainer(
-                    closedElevation: 0.0,
-                    openElevation: 10.0,
-                    closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70.0)),
-                    openShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-                    transitionDuration: Duration(milliseconds: 500),
-                    transitionType: ContainerTransitionType.fade,
-                    openColor: Theme.of(context).cardColor,
-                    closedColor: Theme.of(context).backgroundColor,
-                    closedBuilder: (BuildContext context, void Function() action) {
-                      //logger.d("OvertimeCardsList build - 4");
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: SizeScaleFadeTransition(
+                    animation: animation,
+                    child: OpenContainer(
+                      closedElevation: 0.0,
+                      openElevation: 10.0,
+                      closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70.0)),
+                      openShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                      transitionDuration: Duration(milliseconds: 500),
+                      transitionType: ContainerTransitionType.fade,
+                      openColor: Theme.of(context).cardColor,
+                      closedColor: Theme.of(context).backgroundColor,
+                      closedBuilder: (BuildContext context, void Function() action) {
+                        //logger.d("OvertimeCardsList build - 4");
 
-                      Widget _widget;
+                        Widget _widget;
 
-                      if (index == 0 && _state == "default") {
-                        _widget = KeyedSubtree(
-                          key: ValueKey<int>(1),
-                          child: StreamBuilder<bool>(
-                              stream: getIt<Data>().isRunningStream.stream,
-                              initialData: getIt<Data>().isRunning,
-                              builder: (context, snapshot) {
-                                return FirstCardClosed(i: i, index: index, zeitnahme: _zeitnahme, isRunning: snapshot.data!);
-                              }),
-                        );
-                      } else {
-                        switch (_state) {
-                          case "default":
-                            {
-                              _widget = KeyedSubtree(key: ValueKey<int>(1), child: DefaultCardClosed(i: i, index: index, zeitnahme: _zeitnahme));
-                              break;
-                            }
+                        if (index == 0 && _state == "default") {
+                          _widget = KeyedSubtree(
+                            key: ValueKey<int>(1),
+                            child: StreamBuilder<bool>(
+                                stream: getIt<Data>().isRunningStream.stream,
+                                initialData: getIt<Data>().isRunning,
+                                builder: (context, snapshot) {
+                                  return FirstCardClosed(i: i, index: index, zeitnahme: _zeitnahme, isRunning: snapshot.data!);
+                                }),
+                          );
+                        } else {
+                          switch (_state) {
+                            case "default":
+                              {
+                                _widget = KeyedSubtree(
+                                    key: ValueKey<int>(1), child: Center(child: DefaultCardClosed(i: i, index: index, zeitnahme: _zeitnahme)));
+                                break;
+                              }
 
-                          case "free":
-                            {
-                              _widget = FreeCardClosed(i: i, index: index, zeitnahme: _zeitnahme);
-                              break;
-                            }
+                            case "free":
+                              {
+                                _widget = FreeCardClosed(i: i, index: index, zeitnahme: _zeitnahme);
+                                break;
+                              }
 
-                          case "sickDay":
-                            {
-                              _widget = SickCardClosed(i: i, index: index, zeitnahme: _zeitnahme);
-                              break;
-                            }
+                            case "sickDay":
+                              {
+                                _widget = SickCardClosed(i: i, index: index, zeitnahme: _zeitnahme);
+                                break;
+                              }
 
-                          case "empty":
-                            {
-                              _widget = EmptyCardClosed(i: i, index: index, zeitnahme: _zeitnahme, openCard: action);
-                              break;
-                            }
+                            case "empty":
+                              {
+                                _widget = EmptyCardClosed(i: i, index: index, zeitnahme: _zeitnahme, openCard: action);
+                                break;
+                              }
 
-                          case "edited":
-                            {
-                              _widget = EditedCardClosedStl(i: i, index: index, zeitnahme: _zeitnahme);
-                              break;
-                            }
+                            case "edited":
+                              {
+                                _widget = EditedCardClosedStl(i: i, index: index, zeitnahme: _zeitnahme);
+                                break;
+                              }
 
-                          default:
-                            {
-                              _widget = Center(child: Text("error"));
-                            }
+                            default:
+                              {
+                                _widget = Center(child: Text("error"));
+                              }
+                          }
                         }
-                      }
 
-                      return SizedBox(
-                        height: 80,
-                        child: PageTransitionSwitcher(
-                          reverse: _state == "free" || _state == "edited" || _state == "sickDay",
-                          transitionBuilder: (
-                            Widget child,
-                            Animation<double> primaryAnimation,
-                            Animation<double> secondaryAnimation,
-                          ) {
-                            return SharedAxisTransition(
-                              child: child,
-                              animation: primaryAnimation,
-                              secondaryAnimation: secondaryAnimation,
-                              transitionType: SharedAxisTransitionType.horizontal,
-                              fillColor: Colors.transparent,
-                            );
-                          },
-                          child: _widget,
-                          duration: const Duration(milliseconds: 600),
-                        ),
-                      );
-                    },
-                    openBuilder: (context, openContainer) {
-                      MediaQuery.of(context).removePadding();
-                      return OpenCard(
-                        state: _state,
-                        index: index,
-                        i: i,
-                        zeitnahme: _zeitnahme,
-                      );
-                    },
-                    onClosed: (dynamic o) async {
-                      getIt<HiveDB>().updateGesamtUeberstunden();
-                      await getIt<HiveDB>().calculateTodayElapsedTime();
-                      widget.updateTimer();
-                    },
+                        return Center(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: SizedBox(
+                              height: 80,
+                              child: PageTransitionSwitcher(
+                                reverse: _state == "free" || _state == "edited" || _state == "sickDay",
+                                transitionBuilder: (
+                                  Widget child,
+                                  Animation<double> primaryAnimation,
+                                  Animation<double> secondaryAnimation,
+                                ) {
+                                  return SharedAxisTransition(
+                                    child: child,
+                                    animation: primaryAnimation,
+                                    secondaryAnimation: secondaryAnimation,
+                                    transitionType: SharedAxisTransitionType.horizontal,
+                                    fillColor: Colors.transparent,
+                                  );
+                                },
+                                child: _widget,
+                                duration: const Duration(milliseconds: 600),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      openBuilder: (context, openContainer) {
+                        MediaQuery.of(context).removePadding();
+                        return OpenCard(
+                          state: _state,
+                          index: index,
+                          i: i,
+                          zeitnahme: _zeitnahme,
+                        );
+                      },
+                      onClosed: (dynamic o) async {
+                        getIt<HiveDB>().updateGesamtUeberstunden();
+                        await getIt<HiveDB>().calculateTodayElapsedTime();
+                        widget.updateTimer();
+                      },
+                    ),
                   ),
                 )),
           );

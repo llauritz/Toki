@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:Timo/Services/Data.dart';
 import 'package:animations/animations.dart';
 import 'package:fitted_text_field_container/fitted_text_field_container.dart';
@@ -63,6 +65,522 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
       child: Stack(
         children: [
           Align(
+            alignment: Alignment.center,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  AnimatedPadding(
+                    duration: widget.durationShort,
+                    curve: widget.curve,
+                    padding: isOpen ? const EdgeInsets.only(top: 30) : EdgeInsets.zero,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AnimatedContainer(
+                            color: Colors.transparent,
+                            duration: widget.durationShort,
+                            curve: widget.curve,
+                            width: isOpen ? 30 : 0,
+                            child: FadeTransition(
+                                opacity: animationFade,
+                                child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  icon: Icon(
+                                    Icons.remove_circle_rounded,
+                                    color: offsetButtonColor,
+                                  ),
+                                  onPressed: () {
+                                    getIt<Data>().addOffset(-Duration.millisecondsPerHour);
+                                    updateHr = true;
+                                    updateMin = true;
+                                  },
+                                ))),
+                        StreamBuilder<int>(
+                            initialData: getIt<HiveDB>().ueberMillisekundenGesamt,
+                            stream: getIt<HiveDB>().ueberMillisekundenGesamtStream.stream,
+                            builder: (context, snapshot) {
+                              if (hourSnapshotSave != snapshot.data) {
+                                hourSnapshotSave = snapshot.data!;
+                                updateHr = true;
+                              }
+
+                              if (updateHr) {
+                                tmpHour = snapshot.data!;
+                              }
+
+                              Color _color = tmpHour.isNegative ? Theme.of(context).colorScheme.onSecondary : neon;
+                              int stunden = (tmpHour / Duration.millisecondsPerHour).truncate();
+                              int realStunden = (snapshot.data! / Duration.millisecondsPerHour).truncate();
+
+                              String addMinus = tmpHour.isNegative && stunden == 0 ? "-" : "";
+
+                              if (updateHr) {
+                                print("update");
+                                String initialString = addMinus + stunden.toString();
+                                hoursTextController = TextEditingController.fromValue(
+                                  TextEditingValue(
+                                    text: initialString,
+                                    selection: TextSelection.collapsed(offset: initialString.length),
+                                  ),
+                                );
+                                updateHr = false;
+                              }
+
+                              Widget _widget = KeyedSubtree(
+                                  key: stunden == 0 ? ValueKey<Color>(_color) : ValueKey<int>(realStunden),
+                                  child: AbsorbPointer(
+                                    absorbing: !isOpen,
+                                    child: AnimatedFittedTextFieldContainer(
+                                      calculator: (m) =>
+                                          (m.fixedWidths + max(m.labelWidth, max(m.hintWidth, m.textWidth)) * MediaQuery.textScaleFactorOf(context)),
+                                      growDuration: widget.durationShort,
+                                      shrinkDuration: widget.durationShort,
+                                      growCurve: widget.curve,
+                                      shrinkCurve: widget.curve,
+                                      child: TextField(
+                                        enabled: isOpen,
+                                        controller: hoursTextController,
+                                        style: overTimeNumbers.copyWith(color: _color),
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.allow(RegExp(r'[0-9, -]')),
+                                        ],
+                                        decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            enabledBorder: InputBorder.none,
+                                            contentPadding: EdgeInsets.fromLTRB(0, 0, -2.5, 0)),
+                                        onChanged: (v) {
+                                          setState(() {
+                                            tmpHour = int.parse(v) * Duration.millisecondsPerHour;
+                                            print(hoursTextController.value);
+                                          });
+                                        },
+                                        onSubmitted: (v) {
+                                          int newOffset = int.parse(v) - realStunden;
+                                          getIt<Data>().addOffset(newOffset * Duration.millisecondsPerHour);
+                                          print("newOffset $newOffset");
+                                          updateHr = true;
+                                        },
+                                      ),
+                                    ),
+                                  ));
+
+                              return AnimatedContainer(
+                                duration: widget.duration,
+                                curve: widget.curve,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: isOpen ? _color.withAlpha(40) : _color.withAlpha(0),
+                                ),
+                                padding: isOpen ? const EdgeInsets.symmetric(horizontal: 4, vertical: 2) : EdgeInsets.zero,
+                                child: AnimatedSize(
+                                  vsync: this,
+                                  duration: const Duration(milliseconds: 400),
+                                  curve: Curves.ease,
+                                  child: PageTransitionSwitcher(
+                                    transitionBuilder: (
+                                      Widget child,
+                                      Animation<double> primaryAnimation,
+                                      Animation<double> secondaryAnimation,
+                                    ) {
+                                      return SharedAxisTransition(
+                                        child: child,
+                                        animation: primaryAnimation,
+                                        secondaryAnimation: secondaryAnimation,
+                                        transitionType: SharedAxisTransitionType.scaled,
+                                        fillColor: Colors.transparent,
+                                      );
+                                    },
+                                    child: _widget,
+                                    duration: const Duration(milliseconds: 600),
+                                  ),
+                                ),
+                              );
+                            }),
+                        AnimatedContainer(
+                            color: Colors.transparent,
+                            duration: widget.durationShort,
+                            curve: widget.curve,
+                            width: isOpen ? 30 : 0,
+                            child: FadeTransition(
+                                opacity: animationFade,
+                                child: IconButton(
+                                  padding: const EdgeInsets.all(0),
+                                  icon: Icon(
+                                    Icons.add_circle_rounded,
+                                    color: offsetButtonColor,
+                                  ),
+                                  onPressed: () {
+                                    getIt<Data>().addOffset(Duration.millisecondsPerHour);
+                                    updateHr = true;
+                                    updateMin = true;
+                                  },
+                                ))),
+                        AnimatedPadding(
+                            curve: widget.curve,
+                            duration: widget.duration,
+                            padding: EdgeInsets.symmetric(horizontal: isOpen ? widget.opendividerPadding : widget.closedDividerPadding),
+                            child: StreamBuilder<int>(
+                                initialData: getIt<HiveDB>().ueberMillisekundenGesamt,
+                                stream: getIt<HiveDB>().ueberMillisekundenGesamtStream.stream,
+                                builder: (context, snapshot) {
+                                  Color _color = snapshot.data!.isNegative ? Theme.of(context).colorScheme.onSecondary : neon;
+
+                                  Widget _widget = KeyedSubtree(
+                                      key: ValueKey<Color>(_color),
+                                      child: AnimatedOpacity(
+                                        duration: widget.durationShort,
+                                        curve: widget.curve,
+                                        opacity: isOpen ? 0.2 : 1,
+                                        child: Text(
+                                          ":",
+                                          style: overTimeNumbers.copyWith(color: _color),
+                                        ),
+                                      ));
+
+                                  return PageTransitionSwitcher(
+                                    transitionBuilder: (
+                                      Widget child,
+                                      Animation<double> primaryAnimation,
+                                      Animation<double> secondaryAnimation,
+                                    ) {
+                                      return SharedAxisTransition(
+                                        child: child,
+                                        animation: primaryAnimation,
+                                        secondaryAnimation: secondaryAnimation,
+                                        transitionType: SharedAxisTransitionType.scaled,
+                                        fillColor: Colors.transparent,
+                                      );
+                                    },
+                                    child: _widget,
+                                    duration: const Duration(milliseconds: 600),
+                                  );
+                                })),
+                        AnimatedContainer(
+                            color: Colors.transparent,
+                            duration: widget.durationShort,
+                            curve: widget.curve,
+                            width: isOpen ? 30 : 0,
+                            child: FadeTransition(
+                                opacity: animationFade,
+                                child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  icon: Icon(
+                                    Icons.remove_circle_rounded,
+                                    color: offsetButtonColor,
+                                  ),
+                                  onPressed: () {
+                                    getIt<HiveDB>().ueberMillisekundenGesamt.isNegative
+                                        ? getIt<Data>().addOffset(Duration.millisecondsPerMinute)
+                                        : getIt<Data>().addOffset(-Duration.millisecondsPerMinute);
+                                    updateHr = true;
+                                    updateMin = true;
+                                  },
+                                ))),
+                        StreamBuilder<int>(
+                            initialData: getIt<HiveDB>().ueberMillisekundenGesamt,
+                            stream: getIt<HiveDB>().ueberMillisekundenGesamtStream.stream,
+                            builder: (context, snapshot) {
+                              if (minutesSnapshotSave != snapshot.data) {
+                                minutesSnapshotSave = snapshot.data!;
+                                updateMin = true;
+                              }
+
+                              if (updateMin) {
+                                tmpMinutes = snapshot.data!;
+                              }
+
+                              Color _color = tmpMinutes.isNegative ? Theme.of(context).colorScheme.onSecondary : neon;
+                              int minutes = ((tmpMinutes.abs() / Duration.millisecondsPerMinute) % 60).truncate();
+                              int realMinutes = ((snapshot.data! / Duration.millisecondsPerMinute) % 60).truncate();
+
+                              int negativityFactor = snapshot.data!.isNegative ? -1 : 1;
+
+                              if (updateMin) {
+                                print("updateMin");
+                                String initialString = minutes.toString();
+                                print("$initialString");
+                                minutesTextController = TextEditingController.fromValue(
+                                  TextEditingValue(
+                                    text: initialString.padLeft(2, '0'),
+                                    selection: TextSelection.collapsed(offset: initialString.length),
+                                  ),
+                                );
+                                updateMin = false;
+                              }
+
+                              Widget _widget = KeyedSubtree(
+                                  key: ValueKey<int>(Duration(milliseconds: snapshot.data!).inMinutes),
+                                  child: AbsorbPointer(
+                                      absorbing: !isOpen,
+                                      child: AnimatedDefaultTextStyle(
+                                        duration: Duration(milliseconds: 300),
+                                        style: overTimeNumbers.copyWith(color: _color),
+                                        child: AnimatedFittedTextFieldContainer(
+                                          calculator: (m) => (m.fixedWidths +
+                                              max(m.labelWidth, max(m.hintWidth, m.textWidth)) * MediaQuery.textScaleFactorOf(context)),
+                                          growDuration: widget.durationShort,
+                                          shrinkDuration: widget.durationShort,
+                                          growCurve: widget.curve,
+                                          shrinkCurve: widget.curve,
+                                          child: TextField(
+                                            enabled: isOpen,
+                                            maxLength: 2,
+                                            controller: minutesTextController,
+                                            style: overTimeNumbers.copyWith(color: _color),
+                                            keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                            ],
+                                            decoration: const InputDecoration(
+                                                counterText: "",
+                                                border: InputBorder.none,
+                                                focusedBorder: InputBorder.none,
+                                                enabledBorder: InputBorder.none,
+                                                contentPadding: EdgeInsets.fromLTRB(0, 0, -2.5, 0)),
+                                            onChanged: (v) {
+                                              setState(() {
+                                                tmpMinutes = int.parse(v) * Duration.millisecondsPerMinute;
+                                                print(minutesTextController.value);
+                                              });
+                                            },
+                                            onSubmitted: (v) {
+                                              String value = v;
+                                              print("realMinutes $realMinutes");
+                                              int newOffset;
+                                              snapshot.data!.isNegative
+                                                  ? newOffset = 59 - int.parse(value) - realMinutes.abs()
+                                                  : newOffset = int.parse(value) - realMinutes.abs();
+                                              getIt<Data>().addOffset(newOffset * Duration.millisecondsPerMinute);
+                                              print("newOffset $newOffset");
+                                              updateMin = true;
+                                            },
+                                          ),
+                                        ),
+                                      )));
+
+                              return AnimatedContainer(
+                                duration: widget.duration,
+                                curve: widget.curve,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: isOpen ? _color.withAlpha(40) : _color.withAlpha(0),
+                                ),
+                                padding: isOpen ? const EdgeInsets.symmetric(horizontal: 4, vertical: 2) : EdgeInsets.zero,
+                                child: AnimatedSize(
+                                  vsync: this,
+                                  duration: const Duration(milliseconds: 400),
+                                  curve: Curves.ease,
+                                  child: PageTransitionSwitcher(
+                                    transitionBuilder: (
+                                      Widget child,
+                                      Animation<double> primaryAnimation,
+                                      Animation<double> secondaryAnimation,
+                                    ) {
+                                      return SharedAxisTransition(
+                                        child: child,
+                                        animation: primaryAnimation,
+                                        secondaryAnimation: secondaryAnimation,
+                                        transitionType: SharedAxisTransitionType.scaled,
+                                        fillColor: Colors.transparent,
+                                      );
+                                    },
+                                    child: _widget,
+                                    duration: const Duration(milliseconds: 600),
+                                  ),
+                                ),
+                              );
+                            }),
+                        AnimatedContainer(
+                            duration: widget.durationShort,
+                            curve: widget.curve,
+                            width: isOpen ? 30 : 0,
+                            child: FadeTransition(
+                                opacity: animationFade,
+                                child: IconButton(
+                                  padding: const EdgeInsets.all(0),
+                                  icon: Icon(
+                                    Icons.add_circle_rounded,
+                                    color: offsetButtonColor,
+                                  ),
+                                  onPressed: () {
+                                    getIt<HiveDB>().ueberMillisekundenGesamt.isNegative
+                                        ? getIt<Data>().addOffset(-Duration.millisecondsPerMinute)
+                                        : getIt<Data>().addOffset(Duration.millisecondsPerMinute);
+                                    updateHr = true;
+                                    updateMin = true;
+                                  },
+                                ))),
+                      ],
+                    ),
+                  ),
+                  AnimatedPadding(
+                    duration: widget.duration,
+                    curve: widget.curve,
+                    padding: isOpen ? const EdgeInsets.symmetric(vertical: 20) : EdgeInsets.zero,
+                    child: AnimatedContainer(
+                      duration: widget.duration,
+                      curve: widget.curve,
+                      height: isOpen ? 40 : 30,
+                      child: PageTransitionSwitcher(
+                        reverse: !isOpen,
+                        transitionBuilder: (
+                          Widget child,
+                          Animation<double> primaryAnimation,
+                          Animation<double> secondaryAnimation,
+                        ) {
+                          return SharedAxisTransition(
+                            child: child,
+                            animation: primaryAnimation,
+                            secondaryAnimation: secondaryAnimation,
+                            transitionType: SharedAxisTransitionType.scaled,
+                            fillColor: Colors.transparent,
+                          );
+                        },
+                        child: KeyedSubtree(
+                          key: ValueKey<bool>(isOpen),
+                          child: isOpen
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    FlatButton(
+                                        color: grayTranslucent,
+                                        shape: const StadiumBorder(),
+                                        onPressed: () {
+                                          setState(() {
+                                            print("pressed");
+                                            getIt<Data>().setOffset(0);
+                                            updateHr = true;
+                                            updateMin = true;
+                                          });
+                                        },
+                                        child: Center(
+                                            child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.replay_rounded,
+                                              color: gray,
+                                              size: 20,
+                                            ),
+                                            const SizedBox(width: 5),
+                                            Text(
+                                              "Zurücksetzen",
+                                              style: openButtonText.copyWith(color: gray, fontSize: 14),
+                                            ),
+                                          ],
+                                        ))),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    FlatButton(
+                                        highlightColor: neon.withAlpha(80),
+                                        splashColor: neon.withAlpha(150),
+                                        color: neonTranslucent,
+                                        shape: const StadiumBorder(),
+                                        onPressed: () {
+                                          setState(() {
+                                            print("pressed");
+                                            isOpen = !isOpen;
+                                            !isOpen ? controller.reverse() : controller.forward();
+
+                                            /*// 0-99
+                                              int typedMinutes = int.parse(minutesTextController.text);
+                                              print("tMin $typedMinutes");
+                                              // 0-inf
+                                              int typedHours = int.parse(hoursTextController.text);
+                                              print("tHr $typedHours");
+                                              // 0-inf
+                                              int previousOvertimeMinutes = (getIt<HiveDB>().ueberMillisekundenGesamt/Duration.millisecondsPerMinute).round();
+            
+                                              int goalMinutes = typedHours*60 + typedMinutes;
+            
+                                              int newOffsetMinutes = goalMinutes - previousOvertimeMinutes;
+            
+                                              print("prevMinutes $previousOvertimeMinutes");
+                                              print("goalMin $goalMinutes");
+            
+                                              getIt<Data>().addOffset(newOffsetMinutes*Duration.millisecondsPerMinute);*/
+
+                                            updateHr = true;
+                                            updateMin = true;
+                                          });
+                                        },
+                                        child: Center(
+                                            child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.done,
+                                              color: neonAccent,
+                                              size: 20,
+                                            ),
+                                            const SizedBox(width: 5),
+                                            Text(
+                                              "Fertig",
+                                              style: openButtonText.copyWith(color: neonAccent, fontSize: 14),
+                                            ),
+                                          ],
+                                        )))
+                                  ],
+                                )
+                              : SizedBox(
+                                  height: 30,
+                                  child: StreamBuilder<int>(
+                                      initialData: getIt<HiveDB>().ueberMillisekundenGesamt,
+                                      stream: getIt<HiveDB>().ueberMillisekundenGesamtStream.stream,
+                                      builder: (context, snapshot) {
+                                        String text = snapshot.data!.isNegative ? "Stunden" : "Überstunden";
+
+                                        Widget _widget = KeyedSubtree(
+                                            key: ValueKey<String>(text),
+                                            child: Text(
+                                              text,
+                                              style: TextStyle(fontSize: 20, color: Theme.of(context).colorScheme.onSecondary),
+                                            ));
+
+                                        return PageTransitionSwitcher(
+                                          reverse: text == "Stunden",
+                                          transitionBuilder: (
+                                            Widget child,
+                                            Animation<double> primaryAnimation,
+                                            Animation<double> secondaryAnimation,
+                                          ) {
+                                            return SharedAxisTransition(
+                                              child: child,
+                                              animation: primaryAnimation,
+                                              secondaryAnimation: secondaryAnimation,
+                                              transitionType: SharedAxisTransitionType.vertical,
+                                              fillColor: Colors.transparent,
+                                            );
+                                          },
+                                          child: _widget,
+                                          duration: const Duration(milliseconds: 600),
+                                        );
+                                      }),
+                                ),
+                        ),
+                        duration: const Duration(milliseconds: 600),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: FadeTransition(
+                opacity: animationFade,
+                child: Text(
+                  "Zeit bearbeiten",
+                  style: TextStyle(color: gray, fontSize: 16),
+                )),
+          ),
+          Align(
             alignment: Alignment.centerRight,
             child: PageTransitionSwitcher(
               reverse: isOpen,
@@ -127,515 +645,6 @@ class _OvertimeChangeWidgetState extends State<OvertimeChangeWidget> with Ticker
                     ),
               duration: const Duration(milliseconds: 600),
             ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                AnimatedPadding(
-                  duration: widget.durationShort,
-                  curve: widget.curve,
-                  padding: isOpen ? const EdgeInsets.only(top: 30) : EdgeInsets.zero,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      AnimatedContainer(
-                          color: Colors.transparent,
-                          duration: widget.durationShort,
-                          curve: widget.curve,
-                          width: isOpen ? 30 : 0,
-                          child: FadeTransition(
-                              opacity: animationFade,
-                              child: IconButton(
-                                padding: EdgeInsets.zero,
-                                icon: Icon(
-                                  Icons.remove_circle_rounded,
-                                  color: offsetButtonColor,
-                                ),
-                                onPressed: () {
-                                  getIt<Data>().addOffset(-Duration.millisecondsPerHour);
-                                  updateHr = true;
-                                  updateMin = true;
-                                },
-                              ))),
-                      StreamBuilder<int>(
-                          initialData: getIt<HiveDB>().ueberMillisekundenGesamt,
-                          stream: getIt<HiveDB>().ueberMillisekundenGesamtStream.stream,
-                          builder: (context, snapshot) {
-                            if (hourSnapshotSave != snapshot.data) {
-                              hourSnapshotSave = snapshot.data!;
-                              updateHr = true;
-                            }
-
-                            if (updateHr) {
-                              tmpHour = snapshot.data!;
-                            }
-
-                            Color _color = tmpHour.isNegative ? Theme.of(context).colorScheme.onSecondary : neon;
-                            int stunden = (tmpHour / Duration.millisecondsPerHour).truncate();
-                            int realStunden = (snapshot.data! / Duration.millisecondsPerHour).truncate();
-
-                            String addMinus = tmpHour.isNegative && stunden == 0 ? "-" : "";
-
-                            if (updateHr) {
-                              print("update");
-                              String initialString = addMinus + stunden.toString();
-                              hoursTextController = TextEditingController.fromValue(
-                                TextEditingValue(
-                                  text: initialString,
-                                  selection: TextSelection.collapsed(offset: initialString.length),
-                                ),
-                              );
-                              updateHr = false;
-                            }
-
-                            Widget _widget = KeyedSubtree(
-                                key: stunden == 0 ? ValueKey<Color>(_color) : ValueKey<int>(realStunden),
-                                child: AbsorbPointer(
-                                  absorbing: !isOpen,
-                                  child: AnimatedFittedTextFieldContainer(
-                                    growDuration: widget.durationShort,
-                                    shrinkDuration: widget.durationShort,
-                                    growCurve: widget.curve,
-                                    shrinkCurve: widget.curve,
-                                    child: TextField(
-                                      enabled: isOpen,
-                                      controller: hoursTextController,
-                                      style: overTimeNumbers.copyWith(color: _color),
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.allow(RegExp(r'[0-9, -]')),
-                                      ],
-                                      decoration: const InputDecoration(
-                                          border: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                          enabledBorder: InputBorder.none,
-                                          contentPadding: EdgeInsets.fromLTRB(0, 0, -2.5, 0)),
-                                      onChanged: (v) {
-                                        setState(() {
-                                          tmpHour = int.parse(v) * Duration.millisecondsPerHour;
-                                          print(hoursTextController.value);
-                                        });
-                                      },
-                                      onSubmitted: (v) {
-                                        int newOffset = int.parse(v) - realStunden;
-                                        getIt<Data>().addOffset(newOffset * Duration.millisecondsPerHour);
-                                        print("newOffset $newOffset");
-                                        updateHr = true;
-                                      },
-                                    ),
-                                  ),
-                                ));
-
-                            return AnimatedContainer(
-                              duration: widget.duration,
-                              curve: widget.curve,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: isOpen ? _color.withAlpha(40) : _color.withAlpha(0),
-                              ),
-                              padding: isOpen ? const EdgeInsets.symmetric(horizontal: 4, vertical: 2) : EdgeInsets.zero,
-                              child: AnimatedSize(
-                                vsync: this,
-                                duration: const Duration(milliseconds: 400),
-                                curve: Curves.ease,
-                                child: PageTransitionSwitcher(
-                                  transitionBuilder: (
-                                    Widget child,
-                                    Animation<double> primaryAnimation,
-                                    Animation<double> secondaryAnimation,
-                                  ) {
-                                    return SharedAxisTransition(
-                                      child: child,
-                                      animation: primaryAnimation,
-                                      secondaryAnimation: secondaryAnimation,
-                                      transitionType: SharedAxisTransitionType.scaled,
-                                      fillColor: Colors.transparent,
-                                    );
-                                  },
-                                  child: _widget,
-                                  duration: const Duration(milliseconds: 600),
-                                ),
-                              ),
-                            );
-                          }),
-                      AnimatedContainer(
-                          color: Colors.transparent,
-                          duration: widget.durationShort,
-                          curve: widget.curve,
-                          width: isOpen ? 30 : 0,
-                          child: FadeTransition(
-                              opacity: animationFade,
-                              child: IconButton(
-                                padding: const EdgeInsets.all(0),
-                                icon: Icon(
-                                  Icons.add_circle_rounded,
-                                  color: offsetButtonColor,
-                                ),
-                                onPressed: () {
-                                  getIt<Data>().addOffset(Duration.millisecondsPerHour);
-                                  updateHr = true;
-                                  updateMin = true;
-                                },
-                              ))),
-                      AnimatedPadding(
-                          curve: widget.curve,
-                          duration: widget.duration,
-                          padding: EdgeInsets.symmetric(horizontal: isOpen ? widget.opendividerPadding : widget.closedDividerPadding),
-                          child: StreamBuilder<int>(
-                              initialData: getIt<HiveDB>().ueberMillisekundenGesamt,
-                              stream: getIt<HiveDB>().ueberMillisekundenGesamtStream.stream,
-                              builder: (context, snapshot) {
-                                Color _color = snapshot.data!.isNegative ? Theme.of(context).colorScheme.onSecondary : neon;
-
-                                Widget _widget = KeyedSubtree(
-                                    key: ValueKey<Color>(_color),
-                                    child: AnimatedOpacity(
-                                      duration: widget.durationShort,
-                                      curve: widget.curve,
-                                      opacity: isOpen ? 0.2 : 1,
-                                      child: Text(
-                                        ":",
-                                        style: overTimeNumbers.copyWith(color: _color),
-                                      ),
-                                    ));
-
-                                return PageTransitionSwitcher(
-                                  transitionBuilder: (
-                                    Widget child,
-                                    Animation<double> primaryAnimation,
-                                    Animation<double> secondaryAnimation,
-                                  ) {
-                                    return SharedAxisTransition(
-                                      child: child,
-                                      animation: primaryAnimation,
-                                      secondaryAnimation: secondaryAnimation,
-                                      transitionType: SharedAxisTransitionType.scaled,
-                                      fillColor: Colors.transparent,
-                                    );
-                                  },
-                                  child: _widget,
-                                  duration: const Duration(milliseconds: 600),
-                                );
-                              })),
-                      AnimatedContainer(
-                          color: Colors.transparent,
-                          duration: widget.durationShort,
-                          curve: widget.curve,
-                          width: isOpen ? 30 : 0,
-                          child: FadeTransition(
-                              opacity: animationFade,
-                              child: IconButton(
-                                padding: EdgeInsets.zero,
-                                icon: Icon(
-                                  Icons.remove_circle_rounded,
-                                  color: offsetButtonColor,
-                                ),
-                                onPressed: () {
-                                  getIt<HiveDB>().ueberMillisekundenGesamt.isNegative
-                                      ? getIt<Data>().addOffset(Duration.millisecondsPerMinute)
-                                      : getIt<Data>().addOffset(-Duration.millisecondsPerMinute);
-                                  updateHr = true;
-                                  updateMin = true;
-                                },
-                              ))),
-                      StreamBuilder<int>(
-                          initialData: getIt<HiveDB>().ueberMillisekundenGesamt,
-                          stream: getIt<HiveDB>().ueberMillisekundenGesamtStream.stream,
-                          builder: (context, snapshot) {
-                            if (minutesSnapshotSave != snapshot.data) {
-                              minutesSnapshotSave = snapshot.data!;
-                              updateMin = true;
-                            }
-
-                            if (updateMin) {
-                              tmpMinutes = snapshot.data!;
-                            }
-
-                            Color _color = tmpMinutes.isNegative ? Theme.of(context).colorScheme.onSecondary : neon;
-                            int minutes = ((tmpMinutes.abs() / Duration.millisecondsPerMinute) % 60).truncate();
-                            int realMinutes = ((snapshot.data! / Duration.millisecondsPerMinute) % 60).truncate();
-
-                            int negativityFactor = snapshot.data!.isNegative ? -1 : 1;
-
-                            if (updateMin) {
-                              print("updateMin");
-                              String initialString = minutes.toString();
-                              print("$initialString");
-                              minutesTextController = TextEditingController.fromValue(
-                                TextEditingValue(
-                                  text: initialString.padLeft(2, '0'),
-                                  selection: TextSelection.collapsed(offset: initialString.length),
-                                ),
-                              );
-                              updateMin = false;
-                            }
-
-                            Widget _widget = KeyedSubtree(
-                                key: ValueKey<int>(Duration(milliseconds: snapshot.data!).inMinutes),
-                                child: AbsorbPointer(
-                                    absorbing: !isOpen,
-                                    child: AnimatedDefaultTextStyle(
-                                      duration: Duration(milliseconds: 300),
-                                      style: overTimeNumbers.copyWith(color: _color),
-                                      child: AnimatedFittedTextFieldContainer(
-                                        growDuration: widget.durationShort,
-                                        shrinkDuration: widget.durationShort,
-                                        growCurve: widget.curve,
-                                        shrinkCurve: widget.curve,
-                                        child: TextField(
-                                          enabled: isOpen,
-                                          maxLength: 2,
-                                          controller: minutesTextController,
-                                          style: overTimeNumbers.copyWith(color: _color),
-                                          keyboardType: TextInputType.number,
-                                          inputFormatters: <TextInputFormatter>[
-                                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                          ],
-                                          decoration: const InputDecoration(
-                                              counterText: "",
-                                              border: InputBorder.none,
-                                              focusedBorder: InputBorder.none,
-                                              enabledBorder: InputBorder.none,
-                                              contentPadding: EdgeInsets.fromLTRB(0, 0, -2.5, 0)),
-                                          onChanged: (v) {
-                                            setState(() {
-                                              tmpMinutes = int.parse(v) * Duration.millisecondsPerMinute;
-                                              print(minutesTextController.value);
-                                            });
-                                          },
-                                          onSubmitted: (v) {
-                                            String value = v;
-                                            print("realMinutes $realMinutes");
-                                            int newOffset;
-                                            snapshot.data!.isNegative
-                                                ? newOffset = 59 - int.parse(value) - realMinutes.abs()
-                                                : newOffset = int.parse(value) - realMinutes.abs();
-                                            getIt<Data>().addOffset(newOffset * Duration.millisecondsPerMinute);
-                                            print("newOffset $newOffset");
-                                            updateMin = true;
-                                          },
-                                        ),
-                                      ),
-                                    )));
-
-                            return AnimatedContainer(
-                              duration: widget.duration,
-                              curve: widget.curve,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: isOpen ? _color.withAlpha(40) : _color.withAlpha(0),
-                              ),
-                              padding: isOpen ? const EdgeInsets.symmetric(horizontal: 4, vertical: 2) : EdgeInsets.zero,
-                              child: AnimatedSize(
-                                vsync: this,
-                                duration: const Duration(milliseconds: 400),
-                                curve: Curves.ease,
-                                child: PageTransitionSwitcher(
-                                  transitionBuilder: (
-                                    Widget child,
-                                    Animation<double> primaryAnimation,
-                                    Animation<double> secondaryAnimation,
-                                  ) {
-                                    return SharedAxisTransition(
-                                      child: child,
-                                      animation: primaryAnimation,
-                                      secondaryAnimation: secondaryAnimation,
-                                      transitionType: SharedAxisTransitionType.scaled,
-                                      fillColor: Colors.transparent,
-                                    );
-                                  },
-                                  child: _widget,
-                                  duration: const Duration(milliseconds: 600),
-                                ),
-                              ),
-                            );
-                          }),
-                      AnimatedContainer(
-                          duration: widget.durationShort,
-                          curve: widget.curve,
-                          width: isOpen ? 30 : 0,
-                          child: FadeTransition(
-                              opacity: animationFade,
-                              child: IconButton(
-                                padding: const EdgeInsets.all(0),
-                                icon: Icon(
-                                  Icons.add_circle_rounded,
-                                  color: offsetButtonColor,
-                                ),
-                                onPressed: () {
-                                  getIt<HiveDB>().ueberMillisekundenGesamt.isNegative
-                                      ? getIt<Data>().addOffset(-Duration.millisecondsPerMinute)
-                                      : getIt<Data>().addOffset(Duration.millisecondsPerMinute);
-                                  updateHr = true;
-                                  updateMin = true;
-                                },
-                              ))),
-                    ],
-                  ),
-                ),
-                AnimatedPadding(
-                  duration: widget.duration,
-                  curve: widget.curve,
-                  padding: isOpen ? const EdgeInsets.symmetric(vertical: 20) : EdgeInsets.zero,
-                  child: AnimatedContainer(
-                    duration: widget.duration,
-                    curve: widget.curve,
-                    height: isOpen ? 40 : 30,
-                    child: PageTransitionSwitcher(
-                      reverse: !isOpen,
-                      transitionBuilder: (
-                        Widget child,
-                        Animation<double> primaryAnimation,
-                        Animation<double> secondaryAnimation,
-                      ) {
-                        return SharedAxisTransition(
-                          child: child,
-                          animation: primaryAnimation,
-                          secondaryAnimation: secondaryAnimation,
-                          transitionType: SharedAxisTransitionType.scaled,
-                          fillColor: Colors.transparent,
-                        );
-                      },
-                      child: KeyedSubtree(
-                        key: ValueKey<bool>(isOpen),
-                        child: isOpen
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  FlatButton(
-                                      color: grayTranslucent,
-                                      shape: const StadiumBorder(),
-                                      onPressed: () {
-                                        setState(() {
-                                          print("pressed");
-                                          getIt<Data>().setOffset(0);
-                                          updateHr = true;
-                                          updateMin = true;
-                                        });
-                                      },
-                                      child: Center(
-                                          child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.replay_rounded,
-                                            color: gray,
-                                            size: 20,
-                                          ),
-                                          const SizedBox(width: 5),
-                                          Text(
-                                            "Zurücksetzen",
-                                            style: openButtonText.copyWith(color: gray, fontSize: 14),
-                                          ),
-                                        ],
-                                      ))),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  FlatButton(
-                                      highlightColor: neon.withAlpha(80),
-                                      splashColor: neon.withAlpha(150),
-                                      color: neonTranslucent,
-                                      shape: const StadiumBorder(),
-                                      onPressed: () {
-                                        setState(() {
-                                          print("pressed");
-                                          isOpen = !isOpen;
-                                          !isOpen ? controller.reverse() : controller.forward();
-
-                                          /*// 0-99
-                                            int typedMinutes = int.parse(minutesTextController.text);
-                                            print("tMin $typedMinutes");
-                                            // 0-inf
-                                            int typedHours = int.parse(hoursTextController.text);
-                                            print("tHr $typedHours");
-                                            // 0-inf
-                                            int previousOvertimeMinutes = (getIt<HiveDB>().ueberMillisekundenGesamt/Duration.millisecondsPerMinute).round();
-
-                                            int goalMinutes = typedHours*60 + typedMinutes;
-
-                                            int newOffsetMinutes = goalMinutes - previousOvertimeMinutes;
-
-                                            print("prevMinutes $previousOvertimeMinutes");
-                                            print("goalMin $goalMinutes");
-
-                                            getIt<Data>().addOffset(newOffsetMinutes*Duration.millisecondsPerMinute);*/
-
-                                          updateHr = true;
-                                          updateMin = true;
-                                        });
-                                      },
-                                      child: Center(
-                                          child: Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.done,
-                                            color: neonAccent,
-                                            size: 20,
-                                          ),
-                                          const SizedBox(width: 5),
-                                          Text(
-                                            "Fertig",
-                                            style: openButtonText.copyWith(color: neonAccent, fontSize: 14),
-                                          ),
-                                        ],
-                                      )))
-                                ],
-                              )
-                            : SizedBox(
-                                height: 30,
-                                child: StreamBuilder<int>(
-                                    initialData: getIt<HiveDB>().ueberMillisekundenGesamt,
-                                    stream: getIt<HiveDB>().ueberMillisekundenGesamtStream.stream,
-                                    builder: (context, snapshot) {
-                                      String text = snapshot.data!.isNegative ? "Stunden" : "Überstunden";
-
-                                      Widget _widget = KeyedSubtree(
-                                          key: ValueKey<String>(text),
-                                          child: Text(
-                                            text,
-                                            style: TextStyle(fontSize: 20, color: Theme.of(context).colorScheme.onSecondary),
-                                          ));
-
-                                      return PageTransitionSwitcher(
-                                        reverse: text == "Stunden",
-                                        transitionBuilder: (
-                                          Widget child,
-                                          Animation<double> primaryAnimation,
-                                          Animation<double> secondaryAnimation,
-                                        ) {
-                                          return SharedAxisTransition(
-                                            child: child,
-                                            animation: primaryAnimation,
-                                            secondaryAnimation: secondaryAnimation,
-                                            transitionType: SharedAxisTransitionType.vertical,
-                                            fillColor: Colors.transparent,
-                                          );
-                                        },
-                                        child: _widget,
-                                        duration: const Duration(milliseconds: 600),
-                                      );
-                                    }),
-                              ),
-                      ),
-                      duration: const Duration(milliseconds: 600),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: FadeTransition(
-                opacity: animationFade,
-                child: Text(
-                  "Zeit bearbeiten",
-                  style: TextStyle(color: gray, fontSize: 16),
-                )),
           )
         ],
       ),

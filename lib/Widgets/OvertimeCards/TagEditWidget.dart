@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:Timo/Services/HiveDB.dart';
 import 'package:Timo/hiveClasses/Zeitnahme.dart';
 import 'package:fitted_text_field_container/fitted_text_field_container.dart';
@@ -6,11 +8,7 @@ import 'package:flutter/material.dart';
 import '../../Services/Theme.dart';
 
 class TagEditWidget extends StatefulWidget {
-  const TagEditWidget(
-      {required this.i,
-      required this.color,
-      required this.colorAccent,
-      required this.zeitnahme});
+  const TagEditWidget({required this.i, required this.color, required this.colorAccent, required this.zeitnahme});
 
   final Color colorAccent;
   final Color color;
@@ -41,6 +39,7 @@ class _TagEditWidgetState extends State<TagEditWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           AnimatedFittedTextFieldContainer(
+            calculator: (m) => (m.fixedWidths + max(m.labelWidth, max(m.hintWidth, m.textWidth)) * MediaQuery.textScaleFactorOf(context)),
             growDuration: const Duration(milliseconds: 200),
             growCurve: Curves.easeOutQuart,
             shrinkCurve: Curves.ease,

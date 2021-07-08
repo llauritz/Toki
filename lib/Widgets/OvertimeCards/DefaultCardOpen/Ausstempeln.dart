@@ -88,9 +88,12 @@ class _AusstempelnState extends State<Ausstempeln> {
               ),
               Container(
                 width: 120,
-                child: Text(
-                  "Ausstempeln",
-                  style: headline3.copyWith(color: gray),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    "Ausstempeln",
+                    style: headline3.copyWith(color: gray),
+                  ),
                 ),
               )
             ],

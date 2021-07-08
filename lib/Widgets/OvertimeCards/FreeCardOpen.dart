@@ -78,9 +78,12 @@ class _FreeCardOpenState extends State<FreeCardOpen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
-                            style: openCardDate.copyWith(color: free),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              tag.format(widget.zeitnahme.day) + ", " + datum.format(widget.zeitnahme.day),
+                              style: openCardDate.copyWith(color: free),
+                            ),
                           ),
                           const SizedBox(
                             height: 30,
