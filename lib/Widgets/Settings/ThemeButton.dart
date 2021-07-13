@@ -113,7 +113,7 @@ class _ThemeButtonState extends State<ThemeButton> {
 
     return FadeIn(
       delay: widget.fadeDelay,
-      fadeChild: Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -4,10 +4,10 @@ import 'package:simple_animations/simple_animations.dart';
 enum _AniProps { opacity, offset }
 
 class FadeIn extends StatelessWidget {
+  const FadeIn({required this.delay, required child}) : fadeChild = child;
+
   final int delay;
   final Widget fadeChild;
-
-  FadeIn({required this.delay, required this.fadeChild});
 
   @override
   Widget build(BuildContext context) {

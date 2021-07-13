@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:Timo/Services/Theme.dart';
 import 'package:Timo/Services/ThemeBuilder.dart';
 import 'package:Timo/Widgets/Settings/AutomaticStop.dart';
-import 'package:Timo/Widgets/Settings/PdfExport/ExportPage.dart';
+import 'package:Timo/Widgets/Settings/PdfExport/ExportPageButton.dart';
 import 'package:Timo/Widgets/Settings/ThemeAnimation/syncScrollController.dart';
 import 'package:Timo/Widgets/Settings/ThemeAnimation/widgetMask.dart';
 import 'package:Timo/Widgets/Settings/ThemeButton.dart';
@@ -235,24 +235,24 @@ class ThemedSettings extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         body:
             ListView(controller: sc, padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top), physics: BouncingScrollPhysics(), children: [
-          FadeIn(delay: 200, fadeChild: const SettingsTitle()),
-          //FadeIn(delay: 225, fadeChild: ExportPage()),
+          FadeIn(delay: 200, child: const SettingsTitle()),
+          FadeIn(delay: 225, child: ExportPageButton()),
           //AutoFadeIn(child: NamePicker()),
-          FadeIn(delay: 250, fadeChild: NamePicker()),
+          FadeIn(delay: 250, child: NamePicker()),
           FadeIn(
               delay: 300,
-              fadeChild: WorkTimePicker(
+              child: WorkTimePicker(
                 color: neon,
                 onboarding: false,
               )),
-          FadeIn(delay: 350, fadeChild: BreakCorrection()),
-          FadeIn(delay: 400, fadeChild: AutomaticStop()),
+          FadeIn(delay: 350, child: BreakCorrection()),
+          FadeIn(delay: 400, child: AutomaticStop()),
 
           SizedBox(
             height: 80,
           ),
         ]),
-        floatingActionButton: FadeIn(delay: 450, fadeChild: FertigButton()),
+        floatingActionButton: FadeIn(delay: 450, child: FertigButton()),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );
@@ -275,7 +275,7 @@ class ThemedSettingsNoFade extends StatelessWidget {
         body:
             ListView(controller: sc, padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top), physics: BouncingScrollPhysics(), children: [
           const SettingsTitle(),
-          //ExportPage(),
+          ExportPageButton(),
           //AutoFadeIn(child: NamePicker()),
           NamePicker(),
           WorkTimePicker(

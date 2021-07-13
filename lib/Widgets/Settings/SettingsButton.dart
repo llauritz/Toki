@@ -33,8 +33,8 @@ class _SettingsButtonState extends State<SettingsButton> {
                           ?darkBackground:Colors.white,*/
         closedElevation: 0.0,
         openElevation: 0.0,
-        closedShape: const CircleBorder(),
-        openShape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0.0))),
+        closedShape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(180.0))),
+        openShape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
         onClosed: (dynamic context) {
           getIt<HiveDB>().updateGesamtUeberstunden();
         },
