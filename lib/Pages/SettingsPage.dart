@@ -236,8 +236,7 @@ class ThemedSettings extends StatelessWidget {
         body:
             ListView(controller: sc, padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top), physics: BouncingScrollPhysics(), children: [
           FadeIn(delay: 200, child: const SettingsTitle()),
-          FadeIn(delay: 225, child: ExportPageButton()),
-          //AutoFadeIn(child: NamePicker()),
+          //FadeIn(delay: 225, child: ExportPageButton()),
           FadeIn(delay: 250, child: NamePicker()),
           FadeIn(
               delay: 300,
@@ -247,9 +246,8 @@ class ThemedSettings extends StatelessWidget {
               )),
           FadeIn(delay: 350, child: BreakCorrection()),
           FadeIn(delay: 400, child: AutomaticStop()),
-
           SizedBox(
-            height: 80,
+            height: 80 + MediaQuery.of(context).padding.bottom,
           ),
         ]),
         floatingActionButton: FadeIn(delay: 450, child: FertigButton()),
@@ -275,8 +273,7 @@ class ThemedSettingsNoFade extends StatelessWidget {
         body:
             ListView(controller: sc, padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top), physics: BouncingScrollPhysics(), children: [
           const SettingsTitle(),
-          ExportPageButton(),
-          //AutoFadeIn(child: NamePicker()),
+          //ExportPageButton(),
           NamePicker(),
           WorkTimePicker(
             color: neon,
@@ -284,9 +281,8 @@ class ThemedSettingsNoFade extends StatelessWidget {
           ),
           BreakCorrection(),
           AutomaticStop(),
-
           SizedBox(
-            height: 80,
+            height: 80 + MediaQuery.of(context).padding.bottom,
           ),
         ]),
         floatingActionButton: FertigButton(),

@@ -112,6 +112,7 @@ class _ThemeButtonState extends State<ThemeButton> {
     }
 
     return FadeIn(
+      curve: Curves.easeOutCubic,
       delay: widget.fadeDelay,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,

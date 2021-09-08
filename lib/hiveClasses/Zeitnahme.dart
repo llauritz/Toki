@@ -46,18 +46,20 @@ class Zeitnahme {
   }
 
   int getUeberstunden() {
-    int weekday = getIt<Data>().individualTimes? day.weekday - 1:0;
-    int milliseconds = getIt<Data>().workingTime[weekday];
+    int weekday = getIt<Data>().individualTimes ? day.weekday - 1 : 0;
+    int milliseconds = 0;
+    // Nur, wenn der Tag auch ein Arbeitstag ist, wird die Stundenzahl mit der Arbeitszeit verrechnet.
+    if (getIt<Data>().wochentage[day.weekday - 1]) {
+      milliseconds = getIt<Data>().workingTime[weekday];
+    }
 
     if (state == "default") {
       int uebermilliseconds = getElapsedTime() - milliseconds - getKorrektur();
       print("Zeitnahme - day" + day.toString());
       return uebermilliseconds;
-
     } else if (state == "edited") {
       int uebermilliseconds = editMilli - milliseconds;
       return uebermilliseconds;
-
     } else if (state == "empty") {
       return -milliseconds;
     } else {

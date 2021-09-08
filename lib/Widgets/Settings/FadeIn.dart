@@ -4,9 +4,16 @@ import 'package:simple_animations/simple_animations.dart';
 enum _AniProps { opacity, offset }
 
 class FadeIn extends StatelessWidget {
-  const FadeIn({required this.delay, required child}) : fadeChild = child;
+  const FadeIn({
+    required child,
+    this.delay = 0,
+    this.curve = Curves.ease,
+    this.duration = 400
+  }) : fadeChild = child;
 
   final int delay;
+  final int duration;
+  final Curve curve;
   final Widget fadeChild;
 
   @override
@@ -16,8 +23,8 @@ class FadeIn extends StatelessWidget {
     return PlayAnimation<MultiTweenValues<_AniProps>>(
       delay: Duration(milliseconds: delay),
       tween: _tween,
-      duration: const Duration(milliseconds: 450),
-      curve: Curves.ease,
+      duration: const Duration(milliseconds: 700),
+      curve: curve,
       builder: (context, child, value) {
         return AnimatedOpacity(
             duration: Duration.zero,

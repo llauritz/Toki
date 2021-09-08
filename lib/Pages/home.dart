@@ -27,7 +27,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   PanelController pc = PanelController();
-  StreamController<Color> containerColorStream = StreamController<Color>();
+  StreamController<double> containerOpacityStream = StreamController<double>();
   StreamController<double> blurValueStream = StreamController<double>();
   double _cardPosition = 0;
   double bottomInset = -1;
@@ -82,11 +82,11 @@ class _HomePageState extends State<HomePage> {
           renderPanelSheet: false,
           onPanelSlide: (double value) {
             if (value > 0.1 && _cardPosition <= 0.1) {
-              containerColorStream.sink.add(Colors.white.withAlpha(0));
+              containerOpacityStream.sink.add(0);
               _cardPosition = value;
               logger.v(_cardPosition);
             } else if (value < 0.1 && _cardPosition <= 0.11) {
-              containerColorStream.sink.add(Colors.white);
+              containerOpacityStream.sink.add(1);
               _cardPosition = value;
               logger.v(_cardPosition);
             } else {
@@ -95,20 +95,21 @@ class _HomePageState extends State<HomePage> {
             blurValueStream.sink.add((8 * value) + 0.001);
           },
           onPanelClosed: () {
-            containerColorStream.sink.add(Colors.white);
+            containerOpacityStream.sink.add(1);
           },
           footer: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: SizedBox(
               height: bottomInset,
               width: MediaQuery.of(context).size.width - 16,
-              child: StreamBuilder<Color>(
-                  stream: containerColorStream.stream,
-                  initialData: Colors.white,
-                  builder: (BuildContext context, AsyncSnapshot<Color> snapshot) {
-                    return AnimatedContainer(
+              child: StreamBuilder<double>(
+                  stream: containerOpacityStream.stream,
+                  initialData: 1,
+                  builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                    return AnimatedOpacity(
                       duration: const Duration(milliseconds: 200),
-                      color: snapshot.data,
+                      opacity: snapshot.data!,
+                      child: Container(color: Theme.of(context).backgroundColor),
                     );
                   }),
             ),
@@ -160,7 +161,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    containerColorStream.close();
+    containerOpacityStream.close();
     blurValueStream.close();
     print('home - DISPOSING-----------------');
     super.dispose();

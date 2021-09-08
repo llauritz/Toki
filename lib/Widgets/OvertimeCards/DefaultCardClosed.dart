@@ -1,3 +1,4 @@
+import 'package:Timo/Services/Theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
@@ -38,13 +39,13 @@ class _DefaultCardClosedState extends State<DefaultCardClosed> {
   Widget build(BuildContext context) {
     final int ueberMilliseconds = widget.zeitnahme.getUeberstunden();
     if (!ueberMilliseconds.isNegative) {
-      _color = Colors.tealAccent;
-      _colorAccent = Colors.tealAccent[400]!;
-      _colorTranslucent = Colors.tealAccent.withAlpha(50);
+      _color = neon;
+      _colorAccent = neonAccent;
+      _colorTranslucent = neonTranslucent;
     } else {
-      _color = Colors.blueGrey[300]!;
-      _colorAccent = Colors.blueGrey;
-      _colorTranslucent = Colors.blueGrey.withAlpha(25);
+      _color = gray;
+      _colorAccent = Theme.of(context).colorScheme.onSurface;
+      _colorTranslucent = grayTranslucent;
     }
 
     if (widget.i >= 0) {
