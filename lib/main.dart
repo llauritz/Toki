@@ -1,6 +1,6 @@
-import 'package:Timo/Services/CorrectionDB.dart';
-import 'package:Timo/Services/ThemeBuilder.dart';
-import 'package:Timo/hiveClasses/Correction.dart';
+import 'package:Toki/Services/CorrectionDB.dart';
+import 'package:Toki/Services/ThemeBuilder.dart';
+import 'package:Toki/hiveClasses/Correction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -45,7 +45,7 @@ void main() async {
 
   runApp(ThemeBuilder(builder: (context, thememode) {
     return MaterialApp(
-      title: "Timo",
+      title: "Toki",
       themeMode: thememode,
       darkTheme: darkTheme,
       theme: lightTheme,

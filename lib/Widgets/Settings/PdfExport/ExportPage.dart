@@ -1,7 +1,7 @@
-import 'package:Timo/Services/Theme.dart';
-import 'package:Timo/Widgets/Settings/FadeIn.dart';
+import 'package:Toki/Services/Theme.dart';
+import 'package:Toki/Widgets/Settings/FadeIn.dart';
 import 'dart:io';
-import 'package:Timo/Widgets/Settings/PdfExport/PdfExport.dart';
+import 'package:Toki/Widgets/Settings/PdfExport/PdfExport.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:native_pdf_view/native_pdf_view.dart';

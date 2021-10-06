@@ -1,9 +1,9 @@
 import 'dart:ui';
 
-import 'package:Timo/Services/CorrectionDB.dart';
-import 'package:Timo/Services/Theme.dart';
-import 'package:Timo/Transitions/SizeScaleFadeTransition.dart';
-import 'package:Timo/hiveClasses/Correction.dart';
+import 'package:Toki/Services/CorrectionDB.dart';
+import 'package:Toki/Services/Theme.dart';
+import 'package:Toki/Transitions/SizeScaleFadeTransition.dart';
+import 'package:Toki/hiveClasses/Correction.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -246,7 +246,6 @@ class _BreakCorrectionState extends State<BreakCorrection> {
                                   ),
                                   const SizedBox(width: 1),
                                   Icon(
-                                    
                                     Icons.add_rounded,
                                     color: Theme.of(context).colorScheme.onSurface,
                                     size: 20,

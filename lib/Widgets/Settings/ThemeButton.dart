@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:Timo/Services/Theme.dart';
-import 'package:Timo/Services/ThemeBuilder.dart';
-import 'package:Timo/Widgets/Settings/FadeIn.dart';
+import 'package:Toki/Services/Theme.dart';
+import 'package:Toki/Services/ThemeBuilder.dart';
+import 'package:Toki/Widgets/Settings/FadeIn.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 

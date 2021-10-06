@@ -1,5 +1,5 @@
-import 'package:Timo/Services/CorrectionDB.dart';
-import 'package:Timo/hiveClasses/Correction.dart';
+import 'package:Toki/Services/CorrectionDB.dart';
+import 'package:Toki/hiveClasses/Correction.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 

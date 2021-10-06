@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:Timo/Services/HiveDB.dart';
-import 'package:Timo/hiveClasses/Zeitnahme.dart';
+import 'package:Toki/Services/HiveDB.dart';
+import 'package:Toki/hiveClasses/Zeitnahme.dart';
 import 'package:fitted_text_field_container/fitted_text_field_container.dart';
 import 'package:flutter/material.dart';
 

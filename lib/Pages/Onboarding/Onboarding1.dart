@@ -16,13 +16,13 @@ class Onboarding1 extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  /*SvgPicture.asset("assets/timo/timo_happy_1_white.svg"),*/
+                  /*SvgPicture.asset("assets/Toki/Toki_happy_1_white.svg"),*/
                   SizedBox(height: 70),
                   Text("Willkommen", style: onboardingTitle.copyWith(color: Colors.white)),
                   SizedBox(
                     height: 15,
                   ),
-                  Text("""Timo hilft dir dabei, den Überblick über deine Überstunden zu behalten.""",
+                  Text("""Toki hilft dir dabei, den Überblick über deine Überstunden zu behalten.""",
                       textAlign: TextAlign.center, style: onboardingBody.copyWith(color: Colors.white)),
                   SizedBox(
                     height: 20,
@@ -33,7 +33,7 @@ class Onboarding1 extends StatelessWidget {
             /*Positioned(
                 top: -45,
                 left: 20,
-                child: SvgPicture.asset("assets/timo/timo_happy_1.svg")),*/
+                child: SvgPicture.asset("assets/Toki/Toki_happy_1.svg")),*/
           ],
         ),
       ],

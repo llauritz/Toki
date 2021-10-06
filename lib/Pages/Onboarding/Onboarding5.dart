@@ -1,5 +1,5 @@
-import 'package:Timo/Services/Theme.dart';
-import 'package:Timo/Widgets/OvertimeChangeWidgetOnboarding.dart';
+import 'package:Toki/Services/Theme.dart';
+import 'package:Toki/Widgets/OvertimeChangeWidgetOnboarding.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';

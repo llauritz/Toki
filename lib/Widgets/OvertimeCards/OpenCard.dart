@@ -1,4 +1,4 @@
-import 'package:Timo/Widgets/OvertimeCards/SickCardOpen.dart';
+import 'package:Toki/Widgets/OvertimeCards/SickCardOpen.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';

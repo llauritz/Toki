@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:Timo/Pages/Onboarding/Onboarding.dart';
-import 'package:Timo/Services/CorrectionDB.dart';
-import 'package:Timo/Services/Data.dart';
-import 'package:Timo/Services/Theme.dart';
+import 'package:Toki/Pages/Onboarding/Onboarding.dart';
+import 'package:Toki/Services/CorrectionDB.dart';
+import 'package:Toki/Services/Data.dart';
+import 'package:Toki/Services/Theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

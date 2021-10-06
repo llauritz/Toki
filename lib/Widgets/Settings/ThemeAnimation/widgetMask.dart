@@ -1,4 +1,4 @@
-import 'package:Timo/Services/Theme.dart';
+import 'package:Toki/Services/Theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
@@ -19,7 +19,6 @@ class RenderWidgetMask extends RenderStack {
   void paintStack(context, offset) {
     // Early exit on no children
     if (firstChild == null) return;
-
 
     final paintContent = (PaintingContext context, Offset offset) {
       // Paint all but the first child

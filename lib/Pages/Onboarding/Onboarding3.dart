@@ -1,5 +1,5 @@
-import 'package:Timo/Services/Theme.dart';
-import 'package:Timo/Widgets/Settings/WorkTimePicker.dart';
+import 'package:Toki/Services/Theme.dart';
+import 'package:Toki/Widgets/Settings/WorkTimePicker.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 

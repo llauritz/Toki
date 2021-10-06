@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:Timo/Services/Theme.dart';
-import 'package:Timo/Transitions/SizeScaleFadeTransition.dart';
-import 'package:Timo/Widgets/OvertimeCards/SickCardClosed.dart';
+import 'package:Toki/Services/Theme.dart';
+import 'package:Toki/Transitions/SizeScaleFadeTransition.dart';
+import 'package:Toki/Widgets/OvertimeCards/SickCardClosed.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';

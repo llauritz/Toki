@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:Timo/Services/Theme.dart';
+import 'package:Toki/Services/Theme.dart';
 import 'package:fitted_text_field_container/fitted_text_field_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

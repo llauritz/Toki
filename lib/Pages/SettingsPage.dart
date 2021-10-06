@@ -1,13 +1,13 @@
 import 'dart:ui';
 
-import 'package:Timo/Services/Theme.dart';
-import 'package:Timo/Services/ThemeBuilder.dart';
-import 'package:Timo/Widgets/Settings/AutomaticStop.dart';
-import 'package:Timo/Widgets/Settings/PdfExport/ExportPageButton.dart';
-import 'package:Timo/Widgets/Settings/ThemeAnimation/syncScrollController.dart';
-import 'package:Timo/Widgets/Settings/ThemeAnimation/widgetMask.dart';
-import 'package:Timo/Widgets/Settings/ThemeButton.dart';
-import 'package:Timo/Widgets/Settings/WorkTimePicker.dart';
+import 'package:Toki/Services/Theme.dart';
+import 'package:Toki/Services/ThemeBuilder.dart';
+import 'package:Toki/Widgets/Settings/AutomaticStop.dart';
+import 'package:Toki/Widgets/Settings/PdfExport/ExportPageButton.dart';
+import 'package:Toki/Widgets/Settings/ThemeAnimation/syncScrollController.dart';
+import 'package:Toki/Widgets/Settings/ThemeAnimation/widgetMask.dart';
+import 'package:Toki/Widgets/Settings/ThemeButton.dart';
+import 'package:Toki/Widgets/Settings/WorkTimePicker.dart';
 import 'package:screenshot/screenshot.dart';
 import '../Widgets/Settings/BreakCorrection.dart';
 import 'package:flutter/cupertino.dart';
@@ -236,7 +236,7 @@ class ThemedSettings extends StatelessWidget {
         body:
             ListView(controller: sc, padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top), physics: BouncingScrollPhysics(), children: [
           FadeIn(delay: 200, child: const SettingsTitle()),
-          //FadeIn(delay: 225, child: ExportPageButton()),
+          FadeIn(delay: 225, child: ExportPageButton()),
           FadeIn(delay: 250, child: NamePicker()),
           FadeIn(
               delay: 300,
@@ -273,7 +273,7 @@ class ThemedSettingsNoFade extends StatelessWidget {
         body:
             ListView(controller: sc, padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top), physics: BouncingScrollPhysics(), children: [
           const SettingsTitle(),
-          //ExportPageButton(),
+          ExportPageButton(),
           NamePicker(),
           WorkTimePicker(
             color: neon,
@@ -296,14 +296,14 @@ class ThemedSettingsNoFade extends StatelessWidget {
 /* import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:Timo/Services/Theme.dart';
-import 'package:Timo/Services/ThemeBuilder.dart';
-import 'package:Timo/Widgets/Settings/AutomaticStop.dart';
-import 'package:Timo/Widgets/Settings/PdfExport/ExportPage.dart';
-import 'package:Timo/Widgets/Settings/ThemeAnimation/syncScrollController.dart';
-import 'package:Timo/Widgets/Settings/ThemeAnimation/widgetMask.dart';
-import 'package:Timo/Widgets/Settings/ThemeButton.dart';
-import 'package:Timo/Widgets/Settings/WorkTimePicker.dart';
+import 'package:Toki/Services/Theme.dart';
+import 'package:Toki/Services/ThemeBuilder.dart';
+import 'package:Toki/Widgets/Settings/AutomaticStop.dart';
+import 'package:Toki/Widgets/Settings/PdfExport/ExportPage.dart';
+import 'package:Toki/Widgets/Settings/ThemeAnimation/syncScrollController.dart';
+import 'package:Toki/Widgets/Settings/ThemeAnimation/widgetMask.dart';
+import 'package:Toki/Widgets/Settings/ThemeButton.dart';
+import 'package:Toki/Widgets/Settings/WorkTimePicker.dart';
 import 'package:screenshot/screenshot.dart';
 import '../Widgets/Settings/BreakCorrection.dart';
 import 'package:flutter/cupertino.dart';

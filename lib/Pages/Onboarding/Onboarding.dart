@@ -1,10 +1,10 @@
-import 'package:Timo/Pages/home.dart';
-import 'package:Timo/Services/Data.dart';
-import 'package:Timo/Services/Theme.dart';
-import 'package:Timo/Services/ThemeBuilder.dart';
-import 'package:Timo/Widgets/Settings/ThemeAnimation/syncScrollController.dart';
-import 'package:Timo/Widgets/Settings/ThemeAnimation/widgetMask.dart';
-import 'package:Timo/Widgets/Settings/ThemeButton.dart';
+import 'package:Toki/Pages/home.dart';
+import 'package:Toki/Services/Data.dart';
+import 'package:Toki/Services/Theme.dart';
+import 'package:Toki/Services/ThemeBuilder.dart';
+import 'package:Toki/Widgets/Settings/ThemeAnimation/syncScrollController.dart';
+import 'package:Toki/Widgets/Settings/ThemeAnimation/widgetMask.dart';
+import 'package:Toki/Widgets/Settings/ThemeButton.dart';
 import 'package:animations/animations.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/cupertino.dart';

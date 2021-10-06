@@ -1,4 +1,4 @@
-import 'package:Timo/Widgets/OvertimeCards/DefaultCardOpen/DefaultCardOpen.dart';
+import 'package:Toki/Widgets/OvertimeCards/DefaultCardOpen/DefaultCardOpen.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';

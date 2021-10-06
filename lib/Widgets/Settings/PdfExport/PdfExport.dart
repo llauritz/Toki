@@ -2,9 +2,9 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:Timo/Services/Data.dart';
-import 'package:Timo/Services/HiveDB.dart';
-import 'package:Timo/hiveClasses/Zeitnahme.dart';
+import 'package:Toki/Services/Data.dart';
+import 'package:Toki/Services/HiveDB.dart';
+import 'package:Toki/hiveClasses/Zeitnahme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

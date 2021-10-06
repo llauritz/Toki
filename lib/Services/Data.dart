@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:Timo/Services/CorrectionDB.dart';
-import 'package:Timo/Services/timer.dart';
+import 'package:Toki/Services/CorrectionDB.dart';
+import 'package:Toki/Services/timer.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

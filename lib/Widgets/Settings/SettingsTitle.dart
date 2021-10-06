@@ -1,9 +1,9 @@
-import 'package:Timo/Services/Theme.dart';
-import 'package:Timo/Services/ThemeBuilder.dart';
-import 'package:Timo/Widgets/Settings/ThemeButton.dart';
+import 'package:Toki/Services/Theme.dart';
+import 'package:Toki/Services/ThemeBuilder.dart';
+import 'package:Toki/Widgets/Settings/ThemeButton.dart';
 import 'package:flutter/material.dart';
 
-class  SettingsTitle extends StatelessWidget {
+class SettingsTitle extends StatelessWidget {
   const SettingsTitle({
     Key? key,
   }) : super(key: key);
@@ -24,7 +24,6 @@ class  SettingsTitle extends StatelessWidget {
             ],
           ),
         )),
-        
       ],
     );
   }

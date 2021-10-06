@@ -1,6 +1,6 @@
-import 'package:Timo/Services/CorrectionDB.dart';
-import 'package:Timo/Services/Theme.dart';
-import 'package:Timo/hiveClasses/Correction.dart';
+import 'package:Toki/Services/CorrectionDB.dart';
+import 'package:Toki/Services/Theme.dart';
+import 'package:Toki/hiveClasses/Correction.dart';
 import 'package:fitted_text_field_container/fitted_text_field_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';

@@ -1,4 +1,4 @@
-import 'package:Timo/Services/Theme.dart';
+import 'package:Toki/Services/Theme.dart';
 import 'package:animations/animations.dart';
 import 'package:day_night_time_picker/lib/utils.dart';
 import 'package:flutter/material.dart';

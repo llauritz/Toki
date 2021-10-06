@@ -1,4 +1,4 @@
-import 'package:Timo/Services/Theme.dart';
+import 'package:Toki/Services/Theme.dart';
 import 'package:flutter/material.dart';
 
 class FertigButton extends StatelessWidget {
